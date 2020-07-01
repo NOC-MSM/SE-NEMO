@@ -1,6 +1,6 @@
 # Shelf Enabled Global NEMO (SE-NEMO)
 
-**_NB the code as it stands is a placeholder - not intended to use_**
+**_\*\* NB the code as it stands is a placeholder - not intended for use - the setup script has been tested and will checkout and compile the code on ARCHER, but namelists and forcing files are yet to be configured_**
 
 Configuration files for SE-NEMO project
 
