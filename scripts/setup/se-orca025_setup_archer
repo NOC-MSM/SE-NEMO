@@ -10,7 +10,7 @@ display_usage() {
    echo
    echo "  flags:  -w full path to where nemo will be installed"
    echo "          -x full path to where xios will be installed"
-   echo "          -s full path to where AMM7 repository resides"
+   echo "          -s full path to where SE-NEMO repository resides"
    echo
    exit 1
 	} 
@@ -83,7 +83,7 @@ svn export http://forge.ipsl.jussieu.fr/nemo/svn/utils/build/makenemo nemo/maken
 mkdir nemo/arch
 
 # Setup the directory structure for the ENSEMBLE
-mkdir $WORK_DIR/nemo/cfgs/AMM7
+mkdir $WORK_DIR/nemo/cfgs/se-orca025
 # Define the location of where the AMM7 forcing files are to be downloaded 
 export DOWNLOAD_DIR="$WORK_DIR/nemo/cfgs/se-orca025/EXP00/"
 
