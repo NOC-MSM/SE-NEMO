@@ -1,5 +1,7 @@
 # Shelf Enabled Global NEMO (SE-NEMO)
 
+**_NB the code as it stands is a placeholder - not intended to use_**
+
 Configuration files for SE-NEMO project
 
 ## Quick Start:
