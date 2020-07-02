@@ -106,6 +106,9 @@ export XIOS_DIR=$XIOS_DIR/xios
 
 cd $WORK_DIR/nemo
 cp $REPO_DIR/arch/nemo/* ./arch
+# Dirty fix to hard wire path otherwise user will have to set XIOS_DIR in every new shell session
+sed "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-archer.fcm > tmp_arch
+mv tmp_arch ./arch/arch-archer.fcm
 
 echo 'se-orca025 OCE ICE' >> $WORK_DIR/nemo/cfgs/work_cfgs.txt
 
@@ -125,7 +128,7 @@ ln -s ../../SHARED/field_def_nemo-ice.xml field_def_nemo-ice.xml
 ln -s ../../SHARED/domain_def_nemo.xml domain_def_nemo.xml
 ln -s ../../SHARED/axis_def_nemo.xml axis_def_nemo.xml
 
-wget http://gws-access.ceda.ac.uk/public/jmmp_colab/se-orca025/inputs.tar.gz
+wget http://gws-access.ceda.ac.uk/public/jmmp_collab/se-orca025/inputs.tar.gz
 tar xvfz inputs.tar.gz
 rm inputs.tar.gz
 
@@ -149,7 +152,7 @@ echo
 echo "  Auto-Config: SE-ORCA025"
 echo "  *****************************"
 echo
-echo "  To run the AMM7 Configuration:"
+echo "  To run the SE-ORCA025 Configuration:"
 echo
 echo "  - update the runscript.pbs accordingly "
 echo "      (project code, nodes, modules, etc)"
