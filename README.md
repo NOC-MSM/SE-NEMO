@@ -17,7 +17,8 @@ qsub runscript.pbs
 ```
 This will produce a 5 day mean output from the beginning of 1958. The run should take 15 minutes to complete once in the machine.
 
-forcing data:
+### Forcing data:
 
 [SE-ORCA025](http://gws-access.ceda.ac.uk/public/jmmp_collab/)
 
+_this is automatically transferred when the setup script is executed_
