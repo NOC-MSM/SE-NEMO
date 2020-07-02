@@ -1,6 +1,6 @@
 # Shelf Enabled Global NEMO (SE-NEMO)
 
-**_\*\* NB the code as it stands is a placeholder - not intended for use - the setup script has been tested and will checkout and compile the code on ARCHER, but namelists and forcing files are yet to be configured_**
+**_\*\* NB the code as it stands is a placeholder - not intended for use - the setup script has been tested and will checkout, compile and run the ORCA025 (NEMO 4.0.2) code on ARCHER, but namelists and forcing files are yet to be configured for the 'Shelf Enabled' part_**
 
 Configuration files for SE-NEMO project
 
@@ -18,6 +18,5 @@ qsub -q short runscript.pbs
 
 forcing data:
 
-(could be held here)
 [SE-ORCA025](http://gws-access.ceda.ac.uk/public/jmmp_collab/)
 
