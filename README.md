@@ -1,6 +1,6 @@
 # Shelf Enabled Global NEMO (SE-NEMO)
 
-**_\*\* NB the code as it stands is a placeholder - not intended for use - the setup script has been tested and will checkout and compile the code on ARCHER, but namelists and forcing files are yet to be configured_**
+**_\*\* NB the code as it stands is a placeholder - not intended for use - the setup script has been tested and will checkout, compile and run the ORCA025 (NEMO 4.0.2) code on ARCHER, but namelists and forcing files are yet to be configured for the 'Shelf Enabled' part_**
 
 Configuration files for SE-NEMO project
 
@@ -13,11 +13,12 @@ cd test/nemo/cfgs/se-orca025/EXP00
 ```
 Edit the project code in  `runscript.pbs` then:
 ```
-qsub -q short runscript.pbs
+qsub runscript.pbs
 ```
+This will produce a 5 day mean output from the beginning of 1958. The run should take 15 minutes to complete once in the machine.
 
-forcing data:
+### Forcing data:
 
-(could be held here)
 [SE-ORCA025](http://gws-access.ceda.ac.uk/public/jmmp_collab/)
 
+_this is automatically transferred when the setup script is executed_
