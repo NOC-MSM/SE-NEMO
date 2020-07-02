@@ -13,8 +13,9 @@ cd test/nemo/cfgs/se-orca025/EXP00
 ```
 Edit the project code in  `runscript.pbs` then:
 ```
-qsub -q short runscript.pbs
+qsub runscript.pbs
 ```
+This will produce a 5 day mean output from the beginning of 1958. The run should take 15 minutes to complete once in the machine.
 
 forcing data:
 
