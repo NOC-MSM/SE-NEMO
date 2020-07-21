@@ -22,3 +22,7 @@ This will produce a 5 day mean output from the beginning of 1958. The run should
 [SE-ORCA025](http://gws-access.ceda.ac.uk/public/jmmp_collab/)
 
 _this is automatically transferred when the setup script is executed_
+
+### Important:
+
+The `MY_SRC_GO8_FROZEN` directory should only contain the re-ROSEd code from G08. If editing any of this routines, copy the file from `MY_SRC_GO8_FROZEN` to `MY_SRC` and edit it there. The build process will copy the contents of `MY_SRC_GO8_FROZEN` to `cfgs/se-nemo/MY_SRC` before copying `MY_SRC` to `cfgs/se-nemo/MY_SRC`.
