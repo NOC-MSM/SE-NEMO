@@ -8,8 +8,8 @@
        cn_exp='se-orca025'
        nn_date0=19580101   !  date at nit_0000 (format yyyymmdd) used if ln_rstart=F or (ln_rstart=T and nn_rstctl=0 or 1)
        nn_it000=1
-       nn_itend=480
-       nn_stock=480
+       nn_itend=672
+       nn_stock=672
        !nn_itend=96
        !nn_stock=96
 /
@@ -243,7 +243,7 @@
 !-----------------------------------------------------------------------
 &nam_tide      !   tide parameters (#ifdef key_tide)
 !-----------------------------------------------------------------------
-   ln_tide     = .true.      ! Activate tides
+   ln_tide     = .false.      ! Activate tides
       ln_tide_pot   = .true.                !  use tidal potential forcing
          ln_scal_load  = .true.               ! Use scalar approximation for
             rn_scal_load = 0.094               !     load potential
@@ -252,6 +252,7 @@
             !
       ln_tide_ramp  = .true.               !  Use linear ramp for tides at startup
          rdttideramp   =    1.                 !  ramp duration in days
+      dn_love_number = 0.7
       clname(1) = 'SA'
       clname(2) = 'SSA'
       clname(3) = 'MM'
