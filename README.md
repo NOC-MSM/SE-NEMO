@@ -1,6 +1,10 @@
-# Shelf Enabled Global NEMO (SE-NEMO)
+# Shelf Enabled Global NEMO (SE-NEMO) TIDES BRANCH
 
 **_\*\* NB the code as it stands is a placeholder - not intended for use - the setup script has been tested and will checkout, compile and run the ORCA025 (NEMO 4.0.2) code on ARCHER, but namelists and forcing files are yet to be configured for the 'Shelf Enabled' part_**
+
+# TIDES BRANCH
+This branch includes tides and relevant modifications. These modifications are outlined in MY_SRC/README.md.
+Use this branch by cloning the repository and usual then using `git checkout tides` to switch branches. Once in the correct branch, setup scripts can be used as normal.
 
 Configuration files for SE-NEMO project
 
