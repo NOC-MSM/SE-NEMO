@@ -4,6 +4,7 @@
 
 # TIDES BRANCH
 This branch includes tides and relevant modifications. These modifications are outlined in MY_SRC/README.md.
+Use this branch by cloning the repository and usual then using `git checkout tides` to switch branches. Once in the correct branch, setup scripts can be used as normal.
 
 Configuration files for SE-NEMO project
 
