@@ -251,8 +251,10 @@
             cn_tide_load = 'tide_LOAD_grid_T.nc'  ! filename for load potential
             !
       ln_tide_ramp  = .true.               !  Use linear ramp for tides at startup
-         rdttideramp   =    1.                 !  ramp duration in days
-      dn_love_number = 0.7
+         rdttideramp   =    14.                 !  ramp duration in days
+      dn_love_number = 0.7                 ! Love number
+      ln_int_wave_drag = .false.           ! Turn on internal wave drag parameterization
+         cn_int_wave_drag = './INPUTS/bt_tidal_disspiation.nc' !Required for int_wave_drag
       clname(1) = 'SA'
       clname(2) = 'SSA'
       clname(3) = 'MM'

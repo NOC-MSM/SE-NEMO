@@ -3,6 +3,8 @@
 Contains developement code for SE-NEMO
 Square brackets show comment markers in the code to find and identify changes.
 
+dynspg_ts.F90 - [davbyr] Applies internal wave drag prmtrsation to barotropic component.
+
 sbcrnf.F90 - bugfixes for missing input directory
 
 sbctide.F90
@@ -17,3 +19,4 @@ tide_mod.F90
 
 tideini.F90
    - [NB] Reads Love number from namelist and outputs to Ocean.output.
+   - [davbyr] Reads/stores ln_int_wave_drag (switches on internal wave drag for tides)

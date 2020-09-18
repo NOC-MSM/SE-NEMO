@@ -1115,7 +1115,7 @@ CONTAINS
    ! davbyr: Read in tidal dissipation array.
    IF( ln_int_wave_drag ) THEN   
       WRITE(numout, *) 'Reading internal wave drag field: bt_tidal_dissipation.nc'
-      CALL iom_open('bt_tidal_dissipation',inum)
+      CALL iom_open(cn_int_wave_drag, inum)
       CALL iom_get (inum, jpdom_data, 'tdiss', tdiss_tmp, 1) ! 
       CALL iom_close(inum)
       tdiss = tdiss_tmp
