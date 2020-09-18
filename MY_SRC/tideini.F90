@@ -35,6 +35,9 @@ MODULE tideini
    ! NB - read love number from namelist
    REAL(wp), PUBLIC ::   dn_love_number  !:
    ! END NB
+   ! davbyr : Switch for internal wave drag on barotropic currents.
+   LOGICAL , PUBLIC :: ln_int_wave_drag !:
+   ! END davbyr
    REAL(wp), PUBLIC ::   rn_scal_load    !:
    CHARACTER(lc), PUBLIC ::   cn_tide_load   !: 
 
@@ -55,11 +58,11 @@ CONTAINS
       CHARACTER(LEN=4), DIMENSION(jpmax_harmo) :: clname
       INTEGER  ::   ios                 ! Local integer output status for namelist read
       !
-      ! NB - read love number from namelist
+      ! NB - read love number from namelist (one line)
+      ! davbyr - read ln_int_wave_drag (one line)
       NAMELIST/nam_tide/ln_tide, ln_tide_pot, ln_scal_load, ln_read_load, cn_tide_load, &
                   &     ln_tide_ramp, rn_scal_load, rdttideramp, dn_love_number, &
-                  &      clname
-      ! END NB
+                  &     ln_int_wave_drag, clname
       !!----------------------------------------------------------------------
       !
       ! Read Namelist nam_tide
@@ -86,9 +89,10 @@ CONTAINS
             WRITE(numout,*) '         Apply ramp on tides at startup          ln_tide_ramp = ', ln_tide_ramp
             WRITE(numout,*) '         Fraction of SSH used in scal. approx.   rn_scal_load = ', rn_scal_load
             WRITE(numout,*) '         Duration (days) of ramp                 rdttideramp  = ', rdttideramp
-            ! NB - Love number
-            WRITE(numout,*) '                                     dn_love_number = ', dn_love_number
-            ! End NB
+            ! NB - Love number (one line)
+            WRITE(numout,*) '         Love Number                             dn_love_number = ', dn_love_number
+            ! davbyr - Output wave drag switch value (one line)
+            WRITE(numout,*) '         Internal Wave Drag Parameterization     ln_int_wave_drag = ', ln_int_wave_drag
          ENDIF
       ELSE
          rn_scal_load = 0._wp 
