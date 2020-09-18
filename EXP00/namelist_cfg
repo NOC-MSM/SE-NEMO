@@ -243,7 +243,7 @@
 !-----------------------------------------------------------------------
 &nam_tide      !   tide parameters (#ifdef key_tide)
 !-----------------------------------------------------------------------
-   ln_tide     = .false.      ! Activate tides
+   ln_tide     = .true.      ! Activate tides
       ln_tide_pot   = .true.                !  use tidal potential forcing
          ln_scal_load  = .true.               ! Use scalar approximation for
             rn_scal_load = 0.094               !     load potential
