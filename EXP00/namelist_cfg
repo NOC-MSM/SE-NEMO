@@ -253,7 +253,7 @@
       ln_tide_ramp  = .true.               !  Use linear ramp for tides at startup
          rdttideramp   =    28.                 !  ramp duration in days
       dn_love_number = 0.7
-      ln_int_wave_drag = .true.           ! Turn on internal wave drag parameterization
+      ln_int_wave_drag = .false.           ! Turn on internal wave drag parameterization
          cn_int_wave_drag = './bt_tidal_dissipation.nc' !Required for int_wave_drag
       clname(1) = 'SA'
       clname(2) = 'SSA'
