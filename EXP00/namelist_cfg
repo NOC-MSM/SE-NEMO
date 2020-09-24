@@ -8,8 +8,8 @@
        cn_exp='se-orca025'
        nn_date0=19580101   !  date at nit_0000 (format yyyymmdd) used if ln_rstart=F or (ln_rstart=T and nn_rstctl=0 or 1)
        nn_it000=1
-       nn_itend=672
-       nn_stock=672
+       nn_itend=7104
+       nn_stock=7104
        !nn_itend=96
        !nn_stock=96
 /
@@ -251,10 +251,10 @@
             cn_tide_load = 'tide_LOAD_grid_T.nc'  ! filename for load potential
             !
       ln_tide_ramp  = .true.               !  Use linear ramp for tides at startup
-         rdttideramp   =    14.                 !  ramp duration in days
-      dn_love_number = 0.7                 ! Love number
-      ln_int_wave_drag = .false.           ! Turn on internal wave drag parameterization
-         cn_int_wave_drag = './INPUTS/bt_tidal_disspiation.nc' !Required for int_wave_drag
+         rdttideramp   =    28.                 !  ramp duration in days
+      dn_love_number = 0.7
+      ln_int_wave_drag = .true.           ! Turn on internal wave drag parameterization
+         cn_int_wave_drag = './bt_tidal_dissipation.nc' !Required for int_wave_drag
       clname(1) = 'SA'
       clname(2) = 'SSA'
       clname(3) = 'MM'
@@ -278,7 +278,7 @@
       clname(21) = 'MKS2'
       clname(22) = 'LA2'
       clname(23) = 'R2'
-      clname(24) = 'EPS2'
+!      clname(24) = 'EPS2'
 /
 !-----------------------------------------------------------------------
 &nambdy        !  unstructured open boundaries                          ("key_bdy")
@@ -477,7 +477,16 @@
 !-----------------------------------------------------------------------
 &namdyn_spg    !   surface pressure gradient                            (default: NO selection)
 !-----------------------------------------------------------------------
-   ln_dynspg_ts   = .true.   ! split-explicit free surface
+      ln_dynspg_ts   = .true.   ! split-explicit free surface
+      ln_bt_fw      = .true.     ! Forward integration of barotropic Eqs.
+      ln_bt_av      = .true.     ! Time filtering of barotropic variables
+         nn_bt_flt     = 1          ! Time filter choice  = 0 None
+         !                          !                     = 1 Boxcar over   nn_baro sub-steps
+         !                          !                     = 2 Boxcar over 2*nn_baro  "    "
+      ln_bt_auto    = .true.     ! Number of sub-step defined from:
+         rn_bt_cmax   =  0.8        ! =T : the Maximum Courant Number allowed
+         nn_baro      = 100          ! =F : the number of sub-step in rn_rdt seconds
+      rn_bt_alpha   = 0.         ! Temporal diffusion parameter (if ln_bt_av=F)
 /
 !-----------------------------------------------------------------------
 &namdyn_ldf    !   lateral diffusion on momentum

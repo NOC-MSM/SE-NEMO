@@ -1006,7 +1006,7 @@ CONTAINS
       INTEGER  ::   ji ,jj              ! dummy loop indices
       REAL(wp) ::   zxr2, zyr2, zcmax   ! local scalar
       REAL(wp), DIMENSION(jpi,jpj) ::   zcu
-      REAL(wp), DIMENSION(jpi,jpj)   :: tdiss_tmp ! DB: Temporary read array for tdiss
+      !REAL(wp), DIMENSION(jpi,jpj)   :: tdiss_tmp ! DB: Temporary read array for tdiss
       INTEGER  :: inum
       !!----------------------------------------------------------------------
       !
@@ -1116,9 +1116,8 @@ CONTAINS
    IF( ln_int_wave_drag ) THEN   
       WRITE(numout, *) 'Reading internal wave drag field: bt_tidal_dissipation.nc'
       CALL iom_open(cn_int_wave_drag, inum)
-      CALL iom_get (inum, jpdom_data, 'tdiss', tdiss_tmp, 1) ! 
+      CALL iom_get (inum, jpdom_data, 'tdiss', tdiss, 1) ! 
       CALL iom_close(inum)
-      tdiss = tdiss_tmp
    ENDIF
    !davbyr END
    END SUBROUTINE dyn_spg_ts_init
@@ -1498,8 +1497,12 @@ CONTAINS
 
       !davbyr: Add tdiss parameter to the barotropic friction
       IF ( ln_int_wave_drag ) THEN
-         pCdU_u(ji,jj) = 1*pCdU_u(ji,jj) - tdiss(ji, jj)
-         pCdU_v(ji,jj) = 1*pCdU_v(ji,jj) - tdiss(ji, jj)
+         DO jj = 2, jpjm1
+            DO ji=2, jpim1
+               pCdU_u(ji,jj) = pCdU_u(ji,jj) - tdiss(ji, jj)
+               pCdU_v(ji,jj) = pCdU_v(ji,jj) - tdiss(ji, jj)
+            END DO
+         END DO
       ENDIF
       !davbyr END
       !

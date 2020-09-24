@@ -92,8 +92,9 @@ CONTAINS
             WRITE(numout,*) '         Duration (days) of ramp                 rdttideramp  = ', rdttideramp
             ! NB - Love number (one line)
             WRITE(numout,*) '         Love Number                             dn_love_number = ', dn_love_number
-            ! davbyr - Output wave drag switch value (one line)
+            ! davbyr - Output wave drag switch value (two line)
             WRITE(numout,*) '         Internal Wave Drag Parameterization     ln_int_wave_drag = ', ln_int_wave_drag
+            IF(ln_int_wave_drag) WRITE(numout,*) 'cn_int_wave_drag = ', cn_int_wave_drag
          ENDIF
       ELSE
          rn_scal_load = 0._wp 
