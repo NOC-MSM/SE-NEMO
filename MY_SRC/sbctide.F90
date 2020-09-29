@@ -33,6 +33,9 @@ MODULE sbctide
 
    REAL(wp), ALLOCATABLE, DIMENSION(:,:,:) ::   amp_pot, phi_pot
    REAL(wp), ALLOCATABLE, DIMENSION(:,:,:) ::   amp_load, phi_load
+
+   ! davbyr: Tide drag
+   REAL(wp), ALLOCATABLE, SAVE, DIMENSION(:,:) ::   tdiss
  
    !!----------------------------------------------------------------------
    !! NEMO/OCE 4.0 , NEMO Consortium (2018)
@@ -58,6 +61,10 @@ CONTAINS
             IF( ln_read_load )THEN
                ALLOCATE( amp_load(jpi,jpj,nb_harmo), phi_load(jpi,jpj,nb_harmo) )
                CALL tide_init_load
+            ENDIF
+            IF( ln_int_wave_drag )THEN !davbyr: Allocation and read tdiss
+               ALLOCATE( tdiss(jpi, jpj) )        
+               CALL tide_init_diss
             ENDIF
          ENDIF
          !
@@ -174,6 +181,25 @@ CONTAINS
       CALL iom_close( inum )
       !
    END SUBROUTINE tide_init_load
+
+   SUBROUTINE tide_init_diss !davbyr: subroutine
+      !!----------------------------------------------------------------------
+      !!                 ***  ROUTINE tide_init_diss  ***
+      !!----------------------------------------------------------------------
+      INTEGER :: inum                 ! Logical unit of input file
+      INTEGER :: iii, jjj             ! dummy loop indices
+      !!----------------------------------------------------------------------
+      IF(lwp) THEN
+         WRITE(numout,*)
+         WRITE(numout,*) 'tide_init_diss : Read tidal dissipation from file:',cn_int_wave_drag
+         WRITE(numout,*) '~~~~~~~~~~~~~~ '
+      ENDIF
+         
+      CALL iom_open(cn_int_wave_drag, inum)
+      CALL iom_get (inum, jpdom_data, 'tdiss', tdiss(:,:))
+      CALL iom_close(inum)
+      CALL iom_close( inum )
+   END SUBROUTINE tide_init_diss
 
   !!======================================================================
 END MODULE sbctide

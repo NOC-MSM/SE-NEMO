@@ -82,8 +82,6 @@ MODULE dynspg_ts
    REAL(wp), ALLOCATABLE, SAVE, DIMENSION(:,:) ::   ftnw, ftne         ! triad of coriolis parameter
    REAL(wp), ALLOCATABLE, SAVE, DIMENSION(:,:) ::   ftsw, ftse         ! (only used with een vorticity scheme)
 
-   REAL(wp), ALLOCATABLE, SAVE, DIMENSION(:,:) ::   tdiss              ! davbyr: First declaration of tidal dissipation array
-
    REAL(wp) ::   r1_12 = 1._wp / 12._wp   ! local ratios
    REAL(wp) ::   r1_8  = 0.125_wp         !
    REAL(wp) ::   r1_4  = 0.25_wp          !
@@ -117,7 +115,6 @@ CONTAINS
       CALL mpp_sum( 'dynspg_ts', dyn_spg_ts_alloc )
       IF( dyn_spg_ts_alloc /= 0 )   CALL ctl_stop( 'STOP', 'dyn_spg_ts_alloc: failed to allocate arrays' )
       !
-      IF( ln_int_wave_drag ) ALLOCATE( tdiss(jpi, jpj) ) ! davbyr: Allocation of tidal dissipation array.
    END FUNCTION dyn_spg_ts_alloc
 
 
@@ -1003,7 +1000,7 @@ CONTAINS
       !!
       !! ** Purpose : Set time splitting options
       !!----------------------------------------------------------------------
-      INTEGER  ::   ji ,jj              ! dummy loop indices
+      INTEGER  ::   ji ,jj, iii, jjj              ! dummy loop indices
       REAL(wp) ::   zxr2, zyr2, zcmax   ! local scalar
       REAL(wp), DIMENSION(jpi,jpj) ::   zcu
       !REAL(wp), DIMENSION(jpi,jpj)   :: tdiss_tmp ! DB: Temporary read array for tdiss
@@ -1112,14 +1109,6 @@ CONTAINS
 #endif
       ENDIF
       !
-   ! davbyr: Read in tidal dissipation array.
-   IF( ln_int_wave_drag ) THEN   
-      WRITE(numout, *) 'Reading internal wave drag field: bt_tidal_dissipation.nc'
-      CALL iom_open(cn_int_wave_drag, inum)
-      CALL iom_get (inum, jpdom_data, 'tdiss', tdiss, 1) ! 
-      CALL iom_close(inum)
-   ENDIF
-   !davbyr END
    END SUBROUTINE dyn_spg_ts_init
 
    
