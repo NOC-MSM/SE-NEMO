@@ -140,7 +140,9 @@ mkdir OUTPUTS
 ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXP00/xios_server.exe
 
 cp $REPO_DIR/EXP00/* $CONFIG_DIR/EXP00/
+# First copy G08 code
 cp -r $REPO_DIR/MY_SRC_G08_FROZEN $CONFIG_DIR/MY_SRC
+# Then overwrite with any SE-NEMO mods
 cp $REPO_DIR/MY_SRC/* $CONFIG_DIR/MY_SRC/
 cp $REPO_DIR/cpp_se-orca025.fcm $CONFIG_DIR/
 
