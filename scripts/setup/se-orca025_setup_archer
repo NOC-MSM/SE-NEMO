@@ -70,17 +70,30 @@ module swap PrgEnv-cray PrgEnv-intel
 module load cray-hdf5-parallel
 module load cray-netcdf-hdf5parallel
 
+# Currently running 4.0.2
+NEMO_VER=4.0.2
+
 # Checkout the NEMO code from the SVN Paris repository 
 echo "Checking out NEMO repository"
-svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r4.0.2 --depth empty nemo
-svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r4.0.2/src --depth infinity nemo/src
-svn co http://forge.ipsl.jussieu.fr/nemo/svn/utils/build/mk nemo/mk
-svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r4.0.2/cfgs/SHARED nemo/cfgs/SHARED
-svn export http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r4.0.2/cfgs/ref_cfgs.txt nemo/cfgs/ref_cfgs.txt
-svn co http://forge.ipsl.jussieu.fr/nemo/svn/vendors/FCM nemo/ext/FCM
-svn co http://forge.ipsl.jussieu.fr/nemo/svn/vendors/IOIPSL nemo/ext/IOIPSL
-svn export http://forge.ipsl.jussieu.fr/nemo/svn/utils/build/makenemo nemo/makenemo
-mkdir nemo/arch
+
+svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER --depth empty nemo
+svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/src --depth infinity nemo/src
+svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/SHARED nemo/cfgs/SHARED
+svn export http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/ref_cfgs.txt nemo/cfgs/ref_cfgs.txt
+
+cd nemo
+
+# Now check EXTERNALS revision number before checking out the rest
+for ext_name in mk FCM IOIPSL   
+  do   
+  ext=`svn propget svn:externals | grep $ext_name | cut -c2-`   
+  svn co http://forge.ipsl.jussieu.fr/nemo/svn/$ext
+done
+
+ext=`svn propget svn:externals | grep makenemo | cut -c2-`
+svn export http://forge.ipsl.jussieu.fr/nemo/svn/$ext
+
+mkdir arch
 
 # Setup the directory structure for the ENSEMBLE
 mkdir $WORK_DIR/nemo/cfgs/se-orca025
