@@ -895,11 +895,11 @@ CONTAINS
       !
       REWIND( numnam_ref )              ! Namelist namzdf_gls in reference namelist : Vertical eddy diffivity and viscosity using gls turbulent closure scheme
       READ  ( numnam_ref, namzdf_gls, IOSTAT = ios, ERR = 901)
-901   IF( ios /= 0 )   CALL ctl_nam ( ios , 'namzdf_gls in reference namelist', lwp )
+901   IF( ios /= 0 )   CALL ctl_nam ( ios , 'namzdf_gls in reference namelist' )
 
       REWIND( numnam_cfg )              ! Namelist namzdf_gls in configuration namelist : Vertical eddy diffivity and viscosity using gls turbulent closure scheme
       READ  ( numnam_cfg, namzdf_gls, IOSTAT = ios, ERR = 902 )
-902   IF( ios >  0 )   CALL ctl_nam ( ios , 'namzdf_gls in configuration namelist', lwp )
+902   IF( ios >  0 )   CALL ctl_nam ( ios , 'namzdf_gls in configuration namelist' )
       IF(lwm) WRITE ( numond, namzdf_gls )
 
       IF(lwp) THEN                     !* Control print

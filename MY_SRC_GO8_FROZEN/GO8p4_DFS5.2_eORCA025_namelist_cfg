@@ -1,0 +1,563 @@
+&namrun
+   cn_exp                 = 'bv881o'                   !   experience name
+   cn_ocerst_in           = 'restart'                  !   suffix of ocean restart name (input)
+   cn_ocerst_indir        = '.'                        !   directory from which to read input ocean restarts
+   cn_ocerst_out          = 'restart'                  !   suffix of ocean restart name (output)
+   cn_ocerst_outdir       = '/home/d01/almega/cylc-run/u-bv881/share/data/History_Data/NEMOhist/'     !   directory in which to write output ocean restarts
+   ln_cfmeta              = .true.                     !   output additional data to netcdf files required for compliance with the cf metadata standard
+   ln_clobber             = .true.                     !   clobber (overwrite) an existing file
+   ln_iscpl               = .false.                    !   cavity evolution forcing or coupling to ice sheet model
+   ln_mskland             = .true.                     !   mask land points in netcdf outputs
+   ln_rst_list            = .false.                    !   output restarts at list of times using nn_stocklist (t) or at set frequency with nn_stock (f)
+   ln_rstart              = .true.                     !   start from rest (f) or from a restart file (t)
+   ln_rstdate             = .true.                
+   ln_xios_read           = .false.                    !   use xios to read restart file (only for a single file restart)
+   nn_chunksz             = 0                          !   chunksize (bytes) for netcdf file (works only with iom_nf90 routines)
+   nn_date0               = 19960101                   !   date at nit_0000 (format yyyymmdd) used if ln_rstart=f or (ln_rstart=t and nn_rstctl=0 or 1)
+   nn_euler               = 1                          !   = 0 : start with forward time step if ln_rstart=t
+   nn_istate              = 1                          !   output the initial state (1) or not (0)
+   nn_it000               = 1                          !   first time step
+   nn_itend               = 2232                       !   last  time step (std 5840)
+   nn_leapy               = 0                          !   leap year calendar (1) or not (0)
+   nn_rstctl              = 0                          !   restart control ==> activated only if ln_rstart=t
+   nn_stock               = 100000                     !   used only if ln_rst_list = f: output restart freqeuncy (modulo referenced to 1)
+   nn_time0               = 0000                       !   initial time of day in hhmm
+   nn_write               = 100000                     !   used only if key_iomput is not defined: output frequency (modulo referenced to nn_it000)
+   nn_wxios               = 0                          !   use xios to write restart file 0 - no, 1 - single file output, 2 - multiple file output
+/
+&namcfg
+   cn_domcfg              = 'domain_cfg'               !  domain configuration filename
+   ln_closea              = .true.                     !   t => keep closed seas (defined by closea_mask field) in the
+   ln_read_cfg            = .true.                     !   (=t) read the domain configuration file
+   ln_use_jattr           = .false.                    !   use (t) the file attribute: open_ocean_jstart, if present
+   ln_write_cfg           = .false.                    !   (=t) create the domain configuration file
+/
+&namdom
+   ln_crs                 = .false.                    !   logical switch for coarsening module      (t => fill namcrs)
+   ln_linssh              = .false.                    !   =t  linear free surface  ==>>  model level are fixed in time
+   ln_meshmask            = .false.                    !   =t create a mesh file
+   rn_atfp                = 0.01                       !   asselin time filter parameter
+   rn_isfhmin             = 1.00                       !   treshold [m] to discriminate grounding ice from floating ice
+   rn_rdt                 = 1200.0                     !   time step for the dynamics and tracer
+/
+&namtsd
+   cn_dir                 = './'                       !   root directory for the t-s data location
+   ln_tsd_dmp             = .false.                    !   t-s restoring   (see namtra_dmp)
+   ln_tsd_init            = .true.                     !   ocean initialisation
+   sn_sal                 = 'salinity_clim.nc',-1,'salinity',.true.,.true.,'yearly','', '',''
+   sn_tem                 = 'temperature_clim.nc',-1,'temperature',.true.,.true., 'yearly','','',''
+/
+&namwad
+   ln_wd_dl               = .false.                    !   t/f activation of directional limiter
+   ln_wd_il               = .false.                    !   t/f activation of iterative   limiter
+   nn_wdit                = 20                         !   max iterations for wad limiter
+   rn_wdld                = 2.5                        !   land elevation below which wad is allowed
+   rn_wdmin0              = 0.30                       !   depth at which wad starts
+   rn_wdmin1              = 0.2                        !   minimum wet depth on dried cells
+   rn_wdmin2              = 0.0001                     !   tolerance of min wet depth on dried cells
+/
+&namcrs
+/
+&namc1d
+   ln_c1d_locpt           = .true.                     !  localization of 1d config in a grid (t) or independant point (f)
+   rn_lat1d               = 50                         !   column latitude
+   rn_lon1d               = -145                       !   column longitude
+/
+&namc1d_dyndmp
+   ln_dyndmp              = .false.                    !   add a damping term (t) or not (f)
+/
+&namc1d_uvd
+   cn_dir                 = './'                       !   root directory for the u-v data location
+   ln_uvd_dyndmp          = .false.                    !   u-v restoring
+   ln_uvd_init            = .false.                    !   ocean initialisation
+   sn_ucur                = 'ucurrent',-1,'u_current',.false.,.true.,'monthly','','Ume', ''
+   sn_vcur                = 'vcurrent',-1,'v_current',.false.,.true.,'monthly','','Vme', ''
+/
+&namsbc
+   ln_apr_dyn             = .false.                    !   patm gradient added in ocean & ice eqs.   (t => fill namsbc_apr )
+   ln_blk                 = .true.                     !   bulk formulation                          (t => fill namsbc_blk )
+   ln_cpl                 = .false.                    !   atmosphere coupled   formulation          ( requires key_oasis3 )
+   ln_dm2dc               = .true.                     !   daily mean to diurnal cycle on short wave
+   ln_flx                 = .false.                    !   flux formulation                          (t => fill namsbc_flx )
+   ln_ice_embd            = .false.                    !   =t embedded sea-ice (pressure + mass and salt exchanges)
+   ln_isf                 = .true.                     !   ice shelf                                 (t   => fill namsbc_isf & namsbc_iscpl)
+   ln_mixcpl              = .false.                    !   forced-coupled mixed formulation          ( requires key_oasis3 )
+   ln_rnf                 = .true.                     !   runoffs                                   (t => fill namsbc_rnf)
+   ln_ssr                 = .true.                     !   sea surface restoring on t and/or s       (t => fill namsbc_ssr)
+   ln_traqsr              = .true.                     !   light penetration in the ocean            (t => fill namtra_qsr)
+   ln_usr                 = .false.                    !   user defined formulation                  (t => check usrdef_sbc)
+   ln_wave                = .false.                    !   activate coupling with wave  (t => fill namsbc_wave)
+   nn_components          = 0                          !   configuration of the opa-sas oasis coupling
+   nn_fsbc                = 1                          !   frequency of sbc module call
+   nn_fwb                 = 0                          !   freshwater budget: =0 unchecked
+   nn_ice                 = 2                          !   =0 no ice boundary condition
+   nn_lsm                 = -3                         !   =0 land/sea mask for input fields is not applied (keep empty land/sea mask filename field) ,
+/
+&namsbc_flx
+/
+&namsbc_blk
+   cn_dir                 = '/projects/jmmp/almega/DFS5.2/'     !   root directory for the bulk data location
+   ln_cd_l12              = .false.                    !   air-ice drags = f(ice concentration) (lupkes et al. 2012)
+   ln_cd_l15              = .false.                    !   air-ice drags = f(ice concentration) (lupkes et al. 2015)
+   ln_coare_3p0           = .false.                    !  "coare 3.0" algorithm   (fairall et al. 2003)
+   ln_coare_3p5           = .false.                    !  "coare 3.5" algorithm   (edson et al. 2013)
+   ln_ecmwf               = .false.                    !  "ecmwf"     algorithm   (ifs cycle 31)
+   ln_ncar                = .true.                     !  "ncar"      algorithm   (large and yeager 2008)
+   ln_taudif              = .false.                    !   hf tau contribution: use "mean of stress module - module of the mean stress" data
+   rn_efac                = 1.0                        !   multiplicative factor for evaporation (0. or 1.)
+   rn_pfac                = 1.0                        !   multiplicative factor for precipitation (total & snow)
+   rn_vfac                = 1.0                        !   multiplicative factor for ocean & ice velocity used to
+   rn_zqt                 = 2.0                        !   air temperature & humidity reference height (m)
+   rn_zu                  = 10.0                       !   wind vector reference height (m)
+   sn_humi                = 'drowned_q2_DFS5.2',3,'q2',.true.,.false.,'yearly','weights_grid03_bilinear_eorca025.nc','',''
+   sn_prec                = 'drowned_precip_DFS5.2',24,'precip',.true.,.false.,'yearly','weights_grid03_bilinear_eorca025.nc','',''
+   sn_qlw                 = 'drowned_radlw_DFS5.2',24,'radlw',.false.,.false.,'yearly','weights_grid03_bilinear_eorca025.nc','',''
+   sn_qsr                 = 'drowned_radsw_DFS5.2',24,'radsw',.false.,.false.,'yearly','weights_grid03_bilinear_eorca025.nc','',''
+   sn_slp                 = 'drowned_msl_ERAinterim',6,'msl',.true.,.false.,'yearly','weights_grid03_bilinear_eorca025.nc','',''
+   sn_snow                = 'drowned_snow_DFS5.2',24,'snow',.true.,.false.,'yearly','weights_grid03_bilinear_eorca025.nc','',''
+   sn_tair                = 'drowned_t2_DFS5.2',3,'t2',.true.,.false.,'yearly','weights_grid03_bilinear_eorca025.nc','',''
+   sn_tdif                = 'drowned_taudfif_DFS5.',24,'taudif',.false.,.false.,'yearly','weights_coreII_eorca1_bilinear.nc','',''
+   sn_wndi                = 'drowned_u10_DFS5.2',6,'u10',.true.,.false.,'yearly','weights_grid03_bicubic_eorca025.nc','Ume',''
+   sn_wndj                = 'drowned_v10_DFS5.2',6,'v10',.true.,.false.,'yearly','weights_grid03_bicubic_eorca025.nc','Vme',''
+/
+&namsbc_cpl
+/
+&namsbc_sas
+   cn_dir                 = './'                       !   root directory for the ocean data location
+   l_sasread              = .true.                     !   =t read in file ;  =f set all to 0. (see sbcssm)
+   ln_3d_uve              = .false.                    !   specify whether we are supplying a 3d u,v and e3 field
+   ln_read_frq            = .false.                    !   specify whether we must read frq or not
+   sn_e3t                 = 'sas_grid_T',120,'e3t_m',.true.,.true.,'yearly','','',''
+   sn_frq                 = 'sas_grid_T',120,'frq_m',.true.,.true.,'yearly','','',''
+   sn_sal                 = 'sas_grid_T',120,'sosaline',.true.,.true.,'yearly','','',''
+   sn_ssh                 = 'sas_grid_T',120,'sossheig',.true.,.true.,'yearly','','',''
+   sn_tem                 = 'sas_grid_T',120,'sosstsst',.true.,.true.,'yearly','','',''
+   sn_usp                 = 'sas_grid_U',120,'uos',.true.,.true.,'yearly','','',''
+   sn_vsp                 = 'sas_grid_V',120,'vos',.true.,.true.,'yearly','','',''
+/
+&namsbc_iif
+/
+&namtra_qsr
+   cn_dir                 = './'                       !   root directory for the chlorophyl data location
+   ln_qsr_2bd             = .false.                    !   2bd light penetration (two bands)
+   ln_qsr_bio             = .false.                    !   bio-model light penetration
+   ln_qsr_rgb             = .true.                     !   rgb light penetration (red-green-blue)
+   nn_chldta              = 0                          !   rgb : chl data (=1) or cst value (=0)
+   rn_abs                 = 0.58                       !   rgb & 2bd: fraction absorbed in the very near surface
+   rn_si0                 = 0.35                       !   rgb & 2bd: shortess depth of extinction
+   sn_chl                 = 'chlorophyll',-1,'CHLA',.true.,.true.,'yearly','','',''
+/
+&namsbc_rnf
+   cn_dir                 = './'                       !   root directory for the runoff data location
+   ln_rnf_depth           = .false.                    !   read in depth information for runoff
+   ln_rnf_depth_ini       = .false.                    !  compute depth at initialisation from runoff file
+   ln_rnf_mouth           = .true.                     !   specific treatment at rivers mouths
+   ln_rnf_sal             = .false.                    !   read in salinity information for runoff
+   ln_rnf_tem             = .false.                    !   read in temperature information for runoff
+   rn_avt_rnf             = 2.0e-3                     !   value of the additional vertical mixing coef. [m2/s] (ln_rnf_mouth=t)
+   rn_hrnf                = 10.0                       !   depth over which enhanced vertical mixing is used    (ln_rnf_mouth=t)
+   rn_rfact               = 1.0                        !   multiplicative factor for runoff
+   sn_cnf                 = 'runoff_1m_nomask.nc',0,'socoefr',.false.,.true.,'yearly','','',''
+   sn_rnf                 = 'runoff_1m_nomask.nc',-1,'sornficb',.true.,.true.,'yearly','','',''
+/
+&namsbc_isf
+   nn_isf                 = 3                          !   ice shelf melting/freezing
+   sn_depmax_isf          = 'runoff_1m_nomask.nc',-12,'sozisfmax',.false.,.true.,'yearly','','',''
+   sn_depmin_isf          = 'runoff_1m_nomask.nc',-12,'sozisfmin',.false.,.true.,'yearly','','',''
+   sn_rnfisf              = 'runoff_1m_nomask.nc',-12,'sofwfisf',.false.,.true.,'yearly','','',''
+/
+&namsbc_iscpl
+/
+&namsbc_apr
+/
+&namsbc_ssr
+   cn_dir                 = './'                       !   root directory for the sst/sss data location
+   ln_sssr_bnd            = .true.                     !   flag to bound erp term (associated with nn_sssr=2)
+   nn_sssr                = 2                          !   add a damping term to the surface freshwater flux (=2)
+   nn_sstr                = 0                          !   add a retroaction term to the surface heat flux (=1) or not (=0)
+   rn_deds                = -33.3333333                !   magnitude of the damping on salinity   [mm/day]
+   rn_sssr_bnd            = 4.0                        !   abs(max/min) value of the damping erp term [mm/day]
+   sn_sss                 = 'sss_1m.nc',-1,'salinity',.true.,.true.,'yearly','','',''
+/
+&namsbc_wave
+/
+&namberg
+   cn_dir                 = './'                       !   root directory for the calving data location
+   ln_bergdia             = .true.                     !  calculate budgets
+   ln_icebergs            = .true.                     !  activate iceberg floats (force =f with "key_agrif")
+   ln_operator_splitting  = .true.                     !  use first order operator splitting for thermodynamics
+   ln_passive_mode        = .false.                    !  iceberg - ocean decoupling
+   nn_sample_rate         = 96                         !  timesteps between sampling for trajectory storage
+   nn_test_icebergs       = -1                         !  create test icebergs of this class (-1 = no)
+   nn_verbose_level       = 1                          !  turn on more verbose output if level > 0
+   nn_verbose_write       = 96                         !  timesteps between verbose messages
+   rn_bits_erosion_fraction = 0.0                        !  fraction of erosion melt flux to divert to bergy bits
+   rn_distribution        = 0.24,0.12,0.15,0.18,0.12,0.07,0.03,0.03,0.03,0.02
+   rn_initial_mass        = 8.8e7,4.1e8,3.3e9,1.8e10,3.8e10,7.5e10,1.2e11,2.2e11,3.9e11,7.4e11
+   rn_initial_thickness   = 40.0,67.0,133.0,175.0,6*250.0
+   rn_low_ratio           = 1.5                        !  initial ratio l/w for newly calved icebergs
+   rn_mass_scaling        = 2000,200,50,20,10,5,2,1,1,1
+   rn_rho_bergs           = 850.0                      !  density of icebergs
+   rn_sicn_shift          = 0.0                        !  shift of sea-ice concn in erosion flux (0<sicn_shift<1)
+   rn_speed_limit         = 0.0                        !  cfl speed limit for a berg
+   sn_icb                 = 'calving',-12,'soicbclv',.true.,.true.,'yearly','','',''
+/
+&namlbc
+   ln_shlat2d             = .false.               
+   ln_vorlat              = .false.                    !   consistency of vorticity boundary condition with analytical eqs.
+   rn_shlat               = 0.0                        !   2 < shlat
+/
+&namagrif
+   ln_chk_bathy           = .false.                    !   =t  check the parent bathymetry
+   ln_spc_dyn             = .true.                     !   use 0 as special value for dynamics
+   rn_sponge_dyn          = 2880.0                     !   coefficient for dynamics sponge layer [m2/s]
+   rn_sponge_tra          = 2880.0                     !   coefficient for tracer   sponge layer [m2/s]
+/
+&nam_tide
+   ln_tide                = .false.                    !  activate tides
+/
+&nambdy
+   ln_bdy                 = .false.                    !   use unstructured open boundaries
+/
+&nambdy_dta
+   bn_a_i                 =                       
+   bn_h_i                 =                       
+   bn_h_s                 =                       
+   bn_sal                 = 'amm12_bdyT_tra',24,'vosaline',.true.,.false.,'daily','','',''
+   bn_ssh                 = 'amm12_bdyT_u2d',24,'sossheig',.true.,.false.,'daily','','',''
+   bn_tem                 = 'amm12_bdyT_tra',24,'votemper',.true.,.false.,'daily','','',''
+   bn_u2d                 = 'amm12_bdyU_u2d',24,'vobtcrtx',.true.,.false.,'daily','','',''
+   bn_u3d                 = 'amm12_bdyU_u3d',24,'vozocrtx',.true.,.false.,'daily','','',''
+   bn_v2d                 = 'amm12_bdyV_u2d',24,'vobtcrty',.true.,.false.,'daily','','',''
+   bn_v3d                 = 'amm12_bdyV_u3d',24,'vomecrty',.true.,.false.,'daily','','',''
+   cn_dir                 = 'bdydta/'                  !   root directory for the bdy data location
+   ln_full_vel            = .false.                    !   t if [uv]3d are "full" velocities and not only its baroclinic components
+/
+&nambdy_tide
+   filtide                = 'bdydta/amm12_bdytide_'     !   file name root of tidal forcing files
+   ln_bdytide_2ddta       = .false.               
+   ln_bdytide_conj        = .false.               
+/
+&namdrg
+   ln_drgimp              = .false.                    !   implicit top/bottom friction flag
+   ln_lin                 = .false.                    !       linear  drag: cd = cd0 uc0                   &   namdrg_top)
+   ln_loglayer            = .false.                    !   logarithmic drag: cd = vkarmn/log(z/z0) |u|
+   ln_non_lin             = .true.                     !   non-linear  drag: cd = cd0 |u|
+   ln_off                 = .false.                    !   free-slip       : cd = 0                  (f => fill namdrg_bot
+/
+&namdrg_top
+/
+&namdrg_bot
+   ln_boost               = .true.                     !   =t regional boost of cd0 ; =f constant
+   rn_boost               = 50.0                       !   local boost factor  [-]
+   rn_cd0                 = 1.0e-3                     !   drag coefficient [-]
+   rn_ke0                 = 2.5e-3                     !   background kinetic energy  [m2/s2] (non-linear cases)
+/
+&nambbc
+   cn_dir                 = './'                       !   root directory for the geothermal data location
+   ln_trabbc              = .true.                     !   apply a geothermal heating at the ocean bottom
+   nn_geoflx              = 2                          !   geothermal heat flux: = 1 constant flux
+   sn_qgh                 = 'geothermal_heating.nc',-12,'heatflow',.false.,.true.,'yearly','','',''
+/
+&nambbl
+   ln_trabbl              = .true.                     !   bottom boundary layer parameterisation flag
+   nn_bbl_adv             = 1                          !   advective bbl (=1/2) or not (=0)
+   nn_bbl_ldf             = 1                          !   diffusive bbl (=1)   or not (=0)
+   rn_ahtbbl              = 1000.0                     !   lateral mixing coefficient in the bbl  [m2/s]
+   rn_gambbl              = 10.0                       !   advective bbl coefficient                 [s]
+/
+&nameos
+   ln_eos80               = .false.                    !   = use eos80
+   ln_seos                = .false.                    !   = use s-eos (simplified eq.)
+   ln_teos10              = .true.                     !   = use teos-10
+/
+&namtra_adv
+   ln_traadv_cen          = .false.                    !   2nd order centered scheme
+   ln_traadv_fct          = .true.                     !   fct scheme
+   ln_traadv_mus          = .false.                    !   muscl scheme
+   ln_traadv_off          = .false.                    !   no tracer advection
+   ln_traadv_qck          = .false.                    !   quickest scheme
+   ln_traadv_ubs          = .false.                    !   ubs scheme
+   nn_fct_h               = 4                          !   =2/4, horizontal 2nd / 4th order
+   nn_fct_v               = 4                          !   =2/4, vertical   2nd / compact 4th order
+/
+&namtra_mle
+   ln_mle                 = .false.                    !  (t) use the mixed layer eddy (mle) parameterisation
+/
+&namtra_ldf
+   ln_traldf_blp          = .false.                    !   bilaplacian operator
+   ln_traldf_hor          = .false.                    !   horizontal  (geopotential)
+   ln_traldf_iso          = .true.                     !   iso-neutral (standard operator)
+   ln_traldf_lap          = .true.                     !     laplacian operator
+   ln_traldf_lev          = .false.                    !   iso-level
+   ln_traldf_msc          = .false.                    !   method of stabilizing correction      (both operators)
+   ln_traldf_off          = .false.                    !   no explicit diffusion
+   ln_traldf_triad        = .false.                    !   iso-neutral (triad    operator)
+   nn_aht_ijk_t           = 20                         !   space/time variation of eddy coefficient:
+   rn_slpmax              = 0.01                       !   slope limit                           (both operators)
+   rn_ud                  = 0.011                      !   lateral diffusive velocity [m/s] (nn_aht_ijk_t= 0, 10, 20, 30)
+/
+&namtra_eiv
+   ln_ldfeiv              = .false.                    !  use eddy induced velocity parameterization
+/
+&namtra_dmp
+   ln_tradmp              = .false.                    !   add a damping term (using resto.nc coef.)
+/
+&nam_vvl
+   ln_vvl_dbg             = .false.                    !   debug prints    (t/f)
+   ln_vvl_layer           = .false.                    !   full layer vertical coordinate
+   ln_vvl_zstar           = .true.                     !   z-star vertical coordinate
+   ln_vvl_zstar_at_eqtor  = .false.                    !   ztilde near the equator
+   ln_vvl_ztilde          = .false.                    !   z-tilde vertical coordinate: only high frequency variations
+   ln_vvl_ztilde_as_zstar = .false.                    !   ztilde vertical coordinate emulating zstar
+   rn_ahe3                = 0.0                        !   thickness diffusion coefficient
+   rn_lf_cutoff           = 5.0                        !   cutoff frequency for low-pass filter  [days]
+   rn_rst_e3t             = 30.0                       !   ztilde to zstar restoration timescale [days]
+   rn_zdef_max            = 0.9                        !   maximum fractional e3t deformation
+/
+&namdyn_adv
+   ln_dynadv_cen2         = .false.                    !   flux form - 2nd order centered scheme
+   ln_dynadv_off          = .false.                    !   linear dynamics (no momentum advection)
+   ln_dynadv_ubs          = .false.                    !   flux form - 3rd order ubs      scheme
+   ln_dynadv_vec          = .true.                     !   vector form - 2nd centered scheme
+   nn_dynkeg              = 1                          !  grad(ke) scheme: =0   c2  ;  =1   hollingsworth correction
+/
+&namdyn_vor
+   ln_dynvor_een          = .true.                     !   energy & enstrophy scheme
+   ln_dynvor_eet          = .false.                    !   energy conserving scheme (een using e3t)
+   ln_dynvor_ene          = .false.                    !   energy    conserving scheme
+   ln_dynvor_ens          = .false.                    !   enstrophy conserving scheme
+   ln_dynvor_ent          = .false.                    !   energy conserving scheme (t-point)
+   ln_dynvor_mix          = .false.                    !   mixed scheme
+   ln_dynvor_msk          = .false.                    !   vorticity multiplied by fmask (=t)        ==>>> please do not activate
+   nn_een_e3f             = 0                          !  =0  e3f = mi(mj(e3t))/4
+/
+&namdyn_hpg
+   ln_hpg_djc             = .false.                    !   s-coordinate (density jacobian with cubic polynomial)
+   ln_hpg_isf             = .false.                    !   s-coordinate (sco ) adapted to isf
+   ln_hpg_prj             = .false.                    !   s-coordinate (pressure jacobian scheme)
+   ln_hpg_sco             = .true.                     !   s-coordinate (standard jacobian formulation)
+   ln_hpg_zco             = .false.                    !   z-coordinate - full steps
+   ln_hpg_zps             = .false.                    !   z-coordinate - partial steps (interpolation)
+/
+&namdyn_spg
+   ln_bt_auto             = .true.                     !  number of sub-step defined from:
+   ln_bt_av               = .true.                     !  time filtering of barotropic variables
+   ln_bt_fw               = .true.                     !  forward integration of barotropic eqs.
+   ln_dynspg_exp          = .false.                    !  explicit free surface
+   ln_dynspg_ts           = .true.                     !  split-explicit free surface
+   nn_bt_flt              = 1                          !  time filter choice  = 0 none
+   rn_bt_cmax             = 0.8                        !  =t : the maximum courant number allowed
+/
+&namdyn_ldf
+   ln_dynldf_blp          = .true.                     !   bilaplacian operator
+   ln_dynldf_hor          = .false.                    !   horizontal  (geopotential)
+   ln_dynldf_iso          = .false.                    !   iso-neutral (lap only)
+   ln_dynldf_lap          = .false.                    !     laplacian operator
+   ln_dynldf_lev          = .true.                     !   iso-level
+   ln_dynldf_off          = .false.                    !   no operator (i.e. no explicit diffusion)
+   nn_ahm_ijk_t           = 20                         !   space/time variation of eddy coefficient :
+   rn_uv                  = 0.0838                     !   lateral viscous velocity [m/s] (nn_ahm_ijk_t= 0, 10, 20, 30)
+/
+&namzdf
+   ln_zdfcst              = .false.                    !   constant mixing
+   ln_zdfddm              = .true.                     !  double diffusive mixing
+   ln_zdfevd              = .true.                     !   enhanced vertical diffusion
+   ln_zdfgls              = .false.                    !   generic length scale closure           (t =>   fill namzdf_gls)
+   ln_zdfiwm              = .false.                    !  internal wave-induced mixing            (t =>   fill namzdf_iwm)
+   ln_zdfnpc              = .false.                    !   non-penetrative convective algorithm
+   ln_zdfosm              = .false.                    !   osmosis bl closure                     (t =>   fill namzdf_osm)
+   ln_zdfric              = .false.                    !   local richardson dependent formulation (t =>   fill namzdf_ric)
+   ln_zdfswm              = .false.                    !  surface  wave-induced mixing            (t => ln_wave=ln_sdw=t )
+   ln_zdftke              = .true.                     !   turbulent kinetic energy closure       (t =>   fill namzdf_tke)
+   ln_zdftmx              = .true.                
+   nn_avb                 = 0                          !   profile for background avt & avm (=1) or not (=0)
+   nn_evdm                = 1                          !  apply on tracer (=0) or on tracer and momentum (=1)
+   nn_havtb               = 1                          !   horizontal shape for avtb (=1) or not (=0)
+   rn_avm0                = 1.2e-4                     !   vertical eddy viscosity   [m2/s]       (background kz if ln_zdfcst=f)
+   rn_avt0                = 1.2e-5                     !   vertical eddy diffusivity [m2/s]       (background kz if ln_zdfcst=f)
+   rn_avts                = 1.0e-4                     !   maximum avs (vertical mixing on salinity)
+   rn_evd                 = 10.0                       !  mixing coefficient [m2/s]
+   rn_hsbfr               = 1.6                        !   heat/salt buoyancy flux ratio
+/
+&namzdf_ric
+/
+&namzdf_tke
+   ln_drg                 = .false.                    !   top/bottom friction added as boundary condition of tke
+   ln_lc                  = .true.                     !   langmuir cell parameterisation (axell 2002)
+   ln_mxl0                = .true.                     !   surface mixing length scale = f(wind stress) (t) or not (f)
+   nn_etau                = 1                          !   penetration of tke below the mixed layer (ml) due to niws
+   nn_htau                = 4                          !   type of exponential decrease of tke penetration below the ml
+   nn_mxl                 = 3                          !   mixing length: = 0 bounded by the distance to surface and bottom
+   nn_pdl                 = 1                          !   prandtl number function of richarson number (=1, avt=pdl(ri)*avm) or not (=0, avt=avm)
+   rn_bshear              = 1.0e-20                    !  background shear (>0) currently a numerical threshold (do not change it)
+   rn_ebb                 = 67.83                      !   coef. of the surface input of tke (=67.83 suggested when ln_mxl0=t)
+   rn_ediff               = 0.1                        !   coef. for vertical eddy coef. (avt=rn_ediff*mxl*sqrt(e) )
+   rn_ediss               = 0.7                        !   coef. of the kolmogoroff dissipation
+   rn_efr                 = 0.05                       !   fraction of surface tke value which penetrates below the ml (nn_etau=1 or 2)
+   rn_emin                = 1.0e-6                     !   minimum value of tke [m2/s2]
+   rn_emin0               = 1.0e-4                     !   surface minimum value of tke [m2/s2]
+   rn_lc                  = 0.15                       !   coef. associated to langmuir cells
+   rn_mxl0                = 0.04                       !   surface  buoyancy lenght scale minimum value
+/
+&namzdf_gls
+/
+&namzdf_mldzint
+/
+&namzdf_osm
+/
+&namzdf_iwm
+/
+&namzdf_tmx
+/
+&nammpp
+   jpni                   = 28                         !   number of processors following i (set automatically if < 1), see also ln_listonly = t
+   jpnj                   = 17                         !   number of processors following j (set automatically if < 1), see also ln_listonly = t
+   ln_nnogather           = .true.                     !   activate code to avoid mpi_allgather use at the northfold
+/
+&namctl
+   ln_ctl                 = .false.                    !  toggle all report printing on/off (t/f); ignored if sn_cfctl%l_config is t
+   ln_diacfl              = .false.                    !   cfl diagnostics write out in cfl_diagnostics.ascii
+   ln_timing              = .true.                     !   timing by routine write out in timing.output file
+   nn_ictle               = 0                          !   end   i indice of control sum        multi processor runs
+   nn_ictls               = 0                          !   start i indice of control sum (use to compare mono versus
+   nn_isplt               = 1                          !   number of processors in i-direction
+   nn_jctle               = 0                          !   end   j indice of control
+   nn_jctls               = 0                          !   start j indice of control               over a subdomain)
+   nn_jsplt               = 1                          !   number of processors in j-direction
+   nn_print               = 0                          !   level of print (0 no extra print)
+   sn_cfctl%l_config      = .false.                    !  if .true. then control which reports are written with the following
+/
+&namsto
+   cn_storst_in           = 'restart_sto'              !   suffix of stochastic parameter restart file (input)
+   cn_storst_out          = 'restart_sto'              !   suffix of stochastic parameter restart file (output)
+   ln_rstseed             = .true.                     !  read seed of rng from restart file
+   ln_rststo              = .false.                    !  start from mean parameter (f) or from restart file (t)
+   ln_sto_eos             = .false.                    !  stochastic equation of state
+   nn_eos_flt             = 0                          !  passes of laplacian filter
+   nn_eos_ord             = 1                          !  order of autoregressive processes
+   nn_sto_eos             = 1                          !  number of independent random walks
+   rn_eos_lim             = 2.0                        !  limitation factor (default = 3.0)
+   rn_eos_stdxy           = 1.4                        !  random walk horz. standard deviation (in grid points)
+   rn_eos_stdz            = 0.7                        !  random walk vert. standard deviation (in grid points)
+   rn_eos_tcor            = 1440.0                     !  random walk time correlation (in timesteps)
+/
+&namtrd
+   ln_dyn_mxl             = .false.                    !  (t) 2d momentum trends averaged over the mixed layer (not coded yet)
+   ln_dyn_trd             = .false.                    !  (t) 3d momentum trend output
+   ln_glo_trd             = .false.                    !  (t) global domain averaged diag for t, t^2, ke, and pe
+   ln_ke_trd              = .false.                    !  (t) 3d kinetic   energy     trends
+   ln_pe_trd              = .false.                    !  (t) 3d potential energy     trends
+   ln_tra_mxl             = .false.                    !  (t) 2d tracer trends averaged over the mixed layer (not coded yet)
+   ln_tra_trd             = .false.                    !  (t) 3d tracer trend output
+   ln_vor_trd             = .false.                    !  (t) 2d barotropic vorticity trends (not coded yet)
+/
+&namptr
+   ln_diaptr              = .false.                    !   poleward heat and salt transport (t) or not (f)
+/
+&namhsb
+   ln_diahsb              = .true.                     !   output the heat and salt budgets (t) or not (f)
+/
+&namdiu
+   ln_diurnal             = .false.               
+   ln_diurnal_only        = .false.               
+/
+&namflo
+   jpnfl                  = 1                          !     total number of floats during the run
+   jpnnewflo              = 0                          !     number of floats for the restart
+   ln_argo                = .false.                    !     argo type floats (stay at the surface each 10 days)
+   ln_ariane              = .true.                     !     input with ariane tool convention(t)
+   ln_flo_ascii           = .true.                     !     output with ariane tool netcdf convention(f) or ascii file (t)
+   ln_flork4              = .false.                    !     trajectories computed with a 4th order runge-kutta (t)
+   ln_rstflo              = .false.                    !     float restart (t) or not (f)
+   nn_stockfl             = 5475                       !     frequency of creation of the float restart file
+   nn_writefl             = 75                         !     frequency of writing in float output file
+/
+&nam_diaharm
+   nit000_han             = 1                          !     first time step used for harmonic analysis
+   nitend_han             = 75                         !     last time step used for harmonic analysis
+   nstep_han              = 15                         !     time step frequency for harmonic analysis
+   tname(1)               = 'M2'                       !     name of tidal constituents
+   tname(2)               = 'K1'                       !               ---
+/
+&namdct
+/
+&nam_diatmb
+/
+&nam_dia25h
+   ln_dia25h              = .false.                    !  choose 25h mean output or not
+/
+&namnc4
+   ln_nc4zip              = .true.                     !   (t) use netcdf4 chunking and compression
+   nn_nchunks_i           = 4                          !   number of chunks in i-dimension
+   nn_nchunks_j           = 4                          !   number of chunks in j-dimension
+   nn_nchunks_k           = 31                         !   number of chunks in k-dimension
+/
+&namobs
+   cn_altbiasfile         = 'altbias.nc'               !  altimeter bias input file name
+   cn_gridsearchfile      = 'gridsearch.nc'            !  grid search file name
+   cn_profbfiles          = 'profiles_01.nc'           !  profile feedback input observation file names
+   cn_sicfbfiles          = 'sic_01.nc'                !  sic feedback input observation file names
+   cn_slafbfiles          = 'sla_01.nc'                !  sla feedback input observation file names
+   cn_sssfbfiles          = 'sss_01.nc'                !  sss feedback input observation file names
+   cn_sstbiasfiles        = 'sstbias.nc'               !  sst bias input file name
+   cn_sstfbfiles          = 'sst_01.nc'                !  sst feedback input observation file names
+   cn_velfbfiles          = 'vel_01.nc'                !  velocity feedback input observation file names
+   ln_altbias             = .false.                    !  logical switch for altimeter bias correction
+   ln_diaobs              = .false.                    !  logical switch for the observation operator
+   ln_grid_global         = .true.                     !  logical switch for global distribution of observations
+   ln_grid_search_lookup  = .false.                    !  logical switch for obs grid search w/lookup table
+   ln_ignmis              = .true.                     !  logical switch for ignoring missing files
+   ln_nea                 = .false.                    !  logical switch for rejection of observations near land
+   ln_s3d                 = .false.                    !  logical switch for s profile observations
+   ln_s_at_t              = .false.                    !  logical switch for computing model s at t obs if not there
+   ln_sic                 = .false.                    !  logical switch for sea ice observations
+   ln_sic_fp_indegs       = .true.                     !  logical for sic: t=> averaging footprint is in degrees, f=> in metres
+   ln_sla                 = .false.                    !  logical switch for sla observations
+   ln_sla_fp_indegs       = .true.                     !  logical for sla: t=> averaging footprint is in degrees, f=> in metres
+   ln_sss                 = .false.                    !  logical swithc for sss observations
+   ln_sss_fp_indegs       = .true.                     !  logical for sss: t=> averaging footprint is in degrees, f=> in metres
+   ln_sst                 = .false.                    !  logical switch for sst observations
+   ln_sst_fp_indegs       = .true.                     !  logical for sst: t=> averaging footprint is in degrees, f=> in metres
+   ln_sstbias             = .false.                    !  logical switch for sst bias correction
+   ln_sstnight            = .false.                    !  logical switch for calculating night-time average for sst obs
+   ln_t3d                 = .false.                    !  logical switch for t profile observations
+   ln_vel3d               = .false.                    !  logical switch for velocity observations
+   nn_1dint               = 0                          !  type of vertical interpolation method
+   nn_2dint               = 0                          !  default horizontal interpolation method
+   nn_2dint_sic           = 0                          !  horizontal interpolation method for sic
+   nn_2dint_sla           = 0                          !  horizontal interpolation method for sla
+   nn_2dint_sss           = 0                          !  horizontal interpolation method for sss
+   nn_2dint_sst           = 0                          !  horizontal interpolation method for sst
+   nn_msshc               = 0                          !  mssh correction scheme
+   nn_profdavtypes        = -1                         !  profile daily average types - array
+   rn_dobsend             = 10102.000000               !  final date in window yyyymmdd.hhmmss
+   rn_dobsini             = 10101.000000               !  initial date in window yyyymmdd.hhmmss
+   rn_gridsearchres       = 0.5                        !  grid search resolution
+   rn_mdtcorr             = 1.61                       !  mdt  correction
+   rn_mdtcutoff           = 65.0                       !  mdt cutoff for computed correction
+   rn_sic_avglamscl       = 0.0                        !  e/w diameter of sic observation footprint (metres/degrees)
+   rn_sic_avgphiscl       = 0.0                        !  n/s diameter of sic observation footprint (metres/degrees)
+   rn_sla_avglamscl       = 0.0                        !  e/w diameter of sla observation footprint (metres/degrees)
+   rn_sla_avgphiscl       = 0.0                        !  n/s diameter of sla observation footprint (metres/degrees)
+   rn_sss_avglamscl       = 0.0                        !  e/w diameter of sss observation footprint (metres/degrees)
+   rn_sss_avgphiscl       = 0.0                        !  n/s diameter of sss observation footprint (metres/degrees)
+   rn_sst_avglamscl       = 0.0                        !  e/w diameter of sst observation footprint (metres/degrees)
+   rn_sst_avgphiscl       = 0.0                        !  n/s diameter of sst observation footprint (metres/degrees)
+/
+&nam_asminc
+   ln_asmdin              = .false.                    !   logical switch for direct initialization (di)
+   ln_asmiau              = .false.                    !   logical switch for incremental analysis updating (iau)
+   ln_bkgwri              = .false.                    !   logical switch for writing out background state
+   ln_dyninc              = .false.                    !   logical switch for applying velocity increments
+   ln_salfix              = .false.                    !   logical switch for ensuring that the sa > salfixmin
+   ln_sshinc              = .false.                    !   logical switch for applying ssh increments
+   ln_trainc              = .false.                    !   logical switch for applying tracer increments
+   niaufn                 = 0                          !   type of iau weighting function
+   nitbkg                 = 0                          !   timestep of background in [0,nitend-nit000-1]
+   nitdin                 = 0                          !   timestep of background for di in [0,nitend-nit000-1]
+   nitiaufin              = 15                         !   timestep of end of iau interval in [0,nitend-nit000-1]
+   nitiaustr              = 1                          !   timestep of start of iau interval in [0,nitend-nit000-1]
+   nn_divdmp              = 0                          !   number of iterations of divergence damping operator
+   salfixmin              = -9999                      !   minimum salinity after applying the increments
+/
