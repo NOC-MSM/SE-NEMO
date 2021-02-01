@@ -1,6 +1,6 @@
 # Shelf Enabled Global NEMO (SE-NEMO)
 
-**_\*\* NB the code as it stands is a placeholder - not intended for use - the setup script has been tested and will checkout, compile and run the ORCA025 (NEMO 4.0.2) code on ARCHER, but namelists and forcing files are yet to be configured for the 'Shelf Enabled' part_**
+**_\*\* NB the code as it stands is a placeholder - not intended for use - the setup script has been tested and will checkout, compile and run the ORCA025 (NEMO 4.0.4) code on ARCHER, but namelists and forcing files are yet to be configured for the 'Shelf Enabled' part_**
 
 Configuration files for SE-NEMO project
 
