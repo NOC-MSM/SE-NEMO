@@ -2,4 +2,4 @@
 
 Contains developement code for SE-NEMO
 
-sbcrnf.F90 - bugfixes for missing input directory\
+sbcrnf.F90 - bugfixes for missing input directory
