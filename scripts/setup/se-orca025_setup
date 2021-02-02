@@ -143,10 +143,7 @@ ln -s ../../SHARED/field_def_nemo-oce.xml field_def_nemo-oce.xml
 ln -s ../../SHARED/field_def_nemo-ice.xml field_def_nemo-ice.xml
 ln -s ../../SHARED/domain_def_nemo.xml domain_def_nemo.xml
 ln -s ../../SHARED/axis_def_nemo.xml axis_def_nemo.xml
-
-wget http://gws-access.ceda.ac.uk/public/jmmp_collab/se-orca025/inputs.tar.gz
-tar xvfz inputs.tar.gz
-rm inputs.tar.gz
+ln -s ../INPUTS INPUTS
 
 mkdir meta_out
 mkdir RESTARTS
@@ -154,6 +151,12 @@ mkdir OUTPUTS
 
 
 ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXP00/xios_server.exe
+
+mkdir $CONFIG_DIR/INPUTS
+cd $CONFIG_DIR/INPUTS
+wget http://gws-access.ceda.ac.uk/public/jmmp_collab/se-orca025/inputs.tar.gz
+tar xvfz inputs.tar.gz
+rm inputs.tar.gz
 
 cp $REPO_DIR/EXP00/* $CONFIG_DIR/EXP00/
 # First copy GO8 code
