@@ -32,7 +32,7 @@
 #
 %NCDF_HOME           $NETCDF_DIR
 %HDF5_HOME           $HDF5_DIR
-%XIOS_HOME           /work/n01/shared/acc/xios-2.5
+%XIOS_HOME           XXX_XIOS_DIR_XXX
 #OASIS_HOME          
 
 %NCDF_INC            -I%NCDF_HOME/include -I%HDF5_HOME/include
@@ -42,7 +42,7 @@
 #OASIS_INC           -I%OASIS_HOME/build/lib/mct -I%OASIS_HOME/build/lib/psmile.MPI1
 #OASIS_LIB           -L%OASIS_HOME/lib -lpsmile.MPI1 -lmct -lmpeu -lscrip
 
-%CPP	             cpp
+%CPP	               cpp
 %FC                  ftn
 %FCFLAGS             -em -s integer32 -s real64 -O1 -hflex_mp=intolerant
 %FFLAGS              -em -s integer32 -s real64 -O1 -hflex_mp=intolerant
