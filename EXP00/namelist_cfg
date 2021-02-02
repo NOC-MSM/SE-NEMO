@@ -267,9 +267,9 @@
 !-----------------------------------------------------------------------
 &namdrg        !   top/bottom drag coefficient                          (default: NO selection)
 !-----------------------------------------------------------------------
-   ln_OFF      = .false.   !  free-slip       : Cd = 0                  (F => fill namdrg_bot
-   ln_lin      = .false.   !      linear  drag: Cd = Cd0 Uc0                   &   namdrg_top)
-   ln_non_lin  = .true.    !  non-linear  drag: Cd = Cd0 |U|
+   ln_drg_OFF  = .false.   !  free-slip       : Cd = 0                  (F => fill namdrg_bot
+   ln_non_lin  = .true.   !  non-linear  drag: Cd = Cd0 |U|
+/
 !-----------------------------------------------------------------------
 &namdrg_bot    !   bottom friction
 !-----------------------------------------------------------------------
@@ -557,8 +557,8 @@
 &nammpp        !   Massively Parallel Processing                        ("key_mpp_mpi)
 !-----------------------------------------------------------------------
    ln_nnogather=  .true.   !
-    jpni        = 19   ! jpnij = 251
-    jpnj        = 18   ! jpnij = 251
+    jpni        = 32   ! jpnij = 251
+    jpnj        = 34   ! jpnij = 251
     !jpni        = 14   ! jpnij = 142
     !jpnj        = 13   ! jpnij = 142
 /
