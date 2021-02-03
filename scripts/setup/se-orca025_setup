@@ -152,8 +152,7 @@ mkdir OUTPUTS
 
 ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXP00/xios_server.exe
 
-mkdir $CONFIG_DIR/INPUTS
-cd $CONFIG_DIR/INPUTS
+cd $CONFIG_DIR
 wget http://gws-access.ceda.ac.uk/public/jmmp_collab/se-orca025/inputs.tar.gz
 tar xvfz inputs.tar.gz
 rm inputs.tar.gz
@@ -183,5 +182,5 @@ echo
 echo "  - update the runscript accordingly "
 echo "      (project code, nodes, modules, etc)"
 echo
-echo "  - submit via the qsub command"
+echo "  - submit via the slurm command"
 echo    
