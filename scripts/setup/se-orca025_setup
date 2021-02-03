@@ -153,13 +153,14 @@ do
 	mkdir RESTARTS
 	mkdir OUTPUTS
 
-	ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXP00/xios_server.exe
+	ln -s $XIOS_DIR/bin/xios_server.exe xios_server.exe
 	cp $REPO_DIR/$dnam/* $CONFIG_DIR/$dnam/
+        sed "s?XXX_MOD_XXX?$REPO_DIR?" runscript.slurm > tmp
+        mv tmp runscript.slurm
 
 done
 
-mkdir $CONFIG_DIR/INPUTS
-cd $CONFIG_DIR/INPUTS
+cd CONFIG_DIR
 wget http://gws-access.ceda.ac.uk/public/jmmp_collab/se-orca025/inputs.tar.gz
 tar xvfz inputs.tar.gz
 rm inputs.tar.gz
@@ -167,6 +168,7 @@ rm inputs.tar.gz
 # First copy GO8 code
 # cp -r $REPO_DIR/MY_SRC_GO8_FROZEN $CONFIG_DIR/MY_SRC
 # Then overwrite with any SE-NEMO mods
+mkdir $CONFIG_DIR/MY_SRC
 cp $REPO_DIR/MY_SRC/* $CONFIG_DIR/MY_SRC/
 cp $REPO_DIR/cpp_se-orca025.fcm $CONFIG_DIR/
 
@@ -188,5 +190,5 @@ echo
 echo "  - update the runscript accordingly "
 echo "      (project code, nodes, modules, etc)"
 echo
-echo "  - submit via the qsub command"
+echo "  - submit via the sbatch command"
 echo    
