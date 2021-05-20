@@ -153,9 +153,10 @@ mkdir OUTPUTS
 ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXP00/xios_server.exe
 
 cd $CONFIG_DIR
-wget http://gws-access.ceda.ac.uk/public/jmmp_collab/se-orca025/inputs.tar.gz
-tar xvfz inputs.tar.gz
-rm inputs.tar.gz
+#CW: no longer need following 3 lines, as forcing is already on ARCHER2 : will need to link it appropriately
+#wget http://gws-access.ceda.ac.uk/public/jmmp_collab/se-orca025/inputs.tar.gz
+#tar xvfz inputs.tar.gz
+#rm inputs.tar.gz
 
 cp $REPO_DIR/EXP00/* $CONFIG_DIR/EXP00/
 # First copy GO8 code
