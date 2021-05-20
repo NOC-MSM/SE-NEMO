@@ -8,7 +8,7 @@ Configuration files for SE-NEMO project
 
 ```
 git clone git@github.com:NOC-MSM/SE-NEMO.git
-./SE-NEMO/scripts/setup/se-orca025_setup_archer -w $PWD/test -x $PWD/test -s $PWD/SE-NEMO
+./SE-NEMO/scripts/setup/se-orca025_setup -w $PWD/test -x $PWD/test -s $PWD/SE-NEMO
 cd test/nemo/cfgs/se-orca025/EXP00
 ```
 Edit the project code in  `runscript.slurm` then:
