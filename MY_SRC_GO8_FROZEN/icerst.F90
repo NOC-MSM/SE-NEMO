@@ -17,6 +17,10 @@ MODULE icerst
    USE dom_oce        ! ocean domain
    USE phycst  , ONLY : rt0
    USE sbc_oce , ONLY : nn_fsbc, ln_cpl
+   USE sbc_oce , ONLY : nn_components, jp_iam_sas   ! SAS ss[st]_m init
+   USE sbc_oce , ONLY : sst_m, sss_m                ! SAS ss[st]_m init
+   USE oce     , ONLY : tsn                         ! SAS ss[st]_m init
+   USE eosbn2  , ONLY : l_useCT, eos_pt_from_ct     ! SAS ss[st]_m init
    USE iceistate      ! sea-ice: initial state
    USE icectl         ! sea-ice: control
    !
@@ -142,6 +146,7 @@ CONTAINS
       CALL iom_rstput( iter, nitrst, numriw, 'oa_i' , oa_i  )
       CALL iom_rstput( iter, nitrst, numriw, 'a_ip' , a_ip  )
       CALL iom_rstput( iter, nitrst, numriw, 'v_ip' , v_ip  )
+      CALL iom_rstput( iter, nitrst, numriw, 'v_il' , v_il  )
       ! Snow enthalpy
       DO jk = 1, nlay_s 
          WRITE(zchar1,'(I2.2)') jk
@@ -181,7 +186,7 @@ CONTAINS
       !!----------------------------------------------------------------------
       INTEGER           ::   jk
       LOGICAL           ::   llok
-      INTEGER           ::   id0, id1, id2, id3, id4   ! local integer
+      INTEGER           ::   id0, id1, id2, id3, id4, id5   ! local integer
       CHARACTER(len=25) ::   znam
       CHARACTER(len=2)  ::   zchar, zchar1
       REAL(wp)          ::   zfice, ziter
@@ -260,11 +265,19 @@ CONTAINS
             a_ip(:,:,:) = 0._wp
             v_ip(:,:,:) = 0._wp
          ENDIF
+         ! melt pond lids
+         id3 = iom_varid( numrir, 'v_il' , ldstop = .FALSE. )
+         IF( id3 > 0 ) THEN
+            CALL iom_get( numrir, jpdom_autoglo, 'v_il', v_il)
+         ELSE
+            IF(lwp) WRITE(numout,*) '   ==>>   previous run without melt ponds lids output then set it to zero'
+            v_il(:,:,:) = 0._wp
+         ENDIF
          ! fields needed for Met Office (Jules) coupling
          IF( ln_cpl ) THEN
-            id3 = iom_varid( numrir, 'cnd_ice' , ldstop = .FALSE. )
-            id4 = iom_varid( numrir, 't1_ice'  , ldstop = .FALSE. )
-            IF( id3 > 0 .AND. id4 > 0 ) THEN         ! fields exist
+            id4 = iom_varid( numrir, 'cnd_ice' , ldstop = .FALSE. )
+            id5 = iom_varid( numrir, 't1_ice'  , ldstop = .FALSE. )
+            IF( id4 > 0 .AND. id5 > 0 ) THEN         ! fields exist
                CALL iom_get( numrir, jpdom_autoglo, 'cnd_ice', cnd_ice )
                CALL iom_get( numrir, jpdom_autoglo, 't1_ice' , t1_ice  )
             ELSE                                     ! start from rest
@@ -279,13 +292,24 @@ CONTAINS
          !                 ! ---------------------------------- !
       ELSE                 ! == case of a simplified restart == !
          !                 ! ---------------------------------- !
-         CALL ctl_warn('ice_rst_read: you are using a simplified ice restart')
+         CALL ctl_warn('ice_rst_read: you are attempting to use an unsuitable ice restart')
          !
-         CALL ice_istate_init
+         IF( .NOT. ln_iceini .OR. nn_iceini_file == 2 ) THEN
+            CALL ctl_stop('STOP', 'ice_rst_read: you need ln_ice_ini=T and nn_iceini_file=0 or 1')
+         ELSE
+            CALL ctl_warn('ice_rst_read: using ice_istate to set initial conditions instead')
+         ENDIF
+         !
+         IF( nn_components == jp_iam_sas ) THEN   ! SAS case: ss[st]_m were not initialized by sbc_ssm_init
+            !
+            IF(lwp) WRITE(numout,*) '  SAS: default initialisation of ss[st]_m arrays used in ice_istate'
+            IF( l_useCT )  THEN    ;   sst_m(:,:) = eos_pt_from_ct( tsn(:,:,1,jp_tem), tsn(:,:,1,jp_sal) )
+            ELSE                   ;   sst_m(:,:) = tsn(:,:,1,jp_tem)
+            ENDIF
+            sss_m(:,:) = tsn(:,:,1,jp_sal)
+         ENDIF
+         !
          CALL ice_istate( nit000 )
-         !
-         IF( .NOT.ln_iceini .OR. .NOT.ln_iceini_file ) &
-            &   CALL ctl_stop('STOP', 'ice_rst_read: you need ln_ice_ini=T and ln_iceini_file=T')
          !
       ENDIF
 

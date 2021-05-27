@@ -295,10 +295,10 @@ CONTAINS
             END DO
 #if defined key_agrif 
             IF( .NOT. AGRIF_Root() ) THEN 
-               IF ((nbondi ==  1).OR.(nbondi == 2)) fmask(nlci-1 , :     ,jk) = 0.e0      ! east 
-               IF ((nbondi == -1).OR.(nbondi == 2)) fmask(1      , :     ,jk) = 0.e0      ! west 
-               IF ((nbondj ==  1).OR.(nbondj == 2)) fmask(:      ,nlcj-1 ,jk) = 0.e0      ! north 
-               IF ((nbondj == -1).OR.(nbondj == 2)) fmask(:      ,1      ,jk) = 0.e0      ! south 
+               IF ( l_Eastedge )  fmask(nlci-1 , :     ,jk) = 0.e0      ! east 
+               IF ( l_Westedge )  fmask(1      , :     ,jk) = 0.e0      ! west 
+               IF ( l_Northedge ) fmask(:      ,nlcj-1 ,jk) = 0.e0      ! north 
+               IF ( l_Southedge ) fmask(:      ,1      ,jk) = 0.e0      ! south 
             ENDIF 
 #endif 
          END DO
@@ -312,9 +312,12 @@ CONTAINS
       ENDIF
       
       ! User defined alteration of fmask (use to reduce ocean transport in specified straits)
+      ! Only call if we are not using the shlat2d option.
       ! -------------------------------- 
       !
-      CALL usr_def_fmask( cn_cfg, nn_cfg, fmask )
+      IF ( .not. ln_shlat2d ) THEN      
+         CALL usr_def_fmask( cn_cfg, nn_cfg, fmask )
+      ENDIF
       !
    END SUBROUTINE dom_msk
    

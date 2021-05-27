@@ -84,7 +84,7 @@ CONTAINS
 
          !                                         !**   A1 = A(X1,V1)
          CALL icb_accel( berg , zxi1, ze1, zuvel1, zuvel1, zax1,     &
-            &                   zyj1, ze2, zvvel1, zvvel1, zay1, zdt_2 )
+            &                   zyj1, ze2, zvvel1, zvvel1, zay1, zdt_2, 1 )
          !
          zu1 = zuvel1 / ze1                           !**   V1 in d(i,j)/dt
          zv1 = zvvel1 / ze2
@@ -101,7 +101,7 @@ CONTAINS
 
          !                                         !**   A2 = A(X2,V2)
          CALL icb_accel( berg , zxi2, ze1, zuvel2, zuvel1, zax2,    &
-            &                   zyj2, ze2, zvvel2, zvvel1, zay2, zdt_2 )
+            &                   zyj2, ze2, zvvel2, zvvel1, zay2, zdt_2, 2 )
          !
          zu2 = zuvel2 / ze1                           !**   V2 in d(i,j)/dt
          zv2 = zvvel2 / ze2
@@ -117,7 +117,7 @@ CONTAINS
 
          !                                         !**   A3 = A(X3,V3)
          CALL icb_accel( berg , zxi3, ze1, zuvel3, zuvel1, zax3,    &
-            &                   zyj3, ze2, zvvel3, zvvel1, zay3, zdt )
+            &                   zyj3, ze2, zvvel3, zvvel1, zay3, zdt, 3 )
          !
          zu3 = zuvel3 / ze1                           !**   V3 in d(i,j)/dt
          zv3 = zvvel3 / ze2
@@ -133,7 +133,7 @@ CONTAINS
 
          !                                         !**   A4 = A(X4,V4)
          CALL icb_accel( berg , zxi4, ze1, zuvel4, zuvel1, zax4,    &
-            &                   zyj4, ze2, zvvel4, zvvel1, zay4, zdt )
+            &                   zyj4, ze2, zvvel4, zvvel1, zay4, zdt, 4 )
 
          zu4 = zuvel4 / ze1                           !**   V4 in d(i,j)/dt
          zv4 = zvvel4 / ze2
@@ -234,7 +234,7 @@ CONTAINS
 
 
    SUBROUTINE icb_accel( berg , pxi, pe1, puvel, puvel0, pax,                &
-      &                         pyj, pe2, pvvel, pvvel0, pay, pdt )
+      &                         pyj, pe2, pvvel, pvvel0, pay, pdt, pstage )
       !!----------------------------------------------------------------------
       !!                  ***  ROUTINE icb_accel  ***
       !!
@@ -249,6 +249,7 @@ CONTAINS
       REAL(wp)               , INTENT(  out) ::   pe1, pe2         ! horizontal scale factor at (xi,yj)
       REAL(wp)               , INTENT(inout) ::   pax, pay         ! berg acceleration
       REAL(wp)               , INTENT(in   ) ::   pdt              ! berg time step
+      INTEGER                , INTENT(in   ) ::   pstage           ! RK4 stage (for speed limiter)
       !
       REAL(wp), PARAMETER ::   pp_alpha     = 0._wp      !
       REAL(wp), PARAMETER ::   pp_beta      = 1._wp      !
@@ -264,7 +265,7 @@ CONTAINS
       REAL(wp) ::   z_ocn, z_atm, z_ice
       REAL(wp) ::   zampl, zwmod, zCr, zLwavelength, zLcutoff, zLtop
       REAL(wp) ::   zlambda, zdetA, zA11, zA12, zaxe, zaye, zD_hi
-      REAL(wp) ::   zuveln, zvveln, zus, zvs, zspeed, zloc_dx, zspeed_new
+      REAL(wp) ::   zuveln, zvveln, zus, zvs, zspeed, zloc_dx, zspeed_new, zvel_factor, zcfl_scale
       !!----------------------------------------------------------------------
 
       ! Interpolate gridded fields to berg
@@ -360,12 +361,23 @@ CONTAINS
       IF( rn_speed_limit > 0._wp ) THEN       ! Limit speed of bergs based on a CFL criteria (if asked)
          zspeed = SQRT( zuveln*zuveln + zvveln*zvveln )    ! Speed of berg
          IF( zspeed > 0._wp ) THEN
-            zloc_dx = MIN( pe1, pe2 )                          ! minimum grid spacing
-            zspeed_new = zloc_dx / pdt * rn_speed_limit        ! Speed limit as a factor of dx / dt
+            zloc_dx = MIN( pe1, pe2 )                                ! minimum grid spacing
+            ! cfl scale is function of the RK4 step
+            IF( pstage .le. 2 ) THEN
+               zcfl_scale=0.5
+            ELSE
+               zcfl_scale=1.0
+            ENDIF
+            zspeed_new = zloc_dx / pdt * rn_speed_limit * zcfl_scale ! Speed limit as a factor of dx / dt
             IF( zspeed_new < zspeed ) THEN
-               zuveln = zuveln * ( zspeed_new / zspeed )        ! Scale velocity to reduce speed
-               zvveln = zvveln * ( zspeed_new / zspeed )        ! without changing the direction
-               CALL icb_dia_speed()
+               zvel_factor = zspeed_new / zspeed
+               zuveln = zuveln * ( zvel_factor )             ! Scale velocity to reduce speed
+               zvveln = zvveln * ( zvel_factor )             ! without changing the direction
+               pax = (zuveln - puvel0)/pdt
+               pay = (zvveln - pvvel0)/pdt
+               WRITE(numicb,*) 'speeding ticket (zspeed_new/zspeed): ',zvel_factor, pdt, zcfl_scale
+               CALL FLUSH(numicb)
+               CALL icb_dia_speed(zvel_factor,pstage)
             ENDIF
          ENDIF
       ENDIF

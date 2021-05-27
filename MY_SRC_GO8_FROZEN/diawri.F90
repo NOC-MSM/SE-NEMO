@@ -190,6 +190,8 @@ CONTAINS
          CALL iom_put( "sbs_"//stype, z2d )                ! bottom salinity
       ENDIF
 
+      CALL iom_put( "rhop", rhop(:,:,:) )          ! 3D potential density (sigma0)
+
       IF ( iom_use("taubot") ) THEN                ! bottom stress
          zztmp = rau0 * 0.25
          z2d(:,:) = 0._wp
@@ -385,6 +387,14 @@ CONTAINS
          CALL iom_put( "v_salttr", 0.5 * z2d )        !  heat transport in j-direction
       ENDIF
 
+      IF( (.NOT.l_ldfeiv_time) .AND. ( iom_use('RossRad')  .OR. iom_use('RossRadlim') &
+            &                     .OR. iom_use('Tclinic_recip') .OR. iom_use('RR_GS')      &
+            &                     .OR. iom_use('aeiu_2d')  .OR. iom_use('aeiv_2d') ) ) THEN
+         CALL ldf_eiv(kt, 75.0, z2d, z3d(:,:,1))
+         CALL iom_put('aeiu_2d', z2d)
+         CALL iom_put('aeiv_2d', z3d(:,:,1))
+      ENDIF
+
       IF( iom_use("tosmint_"//ttype) ) THEN
          z2d(:,:) = 0._wp
          DO jk = 1, jpkm1
@@ -428,13 +438,18 @@ CONTAINS
       !!----------------------------------------------------------------------
       INTEGER, DIMENSION(2) :: ierr
       !!----------------------------------------------------------------------
-      ierr = 0
-      ALLOCATE( ndex_hT(jpi*jpj) , ndex_T(jpi*jpj*jpk) ,     &
-         &      ndex_hU(jpi*jpj) , ndex_U(jpi*jpj*jpk) ,     &
-         &      ndex_hV(jpi*jpj) , ndex_V(jpi*jpj*jpk) , STAT=ierr(1) )
+      IF( nn_write == -1 ) THEN
+         dia_wri_alloc = 0
+      ELSE    
+         ierr = 0
+         ALLOCATE( ndex_hT(jpi*jpj) , ndex_T(jpi*jpj*jpk) ,     &
+            &      ndex_hU(jpi*jpj) , ndex_U(jpi*jpj*jpk) ,     &
+            &      ndex_hV(jpi*jpj) , ndex_V(jpi*jpj*jpk) , STAT=ierr(1) )
          !
-      dia_wri_alloc = MAXVAL(ierr)
-      CALL mpp_sum( 'diawri', dia_wri_alloc )
+         dia_wri_alloc = MAXVAL(ierr)
+         CALL mpp_sum( 'diawri', dia_wri_alloc )
+         !
+      ENDIF
       !
    END FUNCTION dia_wri_alloc
 

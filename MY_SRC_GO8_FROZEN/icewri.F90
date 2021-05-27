@@ -115,6 +115,9 @@ CONTAINS
       IF( iom_use('iceapnd' ) )   CALL iom_put( 'iceapnd', at_ip  * zmsk00      )                                           ! melt pond total fraction
       IF( iom_use('icehpnd' ) )   CALL iom_put( 'icehpnd', hm_ip  * zmsk00      )                                           ! melt pond depth
       IF( iom_use('icevpnd' ) )   CALL iom_put( 'icevpnd', vt_ip  * zmsk00      )                                           ! melt pond total volume per unit area
+      IF( iom_use('iceepnd' ) )   CALL iom_put( 'iceepnd', SUM( a_ip_eff * a_i, dim=3 ) * zmsk00  )                         ! melt pond total effective fraction per cell area
+      IF( iom_use('icehlid' ) )   CALL iom_put( 'icehlid', hm_il  * zmsk00      )                                           ! melt pond lid depth
+      IF( iom_use('icevlid' ) )   CALL iom_put( 'icevlid', vt_il  * zmsk00      )                                           ! melt pond lid total volume per unit area
       ! salt
       IF( iom_use('icesalt' ) )   CALL iom_put( 'icesalt', sm_i                 * zmsk00 )                                  ! mean ice salinity
       IF( iom_use('icesalm' ) )   CALL iom_put( 'icesalm', st_i * rhoi * 1.0e-3 * zmsk00 )                                  ! Mass of salt in sea ice per cell area
@@ -161,9 +164,12 @@ CONTAINS
       IF( iom_use('icettop_cat' ) )   CALL iom_put( 'icettop_cat' , ( t_su - rt0 ) * zmsk00l                                   ) ! surface temperature
       IF( iom_use('icebrv_cat'  ) )   CALL iom_put( 'icebrv_cat'  ,   bv_i * 100.  * zmsk00l                                   ) ! brine volume
       IF( iom_use('iceapnd_cat' ) )   CALL iom_put( 'iceapnd_cat' ,   a_ip         * zmsk00l                                   ) ! melt pond frac for categories
-      IF( iom_use('icehpnd_cat' ) )   CALL iom_put( 'icehpnd_cat' ,   h_ip         * zmsk00l                                   ) ! melt pond frac for categories
-      IF( iom_use('iceafpnd_cat') )   CALL iom_put( 'iceafpnd_cat',   a_ip_frac    * zmsk00l                                   ) ! melt pond frac for categories
-      IF( iom_use('icealb_cat'  ) )   CALL iom_put( 'icealb_cat'  ,   alb_ice      * zmsk00l                                   ) ! ice albedo for categories
+      IF( iom_use('icevpnd_cat' ) )   CALL iom_put( 'icevpnd_cat' ,   v_ip         * zmsk00l                                   ) ! melt pond volume for categories
+      IF( iom_use('icehpnd_cat' ) )   CALL iom_put( 'icehpnd_cat' ,   h_ip         * zmsk00l + zmiss_val * ( 1._wp - zmsk00l ) ) ! melt pond thickness for categories
+      IF( iom_use('icehlid_cat' ) )   CALL iom_put( 'icehlid_cat' ,   h_il         * zmsk00l + zmiss_val * ( 1._wp - zmsk00l ) ) ! melt pond lid thickness for categories
+      IF( iom_use('iceafpnd_cat') )   CALL iom_put( 'iceafpnd_cat',   a_ip_frac    * zmsk00l                                   ) ! melt pond frac per ice area for categories
+      IF( iom_use('iceaepnd_cat') )   CALL iom_put( 'iceaepnd_cat',   a_ip_eff     * zmsk00l                                   ) ! melt pond effective frac for categories
+      IF( iom_use('icealb_cat'  ) )   CALL iom_put( 'icealb_cat'  ,   alb_ice      * zmsk00l + zmiss_val * ( 1._wp - zmsk00l ) ) ! ice albedo for categories
 
       !------------------
       ! Add-ons for SIMIP

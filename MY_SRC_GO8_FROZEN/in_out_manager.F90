@@ -160,6 +160,9 @@ MODULE in_out_manager
    !!----------------------------------------------------------------------
    INTEGER       ::   no_print = 0          !: optional argument of fld_fill (if present, suppress some control print)
    INTEGER       ::   nstop = 0             !: error flag (=number of reason for a premature stop run)
+!$AGRIF_DO_NOT_TREAT
+   INTEGER       ::   ngrdstop = -1         !: grid number having nstop > 1
+!$AGRIF_END_DO_NOT_TREAT
    INTEGER       ::   nwarn = 0             !: warning flag (=number of warning found during the run)
    CHARACTER(lc) ::   ctmp1, ctmp2, ctmp3   !: temporary characters 1 to 3
    CHARACTER(lc) ::   ctmp4, ctmp5, ctmp6   !: temporary characters 4 to 6

@@ -108,7 +108,7 @@ CONTAINS
       TYPE(xios_date)     :: start_date
       CHARACTER(len=lc) :: clname
       INTEGER             :: irefyear, irefmonth, irefday
-      INTEGER           :: ji, jkmin
+      INTEGER           :: ji
       LOGICAL :: llrst_context              ! is context related to restart
       !
       REAL(wp), ALLOCATABLE, DIMENSION(:,:) :: zt_bnds, zw_bnds
@@ -205,12 +205,11 @@ CONTAINS
           CALL iom_set_axis_attr( "depthw",  paxis = gdepw_1d )
 
           ! Add vertical grid bounds
-          jkmin = MIN(2,jpk)  ! in case jpk=1 (i.e. sas2D)
           zt_bnds(2,:        ) = gdept_1d(:)
-          zt_bnds(1,jkmin:jpk) = gdept_1d(1:jpkm1)
+          zt_bnds(1,2:jpk    ) = gdept_1d(1:jpkm1)
           zt_bnds(1,1        ) = gdept_1d(1) - e3w_1d(1)
           zw_bnds(1,:        ) = gdepw_1d(:)
-          zw_bnds(2,1:jpkm1  ) = gdepw_1d(jkmin:jpk)
+          zw_bnds(2,1:jpkm1  ) = gdepw_1d(2:jpk)
           zw_bnds(2,jpk:     ) = gdepw_1d(jpk) + e3t_1d(jpk)
           CALL iom_set_axis_attr( "deptht", bounds=zw_bnds )
           CALL iom_set_axis_attr( "depthu", bounds=zw_bnds )
@@ -321,7 +320,7 @@ CONTAINS
         IF( TRIM(Agrif_CFixed()) == '0' ) THEN
            rst_file = TRIM(clpath)//TRIM(cn_ocerst_in)
         ELSE
-           rst_file = TRIM(clpath)//'1_'//TRIM(cn_ocerst_in)
+           rst_file = TRIM(clpath)//TRIM(Agrif_CFixed())//'_'//TRIM(cn_ocerst_in)
         ENDIF
 !set name of the restart file and enable available fields
         if(lwp) WRITE(numout,*) 'Setting restart filename (for XIOS) to: ',rst_file
@@ -518,6 +517,8 @@ CONTAINS
         i = i + 1; fields(i)%vname="hbl";            fields(i)%grid="grid_N"
         i = i + 1; fields(i)%vname="hbli";           fields(i)%grid="grid_N"
         i = i + 1; fields(i)%vname="wn";             fields(i)%grid="grid_N_3D"
+        i = i + 1; fields(i)%vname="a_fwb_b";        fields(i)%grid="grid_scalar"
+        i = i + 1; fields(i)%vname="a_fwb";          fields(i)%grid="grid_scalar"
 
         IF( i-1 > max_rst_fields) THEN
            WRITE(ctmp1,*) 'E R R O R : iom_set_rst_vars SIZE of RST_FIELD array is too small'
@@ -2463,6 +2464,7 @@ CONTAINS
       CALL xios_get_field_attr( cdname, default_value = pmiss_val )
 #else
       IF( .FALSE. )   WRITE(numout,*) cdname, pmiss_val   ! useless test to avoid compilation warnings
+      IF( .FALSE. )   pmiss_val = 0._wp                   ! useless assignment to avoid compilation warnings
 #endif
    END SUBROUTINE iom_miss_val
   

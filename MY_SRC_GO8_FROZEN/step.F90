@@ -75,11 +75,11 @@ CONTAINS
       !!              -8- Outputs and diagnostics
       !!----------------------------------------------------------------------
       INTEGER ::   ji, jj, jk   ! dummy loop indice
-      INTEGER ::   indic        ! error indicator if < 0
 !!gm kcall can be removed, I guess
       INTEGER ::   kcall        ! optional integer argument (dom_vvl_sf_nxt)
       !! ---------------------------------------------------------------------
 #if defined key_agrif
+      IF( nstop > 0 ) RETURN   ! avoid to go further if an error was detected during previous time step (child grid)
       kstp = nit000 + Agrif_Nb_Step()
       IF( lk_agrif_debug ) THEN
          IF( Agrif_Root() .and. lwp)   WRITE(*,*) '---'
@@ -96,8 +96,6 @@ CONTAINS
       !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
       ! update I/O and calendar 
       !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                             indic = 0                ! reset to no error condition
-                             
       IF( kstp == nit000 ) THEN                       ! initialize IOM context (must be done after nemo_init for AGRIF+XIOS+OASIS)
                              CALL iom_init(      cxios_context          )  ! for model grid (including passible AGRIF zoom)
          IF( ln_crs      )   CALL iom_init( TRIM(cxios_context)//"_crs" )  ! for coarse grid
@@ -280,19 +278,29 @@ CONTAINS
 
 #if defined key_agrif
       !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-      ! AGRIF
+      ! AGRIF recursive integration
       !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<      
                          CALL Agrif_Integrate_ChildGrids( stp )  ! allows to finish all the Child Grids before updating
-
-                         IF( Agrif_NbStepint() == 0 ) CALL Agrif_update_all( ) ! Update all components
 #endif
-      IF( ln_diaobs  )   CALL dia_obs      ( kstp )      ! obs-minus-model (assimilation) diagnostics (call after dynamics update)
-
       !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
       ! Control
       !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                         CALL stp_ctl      ( kstp, indic )
+                         CALL stp_ctl      ( kstp )
                          
+#if defined key_agrif
+      !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+      ! AGRIF update
+      !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<      
+      IF( Agrif_NbStepint() == 0 .AND. nstop == 0 ) THEN
+                         CALL Agrif_update_all( )                  ! Update all components
+      ENDIF
+#endif
+
+      IF( ln_diaobs  )   CALL dia_obs      ( kstp )      ! obs-minus-model (assimilation) diagnostics (call after dynamics update)
+
+      !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+      ! File manipulation at the end of the first time step
+      !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<                         
       IF( kstp == nit000 ) THEN                          ! 1st time step only
                                         CALL iom_close( numror )   ! close input  ocean restart file
          IF(lwm)                        CALL FLUSH    ( numond )   ! flush output namelist oce
@@ -303,12 +311,15 @@ CONTAINS
       ! Coupled mode
       !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 !!gm why lk_oasis and not lk_cpl ????
-      IF( lk_oasis   )   CALL sbc_cpl_snd( kstp )     ! coupled mode : field exchanges
+      IF( lk_oasis .AND. nstop == 0 )   CALL sbc_cpl_snd( kstp )     ! coupled mode : field exchanges
       !
 #if defined key_iomput
-      IF( kstp == nitend .OR. indic < 0 ) THEN 
-                      CALL iom_context_finalize(      cxios_context          ) ! needed for XIOS+AGRIF
-                      IF(lrxios) CALL iom_context_finalize(      crxios_context          )
+      !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+      ! Finalize contextes if end of simulation or error detected
+      !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<                         
+      IF( kstp == nitend .OR. nstop > 0 ) THEN 
+                      CALL iom_context_finalize(       cxios_context         ) ! needed for XIOS+AGRIF
+         IF( lrxios ) CALL iom_context_finalize(      crxios_context         )
          IF( ln_crs ) CALL iom_context_finalize( trim(cxios_context)//"_crs" ) ! 
       ENDIF
 #endif
@@ -316,6 +327,6 @@ CONTAINS
       IF( ln_timing )   CALL timing_stop('stp')
       !
    END SUBROUTINE stp
-   
+   !
    !!======================================================================
 END MODULE step

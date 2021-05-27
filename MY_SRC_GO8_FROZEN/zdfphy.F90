@@ -28,6 +28,7 @@ MODULE zdfphy
    USE trc_oce        ! variables shared between passive tracer & ocean           
    USE sbc_oce        ! surface module (only for nn_isf in the option compatibility test)
    USE sbcrnf         ! surface boundary condition: runoff variables
+   USE sbc_ice        ! sea ice drag
 #if defined key_agrif
    USE agrif_oce_interp   ! interpavm
 #endif
@@ -254,6 +255,16 @@ CONTAINS
          ENDIF
       ENDIF
       !
+#if defined key_si3
+      IF ( ln_drgice_imp) THEN
+         IF ( ln_isfcav ) THEN
+            rCdU_top(:,:) = rCdU_top(:,:) + ssmask(:,:) * tmask(:,:,1) * rCdU_ice(:,:)
+         ELSE
+            rCdU_top(:,:) = rCdU_ice(:,:)
+         ENDIF
+      ENDIF
+#endif
+      ! 
       !                       !==  Kz from chosen turbulent closure  ==!   (avm_k, avt_k)
       !
       IF( l_zdfsh2 )   &         !* shear production at w-points (energy conserving form)

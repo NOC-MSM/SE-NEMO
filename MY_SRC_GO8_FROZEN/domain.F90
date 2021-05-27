@@ -112,7 +112,7 @@ CONTAINS
          WRITE(numout,*)     '      Ocean model configuration used:'
          WRITE(numout,*)     '         cn_cfg = ', TRIM( cn_cfg ), '   nn_cfg = ', nn_cfg
       ENDIF
-      lwxios = .FALSE.
+      nn_wxios = 0
       ln_xios_read = .FALSE.
       !
       !           !==  Reference coordinate system  ==!
@@ -624,7 +624,7 @@ CONTAINS
       
       !
       !                             !==  ORCA family specificities  ==!
-      IF( cn_cfg == "ORCA" ) THEN
+      IF( TRIM(cn_cfg) == "orca" .OR. TRIM(cn_cfg) == "ORCA" ) THEN
          CALL iom_rstput( 0, 0, inum, 'ORCA'      , 1._wp            , ktype = jp_i4 )
          CALL iom_rstput( 0, 0, inum, 'ORCA_index', REAL( nn_cfg, wp), ktype = jp_i4 )         
       ENDIF

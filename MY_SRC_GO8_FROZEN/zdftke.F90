@@ -27,7 +27,7 @@ MODULE zdftke
    !!            3.3  !  2010-10  (C. Ethe, G. Madec) reorganisation of initialisation phase
    !!            3.6  !  2014-11  (P. Mathiot) add ice shelf capability
    !!            4.0  !  2017-04  (G. Madec)  remove CPP ddm key & avm at t-point only 
-   !!             -   !  2017-05  (G. Madec)  add top/bottom friction as boundary condition (ln_drg)
+   !!             -   !  2017-05  (G. Madec)  add top/bottom friction as boundary condition
    !!----------------------------------------------------------------------
 
    !!----------------------------------------------------------------------
@@ -45,6 +45,12 @@ MODULE zdftke
    USE zdfdrg         ! vertical physics: top/bottom drag coef.
    USE zdfmxl         ! vertical physics: mixed layer
    !
+#if defined key_si3
+   USE ice, ONLY: hm_i, h_i
+#endif
+#if defined key_cice
+   USE sbc_ice, ONLY: h_i
+#endif
    USE in_out_manager ! I/O manager
    USE iom            ! I/O manager library
    USE lib_mpp        ! MPP library
@@ -61,6 +67,8 @@ MODULE zdftke
 
    !                      !!** Namelist  namzdf_tke  **
    LOGICAL  ::   ln_mxl0   ! mixing length scale surface value as function of wind stress or not
+   INTEGER  ::   nn_mxlice ! type of scaling under sea-ice (=0/1/2/3)
+   REAL(wp) ::   rn_mxlice ! ice thickness value when scaling under sea-ice
    INTEGER  ::   nn_mxl    ! type of mixing length (=0/1/2/3)
    REAL(wp) ::   rn_mxl0   ! surface  min value of mixing length (kappa*z_o=0.4*0.1 m)  [m]
    INTEGER  ::   nn_pdl    ! Prandtl number or not (ratio avt/avm) (=0/1)
@@ -70,13 +78,12 @@ MODULE zdftke
    REAL(wp) ::   rn_emin   ! minimum value of tke           [m2/s2]
    REAL(wp) ::   rn_emin0  ! surface minimum value of tke   [m2/s2]
    REAL(wp) ::   rn_bshear ! background shear (>0) currently a numerical threshold (do not change it)
-   LOGICAL  ::   ln_drg    ! top/bottom friction forcing flag 
    INTEGER  ::   nn_etau   ! type of depth penetration of surface tke (=0/1/2/3)
    INTEGER  ::      nn_htau   ! type of tke profile of penetration (=0/1)
    REAL(wp) ::      rn_efr    ! fraction of TKE surface value which penetrates in the ocean
-   REAL(wp) ::      rn_eice   ! =0 ON below sea-ice, =4 OFF when ice fraction > 1/4   
    LOGICAL  ::   ln_lc     ! Langmuir cells (LC) as a source term of TKE or not
    REAL(wp) ::      rn_lc     ! coef to compute vertical velocity of Langmuir cells
+   INTEGER  ::   nn_eice   ! attenutaion of langmuir & surface wave breaking under ice (=0/1/2/3)   
 
    REAL(wp) ::   ri_cri    ! critic Richardson number (deduced from rn_ediff and rn_ediss values)
    REAL(wp) ::   rmxl_min  ! minimum mixing length value (deduced from rn_ediff and rn_emin values)  [m]
@@ -190,42 +197,48 @@ CONTAINS
       REAL(wp), DIMENSION(:,:,:) , INTENT(in   ) ::   p_sh2          ! shear production term
       REAL(wp), DIMENSION(:,:,:) , INTENT(in   ) ::   p_avm, p_avt   ! vertical eddy viscosity & diffusivity (w-points)
       !
-      INTEGER ::   ji, jj, jk              ! dummy loop arguments
+      INTEGER ::   ji, jj, jk                  ! dummy loop arguments
       REAL(wp) ::   zetop, zebot, zmsku, zmskv ! local scalars
       REAL(wp) ::   zrhoa  = 1.22              ! Air density kg/m3
       REAL(wp) ::   zcdrag = 1.5e-3            ! drag coefficient
-      REAL(wp) ::   zbbrau, zri                ! local scalars
-      REAL(wp) ::   zfact1, zfact2, zfact3     !   -         -
-      REAL(wp) ::   ztx2  , zty2  , zcof       !   -         -
-      REAL(wp) ::   ztau  , zdif               !   -         -
-      REAL(wp) ::   zus   , zwlc  , zind       !   -         -
-      REAL(wp) ::   zzd_up, zzd_lw             !   -         -
+      REAL(wp) ::   zbbrau, zbbirau, zri       ! local scalars
+      REAL(wp) ::   zfact1, zfact2, zfact3     !   -      -
+      REAL(wp) ::   ztx2  , zty2  , zcof       !   -      -
+      REAL(wp) ::   ztau  , zdif               !   -      -
+      REAL(wp) ::   zus   , zwlc  , zind       !   -      -
+      REAL(wp) ::   zzd_up, zzd_lw             !   -      -
       INTEGER , DIMENSION(jpi,jpj)     ::   imlc
-      REAL(wp), DIMENSION(jpi,jpj)     ::   zhlc, zfr_i
+      REAL(wp), DIMENSION(jpi,jpj)     ::   zice_fra, zhlc, zus3
       REAL(wp), DIMENSION(jpi,jpj,jpk) ::   zpelc, zdiag, zd_up, zd_lw
       !!--------------------------------------------------------------------
       !
-      zbbrau = rn_ebb / rau0       ! Local constant initialisation
-      zfact1 = -.5_wp * rdt 
-      zfact2 = 1.5_wp * rdt * rn_ediss
-      zfact3 = 0.5_wp       * rn_ediss
+      zbbrau  =  rn_ebb / rau0       ! Local constant initialisation
+      zbbirau =  3.75_wp / rau0
+      zfact1  = -0.5_wp * rdt 
+      zfact2  =  1.5_wp * rdt * rn_ediss
+      zfact3  =  0.5_wp       * rn_ediss
+      !
+      ! ice fraction considered for attenuation of langmuir & wave breaking
+      SELECT CASE ( nn_eice )
+      CASE( 0 )   ;   zice_fra(:,:) = 0._wp
+      CASE( 1 )   ;   zice_fra(:,:) =        TANH( fr_i(:,:) * 10._wp )
+      CASE( 2 )   ;   zice_fra(:,:) =              fr_i(:,:)
+      CASE( 3 )   ;   zice_fra(:,:) = MIN( 4._wp * fr_i(:,:) , 1._wp )
+      END SELECT
       !
       !                     !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
       !                     !  Surface/top/bottom boundary condition on tke
       !                     !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-      
+      !
       DO jj = 2, jpjm1            ! en(1)   = rn_ebb taum / rau0  (min value rn_emin0)
          DO ji = fs_2, fs_jpim1   ! vector opt.
+!! clem: this should be the right formulation but it makes the model unstable unless drags are calculated implicitly
+!!       one way around would be to increase zbbirau 
+!!          en(ji,jj,1) = MAX( rn_emin0, ( ( 1._wp - fr_i(ji,jj) ) * zbbrau + &
+!!             &                                     fr_i(ji,jj)   * zbbirau ) * taum(ji,jj) ) * tmask(ji,jj,1)
             en(ji,jj,1) = MAX( rn_emin0, zbbrau * taum(ji,jj) ) * tmask(ji,jj,1)
          END DO
       END DO
-      IF ( ln_isfcav ) THEN
-         DO jj = 2, jpjm1            ! en(mikt(ji,jj))   = rn_emin
-            DO ji = fs_2, fs_jpim1   ! vector opt.
-               en(ji,jj,mikt(ji,jj)) = rn_emin * tmask(ji,jj,1)
-            END DO
-         END DO
-      ENDIF
       !
       !                     !<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
       !                     !  Bottom boundary condition on tke
@@ -235,9 +248,9 @@ CONTAINS
       ! where ebb0 does not includes surface wave enhancement (i.e. ebb0=3.75)
       ! Note that stress averaged is done using an wet-only calculation of u and v at t-point like in zdfsh2
       !
-      IF( ln_drg ) THEN       !== friction used as top/bottom boundary condition on TKE
+      IF( .NOT.ln_drg_OFF ) THEN    !== friction used as top/bottom boundary condition on TKE
          !
-         DO jj = 2, jpjm1           ! bottom friction
+         DO jj = 2, jpjm1              ! bottom friction
             DO ji = fs_2, fs_jpim1     ! vector opt.
                zmsku = ( 2. - umask(ji-1,jj,mbkt(ji,jj)) * umask(ji,jj,mbkt(ji,jj)) )
                zmskv = ( 2. - vmask(ji,jj-1,mbkt(ji,jj)) * vmask(ji,jj,mbkt(ji,jj)) )
@@ -255,7 +268,8 @@ CONTAINS
                   !                             ! where 0.001875 = (rn_ebb0/rau0) * 0.5 = 3.75*0.5/1000.  (CAUTION CdU<0)
                   zetop = - 0.001875_wp * rCdU_top(ji,jj) * SQRT(  ( zmsku*( ub(ji,jj,mikt(ji,jj))+ub(ji-1,jj,mikt(ji,jj)) ) )**2  &
                      &                                           + ( zmskv*( vb(ji,jj,mikt(ji,jj))+vb(ji,jj-1,mikt(ji,jj)) ) )**2  )
-                  en(ji,jj,mikt(ji,jj)) = MAX( zetop, rn_emin ) * (1._wp - tmask(ji,jj,1))   ! masked at ocean surface
+                  en(ji,jj,mikt(ji,jj)) = en(ji,jj,1)           * tmask(ji,jj,1) &     
+                     &                  + MAX( zetop, rn_emin ) * (1._wp - tmask(ji,jj,1)) * ssmask(ji,jj)
                END DO
             END DO
          ENDIF
@@ -292,20 +306,19 @@ CONTAINS
          DO jj = 2, jpjm1
             DO ji = fs_2, fs_jpim1   ! vector opt.
                zus  = zcof * SQRT( taum(ji,jj) )           ! Stokes drift
-               zfr_i(ji,jj) = ( 1._wp - 4._wp * fr_i(ji,jj) ) * zus * zus * zus * tmask(ji,jj,1) ! zus > 0. ok
-               IF (zfr_i(ji,jj) < 0. ) zfr_i(ji,jj) = 0.
+               zus3(ji,jj) = MAX( 0._wp, 1._wp - zice_fra(ji,jj) ) * zus * zus * zus * tmask(ji,jj,1) ! zus > 0. ok
             END DO
          END DO         
          DO jk = 2, jpkm1         !* TKE Langmuir circulation source term added to en
             DO jj = 2, jpjm1
                DO ji = fs_2, fs_jpim1   ! vector opt.
-                  IF ( zfr_i(ji,jj) /= 0. ) THEN               
+                  IF ( zus3(ji,jj) /= 0._wp ) THEN               
                      ! vertical velocity due to LC   
                      IF ( pdepw(ji,jj,jk) - zhlc(ji,jj) < 0 .AND. wmask(ji,jj,jk) /= 0. ) THEN
                         !                                           ! vertical velocity due to LC
-                        zwlc = rn_lc * SIN( rpi * pdepw(ji,jj,jk) / zhlc(ji,jj) )   ! warning: optimization: zus^3 is in zfr_i
+                        zwlc = rn_lc * SIN( rpi * pdepw(ji,jj,jk) / zhlc(ji,jj) )
                         !                                           ! TKE Langmuir circulation source term
-                        en(ji,jj,jk) = en(ji,jj,jk) + rdt * zfr_i(ji,jj) * ( zwlc * zwlc * zwlc ) / zhlc(ji,jj)
+                        en(ji,jj,jk) = en(ji,jj,jk) + rdt * zus3(ji,jj) * ( zwlc * zwlc * zwlc ) / zhlc(ji,jj)
                      ENDIF
                   ENDIF
                END DO
@@ -405,11 +418,11 @@ CONTAINS
       
       
       IF( nn_etau == 1 ) THEN           !* penetration below the mixed layer (rn_efr fraction)
-         DO jk = 2, jpkm1                       ! rn_eice =0 ON below sea-ice, =4 OFF when ice fraction > 0.25
+         DO jk = 2, jpkm1                       ! nn_eice=0 : ON below sea-ice ; nn_eice>0 : partly OFF
             DO jj = 2, jpjm1
                DO ji = fs_2, fs_jpim1   ! vector opt.
                   en(ji,jj,jk) = en(ji,jj,jk) + rn_efr * en(ji,jj,1) * EXP( -pdepw(ji,jj,jk) / htau(ji,jj) )   &
-                     &                                 * MAX(0.,1._wp - rn_eice *fr_i(ji,jj) )  * wmask(ji,jj,jk) * tmask(ji,jj,1)
+                     &                                 * MAX( 0._wp, 1._wp - zice_fra(ji,jj) ) * wmask(ji,jj,jk) * tmask(ji,jj,1)
                END DO
             END DO
          END DO
@@ -418,7 +431,7 @@ CONTAINS
             DO ji = fs_2, fs_jpim1   ! vector opt.
                jk = nmln(ji,jj)
                en(ji,jj,jk) = en(ji,jj,jk) + rn_efr * en(ji,jj,1) * EXP( -pdepw(ji,jj,jk) / htau(ji,jj) )   &
-                  &                                 * MAX(0.,1._wp - rn_eice *fr_i(ji,jj) )  * wmask(ji,jj,jk) * tmask(ji,jj,1)
+                  &                                 * MAX( 0._wp, 1._wp - zice_fra(ji,jj) ) * wmask(ji,jj,jk) * tmask(ji,jj,1)
             END DO
          END DO
       ELSEIF( nn_etau == 3 ) THEN       !* penetration belox the mixed layer (HF variability)
@@ -431,7 +444,7 @@ CONTAINS
                   zdif = taum(ji,jj) - ztau                            ! mean of modulus - modulus of the mean 
                   zdif = rhftau_scl * MAX( 0._wp, zdif + rhftau_add )  ! apply some modifications...
                   en(ji,jj,jk) = en(ji,jj,jk) + zbbrau * zdif * EXP( -pdepw(ji,jj,jk) / htau(ji,jj) )   &
-                     &                        * MAX(0.,1._wp - rn_eice *fr_i(ji,jj) ) * wmask(ji,jj,jk) * tmask(ji,jj,1)
+                     &                                 * MAX( 0._wp, 1._wp - zice_fra(ji,jj) ) * wmask(ji,jj,jk) * tmask(ji,jj,1)
                END DO
             END DO
          END DO
@@ -483,7 +496,7 @@ CONTAINS
       INTEGER  ::   ji, jj, jk   ! dummy loop indices
       REAL(wp) ::   zrn2, zraug, zcoef, zav   ! local scalars
       REAL(wp) ::   zdku,   zdkv, zsqen       !   -      -
-      REAL(wp) ::   zemxl, zemlm, zemlp       !   -      -
+      REAL(wp) ::   zemxl, zemlm, zemlp, zmaxice       !   -      -
       REAL(wp), DIMENSION(jpi,jpj,jpk) ::   zmxlm, zmxld   ! 3D workspace
       !!--------------------------------------------------------------------
       !
@@ -496,15 +509,68 @@ CONTAINS
       ! initialisation of interior minimum value (avoid a 2d loop with mikt)
       zmxlm(:,:,:)  = rmxl_min    
       zmxld(:,:,:)  = rmxl_min
-      !
+      ! 
       IF( ln_mxl0 ) THEN            ! surface mixing length = F(stress) : l=vkarmn*2.e5*taum/(rau0*g)
+         !
          zraug = vkarmn * 2.e5_wp / ( rau0 * grav )
-         DO jj = 2, jpjm1
+#if ! defined key_si3 && ! defined key_cice
+         DO jj = 2, jpjm1                     ! No sea-ice
             DO ji = fs_2, fs_jpim1
-               zmxlm(ji,jj,1) = MAX( rn_mxl0, zraug * taum(ji,jj) * tmask(ji,jj,1) )
+               zmxlm(ji,jj,1) =  zraug * taum(ji,jj) * tmask(ji,jj,1)
             END DO
          END DO
-      ELSE 
+#else
+
+         SELECT CASE( nn_mxlice )             ! Type of scaling under sea-ice
+         !
+         CASE( 0 )                      ! No scaling under sea-ice
+            DO jj = 2, jpjm1
+               DO ji = fs_2, fs_jpim1
+                  zmxlm(ji,jj,1) = zraug * taum(ji,jj) * tmask(ji,jj,1)
+               END DO
+            END DO
+            !
+         CASE( 1 )                      ! scaling with constant sea-ice thickness
+            DO jj = 2, jpjm1
+               DO ji = fs_2, fs_jpim1
+                  zmxlm(ji,jj,1) =  ( ( 1._wp - fr_i(ji,jj) ) * zraug * taum(ji,jj) + &
+                     &                          fr_i(ji,jj)   * rn_mxlice           ) * tmask(ji,jj,1)
+               END DO
+            END DO
+            !
+         CASE( 2 )                      ! scaling with mean sea-ice thickness
+            DO jj = 2, jpjm1
+               DO ji = fs_2, fs_jpim1
+#if defined key_si3
+                  zmxlm(ji,jj,1) = ( ( 1._wp - fr_i(ji,jj) ) * zraug * taum(ji,jj) + &
+                     &                         fr_i(ji,jj)   * hm_i(ji,jj) * 2._wp ) * tmask(ji,jj,1)
+#elif defined key_cice
+                  zmaxice = MAXVAL( h_i(ji,jj,:) )
+                  zmxlm(ji,jj,1) = ( ( 1._wp - fr_i(ji,jj) ) * zraug * taum(ji,jj) + &
+                     &                         fr_i(ji,jj)   * zmaxice             ) * tmask(ji,jj,1)
+#endif
+               END DO
+            END DO
+            !
+         CASE( 3 )                      ! scaling with max sea-ice thickness
+            DO jj = 2, jpjm1
+               DO ji = fs_2, fs_jpim1
+                  zmaxice = MAXVAL( h_i(ji,jj,:) )
+                  zmxlm(ji,jj,1) = ( ( 1._wp - fr_i(ji,jj) ) * zraug * taum(ji,jj) + &
+                     &                         fr_i(ji,jj)   * zmaxice             ) * tmask(ji,jj,1)
+               END DO
+            END DO
+            !
+         END SELECT
+#endif
+         !
+         DO jj = 2, jpjm1
+            DO ji = fs_2, fs_jpim1
+               zmxlm(ji,jj,1) = MAX( rn_mxl0, zmxlm(ji,jj,1) )
+            END DO
+         END DO
+         !
+      ELSE
          zmxlm(:,:,1) = rn_mxl0
       ENDIF
       !
@@ -616,7 +682,7 @@ CONTAINS
          DO jk = 2, jpkm1
             DO jj = 2, jpjm1
                DO ji = fs_2, fs_jpim1   ! vector opt.
-                  p_avt(ji,jj,jk)   = MAX( apdlr(ji,jj,jk) * p_avt(ji,jj,jk), avtb_2d(ji,jj) * avtb(jk) ) * tmask(ji,jj,jk)
+                  p_avt(ji,jj,jk)   = MAX( apdlr(ji,jj,jk) * p_avt(ji,jj,jk), avtb_2d(ji,jj) * avtb(jk) ) * wmask(ji,jj,jk)
               END DO
             END DO
          END DO
@@ -649,10 +715,11 @@ CONTAINS
       INTEGER ::   ji, jj, jk   ! dummy loop indices
       INTEGER ::   ios
       !!
-      NAMELIST/namzdf_tke/ rn_ediff, rn_ediss , rn_ebb , rn_emin  ,          &
-         &                 rn_emin0, rn_bshear, nn_mxl , ln_mxl0  ,          &
-         &                 rn_mxl0 , nn_pdl   , ln_drg , ln_lc    , rn_lc,   &
-         &                 nn_etau , nn_htau  , rn_efr , rn_eice  
+      NAMELIST/namzdf_tke/ rn_ediff, rn_ediss , rn_ebb   , rn_emin  ,  &
+         &                 rn_emin0, rn_bshear, nn_mxl   , ln_mxl0  ,  &
+         &                 rn_mxl0 , nn_mxlice, rn_mxlice,             &
+         &                 nn_pdl  , ln_lc    , rn_lc,                 &
+         &                 nn_etau , nn_htau  , rn_efr   , nn_eice  
       !!----------------------------------------------------------------------
       !
       REWIND( numnam_ref )              ! Namelist namzdf_tke in reference namelist : Turbulent Kinetic Energy
@@ -681,15 +748,34 @@ CONTAINS
          WRITE(numout,*) '      mixing length type                          nn_mxl    = ', nn_mxl
          WRITE(numout,*) '         surface mixing length = F(stress) or not    ln_mxl0   = ', ln_mxl0
          WRITE(numout,*) '         surface  mixing length minimum value        rn_mxl0   = ', rn_mxl0
-         WRITE(numout,*) '      top/bottom friction forcing flag            ln_drg    = ', ln_drg
+         IF( ln_mxl0 ) THEN
+            WRITE(numout,*) '      type of scaling under sea-ice               nn_mxlice = ', nn_mxlice
+            IF( nn_mxlice == 1 ) &
+            WRITE(numout,*) '      ice thickness when scaling under sea-ice    rn_mxlice = ', rn_mxlice
+            SELECT CASE( nn_mxlice )             ! Type of scaling under sea-ice
+            CASE( 0 )   ;   WRITE(numout,*) '   ==>>>   No scaling under sea-ice'
+            CASE( 1 )   ;   WRITE(numout,*) '   ==>>>   scaling with constant sea-ice thickness'
+            CASE( 2 )   ;   WRITE(numout,*) '   ==>>>   scaling with mean sea-ice thickness'
+            CASE( 3 )   ;   WRITE(numout,*) '   ==>>>   scaling with max sea-ice thickness'
+            CASE DEFAULT
+               CALL ctl_stop( 'zdf_tke_init: wrong value for nn_mxlice, should be 0,1,2,3 or 4')
+            END SELECT
+         ENDIF
          WRITE(numout,*) '      Langmuir cells parametrization              ln_lc     = ', ln_lc
          WRITE(numout,*) '         coef to compute vertical velocity of LC     rn_lc  = ', rn_lc
          WRITE(numout,*) '      test param. to add tke induced by wind      nn_etau   = ', nn_etau
          WRITE(numout,*) '          type of tke penetration profile            nn_htau   = ', nn_htau
          WRITE(numout,*) '          fraction of TKE that penetrates            rn_efr    = ', rn_efr
-         WRITE(numout,*) '          below sea-ice:  =0 ON                      rn_eice   = ', rn_eice
-         WRITE(numout,*) '          =4 OFF when ice fraction > 1/4   '
-         IF( ln_drg ) THEN
+         WRITE(numout,*) '      langmuir & surface wave breaking under ice  nn_eice = ', nn_eice
+         SELECT CASE( nn_eice ) 
+         CASE( 0 )   ;   WRITE(numout,*) '   ==>>>   no impact of ice cover on langmuir & surface wave breaking'
+         CASE( 1 )   ;   WRITE(numout,*) '   ==>>>   weigthed by 1-TANH( fr_i(:,:) * 10 )'
+         CASE( 2 )   ;   WRITE(numout,*) '   ==>>>   weighted by 1-fr_i(:,:)'
+         CASE( 3 )   ;   WRITE(numout,*) '   ==>>>   weighted by 1-MIN( 1, 4 * fr_i(:,:) )'
+         CASE DEFAULT
+            CALL ctl_stop( 'zdf_tke_init: wrong value for nn_eice, should be 0,1,2, or 3')
+         END SELECT      
+         IF( .NOT.ln_drg_OFF ) THEN
             WRITE(numout,*)
             WRITE(numout,*) '   Namelist namdrg_top/_bot:   used values:'
             WRITE(numout,*) '      top    ocean cavity roughness (m)          rn_z0(_top)= ', r_z0_top

@@ -427,7 +427,9 @@ CONTAINS
       IF( ii == jpi ) THEN ; ii = ii-1 ; ierr = ierr + 1 ; END IF     
       IF( ij == jpj ) THEN ; ij = ij-1 ; ierr = ierr + 1 ; END IF
       !
-      IF ( ierr > 0 ) CALL ctl_stop('STOP','icb_utl_bilin_e: an icebergs coordinates is out of valid range (out of bound error)')
+      IF ( ierr > 0 ) CALL ctl_stop('STOP', &
+     &                'icb_utl_bilin_e: an icebergs coordinates is out of valid range (out of bound error)', &
+     &                'This can be fixed using rn_speed_limit=0.4 in &namberg.')
       !
       IF(    0.0_wp <= zi .AND. zi < 0.5_wp   ) THEN
          IF( 0.0_wp <= zj .AND. zj < 0.5_wp        )   THEN        !  NE quadrant

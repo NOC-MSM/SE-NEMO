@@ -189,6 +189,7 @@ CONTAINS
       INTEGER, INTENT( in ) :: kt
       !
       INTEGER ::   jn   ! dummy loop index
+      INTEGER ::   idg  ! number of digits
       INTEGER ::   ix_dim, iy_dim, ik_dim, in_dim
       INTEGER             ::   iyear, imonth, iday
       REAL (wp)           ::   zsec
@@ -196,6 +197,7 @@ CONTAINS
       CHARACTER(len=256)  :: cl_path
       CHARACTER(len=256)  :: cl_filename
       CHARACTER(LEN=20)   ::   clkt     ! ocean time-step deine as a character
+      CHARACTER(LEN=12 )     :: clfmt            ! writing format
       TYPE(iceberg), POINTER :: this
       TYPE(point)  , POINTER :: pt
       !!----------------------------------------------------------------------
@@ -220,10 +222,13 @@ CONTAINS
             ELSE                        ;   WRITE(clkt, '(i8.8)') kt
             ENDIF
          ENDIF
+         cl_filename = TRIM(cexper)//"_icebergs_"//TRIM(ADJUSTL(clkt))//"_restart"
          IF( lk_mpp ) THEN
-            WRITE(cl_filename,'(A,"_icebergs_",A,"_restart_",I4.4,".nc")') TRIM(cexper), TRIM(ADJUSTL(clkt)), narea-1
+            idg = MAX( INT(LOG10(REAL(MAX(1,jpnij-1),wp))) + 1, 4 )          ! how many digits to we need to write? min=4, max=9
+            WRITE(clfmt, "('(a,a,i', i1, '.', i1, ',a)')") idg, idg          ! '(a,a,ix.x,a)'
+            WRITE(cl_filename,  clfmt) TRIM(cl_filename), '_', narea-1, '.nc'
          ELSE
-            WRITE(cl_filename,'(A,"_icebergs_",A,"_restart.nc")') TRIM(cexper), TRIM(ADJUSTL(clkt))
+            WRITE(cl_filename,'(a,a)') TRIM(cl_filename),               '.nc'
          ENDIF
          IF ( lwp .AND. nn_verbose_level >= 0) WRITE(numout,'(2a)') 'icebergs, write_restart: creating ',  &
            &                                                         TRIM(cl_path)//TRIM(cl_filename)
