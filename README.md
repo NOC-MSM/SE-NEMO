@@ -1,6 +1,6 @@
 # Shelf Enabled Global NEMO (SE-NEMO) TIDES BRANCH
 
-**_\*\* NB the code as it stands is a placeholder - not intended for use - the setup script has been tested and will checkout, compile and run the ORCA025 (NEMO 4.0.2) code on ARCHER, but namelists and forcing files are yet to be configured for the 'Shelf Enabled' part_**
+**_\*\* NB the code as it stands is a placeholder - not intended for use - the setup script has been tested and will checkout, compile and run the ORCA025 (NEMO 4.0.4) code on ARCHER, but namelists and forcing files are yet to be configured for the 'Shelf Enabled' part_**
 
 # TIDES BRANCH
 This branch includes tides and relevant modifications. These modifications are outlined in MY_SRC/README.md.
@@ -12,12 +12,12 @@ Configuration files for SE-NEMO project
 
 ```
 git clone git@github.com:NOC-MSM/SE-NEMO.git
-./SE-NEMO/scripts/setup/se-orca025_setup_archer -w $PWD/test -x $PWD/test -s $PWD/SE-NEMO
+./SE-NEMO/scripts/setup/se-orca025_setup -w $PWD/test -x $PWD/test -s $PWD/SE-NEMO
 cd test/nemo/cfgs/se-orca025/EXP00
 ```
-Edit the project code in  `runscript.pbs` then:
+Edit the project code in  `runscript.slurm` then:
 ```
-qsub runscript.pbs
+qsub runscript.slurm
 ```
 This will produce a 5 day mean output from the beginning of 1958. The run should take 15 minutes to complete once in the machine.
 
@@ -26,6 +26,10 @@ This will produce a 5 day mean output from the beginning of 1958. The run should
 [SE-ORCA025](http://gws-access.ceda.ac.uk/public/jmmp_collab/)
 
 _this is automatically transferred when the setup script is executed_
+
+### Outputs:
+
+On JASMIN: /gws/nopw/j04/class_vol2/senemo
 
 ### Important:
 
