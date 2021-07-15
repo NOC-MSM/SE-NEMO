@@ -1,32 +1,32 @@
 &namrun
-cn_exp='cb897o',
+cn_exp='SENEMO',
 cn_ocerst_in='restart',
 cn_ocerst_indir='.',
 cn_ocerst_out='restart',
-cn_ocerst_outdir='/home/d01/almega/cylc-run/u-cb897/share/data/History_Data/NEMOhist/',
+cn_ocerst_outdir='./OUTPUTS',
 ln_cfmeta=.true.,
 ln_clobber=.true.,
 ln_iscpl=.false.,
 ln_mskland=.true.,
 ln_rst_list=.false.,
-ln_rstart=.true.,
+ln_rstart=.false.,
 ln_rstdate=.true.,
 ln_xios_read=.false.,
 nn_chunksz=0,
-nn_date0=19960101,
+nn_date0=19760101,
 nn_euler=1,
 nn_istate=1,
-nn_it000=348913,
-nn_itend=350400,
+nn_it000=1,
+nn_itend=1488,
 nn_leapy=0,
-nn_rstctl=2,
+nn_rstctl=0,
 nn_stock=100000,
 nn_time0=0000,
 nn_write=100000,
 nn_wxios=0,
 /
 &namcfg
-cn_domcfg='domain_cfg',
+cn_domcfg='./INPUTS/domcfg_eORCA025_v2',
 ln_closea=.true.,
 ln_read_cfg=.true.,
 ln_use_jattr=.false.,
@@ -44,9 +44,9 @@ rn_rdt=1800.0,
 cn_dir='./',
 ln_tsd_dmp=.false.,
 ln_tsd_init=.true.,
-sn_sal='salinity_clim.nc',-1,'salinity',.true.,.true.,'yearly','',
+sn_sal='./INPUTS/EN.4.1.1.f.analysis.g10.1995-2014.eORCA025.teos10.nc',-1,'salinity',.true.,.true.,'yearly','',
 '','',
-sn_tem='temperature_clim.nc',-1,'temperature',.true.,.true.,
+sn_tem='./INPUTS/EN.4.1.1.f.analysis.g10.1995-2014.eORCA025.teos10.nc',-1,'temperature',.true.,.true.,
 'yearly','','','',
 /
 &namwad
@@ -81,7 +81,7 @@ sn_vcur='vcurrent',-1,'v_current',.false.,.true.,'monthly','','Vme',
 ln_apr_dyn=.false.,
 ln_blk=.true.,
 ln_cpl=.false.,
-ln_dm2dc=.true.,
+ln_dm2dc=.false.,
 ln_flx=.false.,
 ln_ice_embd=.false.,
 ln_isf=.true.,
@@ -93,14 +93,14 @@ ln_usr=.false.,
 ln_wave=.false.,
 nn_components=0,
 nn_fsbc=1,
-nn_fwb=0,
+nn_fwb=1,
 nn_ice=2,
 nn_lsm=-3,
 /
 &namsbc_flx
 /
 &namsbc_blk
-cn_dir='/projects/jmmp/almega/DFS5.2/',
+cn_dir='/work/n01/n01/acc/FORCING/JRA/',
 ln_cd_l12=.false.,
 ln_cd_l15=.false.,
 ln_coare_3p0=.false.,
@@ -115,26 +115,26 @@ rn_zqt=10.0,
 rn_zu=10.0,
 sn_cc='NOT USED',24,'CC',.false.,.true.,'yearly',
 'weights_grid03_bilinear_eorca025.nc','','',
-sn_humi='drowned_q2_DFS5.2',3,'q2',.true.,.false.,'yearly',
-'weights_grid03_bilinear_eorca025.nc','','',
-sn_prec='drowned_precip_DFS5.2',24,'precip',.true.,.false.,'yearly',
-'weights_grid03_bilinear_eorca025.nc','','',
-sn_qlw='drowned_radlw_DFS5.2',24,'radlw',.false.,.false.,'yearly',
-'weights_grid03_bilinear_eorca025.nc','','',
-sn_qsr='drowned_radsw_DFS5.2',24,'radsw',.false.,.false.,'yearly',
-'weights_grid03_bilinear_eorca025.nc','','',
-sn_slp='drowned_msl_ERAinterim',6,'msl',.true.,.false.,'yearly',
-'weights_grid03_bilinear_eorca025.nc','','',
-sn_snow='drowned_snow_DFS5.2',24,'snow',.true.,.false.,'yearly',
-'weights_grid03_bilinear_eorca025.nc','','',
-sn_tair='drowned_t2_DFS5.2',3,'t2',.true.,.false.,'yearly',
-'weights_grid03_bilinear_eorca025.nc','','',
-sn_tdif='drowned_taudfif_DFS5.',24,'taudif',.false.,.false.,
-'yearly','weights_coreII_eorca1_bilinear.nc','','',
-sn_wndi='drowned_u10_DFS5.2',3,'u10',.true.,.false.,'yearly',
-'weights_grid03_bicubic_eorca025.nc','Ume','',
-sn_wndj='drowned_v10_DFS5.2',3,'v10',.true.,.false.,'yearly',
-'weights_grid03_bicubic_eorca025.nc','Vme','',
+sn_humi='huss',3,'huss',.true.,.false.,'yearly',
+'weights_grid_jra_bilin_e025.nc','',
+sn_prec='ptot',3,'ptot',.true.,.false.,'yearly',
+'weights_grid_jra_bilin_e025.nc','',
+sn_qlw='rlds',3,'rlds',.false.,.false.,'yearly',
+'weights_grid_jra_bilin_e025.nc','',
+sn_qsr='rsds',3,'rsds',.false.,.false.,'yearly',
+'weights_grid_jra_bilin_e025.nc','',
+sn_slp='psl',3,'psl',.true.,.false.,'yearly',
+'weights_grid_jra_bilin_e025.nc','',
+sn_snow='prsn',3,'prsn',.true.,.false.,'yearly',
+'weights_grid_jra_bilin_e025.nc','',
+sn_tair='tas',3,'tas',.true.,.false.,'yearly',
+'weights_grid_jra_bilin_e025.nc','',
+sn_tdif='taudif_core',24,'taudif',.true.,.false.,'yearly',
+'weights_grid_jra_bilin_e025.nc','',
+sn_wndi='uas',3,'uas',.true.,.false.,'yearly',
+'weights_grid_jra_bicubic_e025.nc','Ume',
+sn_wndj='vas',3,'vas',.true.,.false.,'yearly',
+'weights_grid_jra_bicubic_e025.nc','Vme',
 /
 &namsbc_cpl
 /
@@ -164,7 +164,7 @@ rn_si0=0.35,
 sn_chl='chlorophyll',-1,'CHLA',.true.,.true.,'yearly','','','',
 /
 &namsbc_rnf
-cn_dir='./',
+cn_dir='./INPUTS/',
 ln_rnf_depth=.false.,
 ln_rnf_depth_ini=.false.,
 ln_rnf_icb=.false.,
@@ -181,11 +181,11 @@ sn_rnf='runoff_1m_nomask.nc',-1,'sornficb',.true.,.true.,'yearly',
 /
 &namsbc_isf
 nn_isf=3,
-sn_depmax_isf='runoff_1m_nomask.nc',-12,'sozisfmax',.false.,.true.,
+sn_depmax_isf='./INPUTS/runoff_1m_nomask.nc',-12,'sozisfmax',.false.,.true.,
 'yearly','','','',
-sn_depmin_isf='runoff_1m_nomask.nc',-12,'sozisfmin',.false.,.true.,
+sn_depmin_isf='./INPUTS/runoff_1m_nomask.nc',-12,'sozisfmin',.false.,.true.,
 'yearly','','','',
-sn_rnfisf='runoff_1m_nomask.nc',-12,'sofwfisf',.false.,.true.,
+sn_rnfisf='./INPUTS/runoff_1m_nomask.nc',-12,'sofwfisf',.false.,.true.,
 'yearly','','','',
 /
 &namsbc_iscpl
@@ -193,20 +193,20 @@ sn_rnfisf='runoff_1m_nomask.nc',-12,'sofwfisf',.false.,.true.,
 &namsbc_apr
 /
 &namsbc_ssr
-cn_dir='./',
+cn_dir='./INPUTS/',
 ln_sssr_bnd=.true.,
 nn_sssr=2,
 nn_sstr=0,
 rn_deds=-33.3333333,
 rn_sssr_bnd=4.0,
-sn_sss='sss_1m.nc',-1,'salinity',.true.,.true.,'yearly','','','',
+sn_sss='sss_1m_teos10.nc',-1,'salinity',.true.,.true.,'yearly','','','',
 /
 &namsbc_wave
 /
 &namberg
-cn_dir='./',
-ln_bergdia=.true.,
-ln_icebergs=.true.,
+cn_dir='./INPUTS/',
+ln_bergdia=.false.,
+ln_icebergs=.false.,
 ln_operator_splitting=.true.,
 ln_passive_mode=.false.,
 nn_sample_rate=96,
@@ -222,7 +222,7 @@ rn_low_ratio=1.5,
 rn_mass_scaling=2000,200,50,20,10,5,2,1,1,1,
 rn_rho_bergs=850.0,
 rn_sicn_shift=0.0,
-rn_speed_limit=0.0,
+rn_speed_limit=0.4,
 sn_icb='calving',-12,'soicbclv',.true.,.true.,'yearly','','','',
 /
 &namlbc
@@ -287,10 +287,10 @@ rn_cd0=1.0e-3,
 rn_ke0=2.5e-3,
 /
 &nambbc
-cn_dir='./',
+cn_dir='./INPUTS/',
 ln_trabbc=.true.,
 nn_geoflx=2,
-sn_qgh='geothermal_heating.nc',-12,'heatflow',.false.,.true.,
+sn_qgh='geothermal_heating_orca025ext_extrap40.nc',-12,'heatflow',.false.,.true.,
 'yearly','','','',
 /
 &nambbl
@@ -457,22 +457,32 @@ rn_tfe=0.333,
 rn_tfe_itf=1.0,
 /
 &nammpp
-jpni=28,
-jpnj=17,
+jpni=40,
+jpnj=31,
 ln_nnogather=.true.,
 /
 &namctl
-ln_ctl=.false.,
-ln_diacfl=.false.,
-ln_timing=.true.,
-nn_ictle=0,
-nn_ictls=0,
-nn_isplt=1,
-nn_jctle=0,
-nn_jctls=0,
-nn_jsplt=1,
-nn_print=0,
-sn_cfctl%l_config=.false.,
+   ln_ctl = .TRUE.,                 ! Toggle all report printing on/off (T/F); Ignored if sn_cfctl%l_config is T
+     sn_cfctl%l_config = .FALSE.,     ! IF .true. then control which reports are written with the following
+       sn_cfctl%l_runstat = .FALSE., ! switches and which areas produce reports with the proc integer settings.
+       sn_cfctl%l_trcstat = .FALSE., ! The default settings for the proc integers should ensure
+       sn_cfctl%l_oceout  = .FALSE., ! that  all areas report.
+       sn_cfctl%l_layout  = .FALSE., !
+       sn_cfctl%l_mppout  = .FALSE., !
+       sn_cfctl%l_mpptop  = .FALSE., !
+       sn_cfctl%procmin   = 0,       ! Minimum area number for reporting [default:0]
+       sn_cfctl%procmax   = 1000000, ! Maximum area number for reporting [default:1000000]
+       sn_cfctl%procincr  = 1,       ! Increment for optional subsetting of areas [default:1]
+       sn_cfctl%ptimincr  = 1,       ! Timestep increment for writing time step progress info
+   nn_print    =    0,      !  level of print (0 no extra print)
+   nn_ictls    =    0,      !  start i indice of control sum (use to compare mono versus
+   nn_ictle    =    0,      !  end   i indice of control sum        multi processor runs
+   nn_jctls    =    0,      !  start j indice of control               over a subdomain)
+   nn_jctle    =    0,      !  end   j indice of control
+   nn_isplt    =    1,      !  number of processors in i-direction
+   nn_jsplt    =    1,      !  number of processors in j-direction
+   ln_timing   = .false.,   !  timing by routine write out in timing.output file
+   ln_diacfl   = .false.,   !  CFL diagnostics write out in cfl_diagnostics.ascii
 /
 &namsto
 cn_storst_in='restart_sto',
@@ -530,9 +540,6 @@ tname(2)='K1',
 nn_dct=15,
 nn_dctwri=15,
 nn_secdebug=112,
-/
-&nam_diatmb
-ln_diatmb=.false.,
 /
 &nam_dia25h
 ln_dia25h=.false.,
