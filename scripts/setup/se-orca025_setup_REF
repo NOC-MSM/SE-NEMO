@@ -183,10 +183,16 @@ ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXP_REF_NOTIDE/xios_server.exe
 ln -s INPUTS/K1rowdrg_R025_modif_nonpositive.nc K1rowdrg.nc
 ln -s INPUTS/M2rowdrg_R025_modif_nonpositive.nc M2rowdrg.nc
 ln -s INPUTS/mask_itf_ORCA025ext.nc mask_itf.nc
-ln -s INPUTS/bfr_coeff.nc .
+ln -s INPUTS/bfr_coef.nc .
 
 # copy an example SLURM runscript
 cp INPUTS/runscript_831.slurm .
+
+# Link the nemo executable, which seems hardwired to be placed in EXP00
+ln -s ../EXP00/nemo .
+
+# Copy the configurable namelists too
+cp $REPO_DIR/EXP_REF_NOTIDE/namelist* .
 
 # CW: no longer need this line: cp $REPO_DIR/EXP_REF_NOTIDE/* $CONFIG_DIR/EXP_REF_NOTIDE/
 # First copy GO8 code
