@@ -101,8 +101,6 @@ mkdir arch
 
 # Setup the directory structure for the ENSEMBLE
 mkdir $WORK_DIR/nemo/cfgs/se-orca025
-# Define the location of where the AMM7 forcing files are to be downloaded 
-export DOWNLOAD_DIR="$WORK_DIR/nemo/cfgs/se-orca025/EXP_REF_NOTIDE/"
 
 echo $XIOS_DIR
 # Choose an appropriate directory for your XIOS installation
@@ -134,13 +132,14 @@ mv tmp_arch ./arch/arch-archer2.fcm
 
 echo 'se-orca025 OCE ICE' >> $WORK_DIR/nemo/cfgs/work_cfgs.txt
 
-if [ ! -d "$XIOS_DIR" ]; then
+if [ ! -d "$DOWNLOAD_DIR" ]; then
 	mkdir cfgs/se-orca025/EXP_REF_NOTIDE
 fi
 
 echo "Gathering forcing data"
 
 export CONFIG_DIR=$WORK_DIR/nemo/cfgs/se-orca025
+
 
 cd $CONFIG_DIR
 # # Download the input data 
@@ -153,6 +152,10 @@ rm inputs.tar.gz
 
 
 # Set up EXP_REF_NOTIDE for quick testing 
+
+if [ ! -d EXP_REF_NOTIDE ]; then
+        mkdir EXP_REF_NOTIDE
+fi
 
 cd $CONFIG_DIR/EXP_REF_NOTIDE
 
