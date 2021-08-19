@@ -1,10 +1,6 @@
 &namrun
 cn_exp='SENEMO',
-<<<<<<< HEAD
 cn_ocerst_in='SENEMO_19910101_restart',
-=======
-cn_ocerst_in='restart',
->>>>>>> a4468eb7668715817c1d4b0b431c501053c9487f
 cn_ocerst_indir='./OUTPUTS',
 cn_ocerst_out='restart',
 cn_ocerst_outdir='./OUTPUTS',
