@@ -1,7 +1,7 @@
 &namrun
 cn_exp='SENEMO',
-cn_ocerst_in='restart',
-cn_ocerst_indir='.',
+cn_ocerst_in='SENEMO_19910101_restart',
+cn_ocerst_indir='./OUTPUTS',
 cn_ocerst_out='restart',
 cn_ocerst_outdir='./OUTPUTS',
 ln_cfmeta=.true.,
@@ -18,7 +18,7 @@ nn_euler=1,
 nn_istate=1,
 nn_it000=1,
 nn_itend=1488,
-nn_leapy=0,
+nn_leapy=1,
 nn_rstctl=0,
 nn_stock=100000,
 nn_time0=0000,
@@ -462,7 +462,7 @@ jpnj=31,
 ln_nnogather=.true.,
 /
 &namctl
-   ln_ctl = .TRUE.,                 ! Toggle all report printing on/off (T/F); Ignored if sn_cfctl%l_config is T
+   ln_ctl = .FALSE.,                 ! Toggle all report printing on/off (T/F); Ignored if sn_cfctl%l_config is T
      sn_cfctl%l_config = .FALSE.,     ! IF .true. then control which reports are written with the following
        sn_cfctl%l_runstat = .FALSE., ! switches and which areas produce reports with the proc integer settings.
        sn_cfctl%l_trcstat = .FALSE., ! The default settings for the proc integers should ensure
