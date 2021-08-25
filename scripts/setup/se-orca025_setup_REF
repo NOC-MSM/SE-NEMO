@@ -132,14 +132,12 @@ mv tmp_arch ./arch/arch-archer2.fcm
 
 echo 'se-orca025 OCE ICE' >> $WORK_DIR/nemo/cfgs/work_cfgs.txt
 
-if [ ! -d "$DOWNLOAD_DIR" ]; then
-	mkdir cfgs/se-orca025/EXP_REF_NOTIDE
-fi
+mkdir cfgs/se-orca025/EXP00
+
 
 echo "Gathering forcing data"
 
 export CONFIG_DIR=$WORK_DIR/nemo/cfgs/se-orca025
-
 
 cd $CONFIG_DIR
 # Download the input data 
@@ -149,15 +147,7 @@ wget http://gws-access.ceda.ac.uk/public/jmmp/se-orca025/inputs.tar.gz
 tar xvfz inputs.tar.gz
 rm inputs.tar.gz
 
-
-
-# Set up EXP_REF_NOTIDE for quick testing 
-
-if [ ! -d EXP_REF_NOTIDE ]; then
-        mkdir EXP_REF_NOTIDE
-fi
-
-cd $CONFIG_DIR/EXP_REF_NOTIDE
+cd $CONFIG_DIR/EXP00
 
 ln -s ../INPUTS INPUTS
 
@@ -177,7 +167,7 @@ mkdir RESTARTS
 mkdir OUTPUTS
 
 
-ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXP_REF_NOTIDE/xios_server.exe
+ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXP00/xios_server.exe
 
 # Link some files from INPUTS that are hardwired to be in the experiment directory 
 ln -s INPUTS/K1rowdrg_R025_modif_nonpositive.nc K1rowdrg.nc
@@ -188,13 +178,9 @@ ln -s INPUTS/bfr_coef.nc .
 # copy an example SLURM runscript
 cp INPUTS/runscript_831.slurm .
 
-# Link the nemo executable, which seems hardwired to be placed in EXP00
-ln -s ../EXP00/nemo .
-
-# Copy the configurable namelists too
+# Copy the configurable namelists too ** THIS FOLLOWS OUR PRACTICE TO STORE THESE IN EACH EXP. DIR. ON github **
 cp $REPO_DIR/EXP_REF_NOTIDE/namelist* .
 
-# CW: no longer need this line: cp $REPO_DIR/EXP_REF_NOTIDE/* $CONFIG_DIR/EXP_REF_NOTIDE/
 # First copy GO8 code
 cp -r $REPO_DIR/MY_SRC_GO8_FROZEN $CONFIG_DIR/MY_SRC
 # Then overwrite with any SE-NEMO mods
