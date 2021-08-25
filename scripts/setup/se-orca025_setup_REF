@@ -101,6 +101,8 @@ mkdir arch
 
 # Setup the directory structure for the ENSEMBLE
 mkdir $WORK_DIR/nemo/cfgs/se-orca025
+# Define the location of where the forcing files are downloaded to (CW: not sure if this variable is still used)
+export DOWNLOAD_DIR="$WORK_DIR/nemo/cfgs/se-orca025/EXP00/"
 
 echo $XIOS_DIR
 # Choose an appropriate directory for your XIOS installation
