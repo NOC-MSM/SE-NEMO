@@ -142,10 +142,10 @@ export CONFIG_DIR=$WORK_DIR/nemo/cfgs/se-orca025
 
 
 cd $CONFIG_DIR
-# # Download the input data 
-# wget http://gws-access.ceda.ac.uk/public/jmmp_collab/se-orca025/inputs.tar.gz
-# copy the data locally instead (may choose to use download option later, as more accessible) 
-cp -a /work/n01/n01/cwi/GO8pt6_inputs/inputs.tar.gz .
+# Download the input data 
+wget http://gws-access.ceda.ac.uk/public/jmmp/se-orca025/inputs.tar.gz
+# Or, alternatively, copy the data locally on ARCHER2 instead 
+# cp -a /work/n01/n01/cwi/GO8pt6_inputs/inputs.tar.gz .
 tar xvfz inputs.tar.gz
 rm inputs.tar.gz
 
