@@ -25,9 +25,8 @@
 #SBATCH --ntasks-per-node=59
 #SBATCH --ntasks-per-core=1
 
-# Created by: mkslurm_hetjob -S 8 -s 16 -m 2 -C 831 -g 3 -N 128 -t 00:10:00 -a n01 -j SE-NEMO -v False
+# Created by: mkslurm_hetjob -S 8 -s 16 -m 2 -C 831 -g 3 -N 128 -t 00:10:00 -a n01 -j nemo_test -v False
 module -s restore XXX_MOD_XXX/scripts/env/ucx_env
-
 export OMP_NUM_THREADS=1
 
 cat > myscript_wrapper.sh << EOFB
