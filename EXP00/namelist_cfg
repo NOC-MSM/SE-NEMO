@@ -243,6 +243,41 @@
 !-----------------------------------------------------------------------
 &nam_tide      !   tide parameters (#ifdef key_tide)
 !-----------------------------------------------------------------------
+ln_tide     = .false.      ! Activate tides
+  ln_tide_pot   = .false.                !  use tidal potential forcing
+     ln_scal_load  = .false.               ! Use scalar approximation for
+        rn_scal_load = 0.094               !     load potential
+     ln_read_load  = .false.               ! Or read load potential from file
+        cn_tide_load = 'tide_LOAD_grid_T.nc'  ! filename for load potential
+        !
+  ln_tide_ramp  = .true.               !  Use linear ramp for tides at startup
+     rdttideramp   =    28.                 !  ramp duration in days
+  dn_love_number = 0.7
+  ln_int_wave_drag = .false.           ! Turn on internal wave drag parameterization
+     cn_int_wave_drag = './bt_tidal_dissipation.nc' !Required for int_wave_drag
+  clname(1) = 'SA'
+  clname(2) = 'SSA'
+  clname(3) = 'MM'
+  clname(4) = 'MSF'
+  clname(5) = 'MF'
+  clname(6) = 'K1'
+  clname(7) = 'Q1'
+  clname(8) = 'O1'
+  clname(9) = 'P1'
+  clname(10) = 'S1'
+  clname(11) = 'J1'
+  clname(12) = 'M2'
+  clname(13) = 'S2'
+  clname(14) = '2N2'
+  clname(15) = 'MU2'
+  clname(16) = 'N2'
+  clname(17) = 'NU2'
+  clname(18) = 'L2'
+  clname(19) = 'T2'
+  clname(20) = 'K2'
+  clname(21) = 'MKS2'
+  clname(22) = 'LA2'
+  clname(23) = 'R2'
 /
 !-----------------------------------------------------------------------
 &nambdy        !  unstructured open boundaries                          ("key_bdy")
