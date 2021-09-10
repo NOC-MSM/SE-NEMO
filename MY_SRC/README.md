@@ -1,10 +1,17 @@
 # MY_SRC
 
+<<<<<<< HEAD
 Contains developement code for SE-NEMO
 Square brackets show comment markers in the code to find and identify changes.
 
 dynspg_ts.F90 - [davbyr] Applies internal wave drag prmtrsation to barotropic component.
+=======
+Contains development code for SE-NEMO
+>>>>>>> master
 
+dtatsd.F90 - vertical interpolation of ICs\
+istate.F90 - veritcal interpolation of ICs\
+par_oce.F90 - veritcal interpolation of ICs\
 sbcrnf.F90 - bugfixes for missing input directory
 
 sbctide.F90

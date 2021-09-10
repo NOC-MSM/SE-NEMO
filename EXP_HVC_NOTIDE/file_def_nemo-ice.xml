@@ -4,14 +4,14 @@
  <!--
 ============================================================================================================
 =                                           output files definition                                        =
-=                                            Define your own files for lim3                                =
+=                                      Define your own files for sea ice                                   =
 =                                         put the variables you want...                                    =
 ============================================================================================================
  -->
     
  <file_definition type="one_file" name="@expname@_@freq@_@startdate@_@enddate@" sync_freq="1mo" min_digits="4">
    
-   <file_group id="1m" output_freq="1mo"  output_level="10" enabled=".TRUE.">  <!-- 1m files -->   	
+   <file_group id="5d" output_freq="5d"  output_level="10" enabled=".TRUE.">  <!-- 5d files -->   	
      <file id="file21" name_suffix="_icemod" description="ice variables" enabled=".true." >
 
        <!-- ice mask -->
@@ -27,14 +27,15 @@
        <field field_ref="icesalt"          name="sisali" />
        <field field_ref="iceapnd"          name="siapnd" />
        <field field_ref="icevpnd"          name="sivpnd" />
-       <!-- sst_m is always the potential temperature even when using teos10 -->
-       <field field_ref="sst_m_pot"        name="sst_m_pot"  />
-       <field field_ref="sss_m_abs"        name="sss_m_abs"  />
+       <field field_ref="sst_m"            name="sst_m"  />
+       <field field_ref="sss_m"            name="sss_m"  />
        
        <!-- heat -->
        <field field_ref="icetemp"          name="sitemp" />
+       <field field_ref="snwtemp"          name="sntemp" />
        <field field_ref="icettop"          name="sittop" />
        <field field_ref="icetbot"          name="sitbot" />
+       <field field_ref="icetsni"          name="sitsni" />
        
        <!-- momentum -->
        <field field_ref="uice"             name="sivelu"  />
@@ -76,7 +77,7 @@
        <!-- mass fluxes -->
        <field field_ref="vfxice"           name="vfxice" />
        <field field_ref="vfxsnw"           name="vfxsnw" />
-       
+
        <!-- categories -->
        <field field_ref="icemask_cat"      name="simskcat"/>
        <field field_ref="snwthic_cat"      name="snthicat"/>
@@ -85,48 +86,33 @@
        <field field_ref="icesalt_cat"      name="sisalcat"/>
        <field field_ref="icetemp_cat"      name="sitemcat"/>
        <field field_ref="snwtemp_cat"      name="sntemcat"/>
-
-       <!-- mass balance -->
-       <field field_ref="dmithd"           name="sidmassth"        />
-       <field field_ref="dmidyn"           name="sidmassdyn"       />
-       <field field_ref="dmiopw"           name="sidmassgrowthwat" />
-       <field field_ref="dmibog"           name="sidmassgrowthbot" />
-       <field field_ref="dmisni"           name="sidmasssi"        />
-       <field field_ref="dmisub"           name="sidmassevapsubl"  />
-       <field field_ref="dmisum"           name="sidmassmelttop"   />
-       <field field_ref="dmibom"           name="sidmassmeltbot"   />
-       <field field_ref="dmilam"           name="sidmassmeltlat"   />
-       <field field_ref="dmsspr"           name="sndmasssnf"       />
-       <field field_ref="dmsmel"           name="sndmassmelt"      />
-       <field field_ref="dmssub"           name="sndmasssubl"      />
-       <field field_ref="dmsdyn"           name="sndmassdyn"       />
-       <field field_ref="dmsssi"           name="sndmasssi"        />
+       <field field_ref="icettop_cat"      name="sitopcat"/>
 
      </file>
      
      <file id="file22" name_suffix="_SBC_scalar" description="scalar variables" enabled=".true." >
        <!-- global contents -->
-       <field field_ref="ibgvol_tot"       name="ibgvol_tot"   />
-       <field field_ref="sbgvol_tot"       name="sbgvol_tot"   />
-       <field field_ref="ibgarea_tot"      name="ibgarea_tot"  />
-       <field field_ref="ibgsalt_tot"      name="ibgsalt_tot"  />
-       <field field_ref="ibgheat_tot"      name="ibgheat_tot"  />
-       <field field_ref="sbgheat_tot"      name="sbgheat_tot"  />
+       <field field_ref="ibgvol_tot"     name="ibgvol_tot"   />
+       <field field_ref="sbgvol_tot"     name="sbgvol_tot"   />
+       <field field_ref="ibgarea_tot"    name="ibgarea_tot"  />
+       <field field_ref="ibgsalt_tot"    name="ibgsalt_tot"  />
+       <field field_ref="ibgheat_tot"    name="ibgheat_tot"  />
+       <field field_ref="sbgheat_tot"    name="sbgheat_tot"  />
        
        <!-- global drifts (conservation checks) -->
-       <field field_ref="ibgvolume"        name="ibgvolume"    />
-       <field field_ref="ibgsaltco"        name="ibgsaltco"    />
-       <field field_ref="ibgheatco"        name="ibgheatco"    />
-       <field field_ref="ibgheatfx"        name="ibgheatfx"    />
+       <field field_ref="ibgvolume"      name="ibgvolume"    />
+       <field field_ref="ibgsaltco"      name="ibgsaltco"    />
+       <field field_ref="ibgheatco"      name="ibgheatco"    />
+       <field field_ref="ibgheatfx"      name="ibgheatfx"    />
        
        <!-- global forcings  -->
-       <field field_ref="ibgfrcvoltop"     name="ibgfrcvoltop" />
-       <field field_ref="ibgfrcvolbot"     name="ibgfrcvolbot" />
-       <field field_ref="ibgfrctemtop"     name="ibgfrctemtop" />
-       <field field_ref="ibgfrctembot"     name="ibgfrctembot" />
-       <field field_ref="ibgfrcsal"        name="ibgfrcsal"    />
-       <field field_ref="ibgfrchfxtop"     name="ibgfrchfxtop" />
-       <field field_ref="ibgfrchfxbot"     name="ibgfrchfxbot" />
+       <field field_ref="ibgfrcvoltop"   name="ibgfrcvoltop" />
+       <field field_ref="ibgfrcvolbot"   name="ibgfrcvolbot" />
+       <field field_ref="ibgfrctemtop"   name="ibgfrctemtop" />
+       <field field_ref="ibgfrctembot"   name="ibgfrctembot" />
+       <field field_ref="ibgfrcsal"      name="ibgfrcsal"    />
+       <field field_ref="ibgfrchfxtop"   name="ibgfrchfxtop" />
+       <field field_ref="ibgfrchfxbot"   name="ibgfrchfxbot" />
      </file>
      
    </file_group>
