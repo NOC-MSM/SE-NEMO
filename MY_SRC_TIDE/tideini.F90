@@ -61,9 +61,11 @@ CONTAINS
       !
       ! NB - read love number from namelist (one line)
       ! davbyr - read ln_int_wave_drag (one line)
+      ! davbyr - read var load namelist parameters (one more line)
       NAMELIST/nam_tide/ln_tide, ln_tide_pot, ln_scal_load, ln_read_load, cn_tide_load, &
                   &     ln_tide_ramp, rn_scal_load, rdttideramp, dn_love_number, &
-                  &     ln_int_wave_drag, cn_int_wave_drag, clname
+                  &     ln_int_wave_drag, cn_int_wave_drag, clname, &
+                  &     ln_var_load, rn_var_load_min, rn_var_load_max
       !!----------------------------------------------------------------------
       !
       ! Read Namelist nam_tide
@@ -95,6 +97,9 @@ CONTAINS
             ! davbyr - Output wave drag switch value (two line)
             WRITE(numout,*) '         Internal Wave Drag Parameterization     ln_int_wave_drag = ', ln_int_wave_drag
             IF(ln_int_wave_drag) WRITE(numout,*) 'cn_int_wave_drag = ', cn_int_wave_drag
+            WRITE(numout,*) '         Variable SAL Parameter Beta     ln_var_load = ', ln_var_load
+            IF(ln_int_wave_drag) WRITE(numout,*) 'Variable SAL Parameter Minimum = ', rn_var_load_min
+            IF(ln_int_wave_drag) WRITE(numout,*) 'Variable SAL Parameter Maximum = ', rn_var_load_max
          ENDIF
       ELSE
          rn_scal_load = 0._wp 

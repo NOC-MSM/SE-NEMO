@@ -36,7 +36,9 @@ MODULE sbctide
 
    ! davbyr: Tide drag
    REAL(wp), ALLOCATABLE, SAVE, DIMENSION(:,:) ::   tdiss
- 
+   ! davbyr: Variable scalar load
+   REAL(wp), ALLOCATABLE, SAVE, DIMENSION(:,:) ::   var_scal_load
+   
    !!----------------------------------------------------------------------
    !! NEMO/OCE 4.0 , NEMO Consortium (2018)
    !! $Id: sbctide.F90 10068 2018-08-28 14:09:04Z nicolasmartin $
@@ -65,6 +67,10 @@ CONTAINS
             IF( ln_int_wave_drag )THEN !davbyr: Allocation and read tdiss
                ALLOCATE( tdiss(jpi, jpj) )        
                CALL tide_init_diss
+            ENDIF
+            IF( ln_var_load )THEN !davbyr: Allocation and calculation of variable load
+               ALLOCATE( var_scal_load(jpi, jpj) )        
+               CALL calculate_variable_load
             ENDIF
          ENDIF
          !
@@ -199,6 +205,41 @@ CONTAINS
       CALL iom_get (inum, jpdom_data, 'tdiss', tdiss(:,:))
       CALL iom_close(inum)
       CALL iom_close( inum )
+   END SUBROUTINE tide_init_diss
+   
+   SUBROUTINE calculate_variable_load !davbyr: subroutine
+      !!----------------------------------------------------------------------
+      !!                 ***  ROUTINE calculate_variable_load  ***
+      !!----------------------------------------------------------------------
+      INTEGER :: iii                 ! Loop index
+      REAL :: power, tmp
+      DIMENSION(8) :: coefs
+      !!----------------------------------------------------------------------
+
+	  coefs(1) = -9.8169
+	  coefs(2) = 1.8289
+	  coefs(3) = 4.3787
+	  coefs(4) = -2.9042
+	  coefs(5) = 6.6038
+	  coefs(6) = -4.7393
+	  coefs(7) = -1.9354
+	  coefs(8) = 2.6969
+	  
+	  var_scal_load(:,:) = 0
+	  DO jj = 2, jpjm1                            
+         DO ji = 2, jpim1
+            DO iii=1,8
+               power = -real(iii)/2
+               tmp = var_scal_load(ji,jj) + coefs(iii)*gdept_n(ji,jj,jpk)**power
+               IF (tmp<rn_var_load_min) THEN
+                  tmp=rn_var_load_min
+               ELSE IF (tmp>rn_var_load_max) THEN
+                  tmp=rn_var_load_max
+               var_scal_load(ji,jj) = tmp
+            END DO
+         END DO
+      END DO
+
    END SUBROUTINE tide_init_diss
 
   !!======================================================================

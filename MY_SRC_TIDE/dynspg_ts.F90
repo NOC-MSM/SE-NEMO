@@ -575,13 +575,27 @@ CONTAINS
             &          + za2 *  sshb_e(:,:) + za3 *  sshbb_e(:,:)
          !
          !                             ! Surface pressure gradient
-         zldg = ( 1._wp - rn_scal_load ) * grav    ! local factor
-         DO jj = 2, jpjm1                            
-            DO ji = 2, jpim1
-               zu_spg(ji,jj) = - zldg * ( zsshp2_e(ji+1,jj) - zsshp2_e(ji,jj) ) * r1_e1u(ji,jj)
-               zv_spg(ji,jj) = - zldg * ( zsshp2_e(ji,jj+1) - zsshp2_e(ji,jj) ) * r1_e2v(ji,jj)
+         ! davbyr: Check for whether or not using variable scalar load. If so then
+         ! use scalar value from var_scal_load variable calculated in sbctide. Else
+         ! do the original thing.
+         IF ( ln_var_load ) THEN
+            DO jj = 2, jpjm1                            
+               DO ji = 2, jpim1
+                  zldg = ( 1._wp - var_scal_load(ji,jj) ) * grav
+                  zu_spg(ji,jj) = - zldg * ( zsshp2_e(ji+1,jj) - zsshp2_e(ji,jj) ) * r1_e1u(ji,jj)
+                  zv_spg(ji,jj) = - zldg * ( zsshp2_e(ji,jj+1) - zsshp2_e(ji,jj) ) * r1_e2v(ji,jj)
+               END DO
             END DO
-         END DO
+         ELSE
+            zldg = ( 1._wp - rn_scal_load ) * grav    ! local factor
+            DO jj = 2, jpjm1                            
+               DO ji = 2, jpim1
+                  zu_spg(ji,jj) = - zldg * ( zsshp2_e(ji+1,jj) - zsshp2_e(ji,jj) ) * r1_e1u(ji,jj)
+                  zv_spg(ji,jj) = - zldg * ( zsshp2_e(ji,jj+1) - zsshp2_e(ji,jj) ) * r1_e2v(ji,jj)
+               END DO
+            END DO
+         ENDIF
+         ! END davbyr
          IF( ln_wd_il ) THEN        ! W/D : gravity filters applied on pressure gradient
             CALL wad_spg( zsshp2_e, zcpx, zcpy )   ! Calculating W/D gravity filters
             zu_spg(2:jpim1,2:jpjm1) = zu_spg(2:jpim1,2:jpjm1) * zcpx(2:jpim1,2:jpjm1)
