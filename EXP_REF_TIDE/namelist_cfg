@@ -242,7 +242,7 @@ rn_sponge_tra=2880.0,
 ln_tide     = .true.      ! Activate tides
   ln_tide_pot   = .true.                !  use tidal potential forcing
      ln_scal_load  = .true.               ! Use scalar approximation for
-        rn_scal_load = 0.094               !     load potential
+        rn_scal_load = 0.12               !     load potential
      ln_read_load  = .false.               ! Or read load potential from file
         cn_tide_load = 'tide_LOAD_grid_T.nc'  ! filename for load potential
         !
