@@ -211,7 +211,7 @@ CONTAINS
       !!----------------------------------------------------------------------
       !!                 ***  ROUTINE calculate_variable_load  ***
       !!----------------------------------------------------------------------
-      INTEGER :: iii                 ! Loop index
+      INTEGER :: iii  , jj, ji               ! Loop index
       REAL :: power, tmp
       DIMENSION(8) :: coefs
       !!----------------------------------------------------------------------
@@ -235,12 +235,13 @@ CONTAINS
                   tmp=rn_var_load_min
                ELSE IF (tmp>rn_var_load_max) THEN
                   tmp=rn_var_load_max
+               END IF
                var_scal_load(ji,jj) = tmp
             END DO
          END DO
       END DO
 
-   END SUBROUTINE tide_init_diss
+   END SUBROUTINE calculate_variable_load
 
   !!======================================================================
 END MODULE sbctide

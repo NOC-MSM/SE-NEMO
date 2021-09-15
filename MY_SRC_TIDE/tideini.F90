@@ -28,6 +28,7 @@ MODULE tideini
    LOGICAL , PUBLIC ::   ln_tide_pot     !:
    LOGICAL , PUBLIC ::   ln_read_load    !:
    LOGICAL , PUBLIC ::   ln_scal_load    !:
+   LOGICAL , PUBLIC ::   ln_var_load     !:
    LOGICAL , PUBLIC ::   ln_tide_ramp    !:
    INTEGER , PUBLIC ::   nb_harmo        !:
    INTEGER , PUBLIC ::   kt_tide         !:
@@ -39,6 +40,10 @@ MODULE tideini
    LOGICAL , PUBLIC :: ln_int_wave_drag !:
    CHARACTER(lc), PUBLIC ::   cn_int_wave_drag   !:
    ! END davbyr
+   !davbyr : Stuff for variable SAL
+   LOGICAL , PUBLIC ::   ln_var_load     !:
+   REAL , PUBLIC :: rn_var_load_min, rn_var_load_max
+   !END davbyr
    REAL(wp), PUBLIC ::   rn_scal_load    !:
    CHARACTER(lc), PUBLIC ::   cn_tide_load   !: 
 
