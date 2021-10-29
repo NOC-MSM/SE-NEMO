@@ -13,20 +13,13 @@ import matplotlib.pylab as plt
 import make_nemo_climatology as mc
 import pickle as pkl
 
-GRD='SE-NEMO'
-if GRD=='SE-NEMO':
-    domain_datapath='/work/jholt/JASMIN//SENEMO/NOTIDE/'
-    domain_outpath='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/'
-    DOMNAM='ORCA025-SE-NEMO'
-    EXPNUM=''
-    RUNNAM=''
-    yearstart=1980
-    yearstop=1980
-    ID='SENEMO'
-    nemoconf='ORCA025-SE-NEMO'    
-fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'
+domain_datapath='/work/jholt/JASMIN//SENEMO/NOTIDE/'
+domain_outpath='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/'
+DOMNAM='ORCA025-SE-NEMO'
+  
+fn_nemo_dom=domain_path+'domcfg_eORCA025_v2.nc'
 fn_config_t_grid='/vkamino/work/jholt/Git/SE-NEMO/Analysis/Config/senemo_grid_t.json'    
-fn_nemo_dat='/work/jholt/JASMIN//SENEMO/NOTIDE/SENEMO_1m_19800101_19801231_grid_T_1980*-1980*.nc'
+fn_nemo_dat=domain_datapath+'/SENEMO_1m_19800101_19801231_grid_T_1980*-1980*.nc'
 nemo = coast.Gridded(fn_data= fn_nemo_dat, fn_domain = fn_nemo_dom, config=fn_config_t_grid,multiple=True)
 nemo_w=coast.Gridded(fn_domain = fn_nemo_dom ,config='../Config/example_nemo_grid_w.json')
 print('running')
