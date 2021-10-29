@@ -6,58 +6,47 @@ Created on Thu Sep  5 16:27:35 2019
 @author: jholt
 """
 import numpy as np
-from netCDF4 import Dataset
 
-import nemogrid
-import read_nemo_field as rf
-import environment as e
-from  seawater import eos80 as sw
-#Depth mask   
-#Zd_mask[ip,0:int(kbot[ip])]=1
-#Imax=np.max(np.nonzero(ZW>-Zmax)[0]) #note ZW index
-#if Imax<kbot[ip]:
-# Zd_mask[ip,Imax:nz]=0
-# Zd_mask[ip,Imax]=(ZW[Imax]-(-Zmax))/(ZW[Imax]-ZW[Imax+1])
-#if Zd_mask[ip,Imax-1] < 0 or Zd_mask[ip,Imax-1]  >1:
-# print('error', ip,Zd_mask[ip,Imax-1]),Imax,kbot[ip]
-#domain_outpath='/projectsa/Recicle/outputs/v2/'
-#DOMNAM='HadGEM2-ES'
-#EXPNUM=''
-#RUNNAM=''
-#
-#yearstart=2024
-#yearstop=2052
 Zmax=200
-def calc_pea(tmp,sal,Z, DZ,Zd_mask):
-#not finiished yet    
+def calc_pea(nemo,Zd_mask):
+#%%
  g=9.81
- nz=tmp.shape[2]
+ Z=nemo.dataset.variables['depth_0'].values.T
+ DZ=nemo.dataset.variables['e3_0'].T
  DP=np.sum(DZ*Zd_mask,axis=2)
- Tbar=np.sum(tmp*DZ*Zd_mask,axis=2)/DP
- Sbar=np.sum(sal*DZ*Zd_mask,axis=2)/DP
- rho=sw.dens0(sal,tmp)
- rhobar=sw.dens0(Sbar,Tbar)
- rhobar_2d=np.repeat(rhobar[:,:,np.newaxis],nz,axis=2)
- PEA=np.sum(Z*(rho-rhobar_2d)*DZ*Zd_mask,axis=2)*g/DP
+ nz=DZ.shape[2]
+ if not 'density' in list(nemo.dataset.keys()):     
+     nemo.construct_density(CT_AS=True,pot_dens=True)
+ if not 'density_bar' in list(nemo.dataset.keys()):
+     nemo.construct_density(CT_AS=True,rhobar=True,Zd_mask=Zd_mask.T,pot_dens=True)
+ 
+ rho=nemo.dataset.variables['density'].values.T
+ rhobar=nemo.dataset.variables['density_bar'].values.T
+ rhobar_3d=np.repeat(rhobar[:,:,np.newaxis],nz,axis=2)
+ PEA=np.sum(Z*(rho-rhobar_3d)*DZ*Zd_mask,axis=2)*g/DP
+#%%
  return PEA
-
+#%%
 def calc_zdmask(nemo,nemo_w,Zmax):
-#%%    
- Z=nemo.dataset.variables['depth_0']
- ZW=nemo_w.dataset.variables['depth_0']
+
+
+ Z=nemo.dataset.variables['depth_0'].values.T
+ ZW=nemo_w.dataset.variables['depth_0'].values.T
+ mbot=nemo.dataset.variables['bottom_level'].values.T
+ mask=mbot!=0
  ZZ=ZW[:,:,1:]
  ZZ[ZZ==0]=np.nan
  ZW[:,:,1:]=ZZ
- mbot=np.squeeze(grd.mbot[:,:])
+
  Zd_mask=np.zeros((Z.shape))
  nx,ny,nz=np.shape(Z)
  kmax=np.zeros((nx,ny)).astype(int)
  IIkmax=np.zeros(np.shape(Z))
-#%% 
-#careful assumes mboit is 1st sea point above bed ie new definition
+#
+#careful assumes mbot is 1st sea point above bed ie new definition
  for i in range(nx):
      for j in range(ny):
-       if grd.mask[i,j]==1:          
+       if mask[i,j]==1:          
          Zd_mask[i,j,0:mbot[i,j]]=1 # mbot is not python style index so no +1
          kmax[i,j]=mbot[i,j]
          if ZW[i,j,mbot[i,j]]>Zmax:
@@ -67,25 +56,27 @@ def calc_zdmask(nemo,nemo_w,Zmax):
            kmax[i,j]=kkmax
            IIkmax[i,j,kkmax]=1
  Ikmax=np.nonzero(IIkmax.ravel())          
-#%%
- return Zd_mask,kmax,Ikmax
-         
 
-def make_climatology(nemo,nemo_w,yearstart,yearstop):
+ return Zd_mask,kmax,Ikmax
+#%%%         
+
+def make_climatology(nemo,nemo_w,DOMNAM,domain_outpath):
+#%%
  Z=nemo.dataset.variables['depth_0'] 
  DZ=nemo.dataset.variables['e3_0']
- print('calculating mask')
- try:
-#%%     
-  A=np.load(e.assess_path + '/' + DOMNAM  + '/' +DOMNAM + '_Zd_mask.npz')
+
+ try:     
+  A=np.load(domain_outpath + '/' +DOMNAM + '_Zd_mask.npz')
+  
   Zd_mask=A['Zd_mask']
   kmax=A['kmax']
   Ikmax=A['kmax']
-#%%  
+  print('read mask')
  except:
+    print('calculating mask')
     Zd_mask,kmax,Ikmax=calc_zdmask(nemo,nemo_w,Zmax)
-    np.savez(e.assess_path + '/' + DOMNAM  + '/' +DOMNAM + '_Zd_mask.npz',Zd_mask=Zd_mask,kmax=kmax,Ikmax=Ikmax)
-    
+    np.savez(domain_outpath + '/' +DOMNAM + '_Zd_mask.npz',Zd_mask=Zd_mask,kmax=kmax,Ikmax=Ikmax)
+#%%    
  nx,ny,nz=np.shape(Z)
  def make_climatology_monthly(nemo,yearstart,yearstop):
 #%%

@@ -9,9 +9,9 @@ import sys
 sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
 import matplotlib.pylab as plt
 import coast
-fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc '
-fn_nemo_dat1='/work/jholt/JASMIN//SENEMO/NOTIDE/SENEMO_1m_19800101_19801231_grid_T_198012-198012.nc'
-fn_nemo_dat2=  '/work/jholt/JASMIN//SENEMO/TIDE/SENEMO_1m_19800101_19801231_grid_T_198012-198012.nc'
+fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'
+fn_nemo_dat1='/work/jholt/JASMIN//SENEMO/NOTIDE/SENEMO_1m_20000101_20001231_grid_T_200012-200012.nc'
+fn_nemo_dat2=  '/work/jholt/JASMIN//SENEMO/TIDE/SENEMO_1m_20000101_20001231_grid_T_200012-200012.nc'
 
 fn_config_t_grid='/login/jholt/work/Git/COAsT/config/example_nemo_grid_t.json'
 nemo_t1 = coast.Gridded(fn_data = fn_nemo_dat1, fn_domain = fn_nemo_dom, config=fn_config_t_grid)

@@ -5,18 +5,19 @@ Created on Fri Dec  6 16:12:00 2019
 
 @author: jholt
 """
+import sys
+sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
 import numpy as np
 import coast
 import matplotlib.pylab as plt
-import nemogrid
 import make_nemo_climatology as mc
-import environment as e
 import pickle as pkl
 
 GRD='SE-NEMO'
 if GRD=='SE-NEMO':
     domain_datapath='/work/jholt/JASMIN//SENEMO/NOTIDE/'
-    DOMNAM='ORCA025-SE-NEMf1O'
+    domain_outpath='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/'
+    DOMNAM='ORCA025-SE-NEMO'
     EXPNUM=''
     RUNNAM=''
     yearstart=1980
@@ -25,13 +26,13 @@ if GRD=='SE-NEMO':
     nemoconf='ORCA025-SE-NEMO'    
 fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'
 fn_config_t_grid='../Config/senemo_grid_t.json'    
-fn_nemo_dat='/work/jholt/JASMIN//SENEMO/NOTIDE/SENEMO_1m_19800101_19801231_grid_T_198001-198001.nc'
-nemo = coast.Gridded(fn_data= fn_nemo_dat, fn_domain = fn_nemo_dom, config=fn_config_t_grid,multiple=False)
+fn_nemo_dat='/work/jholt/JASMIN//SENEMO/NOTIDE/SENEMO_1m_19*0101_19*1231_grid_T_19*-19*.nc'
+nemo = coast.Gridded(fn_data= fn_nemo_dat, fn_domain = fn_nemo_dom, config=fn_config_t_grid,multiple=True)
 nemo_w=coast.Gridded(fn_domain = fn_nemo_dom ,config='../Config/example_nemo_grid_w.json')
 print('running')
 #%%
 
-SSTy,SSSy, PEAy, NBTy =mc.make_climatology(nemo,nemo_w,yearstart,yearstop)
+SSTy,SSSy, PEAy, NBTy =mc.make_climatology(nemo,nemo_w,DOMNAM,domain_outpath)
 
 Mask=np.repeat(grd.mask[:,:,np.newaxis],12,axis=2)
 
