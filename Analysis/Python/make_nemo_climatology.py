@@ -6,9 +6,13 @@ Created on Thu Sep  5 16:27:35 2019
 @author: jholt
 """
 import socket
+isliv = 'livljobs' in socket.gethostname()
 import sys
 import numpy as np
-sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
+if isliv:
+ sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
+else:
+ sys.path.insert(0,'/home/users/jholt/work/Git/COAsT/')    
 import coast
 Zmax=200
 def calc_pea(nemo,Zd_mask):
@@ -143,7 +147,7 @@ def NEMO_FileNames(dpath,runtype,ystart,ystop):
             names.append(new_name)
     return names         
 #%%    
-if 'livljobs' in socket.gethostname(): #NOC-liverpool
+if isliv: #NOC-liverpool
     domain_datapath='/work/jholt/JASMIN//SENEMO/NOTIDE/'
     domain_outpath='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/'
     domain_path='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/'
@@ -171,6 +175,6 @@ nemo_w=coast.Gridded(fn_domain = fn_nemo_dom ,config='../Config/example_nemo_gri
 DOMNAM='ORCA025-SE-NEMO'
 print('running')
 #%%
-SSTy,SSSy, PEAy  = make_climatology(nemo,nemo_w,DOMNAM,domain_outpath)
+SSTy,SSSy   = make_climatology(nemo,nemo_w,DOMNAM,domain_outpath)
 
  
