@@ -6,7 +6,9 @@ Created on Thu Sep  5 16:27:35 2019
 @author: jholt
 """
 import socket
+import sys
 import numpy as np
+sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
 import coast
 Zmax=200
 def calc_pea(nemo,Zd_mask):
@@ -108,7 +110,7 @@ def make_climatology(nemo,nemo_w,DOMNAM,domain_outpath):
 #%%  
  tmp=nemo.dataset.variables['temperature']
  sal=nemo.dataset.variables['salinity']
- PEA=calc_pea(nemo,Zd_mask)
+ #PEA=calc_pea(nemo,Zd_mask)
  
  #need to find efficient method for bottom temperature
  #NBT=np.zeros((nt,ny,nx))
@@ -122,10 +124,10 @@ def make_climatology(nemo,nemo_w,DOMNAM,domain_outpath):
    it=np.arange(im,nt,12).astype(int)
    SSTy[im,:,:]=np.mean(SST[it,:,:],axis=0)
    SSSy[im,:,:]=np.mean(SSS[it,:,:],axis=0)
-   PEAy[im,:,:]=np.mean(PEA[it,:,:],axis=0)
+#   PEAy[im,:,:]=np.mean(PEA[it,:,:],axis=0)
   # NBTy[im,:,:]=np.mean(NBT[it,:,:],axis=0)
 
- return SSTy,SSSy,PEAy #,NBTy
+ return SSTy,SSSy#,PEAy #,NBTy
 #%%
 def NEMO_FileNames(dpath,runtype,ystart,ystop):
 #produce a list of nemo filenames
@@ -157,6 +159,7 @@ fn_nemo_dat=domain_datapath+'/SENEMO_1m_19800101_19801231_grid_T_1980*-1980*.nc'
 #make list of filenames
 ystart=1980
 ystop=2009
+ystop=1981
 fn_nemo_dat= NEMO_FileNames(domain_datapath,'SENEMO',ystart,ystop)
   
 fn_nemo_dom=domain_path+'domcfg_eORCA025_v2.nc'
