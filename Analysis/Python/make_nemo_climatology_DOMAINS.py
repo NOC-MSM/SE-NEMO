@@ -32,6 +32,7 @@ fn_config_t_grid='/vkamino/work/jholt/Git/SE-NEMO/Analysis/Config/senemo_grid_t.
 fn_nemo_dat=domain_datapath+'/SENEMO_1m_19800101_19801231_grid_T_1980*-1980*.nc'
 nemo = coast.Gridded(fn_data= fn_nemo_dat, fn_domain = fn_nemo_dom, config=fn_config_t_grid,multiple=True)
 nemo_w=coast.Gridded(fn_domain = fn_nemo_dom ,config='../Config/example_nemo_grid_w.json')
+
 print('running')
 #%%
 
