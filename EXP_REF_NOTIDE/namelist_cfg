@@ -100,7 +100,7 @@ nn_lsm=-3,
 &namsbc_flx
 /
 &namsbc_blk
-cn_dir='/work/n01/n01/acc/FORCING/JRA/',
+cn_dir='/work/n01/shared/nemo/FORCING/JRA/',
 ln_cd_l12=.false.,
 ln_cd_l15=.false.,
 ln_coare_3p0=.false.,
