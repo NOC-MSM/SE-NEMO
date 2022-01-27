@@ -9,15 +9,15 @@ ln_clobber=.true.,
 ln_iscpl=.false.,
 ln_mskland=.true.,
 ln_rst_list=.false.,
-ln_rstart=.true.,
+ln_rstart=.false.,
 ln_rstdate=.true.,
 ln_xios_read=.false.,
 nn_chunksz=0,
-nn_date0=20100101,
+nn_date0=19760101,
 nn_euler=1,
 nn_istate=1,
-nn_it000=596113,
-nn_itend=613632,
+nn_it000=0,
+nn_itend=4464,
 nn_leapy=1,
 nn_rstctl=0,
 nn_stock=100000,
@@ -38,7 +38,7 @@ ln_linssh=.false.,
 ln_meshmask=.false.,
 rn_atfp=0.02,
 rn_isfhmin=1.00,
-rn_rdt=1800.0,
+rn_rdt=600.0,
 /
 &namtsd
 cn_dir='./',
@@ -100,7 +100,7 @@ nn_lsm=-3,
 &namsbc_flx
 /
 &namsbc_blk
-cn_dir='/work/n01/n01/acc/FORCING/JRA/',
+cn_dir='/work/n01/shared/nemo/FORCING/JRA/',
 ln_cd_l12=.false.,
 ln_cd_l15=.false.,
 ln_coare_3p0=.false.,
@@ -570,9 +570,9 @@ nn_stockfl=5475,
 nn_writefl=75,
 /
 &nam_diaharm
-ln_diaharm=.true.
-    nit000_han = 596113 !20446         ! First time step used for harmonic analysis
-    nitend_han = 613632 !38017        ! Last time step used for harmonic analysis
+ln_diaharm=.false.
+    nit000_han = 0 !20446         ! First time step used for harmonic analysis
+    nitend_han = 2976 !38017        ! Last time step used for harmonic analysis
     nstep_han  = 1        ! Time step frequency for harmonic analysis
  
     tname(1) = 'K1'
