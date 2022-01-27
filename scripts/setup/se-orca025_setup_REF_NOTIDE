@@ -65,11 +65,9 @@ fi
 cd $WORK_DIR
 
 echo "Making sure that the correct modules are loaded"
+#(following James Harle's advice....)
+. /work/n01/n01/cwi/modules/gnu-mpich 
 
-. /work/n01/n01/cwi/modules/gnu-mpich
-
-#module load cray-hdf5-parallel
-#module load cray-netcdf-hdf5parallel
 
 
 module list
@@ -105,8 +103,7 @@ mkdir arch
 
 # Setup the directory structure for the ENSEMBLE
 mkdir $WORK_DIR/nemo/cfgs/se-orca025
-# Define the location of where the AMM7 forcing files are to be downloaded 
-export DOWNLOAD_DIR="$WORK_DIR/nemo/cfgs/se-orca025/EXP00/"
+
 
 echo $XIOS_DIR
 # Choose an appropriate directory for your XIOS installation
