@@ -1,0 +1,211 @@
+#!/bin/bash
+# Lightweight script to set up SE-ORCA025 on ARCHER2
+ 
+display_usage() { 
+   echo
+   echo "  Auto-Config: SE-ORCA025 on ARCHER2"
+   echo "  ***************************************"
+   echo
+   echo "  usage: ${0##*/} -w path_to_install_nemo -x path_to_intall_xios -s path_to_repo"
+   echo
+   echo "  flags:  -w full path to where nemo will be installed"
+   echo "          -x full path to where xios will be installed"
+   echo "          -s full path to where SE-NEMO repository resides"
+   echo
+   exit 1
+	} 
+# if less than three arguments supplied, display usage 
+	if [  $# -le 5 ] 
+	then 
+		display_usage
+		exit 1
+	fi 
+# if less than two arguments supplied, display usage 
+	if [  $# -ge 7 ] 
+	then 
+		display_usage
+		exit 1
+	fi 
+# check whether user had supplied -h or --help . If yes display usage 
+	if [[ ( $# == "--help") ||  $# == "-h" ]] 
+	then 
+		display_usage
+		exit 0
+	fi 
+
+while getopts w:x:s: option
+  do
+  case "${option}"
+  in
+  w) export WORK_DIR=${OPTARG};;
+  x) export XIOS_DIR=${OPTARG};;
+  s) export REPO_DIR=${OPTARG};;
+  esac
+done
+
+if [ ${WORK_DIR:0:1} != "/" ]; then
+  echo "WORK_DIR must use full path"
+  exit 1
+fi
+
+if [ ${XIOS_DIR:0:1} != "/" ]; then
+  echo "XIOS_DIR must use full path"
+  exit 1
+fi
+
+if [ ${REPO_DIR:0:1} != "/" ]; then
+  echo "REPO_DIR must use full path"
+  exit 1
+fi
+
+# Change to some working directory of choice
+if [ ! -d "$WORK_DIR" ]; then
+  mkdir $WORK_DIR
+fi
+cd $WORK_DIR
+
+echo "Making sure that the correct modules are loaded"
+
+#module -s restore $REPO_DIR/scripts/env/ucx_env
+
+module load cpe/21.03
+module load cray-hdf5-parallel
+module load cray-netcdf-hdf5parallel
+
+export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
+
+# Currently running 4.0.4
+NEMO_VER=4.0.4
+
+# Checkout the NEMO code from the SVN Paris repository 
+echo "Checking out NEMO repository"
+
+svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER --depth empty nemo
+svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/src --depth infinity nemo/src
+svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/SHARED nemo/cfgs/SHARED
+svn export http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/ref_cfgs.txt nemo/cfgs/ref_cfgs.txt
+
+cd nemo
+
+# Now check EXTERNALS revision number before checking out the rest
+for ext_name in mk FCM IOIPSL   
+  do   
+  ext=`svn propget svn:externals | grep $ext_name | cut -c2-`   
+  svn co http://forge.ipsl.jussieu.fr/nemo/svn/$ext
+done
+
+ext=`svn propget svn:externals | grep makenemo | cut -c2-`
+svn export http://forge.ipsl.jussieu.fr/nemo/svn/$ext
+
+mkdir arch
+
+# Setup the directory structure for the ENSEMBLE
+mkdir $WORK_DIR/nemo/cfgs/se-orca025
+# Define the location of where the forcing files are downloaded to (CW: not sure if this variable is still used)
+export DOWNLOAD_DIR="$WORK_DIR/nemo/cfgs/se-orca025/EXP00/"
+
+echo $XIOS_DIR
+# Choose an appropriate directory for your XIOS installation
+if [ ! -d "$XIOS_DIR" ]; then
+  mkdir $XIOS_DIR
+fi
+cd $XIOS_DIR
+echo $PWD
+echo "Checking out xios repository"
+svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5@1964 xios
+cd xios
+cp $REPO_DIR/arch/xios/* ./arch
+echo "Compiling xios"
+./make_xios --full --prod --arch archer2 --netcdf_lib netcdf4_par --job 4
+# Dirty fix here as xios has to unpack before we can edit
+sed -e "s/FC_MODSEARCH => '',  /FC_MODSEARCH => '-J',/" tools/FCM/lib/Fcm/Config.pm > tmp_file
+mv tmp_file tools/FCM/lib/Fcm/Config.pm
+# Try once more
+./make_xios --full --prod --arch archer2 --netcdf_lib netcdf4_par --job 4
+
+# Let's update the path to xios
+export XIOS_DIR=$XIOS_DIR/xios
+
+cd $WORK_DIR/nemo
+cp $REPO_DIR/arch/nemo/* ./arch
+# Dirty fix to hard wire path otherwise user will have to set XIOS_DIR in every new shell session
+sed "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-archer2.fcm > tmp_arch
+mv tmp_arch ./arch/arch-archer2.fcm
+
+echo 'se-orca025 OCE ICE' >> $WORK_DIR/nemo/cfgs/work_cfgs.txt
+
+mkdir cfgs/se-orca025/EXP00
+
+
+echo "Gathering forcing data"
+
+export CONFIG_DIR=$WORK_DIR/nemo/cfgs/se-orca025
+
+cd $CONFIG_DIR
+# Download the input data 
+wget http://gws-access.ceda.ac.uk/public/jmmp/se-orca025/inputs.tar.gz
+# Or, alternatively, copy the data locally on ARCHER2 instead 
+# cp -a /work/n01/n01/cwi/GO8pt6_inputs/inputs.tar.gz .
+tar xvfz inputs.tar.gz
+rm inputs.tar.gz
+
+cd $CONFIG_DIR/EXP00
+
+ln -s ../INPUTS INPUTS
+
+ln -s INPUTS/namelist_ref .
+ln -s INPUTS/namelist_ice_ref .
+ln -s INPUTS/context_nemo.xml .
+ln -s INPUTS/domain_def_nemo.xml .
+ln -s INPUTS/field_def_nemo-ice.xml .
+ln -s INPUTS/field_def_nemo-oce.xml .
+ln -s INPUTS/file_def_nemo-ice-BASIC.xml .
+ln -s INPUTS/file_def_nemo-oce-BASIC.xml .
+ln -s INPUTS/grid_def_nemo.xml .
+ln -s INPUTS/iodef.xml .
+
+mkdir meta_out
+mkdir RESTARTS
+mkdir OUTPUTS
+
+
+ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXP00/xios_server.exe
+
+# Link some files from INPUTS that are hardwired to be in the experiment directory 
+ln -s INPUTS/K1rowdrg_R025_modif_nonpositive.nc K1rowdrg.nc
+ln -s INPUTS/M2rowdrg_R025_modif_nonpositive.nc M2rowdrg.nc
+ln -s INPUTS/mask_itf_ORCA025ext.nc mask_itf.nc
+ln -s INPUTS/bfr_coef.nc .
+
+# copy an example SLURM runscript
+cp INPUTS/runscript_831.slurm .
+
+# Copy the configurable namelists too ** THIS FOLLOWS OUR PRACTICE TO STORE THESE IN EACH EXP. DIR. ON github **
+cp $REPO_DIR/EXP_REF_NOTIDE/namelist* .
+
+# First copy GO8 code
+cp -r $REPO_DIR/MY_SRC_GO8_FROZEN $CONFIG_DIR/MY_SRC
+# Then overwrite with any SE-NEMO mods
+cp $REPO_DIR/MY_SRC/* $CONFIG_DIR/MY_SRC/
+cp $REPO_DIR/cpp_se-orca025.fcm $CONFIG_DIR/
+
+cd $WORK_DIR/nemo/ext/FCM/lib/Fcm
+sed -e "s/FC_MODSEARCH => '',  /FC_MODSEARCH => '-J',/" Config.pm > tmp_file
+mv tmp_file Config.pm
+
+cd $WORK_DIR/nemo
+
+echo "Compiling nemo SE-ORCA025 Config"
+./makenemo -m archer2 -r se-orca025 -j 16
+
+echo
+echo "  Auto-Config: SE-ORCA025"
+echo "  *****************************"
+echo
+echo "  To run the SE-ORCA025 Configuration:"
+echo
+echo "  - update the runscript accordingly "
+echo "      (project code, nodes, modules, etc)"
+echo
+echo "  - submit via the slurm command"
+echo    
