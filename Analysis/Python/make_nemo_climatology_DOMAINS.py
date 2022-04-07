@@ -4,6 +4,10 @@
 Created on Fri Dec  6 16:12:00 2019
 
 @author: jholt
+
+DON'T USE'
+
+
 """
 import sys
 sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
@@ -12,6 +16,7 @@ import coast
 import matplotlib.pylab as plt
 import make_nemo_climatology as mc
 import pickle as pkl
+
 domain_datapath='/work/jholt/JASMIN//SENEMO/NOTIDE/'
 domain_outpath='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/'
 domain_path='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/'
@@ -25,9 +30,11 @@ fn_nemo_dom=domain_path+'domcfg_eORCA025_v2.nc'
 fn_config_t_grid='/vkamino/work/jholt/Git/SE-NEMO/Analysis/Config/senemo_grid_t.json'
 fn_nemo_dat=domain_datapath+'/SENEMO_1m_19800101_19801231_grid_T_1980*-1980*.nc'
 
-DOMNAM='ORCA025-SE-NEMO'
-  
-fn_nemo_dom=domain_path+'domcfg_eORCA025_v2.nc'
+RUNNAM='EXP_ZPS'
+yearstart=1980
+yearstop=1985
+domain_datapath='/work/jholt/JASMIN//SENEMO/JDHA/EXP_ZPS/SENEMO_1M/'  
+fn_nemo_dom='/work/jholt/JASMIN//SENEMO/JDHA/EXP_ZPS/domain_cfg_zps.nc'
 fn_config_t_grid='/vkamino/work/jholt/Git/SE-NEMO/Analysis/Config/senemo_grid_t.json'    
 fn_nemo_dat=domain_datapath+'/SENEMO_1m_19800101_19801231_grid_T_1980*-1980*.nc'
 nemo = coast.Gridded(fn_data= fn_nemo_dat, fn_domain = fn_nemo_dom, config=fn_config_t_grid,multiple=True)
@@ -40,7 +47,7 @@ SSTy,SSSy, PEAy, NBTy =mc.make_climatology(nemo,nemo_w,DOMNAM,domain_outpath)
 
 Mask=np.repeat(grd.mask[:,:,np.newaxis],12,axis=2)
 
-outname= e.assess_path + '/' + DOMNAM  + '/' +DOMNAM + '_' + EXPNUM +'_TSclim_NOTIDE' + str(yearstart) + '_' +str(yearstop)+'.nc'
+outname= e.assess_path + '/' + DOMNAM  + '/' +DOMNAM + '_' + EXPNUM +'_TSclim_' + EXPNAME + str(yearstart) + '_' +str(yearstop)+'.nc'
 f = Dataset(outname, 'w',  format='NETCDF4')
 f.createDimension('lon',grd.nx)
 f.createDimension('lat',grd.ny)

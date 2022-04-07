@@ -161,55 +161,65 @@ def NEMO_FileNames(dpath,runtype,ystart,ystop):
             names.append(new_name)
     return names         
 ###############################################################################
-if isliv: #NOC-liverpool
-    domain_datapath='/work/jholt/JASMIN//SENEMO/NOTIDE/'
-    domain_outpath='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/'
-    domain_path='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/'
-else: #JASMIN
-    domain_datapath='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/means/monthly/'
-    domain_outpath='/home/users/jholt/work/SENEMO/'
-    domain_path='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/'
-
-fn_nemo_dom=domain_path+'domcfg_eORCA025_v2.nc'
-
-fn_nemo_dat=domain_datapath+'/SENEMO_1m_19800101_19801231_grid_T_1980*-1980*.nc'
-
-#make list of filenames
-ystart=1980
-ystop=2009
-ystop=1981
-fn_nemo_dat= NEMO_FileNames(domain_datapath,'SENEMO',ystart,ystop)
-  
-fn_nemo_dom=domain_path+'domcfg_eORCA025_v2.nc'
-fn_config_t_grid='../Config/senemo_grid_t.json'    
-
-#input datasets
-nemo = coast.Gridded(fn_data= fn_nemo_dat, fn_domain = fn_nemo_dom, config=fn_config_t_grid,multiple=True)
-nemo_w=coast.Gridded(fn_domain = fn_nemo_dom ,config='../Config/example_nemo_grid_w.json')
-
-#Place to output data
-nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid)
-fn_nameout='SST_SSS_PEA_MonClimate.nc'
-fn_out=domain_outpath+DOMNAM+'_'+fn_nameout
-DOMNAM='ORCA025-SE-NEMO'
-print('running')
-#%% do the hard work
-SSTy,SSSy,PEAy   = make_climatology(nemo,nemo_w,DOMNAM,domain_outpath)
-#%%
-# save hard work in netcdf file
-coords = {"Months":(("mon_dim"),np.arange(12).astype(int)),
-        "latitude": (("y_dim", "x_dim"), nemo.dataset.latitude.values),
-        "longitude": (("y_dim", "x_dim"), nemo.dataset.longitude.values),
-    }
-dims = ["mon_dim","y_dim", "x_dim"]                
-attributes_SST = {"units": "o^C", "standard name": "Conservative Sea Surface Temperature"}
-attributes_SSS = {"units": "", "standard name": "Absolution Sea Surface Salinity"}
-attributes_PEA = {"units": "Jm^-3", "standard name": "Potential Energy Anomaly to 200m"}
-nemo_out.dataset['SSTy'] = xr.DataArray(np.squeeze(SSTy), coords=coords, dims=dims, attrs=attributes_SST) 
-nemo_out.dataset['SSSy'] = xr.DataArray(np.squeeze(SSSy), coords=coords, dims=dims, attrs=attributes_SSS) 
-nemo_out.dataset['PEAy'] = xr.DataArray(np.squeeze(PEAy), coords=coords, dims=dims, attrs=attributes_PEA) 
-
-nemo_out.dataset.to_netcdf(fn_out)
+EXPNAMS=['EXP_SZT39_TAPER_TIDE','EXP_ZPS','EXP_SZT39_TAPER',
+         'EXP_SZT39_TAPER_TKE','EXP_SZT51_NOTAPER','EXP_SZT39_NOTAPER']
+DOMCFGNAMS=['domain_cfg_ztaper_match.nc','domain_cfg_zps.nc',
+            'domain_cfg_ztaper_match.nc','domain_cfg_ztaper_match.nc'
+            ,'domain_cfg_51_noztaper_match_rmax15.nc','domain_cfg_noztaper_match.nc']
+#EXPNAMS=['EXP_ZPS']
+for ik,EXPNAM in enumerate(EXPNAMS):
+    print(EXPNAM)
+    if isliv: #NOC-liverpool
+        domain_datapath='/work/jholt/JASMIN//SENEMO/JDHA/' + EXPNAM +'/'
+        domain_outpath='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/'
+        domain_path='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/'
+    
+    else: #JASMIN
+        domain_datapath='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/means/monthly/'
+        domain_outpath='/home/users/jholt/work/SENEMO/'
+        domain_path='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/'
+    
+    
+    
+    
+    fn_nemo_dom=domain_datapath+DOMCFGNAMS[ik]
+    print(fn_nemo_dom)
+    
+    #make list of filenames
+    ystart=1980
+    ystop=1984
+    fn_nemo_dat= NEMO_FileNames(domain_datapath+'/SENEMO_1M/','SENEMO',ystart,ystop)
+      
+    #fn_nemo_dom=domain_path+'domcfg_eORCA025_v2.nc'
+    fn_config_t_grid='../Config/senemo_grid_t.json'    
+    
+    #input datasets
+    nemo = coast.Gridded(fn_data= fn_nemo_dat, fn_domain = fn_nemo_dom, config=fn_config_t_grid,multiple=True)
+    nemo_w=coast.Gridded(fn_domain = fn_nemo_dom ,config='../Config/example_nemo_grid_w.json')
+    
+    #Place to output data
+    nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid)
+    fn_nameout='SENEMO_' +EXPNAM+ 'SST_SSS_PEA_MonClimate.nc'
+    DOMNAM='ORCA025-SE-NEMO'
+    fn_out=domain_outpath+DOMNAM+'_'+fn_nameout
+    print('running')
+    #%% do the hard work
+    SSTy,SSSy,PEAy   = make_climatology(nemo,nemo_w,DOMNAM,domain_outpath)
+    
+    # save hard work in netcdf file
+    coords = {"Months":(("mon_dim"),np.arange(12).astype(int)),
+            "latitude": (("y_dim", "x_dim"), nemo.dataset.latitude.values),
+            "longitude": (("y_dim", "x_dim"), nemo.dataset.longitude.values),
+        }
+    dims = ["mon_dim","y_dim", "x_dim"]                
+    attributes_SST = {"units": "o^C", "standard name": "Conservative Sea Surface Temperature"}
+    attributes_SSS = {"units": "", "standard name": "Absolution Sea Surface Salinity"}
+    attributes_PEA = {"units": "Jm^-3", "standard name": "Potential Energy Anomaly to 200m"}
+    nemo_out.dataset['SSTy'] = xr.DataArray(np.squeeze(SSTy), coords=coords, dims=dims, attrs=attributes_SST) 
+    nemo_out.dataset['SSSy'] = xr.DataArray(np.squeeze(SSSy), coords=coords, dims=dims, attrs=attributes_SSS) 
+    nemo_out.dataset['PEAy'] = xr.DataArray(np.squeeze(PEAy), coords=coords, dims=dims, attrs=attributes_PEA) 
+    
+    nemo_out.dataset.to_netcdf(fn_out)
 
 
 
