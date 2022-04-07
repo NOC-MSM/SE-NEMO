@@ -4,6 +4,9 @@
 
 Configuration files for SE-NEMO project
 
+
+Base Configuration: GO8p4 at NEMO 4.0.2
+
 ## Quick Start:
 
 ```

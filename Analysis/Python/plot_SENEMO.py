@@ -1,8 +1,6 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Oct  8 09:42:55 2021
 
+<<<<<<< HEAD
 @author: jholt
 """
 import sys
@@ -96,3 +94,5 @@ plt.savefig('/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT//ORCA025-SE-NEMO/prof_j{0}
 
 
 
+=======
+>>>>>>> 115fbaf05bbf37dd5f904b072e83f7d9380e90e7

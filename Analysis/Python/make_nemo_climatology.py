@@ -161,8 +161,8 @@ def NEMO_FileNames(dpath,runtype,ystart,ystop):
             names.append(new_name)
     return names         
 ###############################################################################
-EXPNAMS=['EXP_SZT39_TAPER_TIDE','EXP_ZPS','EXP_SZT39_TAPER',
-         'EXP_SZT39_TAPER_TKE','EXP_SZT51_NOTAPER','EXP_SZT39_NOTAPER']
+#EXPNAMS=['EXP_SZT39_TAPER_TIDE','EXP_ZPS','EXP_SZT39_TAPER']
+EXPNAMS=['EXP_SZT39_TAPER_TKE','EXP_SZT51_NOTAPER','EXP_SZT39_NOTAPER']
 DOMCFGNAMS=['domain_cfg_ztaper_match.nc','domain_cfg_zps.nc',
             'domain_cfg_ztaper_match.nc','domain_cfg_ztaper_match.nc'
             ,'domain_cfg_51_noztaper_match_rmax15.nc','domain_cfg_noztaper_match.nc']
@@ -172,17 +172,17 @@ for ik,EXPNAM in enumerate(EXPNAMS):
     if isliv: #NOC-liverpool
         domain_datapath='/work/jholt/JASMIN//SENEMO/JDHA/' + EXPNAM +'/'
         domain_outpath='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/'
-        domain_path='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/'
+        domain_path=domain_datapath
     
     else: #JASMIN
-        domain_datapath='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/means/monthly/'
+        domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/SE-NEMO' + EXPNAM +'/'
         domain_outpath='/home/users/jholt/work/SENEMO/'
-        domain_path='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/'
+        domain_path=domain_datapath
     
     
     
     
-    fn_nemo_dom=domain_datapath+DOMCFGNAMS[ik]
+    fn_nemo_dom=domain_path+DOMCFGNAMS[ik]
     print(fn_nemo_dom)
     
     #make list of filenames
