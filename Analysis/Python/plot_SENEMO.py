@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*-
 
-<<<<<<< HEAD
-@author: jholt
-"""
 import sys
 sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
 import matplotlib.pylab as plt
 import coast
 import numpy as np
+#%%
 fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'
 fn_nemo_dat1='/work/jholt/JASMIN//SENEMO/NOTIDE/SENEMO_1m_19800101_19801231_grid_T_198001-198001.nc'
 fn_nemo_dat2=  '/work/jholt/JASMIN//SENEMO/TIDE/SENEMO_1m_19800101_19801231_grid_T_198001-198001.nc'
@@ -65,34 +62,38 @@ plt.legend(['No Tide avt (log10)','Tide avt (log10)'])
 
 plt.savefig('/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT//ORCA025-SE-NEMO/prof_j{0}_i{1}_1980_tide-notide.png'.format(j,i))
 
+#%%%
+plt.close('all')
+dpath='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/'
+
+
+EXPNAMS=['EXP_SZT39_TAPER_TKE','EXP_SZT39_TAPER_TIDE','EXP_ZPS','EXP_SZT39_TAPER']
+EXPNAMS2=['TIDE','NOTIDE']
+pea_ns={}
+nemo={}
+
+for EXPNAM in EXPNAMS:
+ fname=dpath+'ORCA025-SE-NEMO_'+'SENEMO_' +EXPNAM+ 'SST_SSS_PEA_MonClimate.nc'   
+ nemo[EXPNAM]=coast.Gridded(fn_data=fname)
+for EXPNAM in EXPNAMS2:
+ fname=dpath+'ORCA025-SE-NEMO/ORCA025-SE-NEMO__TSclim_'+ EXPNAM +'1980_2011.nc'   
+ nemo[EXPNAM]=coast.Gridded(fn_data=fname)
+SST1=nemo[EXPNAMS[0]].dataset.variables['SSTy'][0,860:1000,1080:1180]
+for EXPNAM in EXPNAMS:
+ pea=nemo[EXPNAM].dataset.variables['PEAy'].values[7,860:1000,1080:1180]    
+ pea_ns[EXPNAM]=np.ma.masked_where(np.isnan(SST1),pea)
+for EXPNAM in EXPNAMS2:
+ pea=nemo[EXPNAM].dataset.variables['PEAy'].values[1080:1180,860:1000,7].T
+ pea_ns[EXPNAM]=np.ma.masked_where(np.isnan(SST1),pea)
+for EXPNAM in EXPNAMS+EXPNAMS2:
+
+ plt.figure()
+ plt.pcolormesh(pea_ns[EXPNAM],vmin=0,vmax=100)
+ plt.colorbar(orientation='vertical')
+ plt.title('PEA ' +EXPNAM)
+ plt.savefig('/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT//ORCA025-SE-NEMO/PEA_NWS_{0}.png'.format(EXPNAM))
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
->>>>>>> 115fbaf05bbf37dd5f904b072e83f7d9380e90e7

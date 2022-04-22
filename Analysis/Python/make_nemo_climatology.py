@@ -175,7 +175,7 @@ for ik,EXPNAM in enumerate(EXPNAMS):
         domain_path=domain_datapath
     
     else: #JASMIN
-        domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/SE-NEMO' + EXPNAM +'/'
+        domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/SE-NEMO/' + EXPNAM +'/'
         domain_outpath='/home/users/jholt/work/SENEMO/'
         domain_path=domain_datapath
     
@@ -199,9 +199,9 @@ for ik,EXPNAM in enumerate(EXPNAMS):
     
     #Place to output data
     nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid)
-    fn_nameout='SENEMO_' +EXPNAM+ 'SST_SSS_PEA_MonClimate.nc'
+    fn_nameout=EXPNAM+ 'SST_SSS_PEA_MonClimate.nc'
     DOMNAM='ORCA025-SE-NEMO'
-    fn_out=domain_outpath+DOMNAM+'_'+fn_nameout
+    fn_out=domain_outpath+'/'+DOMNAM +'/' +DOMNAM+'_'+fn_nameout
     print('running')
     #%% do the hard work
     SSTy,SSSy,PEAy   = make_climatology(nemo,nemo_w,DOMNAM,domain_outpath)
