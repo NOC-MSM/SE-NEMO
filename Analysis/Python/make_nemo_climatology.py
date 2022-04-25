@@ -162,8 +162,8 @@ def NEMO_FileNames(dpath,runtype,ystart,ystop):
     return names         
 ###############################################################################
 if __name__ == '__main__':
-    EXPNAMS=['EXP_SZT39_TAPER_TIDE','EXP_ZPS','EXP_SZT39_TAPER']
-    #EXPNAMS=['EXP_SZT39_TAPER_TKE','EXP_SZT51_NOTAPER','EXP_SZT39_NOTAPER']
+    EXPNAMS=['EXP_SZT39_TAPER_TIDE','EXP_ZPS','EXP_SZT39_TAPER',
+             'EXP_SZT39_TAPER_TKE','EXP_SZT51_NOTAPER','EXP_SZT39_NOTAPER']
     DOMCFGNAMS=['domain_cfg_ztaper_match.nc','domain_cfg_zps.nc',
                 'domain_cfg_ztaper_match.nc','domain_cfg_ztaper_match.nc'
                 ,'domain_cfg_51_noztaper_match_rmax15.nc','domain_cfg_noztaper_match.nc']
