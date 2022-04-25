@@ -8,6 +8,12 @@ import numpy as np
 fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'
 fn_nemo_dat1='/work/jholt/JASMIN//SENEMO/NOTIDE/SENEMO_1m_19800101_19801231_grid_T_198001-198001.nc'
 fn_nemo_dat2=  '/work/jholt/JASMIN//SENEMO/TIDE/SENEMO_1m_19800101_19801231_grid_T_198001-198001.nc'
+
+fn_nemo_dat1='/work/jholt/JASMIN//SENEMO/JDHA/EXP_ZPS/SENEMO_1M/SENEMO_1m_19800101_19801231_grid_T_198008-198008.nc'
+fn_nemo_dat2='/work/jholt/JASMIN//SENEMO/JDHA/EXP_SZT39_TAPER/SENEMO_1M/SENEMO_1m_19800101_19801231_grid_T_198008-198008.nc'
+fn_nemo_dom='/work/jholt/JASMIN//SENEMO/JDHA/EXP_SZT39_TAPER/domain_cfg_ztaper_match.nc'
+
+
 fn_nemo_dat_w1='/work/jholt/JASMIN//SENEMO/NOTIDE/SENEMO_1m_19800101_19801231_grid_W_198001-198001.nc'
 fn_nemo_dat_w2=  '/work/jholt/JASMIN//SENEMO/TIDE/SENEMO_1m_19800101_19801231_grid_W_198001-198001.nc'
 
@@ -48,7 +54,7 @@ avh2=nemo_w2.dataset.variables['difvho'].values[0,:,j,i]
 T1=nemo_t1.dataset.variables['thetao_con'].values[0,:,j,i]
 T2=nemo_t2.dataset.variables['thetao_con'].values[0,:,j,i]
 
-Z=nemo_t2.dataset.coords['depth_0'].values[:,j,i]
+Z1=nemo_t1.dataset.coords['depth_0'].values[:,j,i]
 
 
 

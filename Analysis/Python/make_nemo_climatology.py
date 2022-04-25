@@ -27,9 +27,9 @@ def calc_pea(nemo,Zd_mask):
 
  g=9.81
  Z=nemo.dataset.variables['depth_0'].values
- DZ=nemo.dataset.variables['e3_0'].values
- DP=np.sum(DZ*Zd_mask,axis=0) #water depth or Zmax , 
- nz=nemo.dataset.dims['z_dim']
+ DZ=nemo.dataset.variables['e3_0'].values*Zd_mask
+ DP=np.sum(DZ,axis=0) #water depth or Zmax , 
+
  nt=nemo.dataset.dims['t_dim']
 
  if not 'density' in list(nemo.dataset.keys()):     
@@ -39,30 +39,32 @@ def calc_pea(nemo,Zd_mask):
  rho=nemo.dataset.variables['density'].values #density 
  rho[np.isnan(rho)]=0
  rhobar=nemo.dataset.variables['density_bar'].values #density with depth-mean T and S
- rho[np.isnan(rho)]=0
+
  z_axis=0
  if len(nemo.dataset['density'].shape) == 4:   # includes time as first axis
   Z=np.repeat(Z[np.newaxis,:,:,:],nt,axis=0)
   DZ=np.repeat(DZ[np.newaxis,:,:,:],nt,axis=0)
   DP=np.repeat(DP[np.newaxis,:,:],nt,axis=0)  
-  Zd_mask=np.repeat(Zd_mask[np.newaxis,:,:,:],nt,axis=0)  
-  rhobar=np.repeat(rhobar[:,np.newaxis,:,:],nz,axis=1)  
+
   z_axis=1
- else:
-  rhobar=np.repeat(rhobar[np.newaxis,:,:],nz,axis=0)  
  
- PEA=np.sum(Z*(rho-rhobar)*DZ*Zd_mask,axis=z_axis)*g/DP
+ PEA=np.sum(Z*(rho-rhobar)*DZ,axis=z_axis)*g/DP
 
  return PEA
 ###############################################################################
-def calc_zdmask(nemo,nemo_w,Zmax):
+def calc_zdmask(nemo_t,Zmax): #Redudent - can delete
+#%%
  """
     Calculates a 3D mask so a specified level Zmax. 1 for sea; 0 for below sea bed
     and linearly ramped for last level
  """
- Z=nemo.dataset.variables['depth_0'].values
- ZW=nemo_w.dataset.variables['depth_0'].values
- mbot=nemo.dataset.variables['bottom_level'].values
+ Z=nemo_t.dataset.variables['depth_0'].values
+ e3t_0=nemo_t.dataset.variables['e3_0'].values
+#calculate W-level - might want this done as stanbdard in gridded
+ ZW = np.zeros_like(e3t_0)
+ ZW[0, :, :] = 0.0
+ ZW[1:, :, :] = np.cumsum(e3t_0, axis=0)[:-1, :, :]
+ mbot=nemo_t.dataset.variables['bottom_level'].values.astype(int)
  mask=mbot!=0
  ZZ=ZW[1:,:,:]
  ZZ[ZZ==0]=np.nan
@@ -86,30 +88,28 @@ def calc_zdmask(nemo,nemo_w,Zmax):
            kmax[j,i]=kkmax
            IIkmax[kkmax,j,i]=1
  Ikmax=np.nonzero(IIkmax.ravel())          
-
+#%%
  return Zd_mask,kmax,Ikmax
 ###############################################################################         
 
-def make_climatology(nemo,nemo_w,DOMNAM,domain_outpath):
+def make_climatology(nemo,DOMNAM,domain_outpath):
 #%%
- Z=nemo.dataset.variables['depth_0'] 
- DZ=nemo.dataset.variables['e3_0']
+
  #Calculate and save first time, otherwise read
  try:     
-  A=np.load(domain_outpath + '/' +DOMNAM + '_Zd_mask.npz')
-  
+  A=np.load(domain_outpath + '/' +DOMNAM + '_Zd_mask.npz')  
   Zd_mask=A['Zd_mask']
   kmax=A['kmax']
-  Ikmax=A['kmax']
+  Ikmax=A['Ikmax']
   print('read mask')
  except:
     print('calculating mask')
-    Zd_mask,kmax,Ikmax=calc_zdmask(nemo,nemo_w,Zmax)
+    Zd_mask,kmax,Ikmax=nemo.calculate_vertical_mask(Zmax)
     np.savez(domain_outpath + '/' +DOMNAM + '_Zd_mask.npz',Zd_mask=Zd_mask,kmax=kmax,Ikmax=Ikmax)
 #%%    
  ny=nemo.dataset.dims['y_dim']
  nx=nemo.dataset.dims['x_dim']
- nz=nemo.dataset.dims['z_dim']
+
  nt=nemo.dataset.dims['t_dim']
 #%%
  print(nx,ny)
@@ -161,66 +161,66 @@ def NEMO_FileNames(dpath,runtype,ystart,ystop):
             names.append(new_name)
     return names         
 ###############################################################################
-#EXPNAMS=['EXP_SZT39_TAPER_TIDE','EXP_ZPS','EXP_SZT39_TAPER']
-EXPNAMS=['EXP_SZT39_TAPER_TKE','EXP_SZT51_NOTAPER','EXP_SZT39_NOTAPER']
-DOMCFGNAMS=['domain_cfg_ztaper_match.nc','domain_cfg_zps.nc',
-            'domain_cfg_ztaper_match.nc','domain_cfg_ztaper_match.nc'
-            ,'domain_cfg_51_noztaper_match_rmax15.nc','domain_cfg_noztaper_match.nc']
-#EXPNAMS=['EXP_ZPS']
-for ik,EXPNAM in enumerate(EXPNAMS):
-    print(EXPNAM)
-    if isliv: #NOC-liverpool
-        domain_datapath='/work/jholt/JASMIN//SENEMO/JDHA/' + EXPNAM +'/'
-        domain_outpath='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/'
-        domain_path=domain_datapath
+if __name__ == '__main__':
+    EXPNAMS=['EXP_SZT39_TAPER_TIDE','EXP_ZPS','EXP_SZT39_TAPER']
+    #EXPNAMS=['EXP_SZT39_TAPER_TKE','EXP_SZT51_NOTAPER','EXP_SZT39_NOTAPER']
+    DOMCFGNAMS=['domain_cfg_ztaper_match.nc','domain_cfg_zps.nc',
+                'domain_cfg_ztaper_match.nc','domain_cfg_ztaper_match.nc'
+                ,'domain_cfg_51_noztaper_match_rmax15.nc','domain_cfg_noztaper_match.nc']
+    #EXPNAMS=['EXP_SZT39_TAPER']
+    for ik,EXPNAM in enumerate(EXPNAMS):
+        print(EXPNAM)
+        if isliv: #NOC-liverpool
+            domain_datapath='/work/jholt/JASMIN//SENEMO/JDHA/' + EXPNAM +'/'
+            domain_outpath='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/'
+            domain_path=domain_datapath
+        
+        else: #JASMIN
+            domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/SE-NEMO/' + EXPNAM +'/'
+            domain_outpath='/home/users/jholt/work/SENEMO/'
+            domain_path=domain_datapath
+        
+        
+        
+        
+        fn_nemo_dom=domain_path+DOMCFGNAMS[ik]
+        print(fn_nemo_dom)
+        
+        #make list of filenames
+        ystart=1980
+        ystop=1984
+        fn_nemo_dat= NEMO_FileNames(domain_datapath+'/SENEMO_1M/','SENEMO',ystart,ystop)
+          
+        #fn_nemo_dom=domain_path+'domcfg_eORCA025_v2.nc'
+        fn_config_t_grid='../Config/senemo_grid_t.json'    
+        
+        #input datasets
+        nemo = coast.Gridded(fn_data= fn_nemo_dat, fn_domain = fn_nemo_dom, config=fn_config_t_grid,multiple=True)
+         
+        #Place to output data
+        nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid)
+        fn_nameout=EXPNAM+ 'SST_SSS_PEA_MonClimate.nc'
+        DOMNAM='ORCA025-SE-NEMO+'+EXPNAM
+        fn_out=domain_outpath+'/'+DOMNAM +'/' +DOMNAM+'_1980_'+fn_nameout
+        print('running')
+        #%% do the hard work
+        SSTy,SSSy,PEAy   = make_climatology(nemo,DOMNAM,domain_outpath)
+        
+        # save hard work in netcdf file
+        coords = {"Months":(("mon_dim"),np.arange(12).astype(int)),
+                "latitude": (("y_dim", "x_dim"), nemo.dataset.latitude.values),
+                "longitude": (("y_dim", "x_dim"), nemo.dataset.longitude.values),
+            }
+        dims = ["mon_dim","y_dim", "x_dim"]                
+        attributes_SST = {"units": "o^C", "standard name": "Conservative Sea Surface Temperature"}
+        attributes_SSS = {"units": "", "standard name": "Absolution Sea Surface Salinity"}
+        attributes_PEA = {"units": "Jm^-3", "standard name": "Potential Energy Anomaly to 200m"}
+        nemo_out.dataset['SSTy'] = xr.DataArray(np.squeeze(SSTy), coords=coords, dims=dims, attrs=attributes_SST) 
+        nemo_out.dataset['SSSy'] = xr.DataArray(np.squeeze(SSSy), coords=coords, dims=dims, attrs=attributes_SSS) 
+        nemo_out.dataset['PEAy'] = xr.DataArray(np.squeeze(PEAy), coords=coords, dims=dims, attrs=attributes_PEA) 
+        
+        nemo_out.dataset.to_netcdf(fn_out)
     
-    else: #JASMIN
-        domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/SE-NEMO/' + EXPNAM +'/'
-        domain_outpath='/home/users/jholt/work/SENEMO/'
-        domain_path=domain_datapath
     
     
     
-    
-    fn_nemo_dom=domain_path+DOMCFGNAMS[ik]
-    print(fn_nemo_dom)
-    
-    #make list of filenames
-    ystart=1980
-    ystop=1984
-    fn_nemo_dat= NEMO_FileNames(domain_datapath+'/SENEMO_1M/','SENEMO',ystart,ystop)
-      
-    #fn_nemo_dom=domain_path+'domcfg_eORCA025_v2.nc'
-    fn_config_t_grid='../Config/senemo_grid_t.json'    
-    
-    #input datasets
-    nemo = coast.Gridded(fn_data= fn_nemo_dat, fn_domain = fn_nemo_dom, config=fn_config_t_grid,multiple=True)
-    nemo_w=coast.Gridded(fn_domain = fn_nemo_dom ,config='../Config/example_nemo_grid_w.json')
-    
-    #Place to output data
-    nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid)
-    fn_nameout=EXPNAM+ 'SST_SSS_PEA_MonClimate.nc'
-    DOMNAM='ORCA025-SE-NEMO'
-    fn_out=domain_outpath+'/'+DOMNAM +'/' +DOMNAM+'_'+fn_nameout
-    print('running')
-    #%% do the hard work
-    SSTy,SSSy,PEAy   = make_climatology(nemo,nemo_w,DOMNAM,domain_outpath)
-    
-    # save hard work in netcdf file
-    coords = {"Months":(("mon_dim"),np.arange(12).astype(int)),
-            "latitude": (("y_dim", "x_dim"), nemo.dataset.latitude.values),
-            "longitude": (("y_dim", "x_dim"), nemo.dataset.longitude.values),
-        }
-    dims = ["mon_dim","y_dim", "x_dim"]                
-    attributes_SST = {"units": "o^C", "standard name": "Conservative Sea Surface Temperature"}
-    attributes_SSS = {"units": "", "standard name": "Absolution Sea Surface Salinity"}
-    attributes_PEA = {"units": "Jm^-3", "standard name": "Potential Energy Anomaly to 200m"}
-    nemo_out.dataset['SSTy'] = xr.DataArray(np.squeeze(SSTy), coords=coords, dims=dims, attrs=attributes_SST) 
-    nemo_out.dataset['SSSy'] = xr.DataArray(np.squeeze(SSSy), coords=coords, dims=dims, attrs=attributes_SSS) 
-    nemo_out.dataset['PEAy'] = xr.DataArray(np.squeeze(PEAy), coords=coords, dims=dims, attrs=attributes_PEA) 
-    
-    nemo_out.dataset.to_netcdf(fn_out)
-
-
-
-
