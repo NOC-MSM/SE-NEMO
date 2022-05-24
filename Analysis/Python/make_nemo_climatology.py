@@ -92,12 +92,12 @@ def calc_zdmask(nemo_t,Zmax): #Redudent - can delete
  return Zd_mask,kmax,Ikmax
 ###############################################################################         
 
-def make_climatology(nemo,DOMNAM,domain_outpath):
+def make_climatology(nemo,DOMNAM,EXPNAM,domain_outpath):
 #%%
 
  #Calculate and save first time, otherwise read
  try:     
-  A=np.load(domain_outpath + '/' +DOMNAM + '_Zd_mask.npz')  
+  A=np.load(domain_outpath + '/' +DOMNAM + '_' + EXPNAM + '_Zd_mask.npz')  
   Zd_mask=A['Zd_mask']
   kmax=A['kmax']
   Ikmax=A['Ikmax']
@@ -105,7 +105,7 @@ def make_climatology(nemo,DOMNAM,domain_outpath):
  except:
     print('calculating mask')
     Zd_mask,kmax,Ikmax=nemo.calculate_vertical_mask(Zmax)
-    np.savez(domain_outpath + '/' +DOMNAM + '_Zd_mask.npz',Zd_mask=Zd_mask,kmax=kmax,Ikmax=Ikmax)
+    np.savez(domain_outpath + '/' +DOMNAM + '_' + EXPNAM + '_Zd_mask.npz',Zd_mask=Zd_mask,kmax=kmax,Ikmax=Ikmax)
 #%%    
  ny=nemo.dataset.dims['y_dim']
  nx=nemo.dataset.dims['x_dim']
@@ -167,30 +167,41 @@ if __name__ == '__main__':
     DOMCFGNAMS=['domain_cfg_ztaper_match.nc','domain_cfg_zps.nc',
                 'domain_cfg_ztaper_match.nc','domain_cfg_ztaper_match.nc'
                 ,'domain_cfg_51_noztaper_match_rmax15.nc','domain_cfg_noztaper_match.nc']
+    
+    EXPNAMS=['TIDE','NOTIDE']
+             
     #EXPNAMS=['EXP_SZT39_TAPER']
     for ik,EXPNAM in enumerate(EXPNAMS):
         print(EXPNAM)
         if isliv: #NOC-liverpool
             domain_datapath='/work/jholt/JASMIN//SENEMO/JDHA/' + EXPNAM +'/'
             domain_outpath='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/'
-            domain_path=domain_datapath
-        
+            
+            if EXPNAM=='TIDE':
+               domain_datapath='/work/jholt/JASMIN//SENEMO/TIDE/outputs/'
+            if EXPNAM=='NOTIDE'    :
+               domain_datapath='/work/jholt/JASMIN//SENEMO/NOTIDE/'                
         else: #JASMIN
             domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/SE-NEMO/' + EXPNAM +'/'
             domain_outpath='/home/users/jholt/work/SENEMO/'
             domain_path=domain_datapath
+        domain_path=domain_datapath
         
         
         
+        #fn_nemo_dom=domain_path+DOMCFGNAMS[ik]
+        fn_nemo_dom=domain_path+DOMCFGNAMS[1]
         
-        fn_nemo_dom=domain_path+DOMCFGNAMS[ik]
         print(fn_nemo_dom)
         
         #make list of filenames
         ystart=1980
         ystop=1984
-        fn_nemo_dat= NEMO_FileNames(domain_datapath+'/SENEMO_1M/','SENEMO',ystart,ystop)
-          
+        if EXPNAM[0] !='E' :
+         fn_nemo_dat= NEMO_FileNames(domain_datapath,'SENEMO',ystart,ystop)            
+        else:    
+         fn_nemo_dat= NEMO_FileNames(domain_datapath+'/SENEMO_1M/','SENEMO',ystart,ystop)
+        fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'  
         #fn_nemo_dom=domain_path+'domcfg_eORCA025_v2.nc'
         fn_config_t_grid='../Config/senemo_grid_t.json'    
         
@@ -200,11 +211,11 @@ if __name__ == '__main__':
         #Place to output data
         nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid)
         fn_nameout=EXPNAM+ 'SST_SSS_PEA_MonClimate.nc'
-        DOMNAM='ORCA025-SE-NEMO+'+EXPNAM
-        fn_out=domain_outpath+'/'+DOMNAM +'/' +DOMNAM+'_1980_'+fn_nameout
+        DOMNAM='ORCA025-SE-NEMO'
+        fn_out=domain_outpath+'/'+DOMNAM +'/' +DOMNAM+'_1980_1984_'+fn_nameout
         print('running')
         #%% do the hard work
-        SSTy,SSSy,PEAy   = make_climatology(nemo,DOMNAM,domain_outpath)
+        SSTy,SSSy,PEAy   = make_climatology(nemo,DOMNAM,EXPNAM,domain_outpath)
         
         # save hard work in netcdf file
         coords = {"Months":(("mon_dim"),np.arange(12).astype(int)),
