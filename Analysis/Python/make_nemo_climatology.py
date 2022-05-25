@@ -123,11 +123,13 @@ def make_climatology(nemo,DOMNAM,EXPNAM,domain_outpath):
  nyear=int(nt/12)
  for iy in range(nyear):
   print('Calc PEA',iy)   
-  it=np.arange((iy-1)*12,(iy-1)*12+12).astype(int)
- 
-  nemo2=nemo.subset_as_copy(t_dim=it) 
-  print('copied')
-  PEAy=PEAy+calc_pea(nemo2,Zd_mask)
+  it=np.arange((iy)*12,(iy)*12+12).astype(int)
+  for im in range(12):
+   itt=[it[im]]
+   print(itt)
+   nemo2=nemo.subset_as_copy(t_dim=itt) 
+   print('copied',im)
+   PEAy[im,:,:]=PEAy[im,:,:]+calc_pea(nemo2,Zd_mask)
  PEAy=PEAy/nyear 
     
 
@@ -168,7 +170,7 @@ if __name__ == '__main__':
                 'domain_cfg_ztaper_match.nc','domain_cfg_ztaper_match.nc'
                 ,'domain_cfg_51_noztaper_match_rmax15.nc','domain_cfg_noztaper_match.nc']
     
-    EXPNAMS=['TIDE','NOTIDE']
+    EXPNAMS=['TIDE'] #,'NOTIDE']
              
     #EXPNAMS=['EXP_SZT39_TAPER']
     for ik,EXPNAM in enumerate(EXPNAMS):
@@ -183,6 +185,12 @@ if __name__ == '__main__':
                domain_datapath='/work/jholt/JASMIN//SENEMO/NOTIDE/'                
         else: #JASMIN
             domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/SE-NEMO/' + EXPNAM +'/'
+
+            if EXPNAM=='TIDE':
+               domain_datapath='/gws/nopw/j04/class_vol2/senemo/dbyrne/EXP_REF_TIDE/outputs/' 
+            if EXPNAM=='NOTIDE'    :
+               domain_datapath='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/means/monthly/'
+
             domain_outpath='/home/users/jholt/work/SENEMO/'
             domain_path=domain_datapath
         domain_path=domain_datapath
@@ -202,7 +210,7 @@ if __name__ == '__main__':
         else:    
          fn_nemo_dat= NEMO_FileNames(domain_datapath+'/SENEMO_1M/','SENEMO',ystart,ystop)
         fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'  
-        #fn_nemo_dom=domain_path+'domcfg_eORCA025_v2.nc'
+        fn_nemo_dom='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/domcfg_eORCA025_v2.nc'
         fn_config_t_grid='../Config/senemo_grid_t.json'    
         
         #input datasets
