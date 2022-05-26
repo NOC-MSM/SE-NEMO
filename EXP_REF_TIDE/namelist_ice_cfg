@@ -1,5 +1,5 @@
 &nampar
-cn_icerst_in='SENEMO_19910101_restart_ice',
+cn_icerst_in='SENEMO_20100101_restart_ice',
 cn_icerst_indir='./OUTPUTS',
 cn_icerst_out='restart_ice',
 cn_icerst_outdir='./OUTPUTS',

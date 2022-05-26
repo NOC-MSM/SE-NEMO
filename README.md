@@ -4,6 +4,9 @@
 
 Configuration files for SE-NEMO project
 
+
+Base Configuration: GO8p4 at NEMO 4.0.2
+
 ## Quick Start:
 
 ```
@@ -13,9 +16,9 @@ cd test/nemo/cfgs/se-orca025/EXP00
 ```
 Edit the project code in  `runscript.slurm` then:
 ```
-qsub runscript.slurm
+sbatch runscript.slurm
 ```
-This will produce a 5 day mean output from the beginning of 1958. The run should take 15 minutes to complete once in the machine.
+This will produce a 5 day mean output from the beginning of 1976. The run should take 15 minutes to complete once in the machine.
 
 ### Forcing data:
 

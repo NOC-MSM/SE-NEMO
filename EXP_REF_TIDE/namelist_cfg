@@ -1,6 +1,6 @@
 &namrun
 cn_exp='SENEMO',
-cn_ocerst_in='SENEMO_19910101_restart',
+cn_ocerst_in='SENEMO_20100101_restart',
 cn_ocerst_indir='./OUTPUTS',
 cn_ocerst_out='restart',
 cn_ocerst_outdir='./OUTPUTS',
@@ -16,8 +16,8 @@ nn_chunksz=0,
 nn_date0=19760101,
 nn_euler=1,
 nn_istate=1,
-nn_it000=1,
-nn_itend=1488,
+nn_it000=0,
+nn_itend=4464,
 nn_leapy=1,
 nn_rstctl=0,
 nn_stock=100000,
@@ -38,7 +38,7 @@ ln_linssh=.false.,
 ln_meshmask=.false.,
 rn_atfp=0.02,
 rn_isfhmin=1.00,
-rn_rdt=1800.0,
+rn_rdt=600.0,
 /
 &namtsd
 cn_dir='./',
@@ -100,7 +100,7 @@ nn_lsm=-3,
 &namsbc_flx
 /
 &namsbc_blk
-cn_dir='/work/n01/n01/acc/FORCING/JRA/',
+cn_dir='/work/n01/shared/nemo/FORCING/JRA/',
 ln_cd_l12=.false.,
 ln_cd_l15=.false.,
 ln_coare_3p0=.false.,
@@ -236,10 +236,8 @@ ln_spc_dyn=.true.,
 rn_sponge_dyn=2880.0,
 rn_sponge_tra=2880.0,
 /
-!-----------------------------------------------------------------------
-&nam_tide      !   tide parameters (#ifdef key_tide)
-!-----------------------------------------------------------------------
-ln_tide     = .true.      ! Activate tides
+&nam_tide
+ ln_tide     = .true.      ! Activate tides
   ln_tide_pot   = .true.                !  use tidal potential forcing
      ln_scal_load  = .true.               ! Use scalar approximation for
         rn_scal_load = 0.12               !     load potential
@@ -250,7 +248,30 @@ ln_tide     = .true.      ! Activate tides
      rdttideramp   =    28.                 !  ramp duration in days
   dn_love_number = 0.7
   ln_int_wave_drag = .false.           ! Turn on internal wave drag parameterization
-     cn_int_wave_drag = './bt_tidal_dissipation.nc' !Required for int_wave_drag
+     cn_int_wave_drag = './tdiss_R025.nc' !Required for int_wave_drag
+  clname(1) = 'SA'
+  clname(2) = 'SSA'
+  clname(3) = 'MM'
+  clname(4) = 'MSF'
+  clname(5) = 'MF'
+  clname(6) = 'K1'
+  clname(7) = 'Q1'
+  clname(8) = 'O1'
+  clname(9) = 'P1'
+  clname(10) = 'S1'
+  clname(11) = 'J1'
+  clname(12) = 'M2'
+  clname(13) = 'S2'
+  clname(14) = '2N2'
+  clname(15) = 'MU2'
+  clname(16) = 'N2'
+  clname(17) = 'NU2'
+  clname(18) = 'L2'
+  clname(19) = 'T2'
+  clname(20) = 'K2'
+  clname(21) = 'MKS2'
+  clname(22) = 'LA2'
+  clname(23) = 'R2'
 /
 &nambdy
 ln_bdy=.false.,
@@ -296,11 +317,14 @@ ln_non_lin=.true.,
 &namdrg_bot
 ln_boost=.true.,
 rn_boost=50.0,
-rn_Cd0      =  2.5e-3    !  drag coefficient [-]
-rn_Uc0      =  0.4      !  ref. velocity [m/s] (linear drag=Cd0*Uc0)
-rn_Cdmax    =  0.1      !  drag value maximum [-] (logarithmic drag)
-rn_ke0      =  2.5e-3   !  background kinetic energy  [m2/s2] (non-linear cases)
-rn_z0       =  3.e-3    !  roughness [m] (ln_loglayer=T)
+rn_Cd0      =  2.5e-3  
+rn_Uc0      =  0.4     
+rn_Cdmax    =  0.1     
+rn_ke0      =  2.5e-3  
+rn_z0       =  3.e-3   
+
+!rn_cd0=1.0e-3,
+
 /
 &nambbc
 cn_dir='./INPUTS/',
@@ -546,11 +570,37 @@ nn_stockfl=5475,
 nn_writefl=75,
 /
 &nam_diaharm
-nit000_han=1,
-nitend_han=75,
-nstep_han=15,
-tname(1)='M2',
-tname(2)='K1',
+ln_diaharm=.false.
+    nit000_han = 0 !20446         ! First time step used for harmonic analysis
+    nitend_han = 2976 !38017        ! Last time step used for harmonic analysis
+    nstep_han  = 1        ! Time step frequency for harmonic analysis
+ 
+    tname(1) = 'K1'
+    tname(2) = 'Q1'
+    tname(3) = 'O1'
+    tname(4) = 'P1'
+    tname(5) = 'S1'
+    tname(6) = 'J1'
+    tname(7) = 'M2'
+    tname(8) = 'S2'
+    tname(9) = '2N2'
+    tname(10) = 'MU2'
+    tname(11) = 'N2'
+    tname(12) = 'NU2'
+    tname(13) = 'L2'
+    tname(14) = 'T2'
+    tname(15) = 'K2'
+    tname(16) = 'MKS2'
+    tname(17) = 'LA2'
+    tname(18) = 'R2'
+    tname(19) = 'EPS2'
+    tname(20) = 'M4'
+    tname(21) = 'M6'
+    tname(22) = 'M8'
+    tname(23) = 'S4'
+    tname(24) = 'MS4'
+    tname(25) = 'MN4'
+    tname(26) = 'M3'
 /
 &namdct
 nn_dct=15,

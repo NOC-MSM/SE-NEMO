@@ -66,11 +66,11 @@ cd $WORK_DIR
 
 echo "Making sure that the correct modules are loaded"
 
-. /work/n01/n01/cwi/modules/gnu-mpich
+#module -s restore $REPO_DIR/scripts/env/ucx_env
 
-module list
-echo $LOADEDMODULES
-
+module load cpe/21.03
+module load cray-hdf5-parallel
+module load cray-netcdf-hdf5parallel
 
 export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
 
@@ -101,7 +101,7 @@ mkdir arch
 
 # Setup the directory structure for the ENSEMBLE
 mkdir $WORK_DIR/nemo/cfgs/se-orca025
-# Define the location of where the AMM7 forcing files are to be downloaded 
+# Define the location of where the forcing files are downloaded to (CW: not sure if this variable is still used)
 export DOWNLOAD_DIR="$WORK_DIR/nemo/cfgs/se-orca025/EXP00/"
 
 echo $XIOS_DIR
@@ -115,17 +115,13 @@ echo "Checking out xios repository"
 svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5@1964 xios
 cd xios
 cp $REPO_DIR/arch/xios/* ./arch
-
-
-
 echo "Compiling xios"
-./make_xios --full --prod --arch archer2_gnu --netcdf_lib netcdf4_par --job 4
+./make_xios --full --prod --arch archer2 --netcdf_lib netcdf4_par --job 4
 # Dirty fix here as xios has to unpack before we can edit
 sed -e "s/FC_MODSEARCH => '',  /FC_MODSEARCH => '-J',/" tools/FCM/lib/Fcm/Config.pm > tmp_file
 mv tmp_file tools/FCM/lib/Fcm/Config.pm
 # Try once more
-./make_xios --full --prod --arch archer2_gnu --netcdf_lib netcdf4_par --job 4
-
+./make_xios --full --prod --arch archer2 --netcdf_lib netcdf4_par --job 4
 
 # Let's update the path to xios
 export XIOS_DIR=$XIOS_DIR/xios
@@ -133,8 +129,8 @@ export XIOS_DIR=$XIOS_DIR/xios
 cd $WORK_DIR/nemo
 cp $REPO_DIR/arch/nemo/* ./arch
 # Dirty fix to hard wire path otherwise user will have to set XIOS_DIR in every new shell session
-sed "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-archer2_gnu.fcm > tmp_arch
-mv tmp_arch ./arch/arch-archer2_gnu.fcm
+sed "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-archer2.fcm > tmp_arch
+mv tmp_arch ./arch/arch-archer2.fcm
 
 echo 'se-orca025 OCE ICE' >> $WORK_DIR/nemo/cfgs/work_cfgs.txt
 
@@ -146,10 +142,10 @@ echo "Gathering forcing data"
 export CONFIG_DIR=$WORK_DIR/nemo/cfgs/se-orca025
 
 cd $CONFIG_DIR
-## Download the input data 
-#wget http://gws-access.ceda.ac.uk/public/jmmp/se-orca025/inputs.tar.gz
+# Download the input data 
+wget http://gws-access.ceda.ac.uk/public/jmmp/se-orca025/inputs.tar.gz
 # Or, alternatively, copy the data locally on ARCHER2 instead 
-cp -a /work/n01/n01/cwi/GO8pt6_inputs/inputs.tar.gz .
+# cp -a /work/n01/n01/cwi/GO8pt6_inputs/inputs.tar.gz .
 tar xvfz inputs.tar.gz
 rm inputs.tar.gz
 
@@ -182,7 +178,7 @@ ln -s INPUTS/mask_itf_ORCA025ext.nc mask_itf.nc
 ln -s INPUTS/bfr_coef.nc .
 
 # copy an example SLURM runscript
-cp INPUTS/runscript_831_gnu.slurm .
+cp INPUTS/runscript_831.slurm .
 
 # Copy the configurable namelists too ** THIS FOLLOWS OUR PRACTICE TO STORE THESE IN EACH EXP. DIR. ON github **
 cp $REPO_DIR/EXP_REF_TIDE/namelist* .
@@ -201,7 +197,7 @@ mv tmp_file Config.pm
 cd $WORK_DIR/nemo
 
 echo "Compiling nemo SE-ORCA025 Config"
-./makenemo -m archer2_gnu -r se-orca025 -j 16
+./makenemo -m archer2 -r se-orca025 -j 16
 
 echo
 echo "  Auto-Config: SE-ORCA025"
@@ -212,7 +208,5 @@ echo
 echo "  - update the runscript accordingly "
 echo "      (project code, nodes, modules, etc)"
 echo
-
-echo "  - submit via the sbatch command"
-
+echo "  - submit via the slurm command"
 echo    
