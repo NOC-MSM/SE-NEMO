@@ -191,7 +191,7 @@ if __name__ == '__main__':
             if EXPNAM=='NOTIDE'    :
                domain_datapath='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/means/monthly/'
 
-            domain_outpath='/home/users/jholt/work/SENEMO/'
+            domain_outpath='/home/users/jholt/work/SENEMO/ASSESSMENT/'
             domain_path=domain_datapath
         domain_path=domain_datapath
         
@@ -220,6 +220,7 @@ if __name__ == '__main__':
         nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid)
         fn_nameout=EXPNAM+ 'SST_SSS_PEA_MonClimate.nc'
         DOMNAM='ORCA025-SE-NEMO'
+        
         fn_out=domain_outpath+'/'+DOMNAM +'/' +DOMNAM+'_1980_1984_'+fn_nameout
         print('running')
         #%% do the hard work
