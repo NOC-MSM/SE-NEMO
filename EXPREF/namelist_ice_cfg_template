@@ -1,8 +1,8 @@
 &nampar
-cn_icerst_in='SENEMO_19910101_restart_ice',
-cn_icerst_indir='./OUTPUTS',
+cn_icerst_in='XXX_RS0_XXX',
+cn_icerst_indir='./RESTARTS',
 cn_icerst_out='restart_ice',
-cn_icerst_outdir='./OUTPUTS',
+cn_icerst_outdir='./RESTARTS',
 jpl=5,
 ln_icedyn=.true.,
 ln_icethd=.true.,
