@@ -170,7 +170,7 @@ if __name__ == '__main__':
                 'domain_cfg_ztaper_match.nc','domain_cfg_ztaper_match.nc'
                 ,'domain_cfg_51_noztaper_match_rmax15.nc','domain_cfg_noztaper_match.nc']
     
-    EXPNAMS=['TIDE'] #,'NOTIDE']
+    EXPNAMS=['EXP_MES_TIDE','EXP_MES_NOTIDE','TIDE','NOTIDE']
              
     #EXPNAMS=['EXP_SZT39_TAPER']
     for ik,EXPNAM in enumerate(EXPNAMS):
@@ -181,36 +181,36 @@ if __name__ == '__main__':
             
             if EXPNAM=='TIDE':
                domain_datapath='/work/jholt/JASMIN//SENEMO/TIDE/outputs/'
-            if EXPNAM=='NOTIDE'    :
-               domain_datapath='/work/jholt/JASMIN//SENEMO/NOTIDE/'                
-        else: #JASMIN
-            domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/SE-NEMO/' + EXPNAM +'/'
 
+            if EXPNAM=='NOTIDE'    :
+               domain_datapath='/work/jholt/JASMIN//SENEMO/NOTIDE/'
+                           
+        else: #JASMIN
+            domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/' + EXPNAM +'/'
+            fn_nemo_dom='/gws/nopw/j04/class_vol2/senemo/jdha/EXP_MES_TIDE/domain_cfg_r015-r010_007_004v2.nc'
             if EXPNAM=='TIDE':
-               domain_datapath='/gws/nopw/j04/class_vol2/senemo/dbyrne/EXP_REF_TIDE/outputs/' 
+               domain_datapath='/gws/nopw/j04/class_vol2/senemo/dbyrne/EXP_REF_TIDE/outputs/'
+               fn_nemo_dom='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/domcfg_eORCA025_v2.nc'
+ 
             if EXPNAM=='NOTIDE'    :
                domain_datapath='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/means/monthly/'
+               fn_nemo_dom='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/domcfg_eORCA025_v2.nc'
 
             domain_outpath='/home/users/jholt/work/SENEMO/ASSESSMENT/'
-            domain_path=domain_datapath
         domain_path=domain_datapath
         
         
         
         #fn_nemo_dom=domain_path+DOMCFGNAMS[ik]
-        fn_nemo_dom=domain_path+DOMCFGNAMS[1]
+        #fn_nemo_dom=domain_path+DOMCFGNAMS[1]
         
         print(fn_nemo_dom)
         
         #make list of filenames
         ystart=1980
-        ystop=1984
-        if EXPNAM[0] !='E' :
-         fn_nemo_dat= NEMO_FileNames(domain_datapath,'SENEMO',ystart,ystop)            
-        else:    
-         fn_nemo_dat= NEMO_FileNames(domain_datapath+'/SENEMO_1M/','SENEMO',ystart,ystop)
-        fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'  
-        fn_nemo_dom='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/domcfg_eORCA025_v2.nc'
+        ystop=1985
+        fn_nemo_dat= NEMO_FileNames(domain_datapath,'SENEMO',ystart,ystop)            
+        #fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'  
         fn_config_t_grid='../Config/senemo_grid_t.json'    
         
         #input datasets
@@ -218,10 +218,10 @@ if __name__ == '__main__':
          
         #Place to output data
         nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid)
-        fn_nameout=EXPNAM+ 'SST_SSS_PEA_MonClimate.nc'
+        fn_nameout=EXPNAM+ '_SST_SSS_PEA_MonClimate.nc'
         DOMNAM='ORCA025-SE-NEMO'
         
-        fn_out=domain_outpath+'/'+DOMNAM +'/' +DOMNAM+'_1980_1984_'+fn_nameout
+        fn_out=domain_outpath+'/'+DOMNAM +'/' +DOMNAM+'_1980_1985_'+fn_nameout
         print('running')
         #%% do the hard work
         SSTy,SSSy,PEAy   = make_climatology(nemo,DOMNAM,EXPNAM,domain_outpath)
