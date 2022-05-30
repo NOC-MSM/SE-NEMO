@@ -50,8 +50,8 @@ sn_sal='./EN.4.1.1.f.analysis.g10.1995-2014.eORCA025.teos10.nc',-1,'salinity',.t
 '','',
 sn_tem='./EN.4.1.1.f.analysis.g10.1995-2014.eORCA025.teos10.nc',-1,'temperature',.true.,.true.,
 'yearly','','','',
-sn_dep  = './out3.nc' ,     -12  ,'depth_4D',   .false.   , .true.  , 'yearly'   , '' ,    ''    ,      ''
-sn_msk  = './out3.nc' ,     -12  ,'mask'     ,   .false.   , .true.  , 'yearly'   , '' ,    ''    ,      ''
+sn_dep  = './EN4_depth.nc' ,     -12  ,'depth_4D',   .false.   , .true.  , 'yearly'   , '' ,    ''    ,      ''
+sn_msk  = './EN4_depth.nc' ,     -12  ,'mask'     ,   .false.   , .true.  , 'yearly'   , '' ,    ''    ,      ''
 /
 &namwad
 ln_wd_dl=.false.,
@@ -180,7 +180,7 @@ rn_hrnf=10.0,
 rn_rfact=1.0,
 sn_cnf='runoff_1m_nomask.nc',0,'socoefr',.false.,.true.,'yearly',
 '','','',
-sn_rnf='runoff_1m_nomask.nc',-1,'sornficb',.true.,.true.,'yearly',
+sn_rnf=XXX_RNF_XXX,
 '','','',
 /
 &namsbc_isf
@@ -550,7 +550,7 @@ ln_vor_trd=.false.,
 ln_diaptr=.false.,
 /
 &namhsb
-ln_diahsb=.false.,
+ln_diahsb=.true.,
 /
 &namdiu
 ln_diurnal=.false.,

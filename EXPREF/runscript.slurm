@@ -28,7 +28,7 @@ fi
 ########################################################################
 rn_rdt=600              ; ln_zps='.true.'         ;
 ln_bt_auto='.true.'     ; rn_bt_cmax=0.8          ; nn_baro=30
-nn_mxlice=3             ; nn_z0_ice=1      
+nn_mxlice=3             ; nn_z0_ice=1             ; ln_rnf_new='.flase.'
 ln_rstdate='.true.'     ; ln_shlat2d='.true.'
 rn_Cd0=2.5e-3           ; ln_loglayer='.true.'    ; ln_tide='.true.'
 ln_boost='.false.'      ; ln_gls='.false.' 
@@ -48,11 +48,9 @@ year=$year_st      # Change if starting job part way through simulation
 ########################################################################
 
 
-
 ########################################################################
 #                No need to edit below this line                       #
 ########################################################################
-
 
 
 if [ "$ln_loglayer" = ".true." ]
@@ -69,6 +67,13 @@ then
 else
    ln_tke='.true.'
    ln_zdfevd='.true.'
+fi
+
+if [ "$ln_rnf_new" = ".true." ]
+then
+	sn_rnf="'ORCA025_rivers_Antar_Green',24,'rorunoff',.false.,.false.,'yearly'"
+else
+	sn_rnf="'runoff_1m_nomask.nc',-1,'sornficb',.true.,.true.,'yearly'"
 fi
 
 # Created by: mkslurm_hetjob -S 8 -s 16 -m 2 -C 1543 -g 3 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo -v False
@@ -200,6 +205,7 @@ do
       sed -i "s/XXX_RMP_XXX/$ln_tide_ramp/g" namelist_cfg
       sed -i "s/XXX_BTA_XXX/$ln_bt_auto/g" namelist_cfg
       sed -i "s/XXX_BTC_XXX/$rn_bt_cmax/g" namelist_cfg
+      sed -i "s/XXX_RNF_XXX/$sn_rnf/g" namelist_cfg
       sed -i "s/XXX_TID_XXX/$ln_tide/g" namelist_cfg
       sed -i "s/XXX_BOO_XXX/$ln_boost/g" namelist_cfg
       sed -i "s/XXX_SHA_XXX/$ln_shlat2d/g" namelist_cfg
