@@ -7,6 +7,8 @@
 #SBATCH --nodes=19
 #SBATCH --ntasks-per-core=1
 
+# ARCHER2 support suggestion to reduce UCX error messages:
+# export UCX_IB_REG_METHODS=direct
 
 #################### nemo runscript options ############################
 # At present se-nemo has been run on 19 and 11 nodes                   #
@@ -226,6 +228,7 @@ do
    do
       eval $SRUN_CMD &
       echo $SRUN_CMD &
+      ./time_step_chk $SLURM_JOB_ID $nn_itend &
    done
 
    wait
