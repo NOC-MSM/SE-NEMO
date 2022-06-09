@@ -108,7 +108,7 @@ mkdir arch
 # Setup the directory structure for the ENSEMBLE
 mkdir $WORK_DIR/nemo/cfgs/se-eORCA025
 # Define the location of where the AMM7 forcing files are to be downloaded 
-export DOWNLOAD_DIR="$WORK_DIR/nemo/cfgs/se-orca025/EXP00/"
+export DOWNLOAD_DIR="$WORK_DIR/nemo/cfgs/se-orca025/EXPREF/"
 
 echo $XIOS_DIR
 # Choose an appropriate directory for your XIOS installation
@@ -135,8 +135,6 @@ sed -i "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-${HPC_TARG}.fcm
 
 echo 'se-eORCA025 OCE ICE' >> $WORK_DIR/nemo/cfgs/work_cfgs.txt
 
-mkdir cfgs/se-eORCA025/EXP00
-
 echo "Gathering forcing data"
 
 export CONFIG_DIR=$WORK_DIR/nemo/cfgs/se-eORCA025
@@ -160,7 +158,7 @@ mkdir meta_out
 mkdir RESTARTS
 mkdir OUTPUTS
 
-ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXP00/xios_server.exe
+ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXPREF/xios_server.exe
 
 # Link some files from INPUTS that are hardwired to be in the experiment directory 
 ln -s INPUTS/K1rowdrg_R025_modif_nonpositive.nc K1rowdrg.nc
