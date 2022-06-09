@@ -32,8 +32,8 @@ rn_rdt=600              ; ln_zps='.true.'         ;
 ln_bt_auto='.true.'     ; rn_bt_cmax=0.8          ; nn_baro=30
 nn_mxlice=3             ; nn_z0_ice=1             ; ln_rnf_new='.false.'
 ln_rstdate='.true.'     ; ln_shlat2d='.true.'
-rn_Cd0=2.5e-3           ; ln_loglayer='.true.'    ; ln_tide='.true.'
-ln_boost='.false.'      ; ln_gls='.false.' 
+rn_Cd0=2.5e-3           ; ln_loglayer='.false.'    ; ln_tide='.true.'
+ln_boost='.true.'       ; ln_gls='.true.' 
 ########################################################################
 
 
@@ -43,7 +43,7 @@ ln_boost='.false.'      ; ln_gls='.false.'
 ln_spin='.true.'   # Do we require a spin up phase for the ice
 nn_spin=3          # How many years spin up
 year_st=1976       # Start year of the simulation (ramains constant)
-year_en=1980       # End year of this job submission
+year_en=1977       # End year of this job submission
 offset=0           # If rdt has changed, an offset to nn_it000 is needed
 nn_spin_cycle=1    # Change if starting job part way through spin up
 year=$year_st      # Change if starting job part way through simulation
