@@ -30,7 +30,7 @@ fi
 ########################################################################
 rn_rdt=600              ; ln_zps='.true.'         ;
 ln_bt_auto='.true.'     ; rn_bt_cmax=0.8          ; nn_baro=30
-nn_mxlice=3             ; nn_z0_ice=1             ; ln_rnf_new='.flase.'
+nn_mxlice=3             ; nn_z0_ice=1             ; ln_rnf_new='.false.'
 ln_rstdate='.true.'     ; ln_shlat2d='.true.'
 rn_Cd0=2.5e-3           ; ln_loglayer='.true.'    ; ln_tide='.true.'
 ln_boost='.false.'      ; ln_gls='.false.' 
