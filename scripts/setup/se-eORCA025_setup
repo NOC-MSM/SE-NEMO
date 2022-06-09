@@ -153,6 +153,7 @@ case "${HPC_TARG}"
            ;;
 esac
 
+cp -r $REPO_DIR/EXPREF .
 cd $CONFIG_DIR/EXPREF
 
 mkdir meta_out
