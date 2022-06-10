@@ -42,7 +42,7 @@ rn_isfhmin=1.00,
 rn_rdt=XXX_RDT_XXX,
 /
 &namtsd
-cn_dir='./',
+cn_dir='./INPUTS/',
 ln_tsd_dmp=.false.,
 ln_tsd_interp=.true.,
 ln_tsd_init=.true.,
