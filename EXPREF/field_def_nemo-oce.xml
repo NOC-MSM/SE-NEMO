@@ -403,6 +403,7 @@
 	  
 	  <!-- sbcssm variables -->
           <field id="sst_m_pot"    unit="degC" />
+          <field id="sst_m"    unit="degC" />
 	  <!-- EOS-80 -->
           <field id="sss_m_pra"    unit="psu"  />
           <!-- TEOS-10 -->
