@@ -233,7 +233,7 @@ sn_icb='calving',-12,'soicbclv',.true.,.true.,'yearly','','','',
 ln_shlat2d=XXX_SHA_XXX,
 ln_vorlat=.false.,
 rn_shlat=0.0,
-cn_shlat2d_file='shlat2d.nc',
+cn_shlat2d_file='./INPUTS/shlat2d.nc',
 cn_shlat2d_var='shlat2d',
 /
 &namagrif
