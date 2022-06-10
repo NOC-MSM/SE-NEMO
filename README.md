@@ -11,12 +11,12 @@ Base Configuration: GO8p6 at NEMO 4.0.4
 
 ```
 git clone git@github.com:NOC-MSM/SE-NEMO.git
-./SE-NEMO/scripts/setup/se-orca025_setup -w $PWD/test -x $PWD/test -s $PWD/SE-NEMO
-cd test/nemo/cfgs/se-orca025/
+git checkout final_tidy
+./SE-NEMO/scripts/setup/se-orca025_setup -w $PWD/test -x $PWD/test -s $PWD/SE-NEMO -m archer2
+cd test/nemo/cfgs/se-eORCA025/
 cp -rP EXPREF EXP_MYRUN
 cd EXP_MYRUN
-ln -s ../EXP00/nemo nemo
-ln -s 
+ln -s ../INPUTS/domcfg_eORCA025_v2.nc domain_cfg.nc # or whatever domain_cfg you are using
 ```
 Edit the project code and options in  `runscript.slurm` then:
 ```
