@@ -161,12 +161,13 @@ do
 	    ln_tide_ramp='.false.'
          fi
 	 nn_rstctl=0
-         ln_reset_ts=.true.,
+         ln_reset_ts='.true.'
       else
          nn_it000=`./end_time_step $(( $year - 1 )) $rn_rdt $year_st` ; rs0=`printf "%08d" $nn_it000`; nn_it000=$(( $nn_it000 + 1 + $offset ))
          ln_rstart=".true."
 	 nn_rstctl=2
 	 ln_tide_ramp='.false.'
+         ln_reset_ts='.false.'
       fi
        
       if [ "$ln_rstdate" = ".true." ]
