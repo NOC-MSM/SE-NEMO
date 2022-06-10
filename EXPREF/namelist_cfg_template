@@ -329,7 +329,7 @@ sn_qgh='geothermal_heating_orca025ext_extrap40.nc',-12,'heatflow',.false.,.true.
 'yearly','','','',
 /
 &nambbl
-ln_trabbl=.false.,
+ln_trabbl=XXX_BBL_XXX,
 nn_bbl_adv=1,
 nn_bbl_ldf=1,
 rn_ahtbbl=1000.0,
@@ -355,8 +355,8 @@ ln_mle=.false.,
 /
 &namtra_ldf
 ln_traldf_blp=.false.,
-ln_traldf_hor=.true.,
-ln_traldf_iso=.false.,
+ln_traldf_hor=XXX_HOR_XXX,
+ln_traldf_iso=XXX_ISO_XXX,
 ln_traldf_lap=.true.,
 ln_traldf_lev=.false.,
 ln_traldf_msc=.false.,
@@ -404,8 +404,8 @@ nn_een_e3f=0,
 &namdyn_hpg
 ln_hpg_djc=.false.,
 ln_hpg_isf=.false.,
-ln_hpg_prj=.true.,
-ln_hpg_sco=.false.,
+ln_hpg_prj=XXX_PRJ_XXX,
+ln_hpg_sco=XXX_SCO_XXX,
 ln_hpg_zco=.false.,
 ln_hpg_zps=.false.,
 /

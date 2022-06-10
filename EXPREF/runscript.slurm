@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=se-nemo
-#SBATCH --time=24:00:00
+#SBATCH --time=00:05:00
 #SBATCH --account=n01-CLASS
 #SBATCH --partition=standard
 #SBATCH --qos=standard
@@ -54,6 +54,20 @@ year=$year_st      # Change if starting job part way through simulation
 #                No need to edit below this line                       #
 ########################################################################
 
+if [ "$ln_zps" = ".true." ]
+then
+   ln_trabbl='.true.'
+   ln_traldf_hor='.false.'
+   ln_traldf_iso='true.'
+   ln_hpg_prj='false.'
+   ln_hpg_sco='true.'
+else
+   ln_trabbl=.false.,
+   ln_traldf_hor=.true.,
+   ln_traldf_iso=.false.,
+   ln_hpg_prj=.true.,
+   ln_hpg_sco=.false.,
+fi
 
 if [ "$ln_loglayer" = ".true." ]
 then
@@ -73,7 +87,7 @@ fi
 
 if [ "$ln_rnf_new" = ".true." ]
 then
-	sn_rnf="'ORCA025_rivers_Antar_Green',24,'rorunoff',.false.,.false.,'yearly'"
+	sn_rnf="'./JRA_RIVERS/ORCA025_rivers_Antar_Green',24,'rorunoff',.false.,.false.,'yearly'"
 else
 	sn_rnf="'runoff_1m_nomask.nc',-1,'sornficb',.true.,.true.,'yearly'"
 fi
@@ -216,6 +230,11 @@ do
       sed -i "s/XXX_GLS_XXX/$ln_gls/g" namelist_cfg
       sed -i "s/XXX_TKE_XXX/$ln_tke/g" namelist_cfg
       sed -i "s/XXX_EVD_XXX/$ln_zdfevd/g" namelist_cfg
+      sed -i "s/XXX_BBL_XXX/$ln_trabbl/g" namelist_cfg
+      sed -i "s/XXX_HOR_XXX/$ln_traldf_hor/g" namelist_cfg
+      sed -i "s/XXX_ISO_XXX/$ln_traldf_iso/g" namelist_cfg
+      sed -i "s/XXX_PRJ_XXX/$ln_hpg_prj/g" namelist_cfg
+      sed -i "s/XXX_SCO_XXX/$ln_hpg_sco/g" namelist_cfg
       sed -i "s/XXX_LOG_XXX/$ln_loglayer/g" namelist_cfg
       sed -i "s/XXX_NLN_XXX/$ln_non_lin/g" namelist_cfg
       sed -i "s/XXX_Z0I_XXX/$nn_z0_ice/g" namelist_cfg
