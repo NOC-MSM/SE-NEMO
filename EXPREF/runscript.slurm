@@ -58,15 +58,15 @@ if [ "$ln_zps" = ".true." ]
 then
    ln_trabbl='.true.'
    ln_traldf_hor='.false.'
-   ln_traldf_iso='true.'
-   ln_hpg_prj='false.'
-   ln_hpg_sco='true.'
+   ln_traldf_iso='.true.'
+   ln_hpg_prj='.false.'
+   ln_hpg_sco='.true.'
 else
-   ln_trabbl=.false.,
-   ln_traldf_hor=.true.,
-   ln_traldf_iso=.false.,
-   ln_hpg_prj=.true.,
-   ln_hpg_sco=.false.,
+   ln_trabbl='.false.',
+   ln_traldf_hor='.true.',
+   ln_traldf_iso='.false.',
+   ln_hpg_prj='.true.',
+   ln_hpg_sco='.false.',
 fi
 
 if [ "$ln_loglayer" = ".true." ]
