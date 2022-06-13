@@ -247,6 +247,7 @@ ln_tide     = XXX_TID_XXX,
 ln_tide_pot   = .true.,  
 ln_scal_load  = .true.,  
 rn_scal_load = 0.12,
+ln_int_wave_drag = XXX_TDG_XXX,
 ln_tide_ramp  = XXX_RMP_XXX,
 rdttideramp   =    28.,
 !

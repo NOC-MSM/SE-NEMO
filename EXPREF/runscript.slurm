@@ -33,7 +33,7 @@ ln_bt_auto='.true.'     ; rn_bt_cmax=0.8          ; nn_baro=30
 nn_mxlice=3             ; nn_z0_ice=1             ; ln_rnf_new='.false.'
 ln_rstdate='.true.'     ; ln_shlat2d='.true.'
 rn_Cd0=2.5e-3           ; ln_loglayer='.false.'    ; ln_tide='.true.'
-ln_boost='.true.'       ; ln_gls='.true.' 
+ln_boost='.true.'       ; ln_gls='.true.' ; ln_int_wave_drag = '.true.' 
 ########################################################################
 
 
@@ -241,6 +241,7 @@ do
       sed -i "s/XXX_IMX_XXX/$nn_mxlice/g" namelist_cfg
       sed -i "s/XXX_PNI_XXX/$nn_jpni/g" namelist_cfg
       sed -i "s/XXX_PNJ_XXX/$nn_jpnj/g" namelist_cfg
+      sed -i "s/XXX_TDG_XXX/$ln_int_wave_drag/g" namelist_cfg
 
    done
 

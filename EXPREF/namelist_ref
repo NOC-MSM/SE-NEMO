@@ -585,6 +585,7 @@
             cn_tide_load = 'tide_LOAD_grid_T.nc'  ! filename for load potential
             !      
       dn_love_number=0.7
+      cn_int_wave_drag = './INPUTS/tdiss_R025.nc'  ! filename for internal wave drag dissipation
       ln_tide_ramp  = .true.               !  Use linear ramp for tides at startup
          rdttideramp   =   30.                 !  ramp duration in days
       clname(1)     = 'DUMMY'               !  name of constituent - all tidal components must be set in namelist_cfg
