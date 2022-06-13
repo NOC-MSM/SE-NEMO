@@ -45,7 +45,7 @@ nn_spin=3          # How many years spin up
 year_st=1976       # Start year of the simulation (ramains constant)
 year_en=1977       # End year of this job submission
 offset=0           # If rdt has changed, an offset to nn_it000 is needed
-nn_spin_cycle=1    # Change if starting job part way through spin up
+nn_spin_cycle=1    # Change to nn_spin+1 if year is .gt. year_st
 year=$year_st      # Change if starting job part way through simulation
 ########################################################################
 
