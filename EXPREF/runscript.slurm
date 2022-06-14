@@ -87,7 +87,7 @@ fi
 
 if [ "$ln_rnf_new" = ".true." ]
 then
-	sn_rnf="'./JRA_RIVERS/ORCA025_rivers_Antar_Green',24,'rorunoff',.false.,.false.,'yearly'"
+	sn_rnf="'.\/JRA_RIVERS\/ORCA025_rivers_Antar_Green',24,'rorunoff',.false.,.false.,'yearly'"
 else
 	sn_rnf="'runoff_1m_nomask.nc',-1,'sornficb',.true.,.true.,'yearly'"
 fi
