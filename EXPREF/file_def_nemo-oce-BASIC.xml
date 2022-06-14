@@ -105,7 +105,7 @@
       <file_group id="6m" output_freq="6mo" output_level="10" enabled=".TRUE."/> <!-- real 6m files -->
 
 
-      <file_group id="1y"  output_freq="1y" output_level="10" enabled=".FALSE."/> <!-- real 2y files -->
+      <file_group id="1y"  output_freq="1y" output_level="10" enabled=".FALSE."> <!-- real 1y files -->
         <file id="file54" name_suffix="_grid_T_2D" description="tidal harmonics">
           <field field_ref="M2x"       name="M2x"     />
           <field field_ref="M2y"       name="M2y"     />
