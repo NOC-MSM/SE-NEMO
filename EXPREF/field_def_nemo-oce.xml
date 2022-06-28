@@ -195,6 +195,8 @@
         <field id="N2y"          long_name="N2 Elevation harmonic imaginary part"                         unit="m"        />
         <field id="K1x"          long_name="K1 Elevation harmonic real part "                             unit="m"        />
         <field id="K1y"          long_name="K1 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="J1x"          long_name="J1 Elevation harmonic real part "                             unit="m"        />
+        <field id="J1y"          long_name="J1 Elevation harmonic imaginary part"                         unit="m"        />
         <field id="O1x"          long_name="O1 Elevation harmonic real part "                             unit="m"        />
         <field id="O1y"          long_name="O1 Elevation harmonic imaginary part"                         unit="m"        />
         <field id="Q1x"          long_name="Q1 Elevation harmonic real part "                             unit="m"        />
@@ -205,10 +207,54 @@
         <field id="K2y"          long_name="K2 Elevation harmonic imaginary part"                         unit="m"        />
         <field id="P1x"          long_name="P1 Elevation harmonic real part "                             unit="m"        />
         <field id="P1y"          long_name="P1 Elevation harmonic imaginary part"                         unit="m"        />
-        <field id="Mfx"          long_name="Mf Elevation harmonic real part "                             unit="m"        />
-        <field id="Mfy"          long_name="Mf Elevation harmonic imaginary part"                         unit="m"        />
-        <field id="Mmx"          long_name="Mm Elevation harmonic real part "                             unit="m"        />
-        <field id="Mmy"          long_name="Mm Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="MFx"          long_name="Mf Elevation harmonic real part "                             unit="m"        />
+        <field id="MFy"          long_name="Mf Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="MMx"          long_name="Mm Elevation harmonic real part "                             unit="m"        />
+        <field id="MMy"          long_name="Mm Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="SAx"          long_name="SA Elevation harmonic real part "                             unit="m"        />
+        <field id="SAy"          long_name="SA  Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="SSAx"         long_name="SSA Elevation harmonic real part "                             unit="m"        />
+        <field id="SSAy"         long_name="SSA Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="MSFx"         long_name="MSF Elevation harmonic real part "                             unit="m"        />
+        <field id="MSFy"         long_name="MSF Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="S1x"          long_name="S1 Elevation harmonic real part "                             unit="m"        />
+        <field id="S1y"          long_name="S1 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="2N2x"         long_name="2N2 Elevation harmonic real part "                             unit="m"        />
+        <field id="2N2y"         long_name="2N2 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="MU2x"         long_name="MU2 Elevation harmonic real part "                             unit="m"        />
+        <field id="MU2y"         long_name="Mu2 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="NU2x"         long_name="NU2 Elevation harmonic real part "                             unit="m"        />
+        <field id="NU2y"         long_name="NU2 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="L2x"          long_name="L2 Elevation harmonic real part "                             unit="m"        />
+        <field id="L2y"          long_name="L2 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="T2x"          long_name="T2 Elevation harmonic real part "                             unit="m"        />
+        <field id="T2y"          long_name="T2 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="MKS2x"        long_name="MKS2 Elevation harmonic real part "                             unit="m"        />
+        <field id="MKS2y"        long_name="MKS2 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="LA2x"         long_name="LA2 Elevation harmonic real part "                             unit="m"        />
+        <field id="LA2y"         long_name="LA2 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="R2x"          long_name="R2 Elevation harmonic real part "                             unit="m"        />
+        <field id="R2y"          long_name="R2 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="MTNx"         long_name="MTN Elevation harmonic real part "                             unit="m"        />
+        <field id="MTNy"         long_name="MTN Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="MSQMx"        long_name="MSQM Elevation harmonic real part "                             unit="m"        />
+        <field id="MSQMy"        long_name="MSQM Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="EPS2x"        long_name="EPS2 Elevation harmonic real part "                             unit="m"        />
+        <field id="EPS2y"        long_name="EPS2 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="M3x"          long_name="M3 Elevation harmonic real part "                             unit="m"        />
+        <field id="M3y"          long_name="M3 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="M6x"          long_name="M6 Elevation harmonic real part "                             unit="m"        />
+        <field id="M6y"          long_name="M6 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="M8x"          long_name="M8 Elevation harmonic real part "                             unit="m"        />
+        <field id="M8y"          long_name="M8 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="N4x"          long_name="N4 Elevation harmonic real part "                             unit="m"        />
+        <field id="N4y"          long_name="N4 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="S4x"          long_name="S4 Elevation harmonic real part "                             unit="m"        />
+        <field id="S4y"          long_name="S4 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="MN4x"         long_name="MN4 Elevation harmonic real part "                             unit="m"        />
+        <field id="MN4y"         long_name="MN4 Elevation harmonic imaginary part"                         unit="m"        />
+        <field id="MS4x"         long_name="MS4 Elevation harmonic real part "                             unit="m"        />
+        <field id="MS4y"         long_name="MS4 Elevation harmonic imaginary part"                         unit="m"        />
       </field_group>
 	 
       <field_group id="Tides_U" grid_ref="grid_U_2D" operation="once" >
@@ -220,6 +266,8 @@
         <field id="N2y_u"        long_name="N2 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />
         <field id="K1x_u"        long_name="K1 current barotrope along i-axis harmonic real part "        unit="m/s"      />
         <field id="K1y_u"        long_name="K1 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />
+        <field id="J1x_u"        long_name="J1 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="J1y_u"        long_name="J1 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />
         <field id="O1x_u"        long_name="O1 current barotrope along i-axis harmonic real part "        unit="m/s"      />
         <field id="O1y_u"        long_name="O1 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />
         <field id="Q1x_u"        long_name="Q1 current barotrope along i-axis harmonic real part "        unit="m/s"      />
@@ -230,10 +278,54 @@
         <field id="K2y_u"        long_name="K2 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />
         <field id="P1x_u"        long_name="P1 current barotrope along i-axis harmonic real part "        unit="m/s"      />
         <field id="P1y_u"        long_name="P1 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />
-        <field id="Mfx_u"        long_name="Mf current barotrope along i-axis harmonic real part "        unit="m/s"      />
-        <field id="Mfy_u"        long_name="Mf current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />
-        <field id="Mmx_u"        long_name="Mm current barotrope along i-axis harmonic real part "        unit="m/s"      />
-        <field id="Mmy_u"        long_name="Mm current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />
+        <field id="MFx_u"        long_name="MF current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="MFy_u"        long_name="MF current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />
+        <field id="MMx_u"        long_name="MM current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="MMy_u"        long_name="MM current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />
+        <field id="SAx_u"        long_name="SA current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="SAy_u"        long_name="SA current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="SSAx_u"       long_name="SSA current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="SSAy_u"       long_name="SSA current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MSFx_u"       long_name="MSF current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="MSFy_u"       long_name="MSF current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="S1x_u"        long_name="S1 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="S1y_u"        long_name="S1 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="2N2x_u"       long_name="2N2 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="2N2y_u"       long_name="2N2 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MU2x_u"       long_name="MU2 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="MU2y_u"       long_name="MU2 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="NU2x_u"       long_name="NU2 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="NU2y_u"       long_name="NU2 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="L2x_u"        long_name="L2 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="L2y_u"        long_name="L2 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="T2x_u"        long_name="T2 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="T2y_u"        long_name="T2 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MKS2x_u"      long_name="MKS2 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="MKS2y_u"      long_name="MKS2 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="LA2x_u"       long_name="LA2 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="LA2y_u"       long_name="LA2 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="R2x_u"        long_name="R2 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="R2y_u"        long_name="R2 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MTNx_u"       long_name="MTN current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="MTNy_u"       long_name="MTN current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MSQMx_u"      long_name="MSQM current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="MSQMy_u"      long_name="MSQM current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="EPS2x_u"      long_name="EPS2 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="EPS2y_u"      long_name="EPS2 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="M3x_u"        long_name="M3 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="M3y_u"        long_name="M3 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="M6x_u"        long_name="M6 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="M6y_u"        long_name="M6 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="M8x_u"        long_name="M8 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="M8y_u"        long_name="M8 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="N4x_u"        long_name="N4 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="N4y_u"        long_name="N4 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="S4x_u"        long_name="S4 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="S4y_u"        long_name="S4 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MN4x_u"       long_name="MN4 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="MN4y_u"       long_name="MN4 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MS4x_u"       long_name="MS4 current barotrope along i-axis harmonic real part "        unit="m/s"      />
+        <field id="MS4y_u"       long_name="MS4 current barotrope along i-axis harmonic imaginary part "   unit="m/s"      />	 
       </field_group>
 	 
       <field_group id="Tides_V" grid_ref="grid_V_2D" operation="once" >
@@ -245,6 +337,8 @@
         <field id="N2y_v"        long_name="N2 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />
         <field id="K1x_v"        long_name="K1 current barotrope along j-axis harmonic real part "        unit="m/s"      />
         <field id="K1y_v"        long_name="K1 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />
+        <field id="J1x_v"        long_name="J1 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="J1y_v"        long_name="J1 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />
         <field id="O1x_v"        long_name="O1 current barotrope along j-axis harmonic real part "        unit="m/s"      />
         <field id="O1y_v"        long_name="O1 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />
         <field id="Q1x_v"        long_name="Q1 current barotrope along j-axis harmonic real part "        unit="m/s"      />
@@ -255,10 +349,54 @@
         <field id="K2y_v"        long_name="K2 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />
         <field id="P1x_v"        long_name="P1 current barotrope along j-axis harmonic real part "        unit="m/s"      />
         <field id="P1y_v"        long_name="P1 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />
-        <field id="Mfx_v"        long_name="Mf current barotrope along j-axis harmonic real part "        unit="m/s"      />
-        <field id="Mfy_v"        long_name="Mf current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />
-        <field id="Mmx_v"        long_name="Mm current barotrope along j-axis harmonic real part "        unit="m/s"      />
-        <field id="Mmy_v"        long_name="Mm current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MFx_v"        long_name="MF current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="MFy_v"        long_name="MF current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />
+        <field id="MMx_v"        long_name="MM current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="MMy_v"        long_name="MM current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="SAx_v"        long_name="SA current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="SAy_v"        long_name="SA current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="SSAx_v"       long_name="SSA current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="SSAy_v"       long_name="SSA current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MSFx_v"       long_name="MSF current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="MSFy_v"       long_name="MSF current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="S1x_v"        long_name="S1 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="S1y_v"        long_name="S1 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="2N2x_v"       long_name="2N2 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="2N2y_v"       long_name="2N2 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MU2x_v"       long_name="MU2 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="MU2y_v"       long_name="MU2 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="NU2x_v"       long_name="NU2 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="NU2y_v"       long_name="NU2 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="L2x_v"        long_name="L2 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="L2y_v"        long_name="L2 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="T2x_v"        long_name="T2 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="T2y_v"        long_name="T2 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MKS2x_v"      long_name="MKS2 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="MKS2y_v"      long_name="MKS2current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="LA2x_v"       long_name="LA2 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="LA2y_v"       long_name="LA2 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="R2x_v"        long_name="R2 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="R2y_v"        long_name="R2 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MTNx_v"       long_name="MTN current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="MTNy_v"       long_name="MTN current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MSQMx_v"      long_name="MSQM current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="MSQMy_v"      long_name="MSQM current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="EPS2x_v"      long_name="EPS2 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="EPS2y_v"      long_name="EPS2 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="M3x_v"        long_name="M3 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="M3y_v"        long_name="M3 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="M6x_v"        long_name="M6 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="M6y_v"        long_name="M6 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="M8x_v"        long_name="M8 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="M8y_v"        long_name="M8 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="N4x_v"        long_name="N4 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="N4y_v"        long_name="N4 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="S4x_v"        long_name="S4 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="S4y_v"        long_name="S4 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MN4x_v"       long_name="MN4 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="MN4y_v"       long_name="MN4 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
+        <field id="MS4x_v"       long_name="MS4 current barotrope along j-axis harmonic real part "        unit="m/s"      />
+        <field id="MS4y_v"       long_name="MS4 current barotrope along j-axis harmonic imaginary part "   unit="m/s"      />	 
       </field_group>
 
       <!-- OSMOSIS variables (available with ln_zdfosm=.true.) -->

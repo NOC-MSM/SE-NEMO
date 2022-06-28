@@ -569,11 +569,11 @@ nn_stockfl=5475,
 nn_writefl=75,
 /
 &nam_diaharm
+ln_diaharm=.false.,
 nit000_han=1,
 nitend_han=75,
 nstep_han=15,
 tname(1)='M2',
-tname(2)='K1',
 /
 &namdct
 /
