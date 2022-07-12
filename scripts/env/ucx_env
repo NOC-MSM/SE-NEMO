@@ -1,0 +1,10 @@
+module load PrgEnv-gnu
+module load cray-hdf5-parallel
+module load cray-netcdf-hdf5parallel
+module unload craype-network-ofi
+module unload cray-mpich
+module load craype-network-ucx
+module load cray-mpich-ucx
+module load libfabric
+module load gcc
+module swap gcc/10.1.0 gcc/9.3.0

@@ -73,6 +73,10 @@ case "${HPC_TARG}"
   in
   archer2) . $REPO_DIR/scripts/env/gnu-mpich
            ;;
+  GCC_ARCHER2) . $REPO_DIR/scripts/env/ucx_env
+           ;;
+  GCC_ARCHER2_PHYS) . $REPO_DIR/scripts/env/ucx_env
+           ;;
   *)       echo "Machine not recognised"
            echo "Machines available: archer2"
            exit 1
@@ -86,10 +90,15 @@ NEMO_VER=4.0.4
 # Checkout the NEMO code from the SVN Paris repository 
 echo "Checking out NEMO repository"
 
-svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER --depth empty nemo
-svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/src --depth infinity nemo/src
-svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/SHARED nemo/cfgs/SHARED
-svn export http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/ref_cfgs.txt nemo/cfgs/ref_cfgs.txt
+#svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER --depth empty nemo
+#svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/src --depth infinity nemo/src
+#svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/SHARED nemo/cfgs/SHARED
+#svn export http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/ref_cfgs.txt nemo/cfgs/ref_cfgs.txt
+git clone https://github.com/pmlmodelling/NEMO4.0-FABM nemo
+
+# this is needed until the physics only architecture file is not in the pmlmodelling repo
+
+cp /home/n01/n01/yuti/git-reps/NEMO4.0-FABM/arch/PML/arch-GCC_ARCHER2_PHYS.fcm nemo/arch/PML/
 
 cd nemo
 
@@ -122,11 +131,21 @@ svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5@1964 xios
 cd xios
 cp $REPO_DIR/arch/xios/* ./arch
 
+
 echo "Compiling xios"
-./make_xios --full --prod --arch ${HPC_TARG} --netcdf_lib netcdf4_par --job 4
+if [ ${HPC_TARG} == "GCC_ARCHER2_PHYS"  ]; then
+    ./make_xios --full --prod --arch GCC_ARCHER2 --netcdf_lib netcdf4_par --job 4
+else
+	./make_xios --full --prod --arch ${HPC_TARG} --netcdf_lib netcdf4_par --job 4
+fi
+
 
 # Let's update the path to xios
 export XIOS_DIR=$XIOS_DIR/xios
+export XIOS_HOME=$XIOS_DIR
+export FABM_HOME=$FABM_DIR
+
+
 
 cd $WORK_DIR/nemo
 cp $REPO_DIR/arch/nemo/* ./arch
@@ -145,6 +164,10 @@ cd $CONFIG_DIR
 case "${HPC_TARG}"
   in
   archer2) ln -s /work/n01/shared/se-eORCA025 INPUTS
+           ;;
+  GCC_ARCHER2) ln -s /work/n01/shared/se-eORCA025 INPUTS
+           ;;
+  GCC_ARCHER2_PHYS) ln -s /work/n01/shared/se-eORCA025 INPUTS
            ;;
   *)       wget http://gws-access.ceda.ac.uk/public/jmmp/se-eORCA025/inputs.tar.gz
 	   tar xvfz inputs.tar.gz
