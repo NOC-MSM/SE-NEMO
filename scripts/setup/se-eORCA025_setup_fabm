@@ -7,12 +7,13 @@ display_usage() {
    echo "  ***************************************"
    echo
    echo "  usage: ${0##*/} -w path_to_install_nemo -x path_to_intall_xios -s path_to_repo"
-   echo "                  -m machine "
+   echo "                  -m machine -f pah_to_fabm"
    echo
    echo "  flags:  -w full path to where nemo will be installed"
    echo "          -x full path to where xios will be installed"
    echo "          -s full path to where SE-NEMO repository resides"
    echo "          -m machine name"
+   echo "          -f full path to where fabm was built"
    echo
    exit 1
 	} 
@@ -23,7 +24,7 @@ display_usage() {
 		exit 1
 	fi 
 # if less than two arguments supplied, display usage 
-	if [  $# -ge 9 ] 
+	if [  $# -ge 11 ] 
 	then 
 		display_usage
 		exit 1
@@ -35,7 +36,7 @@ display_usage() {
 		exit 0
 	fi 
 
-while getopts w:x:s:m: option
+while getopts w:x:s:m:f: option
   do
   case "${option}"
   in
@@ -43,6 +44,7 @@ while getopts w:x:s:m: option
   x) export XIOS_DIR=${OPTARG};;
   s) export REPO_DIR=${OPTARG};;
   m) export HPC_TARG=${OPTARG};;
+  f) export FABM_DIR=${OPTARG};;
   esac
 done
 
@@ -61,24 +63,33 @@ if [ ${REPO_DIR:0:1} != "/" ]; then
   exit 1
 fi
 
+if [ ${FABM_DIR:0:1} != "/" ]; then
+  echo "FABM_DIR must use full path"
+  exit 1
+fi
+
 # Change to some working directory of choice
 if [ ! -d "$WORK_DIR" ]; then
   mkdir $WORK_DIR
 fi
 cd $WORK_DIR
 
+# clean old stuff
+rm -rf $WORK_DIR/*
+
+module purge
+
 echo "Making sure that the correct modules are loaded"
 
 case "${HPC_TARG}"
   in
   archer2) . $REPO_DIR/scripts/env/gnu-mpich
-           ;;
+  ;;
   GCC_ARCHER2) . $REPO_DIR/scripts/env/ucx_env
-           ;;
-  GCC_ARCHER2_PHYS) . $REPO_DIR/scripts/env/ucx_env
            ;;
   *)       echo "Machine not recognised"
            echo "Machines available: archer2"
+           echo "Machines available: GCC_ARCHER2"
            exit 1
 esac
 
@@ -96,23 +107,23 @@ echo "Checking out NEMO repository"
 #svn export http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/ref_cfgs.txt nemo/cfgs/ref_cfgs.txt
 git clone https://github.com/pmlmodelling/NEMO4.0-FABM nemo
 
-# this is needed until the physics only architecture file is not in the pmlmodelling repo
-
+#this is needed until the new arch is pushed to NEMO4
 cp /home/n01/n01/yuti/git-reps/NEMO4.0-FABM/arch/PML/arch-GCC_ARCHER2_PHYS.fcm nemo/arch/PML/
+
 
 cd nemo
 
-# Now check EXTERNALS revision number before checking out the rest
-for ext_name in mk FCM IOIPSL   
-  do   
-  ext=`svn propget svn:externals | grep $ext_name | cut -c2-`   
-  svn co http://forge.ipsl.jussieu.fr/nemo/svn/$ext
-done
+## Now check EXTERNALS revision number before checking out the rest
+#for ext_name in mk FCM IOIPSL   
+#  do   
+#  ext=`svn propget svn:externals | grep $ext_name | cut -c2-`   
+#  svn co http://forge.ipsl.jussieu.fr/nemo/svn/$ext
+#done
 
-ext=`svn propget svn:externals | grep makenemo | cut -c2-`
-svn export http://forge.ipsl.jussieu.fr/nemo/svn/$ext
-
-mkdir arch
+#ext=`svn propget svn:externals | grep makenemo | cut -c2-`
+#svn export http://forge.ipsl.jussieu.fr/nemo/svn/$ext
+#
+#mkdir arch
 
 # Setup the directory structure for the ENSEMBLE
 mkdir $WORK_DIR/nemo/cfgs/se-eORCA025
@@ -127,28 +138,19 @@ fi
 cd $XIOS_DIR
 echo $PWD
 echo "Checking out xios repository"
-svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5@1964 xios
+#svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5@1964 xios
+svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5 xios
 cd xios
 cp $REPO_DIR/arch/xios/* ./arch
 
-
 echo "Compiling xios"
-if [ ${HPC_TARG} == "GCC_ARCHER2_PHYS"  ]; then
-    ./make_xios --full --prod --arch GCC_ARCHER2 --netcdf_lib netcdf4_par --job 4
-else
-	./make_xios --full --prod --arch ${HPC_TARG} --netcdf_lib netcdf4_par --job 4
-fi
-
+#./make_xios --full --prod --arch ${HPC_TARG} --netcdf_lib netcdf4_par --job 4
+./make_xios --full --debug --arch ${HPC_TARG} --netcdf_lib netcdf4_par --job 4
 
 # Let's update the path to xios
 export XIOS_DIR=$XIOS_DIR/xios
 export XIOS_HOME=$XIOS_DIR
 export FABM_HOME=$FABM_DIR
-
-# set cpp file that includes key_top and key_fabm (this allows to keep 1 config folder)
-rm $REPO_DIR/cpp_se-eORCA025.fcm
-cp $REPO_DIR/cpp_se-eORCA025.phys.fcm $REPO_DIR/cpp_se-eORCA025.fcm
-
 
 cd $WORK_DIR/nemo
 cp $REPO_DIR/arch/nemo/* ./arch
@@ -161,6 +163,10 @@ echo "Gathering forcing data"
 
 export CONFIG_DIR=$WORK_DIR/nemo/cfgs/se-eORCA025
 
+# set cpp file that includes key_top and key_fabm (this allows to keep 1 config folder)
+rm $REPO_DIR/cpp_se-eORCA025.fcm
+cp $REPO_DIR/cpp_se-eORCA025.fabm.fcm $REPO_DIR/cpp_se-eORCA025.fcm
+
 cd $CONFIG_DIR
 
 ## Download the input data 
@@ -169,8 +175,6 @@ case "${HPC_TARG}"
   archer2) ln -s /work/n01/shared/se-eORCA025 INPUTS
            ;;
   GCC_ARCHER2) ln -s /work/n01/shared/se-eORCA025 INPUTS
-           ;;
-  GCC_ARCHER2_PHYS) ln -s /work/n01/shared/se-eORCA025 INPUTS
            ;;
   *)       wget http://gws-access.ceda.ac.uk/public/jmmp/se-eORCA025/inputs.tar.gz
 	   tar xvfz inputs.tar.gz
@@ -185,6 +189,10 @@ mkdir RESTARTS
 mkdir OUTPUTS
 
 ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXPREF/xios_server.exe
+
+
+echo 'se-eORCA025 OCE TOP ICE' >> $WORK_DIR/nemo/cfgs/work_cfgs.txt
+
 
 # Link some files from INPUTS that are hardwired to be in the experiment directory 
 ln -s INPUTS/K1rowdrg_R025_modif_nonpositive.nc K1rowdrg.nc
@@ -205,7 +213,8 @@ cp $REPO_DIR/scripts/run/* $CONFIG_DIR/EXPREF
 cd $WORK_DIR/nemo
 
 echo "Compiling nemo SE-ORCA025 Config"
-./makenemo -m ${HPC_TARG} -r se-eORCA025 -j 16
+#./makenemo -m ${HPC_TARG} -r se-eORCA025 -j 16
+./makenemo -m GCC_ARCHER2_DEBUG -r se-eORCA025 -j 8
 
 echo
 echo "  Auto-Config: SE-eORCA025"
@@ -220,5 +229,6 @@ echo "      (project code, nodes, modules, etc)"
 echo
 
 echo "  - submit via the sbatch command"
+
 
 echo    
