@@ -171,7 +171,7 @@ if __name__ == '__main__':
                 ,'domain_cfg_51_noztaper_match_rmax15.nc','domain_cfg_noztaper_match.nc']
     
     EXPNAMS=['EXP_MES_TIDE','EXP_MES_NOTIDE','TIDE','NOTIDE']
-             
+    EXPNAMS=['EXP_MES',  'EXP_MES_WAV',  'EXP_MES_WAV_NTM'] 
     #EXPNAMS=['EXP_SZT39_TAPER']
     for ik,EXPNAM in enumerate(EXPNAMS):
         print(EXPNAM)
@@ -186,8 +186,8 @@ if __name__ == '__main__':
                domain_datapath='/work/jholt/JASMIN//SENEMO/NOTIDE/'
                            
         else: #JASMIN
-            domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/' + EXPNAM +'/'
-            fn_nemo_dom='/gws/nopw/j04/class_vol2/senemo/jdha/EXP_MES_TIDE/domain_cfg_r015-r010_007_004v2.nc'
+            domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/' + EXPNAM +'/'
+            fn_nemo_dom='/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES/domain_cfg_r015-r010_007_004v2.nc'
             if EXPNAM=='TIDE':
                domain_datapath='/gws/nopw/j04/class_vol2/senemo/dbyrne/EXP_REF_TIDE/outputs/'
                fn_nemo_dom='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/domcfg_eORCA025_v2.nc'
@@ -207,8 +207,8 @@ if __name__ == '__main__':
         print(fn_nemo_dom)
         
         #make list of filenames
-        ystart=1980
-        ystop=1985
+        ystart=1979
+        ystop=1981
         fn_nemo_dat= NEMO_FileNames(domain_datapath,'SENEMO',ystart,ystop)            
         #fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'  
         fn_config_t_grid='../Config/senemo_grid_t.json'    
@@ -221,7 +221,7 @@ if __name__ == '__main__':
         fn_nameout=EXPNAM+ '_SST_SSS_PEA_MonClimate.nc'
         DOMNAM='ORCA025-SE-NEMO'
         
-        fn_out=domain_outpath+'/'+DOMNAM +'/' +DOMNAM+'_1980_1985_'+fn_nameout
+        fn_out=domain_outpath+'/'+DOMNAM +'/' +DOMNAM+'_1979_1981_'+fn_nameout
         print('running')
         #%% do the hard work
         SSTy,SSSy,PEAy   = make_climatology(nemo,DOMNAM,EXPNAM,domain_outpath)
