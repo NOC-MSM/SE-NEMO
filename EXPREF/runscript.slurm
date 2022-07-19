@@ -40,13 +40,13 @@ ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.'
 #################### runscript options #################################
 # Controls for the simulation                                          #
 ########################################################################
-ln_spin='.true.'   # Do we require a spin up phase for the ice
-nn_spin=3          # How many years spin up
-year_st=1976       # Start year of the simulation (ramains constant)
-year_en=1977       # End year of this job submission
-offset=0           # If rdt has changed, an offset to nn_it000 is needed
-nn_spin_cycle=1    # Change to nn_spin+1 if year is .gt. year_st
-year=$year_st      # Change if starting job part way through simulation
+ln_spin='.true.'     # Do we require a spin up phase for the ice
+nn_spin=3            # How many years spin up
+offset=0             # If rdt has changed, offset to nn_it000 is needed
+nn_spin_cycle=1      # Change to nn_spin+1 if year is .gt. year_st
+year_origin=1976     # Start year of whole simulation (ramains constant)
+year_st=$year_origin # Change if starting job part way through simulation
+year_en=1977         # End year of this job submission
 ########################################################################
 
 
@@ -147,7 +147,7 @@ else
 fi
 
 
-nn_date0=$year_st\0101
+nn_date0=$year_origin\0101
 while [ $year -le $year_en ]
 do
 
@@ -163,7 +163,7 @@ do
       nam="${ens%%:*}"
       jpk="${ens##*:}"
 
-      if [ $year -eq 1976 ]
+      if [ $year -eq $year_origin ]
       then
          nn_it000=1
 	 if [ $nn_spin_cycle -eq 1 ]
@@ -177,7 +177,7 @@ do
 	 nn_rstctl=0
          ln_reset_ts='.true.'
       else
-         nn_it000=`./end_time_step $(( $year - 1 )) $rn_rdt $year_st` ; rs0=`printf "%08d" $nn_it000`; nn_it000=$(( $nn_it000 + 1 + $offset ))
+         nn_it000=`./end_time_step $(( $year - 1 )) $rn_rdt $year_origin` ; rs0=`printf "%08d" $nn_it000`; nn_it000=$(( $nn_it000 + 1 + $offset ))
          ln_rstart=".true."
 	 nn_rstctl=2
 	 ln_tide_ramp='.false.'
@@ -186,7 +186,7 @@ do
        
       if [ "$ln_rstdate" = ".true." ]
       then
-         if [ $year -eq $year_st ]
+         if [ $year -eq $year_origin ]
          then
             rs0=$(($year+1))\0101
          else
@@ -194,7 +194,7 @@ do
          fi
       fi 
 
-      nn_itend=`./end_time_step $year $rn_rdt $year_st`; nn_itend=$(( $nn_itend + $offset ))
+      nn_itend=`./end_time_step $year $rn_rdt $year_origin`; nn_itend=$(( $nn_itend + $offset ))
       if [ $nn_spin_cycle -le $nn_spin ]
       then
          sed    "s/XXX_EXP_XXX/$nam\_S$nn_spin_cycle/g" namelist_cfg_template > namelist_cfg
@@ -202,7 +202,7 @@ do
          sed "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle-1))_$rs0\_restart_ice/g" namelist_ice_cfg_template > namelist_ice_cfg
       else
          sed    "s/XXX_EXP_XXX/$nam/g" namelist_cfg_template > namelist_cfg
-	 if [ $year -eq $year_st ]
+	 if [ $year -eq $year_origin ]
          then
             sed -i "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle-1))_$rs0\_restart/g" namelist_cfg
             sed "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle-1))_$rs0\_restart_ice/g" namelist_ice_cfg_template > namelist_ice_cfg
@@ -257,7 +257,7 @@ do
 
    for ens in "${ARRAY[@]}"
    do
-      if [ $year -eq $year_st ] && [ $nn_spin_cycle -le $nn_spin ]
+      if [ $year -eq $year_origin ] && [ $nn_spin_cycle -le $nn_spin ]
       then
          suf=$year\_S$nn_spin_cycle
       else
