@@ -22,9 +22,9 @@ import xarray as xr
 #Depth for PEA integration
 Zmax=200
 ###############################################################################
-def calc_pea(nemo,Zd_mask):
+def calc_pea(nemo,Zd_mask): #Redudent - can delete
 # Calculates Potential Engergy Anomaly
-
+#%%
  g=9.81
  Z=nemo.dataset.variables['depth_0'].values
  DZ=nemo.dataset.variables['e3_0'].values*Zd_mask
@@ -47,7 +47,7 @@ def calc_pea(nemo,Zd_mask):
   DP=np.repeat(DP[np.newaxis,:,:],nt,axis=0)  
 
   z_axis=1
- 
+#%% 
  PEA=np.sum(Z*(rho-rhobar)*DZ,axis=z_axis)*g/DP
 
  return PEA
@@ -93,7 +93,6 @@ def calc_zdmask(nemo_t,Zmax): #Redudent - can delete
 ###############################################################################         
 
 def make_climatology(nemo,DOMNAM,EXPNAM,domain_outpath):
-#%%
 
  #Calculate and save first time, otherwise read
  try:     
@@ -149,7 +148,7 @@ def make_climatology(nemo,DOMNAM,EXPNAM,domain_outpath):
 
  return SSTy,SSSy,PEAy #,NBTy
 ##############################################################################
-def NEMO_FileNames(dpath,runtype,ystart,ystop):
+def NEMO_FileNames(dpath,runtype,ystart,ystop):  # redundent can delete
 #produce a list of nemo filenames
     names=[]    
     if runtype== 'SENEMO':
