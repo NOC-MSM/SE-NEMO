@@ -91,9 +91,11 @@ def calc_zdmask(nemo_t,Zmax): #Redudent - can delete
 #%%
  return Zd_mask,kmax,Ikmax
 ###############################################################################         
-
-def annual_climatology(nemo,nemo_out):
-     Zd_mask,kmax,Ikmax=nemo.calculate_vertical_mask(Zmax) 
+class annual_climatology: #Redunded can delete
+    def __init__ (self,gridded_t,gridded_t_out):
+                
+#%%
+     Zd_mask,kmax,Ikmax=gridded_t.calculate_vertical_mask(Zmax) 
      #Calculate and save first time, otherwise read
      #try:     
      # A=np.load(domain_outpath + '/' +DOMNAM + '_' + EXPNAM + '_Zd_mask.npz')  
@@ -103,13 +105,13 @@ def annual_climatology(nemo,nemo_out):
      # print('read mask')
      #except:
      #   print('calculating mask')
-     #   Zd_mask,kmax,Ikmax=nemo.calculate_vertical_mask(Zmax)
+     #   Zd_mask,kmax,Ikmax=gridded_t.calculate_vertical_mask(Zmax)
      #   np.savez(domain_outpath + '/' +DOMNAM + '_' + EXPNAM + '_Zd_mask.npz',Zd_mask=Zd_mask,kmax=kmax,Ikmax=Ikmax)
     #%%    
-     ny=nemo.dataset.dims['y_dim']
-     nx=nemo.dataset.dims['x_dim']
+     ny=gridded_t.dataset.dims['y_dim']
+     nx=gridded_t.dataset.dims['x_dim']
     
-     nt=nemo.dataset.dims['t_dim']
+     nt=gridded_t.dataset.dims['t_dim']
     #%%
      print(nx,ny)
      SSTy=np.zeros((12,ny,nx))
@@ -126,10 +128,10 @@ def annual_climatology(nemo,nemo_out):
       for im in range(12):
        itt=[it[im]]
        print(itt)
-       nemo2=nemo.subset_as_copy(t_dim=itt)
+       gridded_t2=gridded_t.subset_as_copy(t_dim=itt)
        print('copied',im)
-       PEA=coast.InternalTide(nemo2,nemo2)
-       PEA.calc_pea(nemo2,Zd_mask)
+       PEA=coast.InternalTide(gridded_t2,gridded_t2)
+       PEA.calc_pea(gridded_t2,Zd_mask)
        PEAy[im,:,:]=PEAy[im,:,:]+PEA.dataset['PEA'].values
      PEAy=PEAy/nyear 
     
@@ -138,8 +140,8 @@ def annual_climatology(nemo,nemo_out):
      #NBT=np.zeros((nt,ny,nx))
      #for it in range(nt): 
      #    NBT[it,:,:]=np.reshape(tmp[it,:,:,:].values.ravel()[Ikmax],(ny,nx))
-     SST=nemo.dataset.variables['temperature'][:,0,:,:]
-     SSS=nemo.dataset.variables['salinity'][:,0,:,:]    
+     SST=gridded_t.dataset.variables['temperature'][:,0,:,:]
+     SSS=gridded_t.dataset.variables['salinity'][:,0,:,:]    
     
      for im in range(12):
        print('Month',im)
@@ -149,17 +151,17 @@ def annual_climatology(nemo,nemo_out):
      # NBTy[im,:,:]=np.mean(NBT[it,:,:],axis=0)
         # save hard work in netcdf file
      coords = {"Months":(("mon_dim"),np.arange(12).astype(int)),
-                "latitude": (("y_dim", "x_dim"), nemo.dataset.latitude.values),
-                "longitude": (("y_dim", "x_dim"), nemo.dataset.longitude.values),
+                "latitude": (("y_dim", "x_dim"), gridded_t.dataset.latitude.values),
+                "longitude": (("y_dim", "x_dim"), gridded_t.dataset.longitude.values),
             }
      dims = ["mon_dim","y_dim", "x_dim"]                
      attributes_SST = {"units": "o^C", "standard name": "Conservative Sea Surface Temperature"}
      attributes_SSS = {"units": "", "standard name": "Absolution Sea Surface Salinity"}
      attributes_PEA = {"units": "Jm^-3", "standard name": "Potential Energy Anomaly to 200m"}
-     nemo_out.dataset['SSTy'] = xr.DataArray(np.squeeze(SSTy), coords=coords, dims=dims, attrs=attributes_SST) 
-     nemo_out.dataset['SSSy'] = xr.DataArray(np.squeeze(SSSy), coords=coords, dims=dims, attrs=attributes_SSS) 
-     nemo_out.dataset['PEAy'] = xr.DataArray(np.squeeze(PEAy), coords=coords, dims=dims, attrs=attributes_PEA) 
- 
+     gridded_t_out.dataset['SSTy'] = xr.DataArray(np.squeeze(SSTy), coords=coords, dims=dims, attrs=attributes_SST) 
+     gridded_t_out.dataset['SSSy'] = xr.DataArray(np.squeeze(SSSy), coords=coords, dims=dims, attrs=attributes_SSS) 
+     gridded_t_out.dataset['PEAy'] = xr.DataArray(np.squeeze(PEAy), coords=coords, dims=dims, attrs=attributes_PEA) 
+#%% 
 ##############################################################################
 def NEMO_FileNames(dpath,runtype,ystart,ystop):  # redundent can delete
 #produce a list of nemo filenames
@@ -223,21 +225,26 @@ if __name__ == '__main__':
         ystart=1979
         ystop=1979
         fn_nemo_dat= coast.nemo_filenames(domain_datapath,'SENEMO',ystart,ystop)            
-        #fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'  
+
         fn_config_t_grid='../Config/senemo_grid_t.json'    
         
         #input datasets
         nemo = coast.Gridded(fn_data= fn_nemo_dat, fn_domain = fn_nemo_dom, config=fn_config_t_grid,multiple=True)
-         
+        #nemo = nemo. subset_as_copy(y_dim=range(86,1000),x_dim=range(1080,1180))
+        #fix for nasty bug 
+        nemo_dom=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid)
+        #nemo_dom = nemo_dom. subset_as_copy(y_dim=range(86,1000),x_dim=range(1080,1180))        
+        nemo.dataset['e3_0']=nemo_dom.dataset['e3_0']
         #Place to output data
         nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid)
+        #nemo_out = nemo_out. subset_as_copy(y_dim=range(86,1000),x_dim=range(1080,1180))  
         fn_nameout=EXPNAM+ '_SST_SSS_PEA_MonClimate.nc'
         DOMNAM='ORCA025-SE-NEMO'
         
         fn_out=domain_outpath+'/'+DOMNAM +'/' +DOMNAM+'_1979_1979_'+fn_nameout
         print('running')
         #%% do the hard work
-        annual_climatology(nemo,nemo_out)        
+        coast.Annual_Climatology(nemo,nemo_out,Zmax=200)        
         nemo_out.dataset.to_netcdf(fn_out)
     
     
