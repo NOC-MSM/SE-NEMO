@@ -6,9 +6,16 @@ Created on Wed Jul 27 14:44:39 2022
 @author: jholt
 """
 # Needs SE-NEMO branch of coast
+import socket
+isliv = 'livljobs' in socket.gethostname()
+
 import sys
-sys.path.insert(0,'/home/users/jholt/work/Git/COAsT/')
+if isliv:
+ sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
+else:
+ sys.path.insert(0,'/home/users/jholt/work/Git/COAsT/')
 import coast
+
 #Specify years to average
 ystart=1979
 ystop=1981
@@ -16,6 +23,7 @@ ystop=1981
 EXPNAMS=['EXP_MES',  'EXP_MES_WAV',  'EXP_MES_WAV_NTM'] 
 EXPNAMS=[ 'EXP_MES_WAV_NTM_RIV']
 for EXPNAM in EXPNAMS:
+    print(EXPNAM)
     domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/' + EXPNAM +'/'
     domain_datapath='/gws/nopw/j04/class_vol2/senemo/slwa/' + EXPNAM +'/'
     

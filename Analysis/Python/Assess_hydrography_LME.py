@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.pylab as plt
 import sys
 import pandas as pd
+
 if isliv:
  sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
 else:
@@ -32,16 +33,23 @@ def error_stats(var,var_obs):
 J_offset=186 #account for extra rows in eORCA if data is made for normal ORCA
 plot=False
 metrics={}
-A=np.load('/work/jholt/Git/DEV_jholt/GCO_Hydro/Data/LME_gridinfo_V4.npz')
-a=scipy.io.loadmat('/projectsa/FASTNEt/jholt/HCIdata/ORCA025_ROAM_GLB_LMEmaskV4.mat')
+A=np.load('../Data/LME_gridinfo_V4.npz')
+a=scipy.io.loadmat('../Data/ORCA025_ROAM_GLB_LMEmaskV4.mat')
 LME_mask=a['LME_mask'][:,:].T
-datapath_LME ='/work/jholt/Git/DEV_jholt/GCO_Hydro/Data/'
-fn_bathymetry='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/eORCA025_bathy_meter.nc'
+if isliv:
+ datapath_LME ='/work/jholt/Git/DEV_jholt/GCO_Hydro/Data/'
+ fn_bathymetry='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/eORCA025_bathy_meter.nc'
+else:
+ datapath_LME ='/home/users/jholt/work/SENEMO/ASSESSMENT/EN4/'
+ fn_bathymetry='/home/users/jholt/work/SENEMO/senemo/INPUTS/eORCA025_bathy_meter.nc'    
 DATANAME='ORCA025'
 
 nlme=66#len(A['i_min'])
 Depth_lim=1000.
-Assessdir='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/ORCA025-SE-NEMO/'
+if isliv:
+ Assessdir='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/ORCA025-SE-NEMO/' 
+else:
+ Assessdir='/home/users/jholt//work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/'
 Outdir=Assessdir+'Errorstats/'
 monrange=range(0,12)
 
@@ -57,7 +65,7 @@ RUNNAMS=[
     'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM',
     'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV'
     ]
-RUNNAMS=['ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM']#,'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM_RIV']
+RUNNAMS=['ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM_RIV']#,'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM_RIV']
 
 for RUNNAM in RUNNAMS:
     
@@ -109,10 +117,14 @@ for RUNNAM in RUNNAMS:
     
      try:
     #%%
-         EN4=np.load(datapath_LME + '/' + DATANAME  +'/'+ LMENAM + '_EN4mnthgrid_V3.npz') 
-         SST_EN4=EN4['SST_g'].T[monrange,:,:]
-         SSS_EN4=EN4['SSS_g'].T[monrange,:,:]
-         PEA_EN4=EN4['PEA_g'].T[monrange,:,:]     
+         EN4=coast.Gridded(datapath_LME + '/' + DATANAME  +'/'+ LMENAM + '_EN4mnthgrid_V3.nc')
+         SST_EN4=EN4.dataset.SST_g.values.T[monrange,:,:]
+         SSS_EN4=EN4.dataset.SSS_g.values.T[monrange,:,:]
+         PEA_EN4=EN4.dataset.PEA_g.values.T[monrange,:,:]         
+    #        EN4=np.load(datapath_LME + '/' + DATANAME  +'/'+ LMENAM + '_EN4mnthgrid_V3.npz')         
+ #        SST_EN4=EN4['SST_g'].T[monrange,:,:]
+ #        SSS_EN4=EN4['SSS_g'].T[monrange,:,:]
+ #        PEA_EN4=EN4['PEA_g'].T[monrange,:,:]     
          SST_EN4[mm==0]=np.nan
          PEA_EN4[mm==0]=np.nan
          SSS_EN4[mm==0]=np.nan
