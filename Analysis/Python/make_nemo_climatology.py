@@ -184,7 +184,7 @@ if __name__ == '__main__':
     
     EXPNAMS=['EXP_MES_TIDE','EXP_MES_NOTIDE','TIDE','NOTIDE']
     EXPNAMS=['EXP_MES',  'EXP_MES_WAV',  'EXP_MES_WAV_NTM'] 
-    EXPNAMS=['TIDE']  
+    EXPNAMS=['EXP_MES_WAV_NTM']  
     #EXPNAMS=['EXP_SZT39_TAPER']
     for ik,EXPNAM in enumerate(EXPNAMS):
         print(EXPNAM)
@@ -215,7 +215,7 @@ if __name__ == '__main__':
         
         
         #fn_nemo_dom=domain_path+DOMCFGNAMS[ik]
-        fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'
+        #fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'
         
         print(fn_nemo_dom)
         
@@ -228,7 +228,7 @@ if __name__ == '__main__':
         
         #input datasets
         nemo = coast.Gridded(fn_data= fn_nemo_dat, fn_domain = fn_nemo_dom, config=fn_config_t_grid,multiple=True)
-         
+        nemo = nemo. subset_as_copy(y_dim=range(86,1000),x_dim=range(1080,1180))  
         #Place to output data
         nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid)
         fn_nameout=EXPNAM+ '_SST_SSS_PEA_MonClimate.nc'
