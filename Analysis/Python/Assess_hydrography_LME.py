@@ -43,10 +43,11 @@ nlme=66#len(A['i_min'])
 Depth_lim=1000.
 Assessdir='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/ORCA025-SE-NEMO/'
 Outdir=Assessdir+'Errorstats/'
-monrange=range(5,9)
+monrange=range(0,12)
+
 lmonrange=len(monrange)
 mons='NHS'
-
+mons='YR'
 RUNNAMS=[
     'ORCA025-SE-NEMO_1980_1985_EXP_MES_NOTIDE',
     'ORCA025-SE-NEMO_1980_1985_EXP_MES_TIDE',
@@ -56,7 +57,7 @@ RUNNAMS=[
     'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM',
     'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV'
     ]
-
+RUNNAMS=['ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM']#,'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM_RIV']
 
 for RUNNAM in RUNNAMS:
     
@@ -188,7 +189,7 @@ for RUNNAM in RUNNAMS:
     DD['LME']=np.append(DD['LME'],'N Weighted Mean')                                     
     df=pd.DataFrame(DD)
     df=df.set_index('LME')
-    df.to_csv(Outdir +'Errorstats_'+ RUNNAM +'_'+str(int(Depth_lim))+'m_'+mons+'_V1.csv')
+    df.to_csv(Outdir +'Errorstats_'+ RUNNAM +'_'+str(int(Depth_lim))+'m_'+mons+'_V2.csv')
     #writer = pd.ExcelWriter(Outdir +'Errorstats_'+ RUNNAM +'_V1.xlsx', engine='xlsxwriter')
     #df.to_excel(writer, sheet_name='Sheet1')
     #workbook  = writer.book
