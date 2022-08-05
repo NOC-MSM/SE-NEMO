@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
+THIS IS REDUNDENT USE make_SENEMO_climatology.py instead
 Created on Thu Sep  5 16:27:35 2019
 
 @author: jholt
