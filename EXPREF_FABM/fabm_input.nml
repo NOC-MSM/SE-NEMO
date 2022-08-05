@@ -1,0 +1,26 @@
+!              !  file name   ! frequency (hours) ! variable  ! time interp. !  clim  ! 'yearly'/ ! weights  ! rotation ! land/sea mask !
+!              !              !  (if <0  months)  !   name    !   (logical)  !  (T/F) ! 'monthly' ! filename ! pairing  ! filename      !
+&variable
+   name='gelbstoff_absorption_satellite'
+   sn=         'INPUTS/eORCA1-CCI-ady-broadband-climatology-1997-2020', -1, 'ady', .false.,  .true.,   'yearly',  '',  '', ''
+/
+&variable
+   name='mole_fraction_of_carbon_dioxide_in_air'
+   sn=         'INPUTS/pCO2a',  -12,  'pCO2a', .false.,  .true., 'yearly', '', '', ''
+/
+&variable
+   name='N4_flux/flux'
+   sn=  'INPUTS/ndep-nhx_histsoc_monthly_atmosgrid', -1, 'nhx', .false.,  .false., 'yearly', 'INPUTS/weights_coreII_2_eorca1_bilinear.nc', '', ''
+/
+&variable
+   name='N3_flux/flux'
+   sn=  'INPUTS/ndep-noy_histsoc_monthly_atmosgrid', -1, 'noy', .false., .false., 'yearly', 'INPUTS/weights_coreII_2_eorca1_bilinear.nc', '', ''
+/
+!&variable
+!   name='N7_flux/flux'
+!   sn=  'INPUTS/dust_orca_nM_eORCA1_v2', -1, 'dust', .false., .true., 'yearly', '', '', ''
+!/
+&variable
+   name='N7_flux/flux'
+   sn=  'eORCA1_Fe_dep_GESAMP.nc', -1, 'LFe_dep', .false., .true., 'yearly', '', '', ''
+/
