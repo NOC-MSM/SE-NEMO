@@ -55,7 +55,7 @@ for i,name in enumerate(names):
     
     
     
-    nemo_t = coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid,calc_bathy=True)    
+    #nemo_t = coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid,calc_bathy=True)    
     nemo_f = coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_f_grid,calc_bathy=True)
     nemo_u = coast.Gridded(fn_data=fn_nemo_dat_u, fn_domain=fn_nemo_dom, config=fn_config_u_grid,multiple=True)
     nemo_v = coast.Gridded(fn_data=fn_nemo_dat_v, fn_domain=fn_nemo_dom, config=fn_config_v_grid,multiple=True)
