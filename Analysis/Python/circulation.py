@@ -40,9 +40,6 @@ DOMS=[dom_dir1+'domcfg_eORCA025_v2.nc',
       dom_dir1+'domcfg_eORCA025_v2.nc',
       dom_dir2+'domain_cfg_r015-r010_007_004v2.nc',
       dom_dir3+'domain_cfg_ztaper_match.nc',
-      dom_dir1+'domcfg_eORCA025_v2.nc',
-      dom_dir1+'domcfg_eORCA025_v2.nc',
-      dom_dir1+'domcfg_eORCA025_v2.nc',      
       dom_dir2+'domain_cfg_r015-r010_007_004v2.nc'      
       ]
 #DOMS=['/work/jholt/JASMIN//SENEMO/JDHA/TO_SORT/SE-NEMO/EXP_SZT39_TAPER_TIDE/domain_cfg_ztaper_match.nc']
@@ -63,22 +60,15 @@ else:
             '/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_ZPS_GLS_TIDE_WITH_TDRAG/OUTPUTS/',
             '/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM/',
             '/gws/nopw/j04/class_vol2/senemo/jdha/LONG_TESTS/EXP_SZT_TIDE/',
-            '/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_ZPS_GLS_TIDE_WITHOUT_TDRAG',
-            '/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_ZPS_GLS_TIDE_WITH_TDRAG',
-            '/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_ZPS_GLS_TO_TKE_WITHOUT_TDRAG',
             '/gws/nopw/j04/class_vol2/senemo/slwa/EXP_MES_WAV_NTM_RIV/'
             ]
 
 
 
 names=['NOTIDE',
-       'Tide',
+       'EXP_ZPS_GLS_TIDE_WITH_TDRAG',
        'EXP_MES_WAV_NTM',
        'EXP_SZT_TIDE',
-       'EXP_MES_WAV_NTM',
-       'EXP_ZPS_GLS_TIDE_WITHOUT_TDRAG',
-       'EXP_ZPS_GLS_TIDE_WITH_TDRAG',
-       'EXP_ZPS_GLS_TO_TKE_WITHOUT_TDRAG',
        'EXP_MES_WAV_NTM_RIV'
 ]
 #names=['EXP_MES_WAV_NTM']
@@ -156,7 +146,7 @@ def plot_surface_circulation(nemo_u,nemo_v,nemo_t,name):
  #plt.quiver(x,y,u,v,color=[0.1,0.1,0.1],headwidth=4,scale=50)
  plt.quiver(I,J,u,v,color=[0.1,0.1,0.1],headwidth=4,scale=50)
  plt.title('Surface Currents ' + name)
- plt.savefig('../Figures/Surface Currents_' + name.replace(' ','_')+'.png')
+ plt.savefig('../Figures/Surface_Currents_' + name.replace(' ','_')+'.png')
 
 
 
@@ -183,8 +173,9 @@ ystop=1981
 jmin,jmax=[860,1010]
 imin,imax=[1080,1180]
 plt.close('all')
-for i,name in enumerate([names[7]]): 
-
+for i,name in enumerate(names): 
+    print(name)
+    print(dpaths[i])
     fn_nemo_dat_u= coast.nemo_filenames(dpaths[i],'SENEMO',ystart,ystop,grid='U') 
     fn_nemo_dat_v= coast.nemo_filenames(dpaths[i],'SENEMO',ystart,ystop,grid='V') 
     fn_nemo_dat_u=    fn_nemo_dat_u[6:9]       
