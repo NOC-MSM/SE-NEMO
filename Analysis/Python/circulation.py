@@ -11,8 +11,7 @@ if isliv:
     coast_dir='/login/jholt/work/Git/COAsT/'
 else:
     coast_dir='/home/users/jholt/work/Git/COAsT/'
-
-    
+ 
 import sys
 sys.path.insert(0,coast_dir)
 import matplotlib.pylab as plt
@@ -23,58 +22,8 @@ fn_config_t_grid=coast_dir+'/config/example_nemo_grid_t.json'
 fn_config_f_grid=coast_dir+'/config/example_nemo_grid_f.json'
 fn_config_u_grid=coast_dir+'/config/example_nemo_grid_u.json'
 fn_config_v_grid=coast_dir+'/config/example_nemo_grid_v.json'
-    
-#Dom Paths    
-if isliv:
-    dom_dir1='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/'
-    dom_dir2='/work/jholt/JASMIN//SENEMO/JDHA/SHORT_TESTS/EXP_MES_WAV_NTM/'
-    dom_dir3='/work/jholt/JASMIN//SENEMO/JDHA/TO_SORT/SE-NEMO/EXP_SZT39_TAPER_TIDE/'
-else:    
-    dom_dir1='/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/'
-    dom_dir2='/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM/'
-    dom_dir3='/gws/nopw/j04/class_vol2/senemo/jdha/TO_SORT/SE-NEMO/EXP_SZT39_TAPER_TIDE/'
-#Data paths
-    
-        
-DOMS=[dom_dir1+'domcfg_eORCA025_v2.nc',
-      dom_dir1+'domcfg_eORCA025_v2.nc',
-      dom_dir2+'domain_cfg_r015-r010_007_004v2.nc',
-      dom_dir3+'domain_cfg_ztaper_match.nc',
-      dom_dir2+'domain_cfg_r015-r010_007_004v2.nc'      
-      ]
-#DOMS=['/work/jholt/JASMIN//SENEMO/JDHA/TO_SORT/SE-NEMO/EXP_SZT39_TAPER_TIDE/domain_cfg_ztaper_match.nc']
-#DOMS=[dom_dir2+'domain_cfg_r015-r010_007_004v2.nc']      
-#DOMS=[dom_dir1+'domcfg_eORCA025_v2.nc']      
 
-if isliv:
-    dpaths=['/work/jholt/JASMIN//SENEMO/NOTIDE/',
-           '/work/jholt/JASMIN/SENEMO/TIDE/outputs/',
-           '/work/jholt/JASMIN//SENEMO/JDHA/SHORT_TESTS/EXP_MES_WAV_NTM/',
-           '/work/jholt/JASMIN//SENEMO/JDHA/LONG_TESTS/EXP_SZT_TIDE/'
-           ]
-    
-    #dpaths=['/work/jholt/JASMIN//SENEMO/JDHA/LONG_TESTS/EXP_SZT_TIDE/']
-    dpaths=['/work/jholt/JASMIN//SENEMO/JDHA/SHORT_TESTS/EXP_MES_WAV_NTM/']
-else:
-    dpaths=['/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/means/monthly/',
-            '/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_ZPS_GLS_TIDE_WITH_TDRAG/OUTPUTS/',
-            '/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM/',
-            '/gws/nopw/j04/class_vol2/senemo/jdha/LONG_TESTS/EXP_SZT_TIDE/',
-            '/gws/nopw/j04/class_vol2/senemo/slwa/EXP_MES_WAV_NTM_RIV/'
-            ]
-
-
-
-names=['NOTIDE',
-       'EXP_ZPS_GLS_TIDE_WITH_TDRAG',
-       'EXP_MES_WAV_NTM',
-       'EXP_SZT_TIDE',
-       'EXP_MES_WAV_NTM_RIV'
-]
-#names=['EXP_MES_WAV_NTM']
-#names=['EXP_SZT_TIDE']
-
-    
+names,dpaths,DOMS,_  = coast. experiments(experiments='experiments.json')  
 
 def flx_contour(nemo_f,nemo_u,nemo_v):
     contours, no_contours = coast.Contour.get_contours(nemo_f, 300)
@@ -146,10 +95,7 @@ def plot_surface_circulation(nemo_u,nemo_v,nemo_t,name):
  #plt.quiver(x,y,u,v,color=[0.1,0.1,0.1],headwidth=4,scale=50)
  plt.quiver(I,J,u,v,color=[0.1,0.1,0.1],headwidth=4,scale=50)
  plt.title('Surface Currents ' + name)
- plt.savefig('../Figures/Surface_Currents_' + name.replace(' ','_')+'.png')
-
-
-
+ plt.savefig('../Figures/Circulation/Surface_Currents_' + name.replace(' ','_')+'.png')
 
 
 
