@@ -85,7 +85,7 @@ def plot_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name, co_located=False,Vm
  VS[SP<0.02]=np.nan
  US=US/SP
  VS=VS/SP
- Np=3
+ Np=5
 
 
  p=np.ma.masked_where(mask==0,SP)
