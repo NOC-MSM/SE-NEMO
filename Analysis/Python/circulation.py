@@ -19,10 +19,11 @@ import coast
 import numpy as np
 import xarray as xr
 import scipy.io
-fn_config_t_grid=coast_dir+'/config/example_nemo_grid_t.json'
-fn_config_f_grid=coast_dir+'/config/example_nemo_grid_f.json'
-fn_config_u_grid=coast_dir+'/config/example_nemo_grid_u.json'
-fn_config_v_grid=coast_dir+'/config/example_nemo_grid_v.json'
+fn_config_t_grid='./example_nemo_grid_t.json'
+fn_config_f_grid='./example_nemo_grid_f.json'
+fn_config_u_grid='./example_nemo_grid_u.json'
+fn_config_v_grid='./example_nemo_grid_v.json'
+
 
 names,dpaths,DOMS,_  = coast. experiments(experiments='experiments1.json')  
 
@@ -55,7 +56,7 @@ def lightcolormap(Np,nt):
  cmap1=LinearSegmentedColormap.from_list('cmap1',colors1,cmap0.N-nt*2)
  return cmap1
 #%%
-def plot_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name, co_located=False,Vmax=0.16): 
+def plot_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name, co_located=False,Vmax=0.16,Np=3): 
 #%%
  nx=nemo_u.dataset.x_dim.size
  ny=nemo_u.dataset.y_dim.size
@@ -85,7 +86,7 @@ def plot_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name, co_located=False,Vm
  VS[SP<0.02]=np.nan
  US=US/SP
  VS=VS/SP
- Np=5
+ 
 
 
  p=np.ma.masked_where(mask==0,SP)
@@ -109,7 +110,7 @@ def plot_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name, co_located=False,Vm
  #plt.quiver(x,y,u,v,color=[0.1,0.1,0.1],headwidth=4,scale=50)
  plt.quiver(x,y,u,v,color=[0.1,0.1,0.1],headwidth=4,scale=50)
  plt.title('Surface Currents ' + name)
- plt.savefig('../Figures/Circulation/Surface_Currents_' + name.replace(' ','_')+'.png')
+
 
 
 
@@ -129,52 +130,64 @@ if __name__ == '__main__':
     Zmean={}
     Un={}
     Z={}
-    ystart=1981
-    ystop=1981
+    ystart=1993
+    ystop=2019
     A=np.load('../Data/LME_gridinfo_V4.npz')
     a=scipy.io.loadmat('../Data/ORCA025_ROAM_GLB_LMEmaskV4.mat')
     nlme=66
     J_offset=186 #account for extra rows in eORCA if data is made for normal ORCA
     LME_mask=a['LME_mask'][:,:].T
     lmelist=np.array([14])-1
-    for ilme in lmelist:    
-        LMENAM=A['DOMNAM'][ilme]
-        imin=A['i_min'][ilme]
-        imax=A['i_max'][ilme]
-        jmin=A['j_min'][ilme]+J_offset
-        jmax=A['j_max'][ilme]+J_offset
-        jmin0=A['j_min'][ilme]
-        jmax0=A['j_max'][ilme]
-        print(LMENAM)
+
+    SEASON='JAS'
+    YEARS="{0}_{1}".format(ystart,ystop)
+    plt.close('all')
+    ny=ystop-ystart+1
+    isea=[6,7,8]
+    iseason=np.array([])
+    for iss in isea:        
+        iseason=np.append(iseason,np.arange(iss,12*ny,12))
+    iseason=(np.sort(iseason)).astype(int)                        
+    for i,name in enumerate(names): 
+        print(name)
+        print(dpaths[i])
+        fn_nemo_dat_u= coast.nemo_filenames(dpaths[i],'SENEMO',ystart,ystop,grid='U') 
+        fn_nemo_dat_v= coast.nemo_filenames(dpaths[i],'SENEMO',ystart,ystop,grid='V') 
+        fn_nemo_dat_u=    fn_nemo_dat_u[iseason]       
+        fn_nemo_dat_v=    fn_nemo_dat_v[iseason]   
+        fn_nemo_dom=DOMS[i]
+    #    fn_nemo_dat_u=dpaths[i]+'SENEMO_1m_19800101_19801231_grid_U_198007-198007.nc'
+    #    fn_nemo_dat_v=dpaths[i]+'SENEMO_1m_19800101_19801231_grid_V_198007-198007.nc'
+    
         
-    #    jmin,jmax=[860,1010]
-    #    imin,imax=[1080,1180]
-        plt.close('all')
-        for i,name in enumerate(names): 
-            print(name)
-            print(dpaths[i])
-            fn_nemo_dat_u= coast.nemo_filenames(dpaths[i],'SENEMO',ystart,ystop,grid='U') 
-            fn_nemo_dat_v= coast.nemo_filenames(dpaths[i],'SENEMO',ystart,ystop,grid='V') 
-            fn_nemo_dat_u=    fn_nemo_dat_u[6:9]       
-            fn_nemo_dat_v=    fn_nemo_dat_v[6:9]   
-            fn_nemo_dom=DOMS[i]
-        #    fn_nemo_dat_u=dpaths[i]+'SENEMO_1m_19800101_19801231_grid_U_198007-198007.nc'
-        #    fn_nemo_dat_v=dpaths[i]+'SENEMO_1m_19800101_19801231_grid_V_198007-198007.nc'
         
+        
+        nemo_t = coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid)#,calc_bathy=True)    
+        nemo_f = coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_f_grid)#,calc_bathy=True)
+        nemo_u = coast.Gridded(fn_data=fn_nemo_dat_u, fn_domain=fn_nemo_dom, config=fn_config_u_grid,multiple=True)
+        nemo_v = coast.Gridded(fn_data=fn_nemo_dat_v, fn_domain=fn_nemo_dom, config=fn_config_v_grid,multiple=True)
+        for ilme in lmelist:    
+            LMENAM=A['DOMNAM'][ilme]
+            imin=A['i_min'][ilme]
+            imax=A['i_max'][ilme]
+            jmin=A['j_min'][ilme]+J_offset
+            jmax=A['j_max'][ilme]+J_offset
+            jmin0=A['j_min'][ilme]
+            jmax0=A['j_max'][ilme]
+            print(LMENAM)
             
-            
-            
-            nemo_t = coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid)#,calc_bathy=True)    
-            nemo_f = coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_f_grid)#,calc_bathy=True)
-            nemo_u = coast.Gridded(fn_data=fn_nemo_dat_u, fn_domain=fn_nemo_dom, config=fn_config_u_grid,multiple=True)
-            nemo_v = coast.Gridded(fn_data=fn_nemo_dat_v, fn_domain=fn_nemo_dom, config=fn_config_v_grid,multiple=True)
-            
-            nemo_f.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
-            nemo_u.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
-            nemo_v.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
-            nemo_t.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
-            mask=nemo_t.dataset.bathymetry != 0
-            plot_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name+' JAS 1981 '+LMENAM, )
+            jmin,jmax=[860,1015]
+            imin,imax=[1080,1180]
+            REGION=LMENAM
+            REGION='NWS'            
+            nemo_f1=nemo_f.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
+            nemo_u1=nemo_u.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
+            nemo_v1=nemo_v.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
+            nemo_t1=nemo_t.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
+            mask=nemo_t1.dataset.bathymetry != 0
+            Name=name+' '+SEASON+' '+YEARS+' '+REGION 
+            plot_surface_circulation(nemo_u1,nemo_v1,nemo_t1,mask,Name)
+            plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png')
     #    Un[name],Unmean[name],Z[name],Zmean[name]=flx_contour(nemo_f,nemo_u,nemo_v)
     
     
