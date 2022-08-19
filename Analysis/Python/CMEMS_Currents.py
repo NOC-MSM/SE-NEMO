@@ -18,7 +18,7 @@ import numpy as np
 from getpass import getpass
 import circulation
 import scipy.io
-
+import matplotlib.pylab as plt
 USERNAME='jholt'
 PASSWORD=getpass( 'Password: ' )
 
@@ -46,34 +46,44 @@ nlme=66
 
 LME_mask=a['LME_mask'][:,:].T
 lmelist=np.array([34])-1
+lmelist=np.arange(nlme)
 for ilme in lmelist:    
-
+        LMENAM=A['DOMNAM'][ilme]
         x_min=A['x_min'][ilme]
         x_max=A['x_max'][ilme]
         y_min=A['y_min'][ilme]
         y_max=A['y_max'][ilme]        
                 
-#        x_min=-15
-#        x_max=13
-#        y_min=45
-#        y_max=65
+        #x_min=-15
+        #x_max=13
+        #y_min=45
+        #y_max=65
         
         
         j,i,_=nemo_t.find_j_i_list(lon=[x_min,x_max,x_max,x_min],lat=[y_min,y_min,y_max,y_max])
+
         imin=min(i)
         imax=max(i)
         jmin=min(j)
         jmax=max(j)        
-#        jmin=375
-#        jmax=455
-#        imin=1030
-#        imax=1130
 
-#        imin=1950
-#        imax=2300
-#        jmin=1450
-#        jmax=1750
-#        LMENAM='_ORCA12'
+        #LMENAM='NWS'
+        name="CMEMS_ORCA12"
+        SEASON='JAS'
+        YEARS="1993_2019"
         nemo_t1=nemo_t.subset_as_copy(x_dim=range(imin,imax),y_dim=range(jmin,jmax),z_dim=0,t_dim=T)
         mask=nemo_t1.dataset.u_velocity[0,:,:].values != np.nan
-        circulation.plot_surface_circulation(nemo_t1, nemo_t1,nemo_t1, mask,'CMEMS ORCA12 '+LMENAM, co_located=True,Vmax=.32)
+
+        REGION=LMENAM
+        #REGION='NWS'  
+        Name=name+' '+SEASON+' '+YEARS+' '+REGION         
+        SP,US,VS=circulation.plot_surface_circulation(nemo_t1, nemo_t1,nemo_t1, mask,Name, co_located=True,Vmax=.16,Np=5)
+        plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png')
+
+        fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
+        nemo_t_out=nemo_t1.copy()
+        for var in list(nemo_t_out.dataset.keys()):
+            print(var)
+            nemo_t_out.dataset=nemo_t_out.dataset.drop(var)  
+ 
+        circulation.save_currents(SP,US,VS,fn_out,nemo_t_out)        

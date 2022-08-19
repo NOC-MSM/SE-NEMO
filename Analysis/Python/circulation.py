@@ -110,6 +110,7 @@ def plot_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name, co_located=False,Vm
  #plt.quiver(x,y,u,v,color=[0.1,0.1,0.1],headwidth=4,scale=50)
  plt.quiver(x,y,u,v,color=[0.1,0.1,0.1],headwidth=4,scale=50)
  plt.title('Surface Currents ' + name)
+ return SP, US, VS
 
 
 
@@ -123,6 +124,18 @@ def plot_flx_contour(Unmean,Zmean,names):
              
     plt.ylim((-350,0))
     plt.legend(names)
+def save_currents(SP,US,VS,fn_out,nemo_t_out):
+    coords = {
+        "latitude": (("y_dim", "x_dim"), nemo_t_out.dataset.latitude.values),
+        "longitude": (("y_dim", "x_dim"), nemo_t_out.dataset.longitude.values),
+    }
+    dims = ["y_dim", "x_dim"]
+    nemo_t_out.dataset['Speed']=xr.DataArray(SP,coords=coords, dims=dims)
+    nemo_t_out.dataset['U_unitvector']=xr.DataArray(US,coords=coords, dims=dims)
+    nemo_t_out.dataset['V_unitvector']=xr.DataArray(VS,coords=coords, dims=dims)            
+
+    nemo_t_out.dataset.to_netcdf(fn_out)
+            
 ######################################################################
 if __name__ == '__main__':
     Unmean={}
@@ -168,26 +181,38 @@ if __name__ == '__main__':
         nemo_v = coast.Gridded(fn_data=fn_nemo_dat_v, fn_domain=fn_nemo_dom, config=fn_config_v_grid,multiple=True)
         for ilme in lmelist:    
             LMENAM=A['DOMNAM'][ilme]
-            imin=A['i_min'][ilme]
-            imax=A['i_max'][ilme]
-            jmin=A['j_min'][ilme]+J_offset
-            jmax=A['j_max'][ilme]+J_offset
-            jmin0=A['j_min'][ilme]
-            jmax0=A['j_max'][ilme]
+
             print(LMENAM)
-            
-            jmin,jmax=[860,1015]
-            imin,imax=[1080,1180]
+            x_min=A['x_min'][ilme]
+            x_max=A['x_max'][ilme]
+            y_min=A['y_min'][ilme]
+            y_max=A['y_max'][ilme]        
+                    
+            j,i,_=nemo_t.find_j_i_list(lon=[x_min,x_max,x_max,x_min],lat=[y_min,y_min,y_max,y_max])
+            imin=min(i)
+            imax=max(i)
+            jmin=min(j)
+            jmax=max(j)   
+            #jmin,jmax=[860,1015]
+            #imin,imax=[1080,1180]
             REGION=LMENAM
-            REGION='NWS'            
+            #REGION='NWS'            
             nemo_f1=nemo_f.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
             nemo_u1=nemo_u.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
             nemo_v1=nemo_v.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
             nemo_t1=nemo_t.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
             mask=nemo_t1.dataset.bathymetry != 0
             Name=name+' '+SEASON+' '+YEARS+' '+REGION 
-            plot_surface_circulation(nemo_u1,nemo_v1,nemo_t1,mask,Name)
+            SP,US,VS=plot_surface_circulation(nemo_u1,nemo_v1,nemo_t1,mask,Name)
             plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png')
+
+            fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
+            nemo_t_out=coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid)
+            nemo_t_out.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
+ 
+            save_currents(SP,US,VS,fn_out,nemo_t_out)
+
+            
     #    Un[name],Unmean[name],Z[name],Zmean[name]=flx_contour(nemo_f,nemo_u,nemo_v)
     
     
