@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=se-nemo
 #SBATCH --time=00:05:00
-#SBATCH --account=n01-CLASS
+#SBATCH --account=n01-PML
 #SBATCH --partition=standard
 #SBATCH --qos=standard
 #SBATCH --nodes=19
@@ -41,7 +41,7 @@ ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.'
 # Controls for the simulation                                          #
 ########################################################################
 ln_spin='.true.'   # Do we require a spin up phase for the ice
-nn_spin=3          # How many years spin up
+nn_spin=1          # How many years spin up
 year_st=1976       # Start year of the simulation (ramains constant)
 year_en=1977       # End year of this job submission
 offset=0           # If rdt has changed, an offset to nn_it000 is needed
@@ -169,9 +169,11 @@ do
 	 if [ $nn_spin_cycle -eq 1 ]
          then
             ln_rstart='.false.'	  
+            ln_rstart_top='.false.'	  
 	    ln_tide_ramp='.true.'
 	 else
             ln_rstart='.true.'	  
+            ln_rstart_top='.true.'
 	    ln_tide_ramp='.false.'
          fi
 	 nn_rstctl=0
@@ -179,6 +181,7 @@ do
       else
          nn_it000=`./end_time_step $(( $year - 1 )) $rn_rdt $year_st` ; rs0=`printf "%08d" $nn_it000`; nn_it000=$(( $nn_it000 + 1 + $offset ))
          ln_rstart=".true."
+         ln_rstart_top=".true."
 	 nn_rstctl=2
 	 ln_tide_ramp='.false.'
          ln_reset_ts='.false.'
@@ -242,6 +245,10 @@ do
       sed -i "s/XXX_PNI_XXX/$nn_jpni/g" namelist_cfg
       sed -i "s/XXX_PNJ_XXX/$nn_jpnj/g" namelist_cfg
       sed -i "s/XXX_TDG_XXX/$ln_int_wave_drag/g" namelist_cfg
+      cat namelist_top_template \
+        | sed "s,XXX_RST_XXX,$ln_rstart_top,g" \
+        | sed "s,XXX_RCT_XXX,$nn_rstctl,g" \
+        > namelist_top_cfg
 
    done
 

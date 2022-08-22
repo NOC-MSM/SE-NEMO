@@ -18,7 +18,7 @@
    nn_rsttr      = XXX_RCT_XXX ! restart control = 0 initial time step is not compared to the restart file value
                                !                 = 1 do not use the value in the restart file
                                !                 = 2 calendar parameters read in the restart file
-   cn_trcrst_in  = "restart_trc"   !  suffix of pass. sn_tracer restart name (input)
+   cn_trcrst_in  = "XXX_RS0_XXX"   !  suffix of pass. sn_tracer restart name (input)
    cn_trcrst_indir = "./RESTARTS"           !  directory from which to read input passive tracer restarts
    cn_trcrst_out = "restart_trc"   !  suffix of pass. sn_tracer restart name (output)
    cn_trcrst_outdir  = "./RESTARTS"   !  directory of ocean restart name (output)

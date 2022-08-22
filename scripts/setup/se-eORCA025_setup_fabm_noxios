@@ -105,10 +105,15 @@ echo "Checking out NEMO repository"
 #svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/src --depth infinity nemo/src
 #svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/SHARED nemo/cfgs/SHARED
 #svn export http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/ref_cfgs.txt nemo/cfgs/ref_cfgs.txt
+if [ -d "nemo" ] 
+then
+	rm -rf nemo
+fi
 git clone https://github.com/pmlmodelling/NEMO4.0-FABM nemo
 
 # this is needed until the physics only architecture file is not in the pmlmodelling repo
 cp /home/n01/n01/yuti/git-reps/NEMO4.0-FABM/arch/PML/arch-GCC_ARCHER2_PHYS.fcm nemo/arch/PML/
+cp $REPO_DIR/arch/nemo/arch-archer2.fcm nemo/arch 
 
 
 cd nemo
@@ -139,18 +144,20 @@ cd $XIOS_DIR
 echo $PWD
 echo "Checking out xios repository"
 #svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5@1964 xios
-svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5 xios
-cd xios
-cp $REPO_DIR/arch/xios/* ./arch
+#svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5 xios
+#cd xios
+#cp $REPO_DIR/arch/xios/* ./arch
 
 echo "Compiling xios"
-./make_xios --full --prod --arch ${HPC_TARG} --netcdf_lib netcdf4_par --job 4
+#./make_xios --full --prod --arch ${HPC_TARG} --netcdf_lib netcdf4_par --job 4
 #./make_xios --full --debug --arch ${HPC_TARG} --netcdf_lib netcdf4_par --job 4
 
 # Let's update the path to xios
 export XIOS_DIR=$XIOS_DIR/xios
 export XIOS_HOME=$XIOS_DIR
 export FABM_HOME=$FABM_DIR
+
+
 
 cd $WORK_DIR/nemo
 cp $REPO_DIR/arch/nemo/* ./arch
@@ -200,7 +207,7 @@ ln -s INPUTS/M2rowdrg_R025_modif_nonpositive.nc M2rowdrg.nc
 ln -s INPUTS/mask_itf_ORCA025ext.nc mask_itf.nc
 ln -s INPUTS/bfr_coef.nc .
 ln -s INPUTS/shlat2d.nc .
-ln -s ../INPUTS/domcfg_eORCA025_v2.nc ./domain_cfg.nc
+ln -s INPUTS/domain_cfg.nc .
 
 # First copy GO8 code
 cp -r $REPO_DIR/MY_SRC_GO8_FROZEN $CONFIG_DIR/MY_SRC
