@@ -19,13 +19,7 @@ import coast
 import numpy as np
 import xarray as xr
 import scipy.io
-fn_config_t_grid='./example_nemo_grid_t.json'
-fn_config_f_grid='./example_nemo_grid_f.json'
-fn_config_u_grid='./example_nemo_grid_u.json'
-fn_config_v_grid='./example_nemo_grid_v.json'
 
-
-names,dpaths,DOMS,_  = coast. experiments(experiments='experiments1.json')  
 
 def flx_contour(nemo_f,nemo_u,nemo_v):
     contours, no_contours = coast.Contour.get_contours(nemo_f, 300)
@@ -125,6 +119,7 @@ def plot_flx_contour(Unmean,Zmean,names):
     plt.ylim((-350,0))
     plt.legend(names)
 def save_currents(SP,US,VS,fn_out,nemo_t_out):
+    
     coords = {
         "latitude": (("y_dim", "x_dim"), nemo_t_out.dataset.latitude.values),
         "longitude": (("y_dim", "x_dim"), nemo_t_out.dataset.longitude.values),
@@ -135,9 +130,26 @@ def save_currents(SP,US,VS,fn_out,nemo_t_out):
     nemo_t_out.dataset['V_unitvector']=xr.DataArray(VS,coords=coords, dims=dims)            
 
     nemo_t_out.dataset.to_netcdf(fn_out)
+    
+    
+def regrid_currents(inputgrid,outputgrid):
+
+    import xesmf as xe
+    xesmf_ready = coast.xesmf_convert(inputgrid, outputgrid, output_grid_type = 'curvilinear',input_grid_type = 'curvilinear')
+    regridder = xe.Regridder(xesmf_ready.input_grid,
+                 xesmf_ready.output_grid, "bilinear")
+    regridded_dataset = regridder(xesmf_ready.input_data)
+    return regridded_dataset 
             
 ######################################################################
 if __name__ == '__main__':
+    fn_config_t_grid='./example_nemo_grid_t.json'
+    fn_config_f_grid='./example_nemo_grid_f.json'
+    fn_config_u_grid='./example_nemo_grid_u.json'
+    fn_config_v_grid='./example_nemo_grid_v.json'
+
+
+    names,dpaths,DOMS,_  = coast. experiments(experiments='experiments1.json')  
     Unmean={}
     Untm={}
     Zmean={}
@@ -172,13 +184,13 @@ if __name__ == '__main__':
     #    fn_nemo_dat_u=dpaths[i]+'SENEMO_1m_19800101_19801231_grid_U_198007-198007.nc'
     #    fn_nemo_dat_v=dpaths[i]+'SENEMO_1m_19800101_19801231_grid_V_198007-198007.nc'
     
-        
-        
-        
-        nemo_t = coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid)#,calc_bathy=True)    
-        nemo_f = coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_f_grid)#,calc_bathy=True)
-        nemo_u = coast.Gridded(fn_data=fn_nemo_dat_u, fn_domain=fn_nemo_dom, config=fn_config_u_grid,multiple=True)
-        nemo_v = coast.Gridded(fn_data=fn_nemo_dat_v, fn_domain=fn_nemo_dom, config=fn_config_v_grid,multiple=True)
+        recalc=False            
+        nemo_t = coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid)#,calc_bathy=True)
+        if recalc:        
+    
+            nemo_f = coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_f_grid)#,calc_bathy=True)
+            nemo_u = coast.Gridded(fn_data=fn_nemo_dat_u, fn_domain=fn_nemo_dom, config=fn_config_u_grid,multiple=True)
+            nemo_v = coast.Gridded(fn_data=fn_nemo_dat_v, fn_domain=fn_nemo_dom, config=fn_config_v_grid,multiple=True)
         for ilme in lmelist:    
             LMENAM=A['DOMNAM'][ilme]
 
@@ -193,25 +205,35 @@ if __name__ == '__main__':
             imax=max(i)
             jmin=min(j)
             jmax=max(j)   
-            #jmin,jmax=[860,1015]
-            #imin,imax=[1080,1180]
+            jmin,jmax=[860,1015]
+            imin,imax=[1080,1180]
             REGION=LMENAM
-            #REGION='NWS'            
-            nemo_f1=nemo_f.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
-            nemo_u1=nemo_u.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
-            nemo_v1=nemo_v.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
-            nemo_t1=nemo_t.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
-            mask=nemo_t1.dataset.bathymetry != 0
-            Name=name+' '+SEASON+' '+YEARS+' '+REGION 
-            SP,US,VS=plot_surface_circulation(nemo_u1,nemo_v1,nemo_t1,mask,Name)
-            plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png')
+            REGION='NWS'
+        
+            if recalc:  
+                nemo_f1=nemo_f.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
+                nemo_u1=nemo_u.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
+                nemo_v1=nemo_v.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
+                nemo_t1=nemo_t.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
+                mask=nemo_t1.dataset.bathymetry != 0
+                Name=name+' '+SEASON+' '+YEARS+' '+REGION 
+                SP,US,VS=plot_surface_circulation(nemo_u1,nemo_v1,nemo_t1,mask,Name)
+                plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png')
+                fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
+                nemo_t_out=coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid)
+                nemo_t_out.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
+                save_currents(SP,US,VS,fn_out,nemo_t_out)
 
-            fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
-            nemo_t_out=coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid)
-            nemo_t_out.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
- 
-            save_currents(SP,US,VS,fn_out,nemo_t_out)
-
+#
+            name="CMEMS_ORCA12"
+            Name=name+' '+SEASON+' '+YEARS+' '+REGION   
+            fn_cmems=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
+            cmems=coast.Gridded(fn_data=fn_cmems,config="")
+            name=names[0]
+            Name=name+' '+SEASON+' '+YEARS+' '+REGION
+            fn_orca025=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
+            ORCA025=coast.Gridded(fn_data=fn_orca025,config="")
+            cmems_on_ORCA025=regrid_currents(cmems,ORCA025)
             
     #    Un[name],Unmean[name],Z[name],Zmean[name]=flx_contour(nemo_f,nemo_u,nemo_v)
     

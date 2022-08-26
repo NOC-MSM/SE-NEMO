@@ -41,12 +41,12 @@ for im in [6,7,8]:
 T=np.sort(T).astype(int)    
 
 A=np.load('../Data/LME_gridinfo_equ025.npz')
-a=scipy.io.loadmat('../Data/equalgrid_025_LMEmask.mat')
+#a=scipy.io.loadmat('../Data/equalgrid_025_LMEmask.mat')
 nlme=66
 
-LME_mask=a['LME_mask'][:,:].T
+#LME_mask=a['LME_mask'][:,:].T
 lmelist=np.array([34])-1
-lmelist=np.arange(nlme)
+#lmelist=np.arange(nlme)
 for ilme in lmelist:    
         LMENAM=A['DOMNAM'][ilme]
         x_min=A['x_min'][ilme]
@@ -54,10 +54,10 @@ for ilme in lmelist:
         y_min=A['y_min'][ilme]
         y_max=A['y_max'][ilme]        
                 
-        #x_min=-15
-        #x_max=13
-        #y_min=45
-        #y_max=65
+        x_min=-15
+        x_max=13
+        y_min=45
+        y_max=65
         
         
         j,i,_=nemo_t.find_j_i_list(lon=[x_min,x_max,x_max,x_min],lat=[y_min,y_min,y_max,y_max])
@@ -67,7 +67,7 @@ for ilme in lmelist:
         jmin=min(j)
         jmax=max(j)        
 
-        #LMENAM='NWS'
+        LMENAM='NWS'
         name="CMEMS_ORCA12"
         SEASON='JAS'
         YEARS="1993_2019"
