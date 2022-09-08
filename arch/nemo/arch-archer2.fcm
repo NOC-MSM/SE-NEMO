@@ -33,31 +33,25 @@
 %NCDF_HOME           $NETCDF_DIR
 %HDF5_HOME           $HDF5_DIR
 %XIOS_HOME           XXX_XIOS_DIR_XXX
-#OASIS_HOME          
 
 %NCDF_INC            -I%NCDF_HOME/include -I%HDF5_HOME/include
-%NCDF_LIB            -L%HDF5_HOME/lib -L%NCDF_HOME/lib -lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lz
-%XIOS_INC            -I%XIOS_HOME/inc 
-%XIOS_LIB            -L%XIOS_HOME/lib -lxios
-#OASIS_INC           -I%OASIS_HOME/build/lib/mct -I%OASIS_HOME/build/lib/psmile.MPI1
-#OASIS_LIB           -L%OASIS_HOME/lib -lpsmile.MPI1 -lmct -lmpeu -lscrip
+%NCDF_LIB            -L%HDF5_HOME/lib -L%NCDF_HOME/lib -lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lcurl -lz
+%XIOS_INC            -I%XIOS_HOME/inc
+%XIOS_LIB            -L%XIOS_HOME/lib -lxios -lstdc++
 
-%CPP	               cpp
+%CPP                 cpp -Dkey_nosignedzero -P -traditional
 %FC                  ftn
-%FCFLAGS             -em -s integer32 -s real64 -O1 -hflex_mp=intolerant
-%FFLAGS              -em -s integer32 -s real64 -O1 -hflex_mp=intolerant
-#%FCFLAGS             -em -s integer32 -s real64 -O0 -e0 -eZ
-#%FFLAGS              -em -s integer32 -s real64 -O0 -e0 -eZ
-%LD                  CC -Wl,"--allow-multiple-definition"
+%FCFLAGS             -fdefault-double-8 -fdefault-real-8 -Ofast  -funroll-all-loops -fcray-pointer -ffree-line-length-none -w -fallow-argument-mismatch
+%FFLAGS              -fdefault-double-8 -fdefault-real-8 -Ofast  -funroll-all-loops -fcray-pointer -ffree-line-length-none -w -fallow-argument-mismatch
+%LD                  ftn
 %FPPFLAGS            -P -traditional
-%LDFLAGS             -lmpifort_cray
-%AR                  ar 
+%LDFLAGS
+%AR                  ar
 %ARFLAGS             -r
 %MK                  gmake
 %USER_INC            %XIOS_INC %NCDF_INC
-%USER_LIB            %XIOS_LIB %NCDF_LIB
-#USER_INC            %XIOS_INC %OASIS_INC %NCDF_INC
-#USER_LIB            %XIOS_LIB %OASIS_LIB %NCDF_LIB
+%USER_LIB            %XIOS_LIB %NCDF_LIB -L/opt/cray/pe/libsci/21.08.1.2/GNU/9.1/x86_64/lib -lsci_gnu_82
 
-%CC                  cc
-%CFLAGS              -O0
+%CC                  cc -Wl,"--allow-multiple-definition"
+%CFLAGS              -O2 -fcommon -Wl,"--allow-multiple-definition"
+bld::tool::fc_modsearch -J

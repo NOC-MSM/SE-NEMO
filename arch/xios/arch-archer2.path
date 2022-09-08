@@ -6,8 +6,8 @@ MPI_INCDIR=""
 MPI_LIBDIR=""
 MPI_LIB=""
 
-HDF5_INCDIR="-I$HDF5_DIR/include"
-HDF5_LIBDIR="-L$HDF5_DIR/lib"
+HDF5_INCDIR="-I $HDF5_DIR/include"
+HDF5_LIBDIR="-L $HDF5_DIR//lib"
 HDF5_LIB="-lhdf5_hl -lhdf5 -lz -lcurl"
 
 #BOOST_INCDIR="-I $BOOST_INCDIR"

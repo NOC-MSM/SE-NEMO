@@ -1,12 +1,12 @@
 MODULE zdfgls
    !!======================================================================
    !!                       ***  MODULE  zdfgls  ***
-   !! Ocean physics:  vertical mixing coefficient computed from the gls 
+   !! Ocean physics:  vertical mixing coefficient computed from the gls
    !!                 turbulent closure parameterization
    !!======================================================================
    !! History :  3.0  !  2009-09  (G. Reffray)  Original code
    !!            3.3  !  2010-10  (C. Bricaud)  Add in the reference
-   !!            4.0  !  2017-04  (G. Madec)  remove CPP keys & avm at t-point only 
+   !!            4.0  !  2017-04  (G. Madec)  remove CPP keys & avm at t-point only
    !!             -   !  2017-05  (G. Madec)  add top friction as boundary condition
    !!----------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ MODULE zdfgls
    !!   zdf_gls_init  : initialization, namelist read, and parameters control
    !!   gls_rst       : read/write gls restart in ocean restart file
    !!----------------------------------------------------------------------
-   USE oce            ! ocean dynamics and active tracers 
+   USE oce            ! ocean dynamics and active tracers
    USE dom_oce        ! ocean space and time domain
    USE domvvl         ! ocean space and time domain : variable volume layer
    USE zdfdrg  , ONLY : ln_drg_OFF            ! top/bottom free-slip flag
@@ -25,6 +25,12 @@ MODULE zdfgls
    USE phycst         ! physical constants
    USE zdfmxl         ! mixed layer
    USE sbcwave , ONLY : hsw   ! significant wave height
+#if defined key_si3
+   USE ice, ONLY: hm_i, h_i
+#endif
+#if defined key_cice
+   USE sbc_ice, ONLY: h_i
+#endif
    !
    USE lbclnk         ! ocean lateral boundary conditions (or mpp link)
    USE lib_mpp        ! MPP manager
@@ -50,6 +56,7 @@ MODULE zdfgls
    !                              !! ** Namelist  namzdf_gls  **
    LOGICAL  ::   ln_length_lim     ! use limit on the dissipation rate under stable stratification (Galperin et al. 1988)
    LOGICAL  ::   ln_sigpsi         ! Activate Burchard (2003) modification for k-eps closure & wave breaking mixing
+   INTEGER  ::   nn_mxlice         ! type of scaling under sea-ice (=0/1/2/3)
    INTEGER  ::   nn_bc_surf        ! surface boundary condition (=0/1)
    INTEGER  ::   nn_bc_bot         ! bottom boundary condition (=0/1)
    INTEGER  ::   nn_z0_met         ! Method for surface roughness computation
@@ -63,19 +70,19 @@ MODULE zdfgls
    REAL(wp) ::   rn_crban          ! Craig and Banner constant for surface breaking waves mixing
    REAL(wp) ::   rn_hsro           ! Minimum surface roughness
    REAL(wp) ::   rn_hsri           ! Ice ocean roughness
-   REAL(wp) ::   rn_frac_hs        ! Fraction of wave height as surface roughness (if nn_z0_met > 1) 
+   REAL(wp) ::   rn_frac_hs        ! Fraction of wave height as surface roughness (if nn_z0_met > 1)
 
    REAL(wp) ::   rcm_sf        =  0.73_wp     ! Shear free turbulence parameters
-   REAL(wp) ::   ra_sf         = -2.0_wp      ! Must be negative -2 < ra_sf < -1 
-   REAL(wp) ::   rl_sf         =  0.2_wp      ! 0 <rl_sf<vkarmn    
+   REAL(wp) ::   ra_sf         = -2.0_wp      ! Must be negative -2 < ra_sf < -1
+   REAL(wp) ::   rl_sf         =  0.2_wp      ! 0 <rl_sf<vkarmn
    REAL(wp) ::   rghmin        = -0.28_wp
    REAL(wp) ::   rgh0          =  0.0329_wp
    REAL(wp) ::   rghcri        =  0.03_wp
    REAL(wp) ::   ra1           =  0.92_wp
    REAL(wp) ::   ra2           =  0.74_wp
    REAL(wp) ::   rb1           = 16.60_wp
-   REAL(wp) ::   rb2           = 10.10_wp         
-   REAL(wp) ::   re2           =  1.33_wp         
+   REAL(wp) ::   rb2           = 10.10_wp
+   REAL(wp) ::   re2           =  1.33_wp
    REAL(wp) ::   rl1           =  0.107_wp
    REAL(wp) ::   rl2           =  0.0032_wp
    REAL(wp) ::   rl3           =  0.0864_wp
@@ -125,7 +132,6 @@ CONTAINS
       IF( zdf_gls_alloc /= 0 )   CALL ctl_stop( 'STOP', 'zdf_gls_alloc: failed to allocate arrays' )
    END FUNCTION zdf_gls_alloc
 
-
    SUBROUTINE zdf_gls( kt, p_sh2, p_avm, p_avt )
       !!----------------------------------------------------------------------
       !!                   ***  ROUTINE zdf_gls  ***
@@ -143,14 +149,14 @@ CONTAINS
       INTEGER  ::   ibot, ibotm1  ! local integers
       INTEGER  ::   itop, itopp1  !   -       -
       REAL(wp) ::   zesh2, zsigpsi, zcoef, zex1 , zex2  ! local scalars
-      REAL(wp) ::   ztx2, zty2, zup, zdown, zcof, zdir  !   -      - 
+      REAL(wp) ::   ztx2, zty2, zup, zdown, zcof, zdir  !   -      -
       REAL(wp) ::   zratio, zrn2, zflxb, sh     , z_en  !   -      -
       REAL(wp) ::   prod, buoy, diss, zdiss, sm         !   -      -
       REAL(wp) ::   gh, gm, shr, dif, zsqen, zavt, zavm !   -      -
       REAL(wp) ::   zmsku, zmskv                        !   -      -
       REAL(wp), DIMENSION(jpi,jpj)     ::   zdep
       REAL(wp), DIMENSION(jpi,jpj)     ::   zkar
-      REAL(wp), DIMENSION(jpi,jpj)     ::   zflxs       ! Turbulence fluxed induced by internal waves 
+      REAL(wp), DIMENSION(jpi,jpj)     ::   zflxs       ! Turbulence fluxed induced by internal waves
       REAL(wp), DIMENSION(jpi,jpj)     ::   zhsro       ! Surface roughness (surface waves)
       REAL(wp), DIMENSION(jpi,jpj)     ::   zice_fra    ! Tapering of wave breaking under sea ice
       REAL(wp), DIMENSION(jpi,jpj,jpk) ::   eb          ! tke at time before
@@ -164,7 +170,7 @@ CONTAINS
       !
       ! Preliminary computing
 
-      ustar2_surf(:,:) = 0._wp   ;         psi(:,:,:) = 0._wp   
+      ustar2_surf(:,:) = 0._wp   ;         psi(:,:,:) = 0._wp
       ustar2_top (:,:) = 0._wp   ;   zwall_psi(:,:,:) = 0._wp
       ustar2_bot (:,:) = 0._wp
 
@@ -174,19 +180,19 @@ CONTAINS
       CASE( 2 )   ;   zice_fra(:,:) =              fr_i(:,:)
       CASE( 3 )   ;   zice_fra(:,:) = MIN( 4._wp * fr_i(:,:) , 1._wp )
       END SELECT
-      
+
       ! Compute surface, top and bottom friction at T-points
       DO jj = 2, jpjm1              !==  surface ocean friction
-         DO ji = fs_2, fs_jpim1           ! vector opt.         
+         DO ji = fs_2, fs_jpim1           ! vector opt.
             ustar2_surf(ji,jj) = r1_rau0 * taum(ji,jj) * tmask(ji,jj,1)
          END DO
       END DO
-      !   
+      !
 !!gm Rq we may add here r_ke0(_top/_bot) ?  ==>> think about that...
-      !    
+      !
       IF( .NOT.ln_drg_OFF ) THEN    !== top/bottom friction   (explicit before friction)
          DO jj = 2, jpjm1                      ! bottom friction
-            DO ji = fs_2, fs_jpim1   ! vector opt.         
+            DO ji = fs_2, fs_jpim1   ! vector opt.
                zmsku = 0.5_wp * ( 2._wp - umask(ji-1,jj,mbkt(ji,jj)) * umask(ji,jj,mbkt(ji,jj)) )
                zmskv = 0.5_wp * ( 2._wp - vmask(ji,jj-1,mbkt(ji,jj)) * vmask(ji,jj,mbkt(ji,jj)) )     ! (CAUTION: CdU<0)
                ustar2_bot(ji,jj) = - rCdU_bot(ji,jj) * SQRT(  ( zmsku*( ub(ji,jj,mbkt(ji,jj))+ub(ji-1,jj,mbkt(ji,jj)) ) )**2  &
@@ -204,9 +210,9 @@ CONTAINS
             END DO
          ENDIF
       ENDIF
-   
+
       SELECT CASE ( nn_z0_met )      !==  Set surface roughness length  ==!
-      CASE ( 0 )                          ! Constant roughness          
+      CASE ( 0 )                          ! Constant roughness
          zhsro(:,:) = rn_hsro
       CASE ( 1 )             ! Standard Charnock formula
          zhsro(:,:) = MAX( rsbc_zs1 * ustar2_surf(:,:) , rn_hsro )
@@ -221,8 +227,36 @@ CONTAINS
       END SELECT
       !
       ! adapt roughness where there is sea ice
-      zhsro(:,:) = ( (1._wp-zice_fra(:,:)) * zhsro(:,:) + zice_fra(:,:) * rn_hsri )*tmask(:,:,1)  + (1._wp - tmask(:,:,1))*rn_hsro
+      ! zhsro(:,:) = ( (1._wp-zice_fra(:,:)) * zhsro(:,:) + zice_fra(:,:) * rn_hsri )*tmask(:,:,1)  + (1._wp - tmask(:,:,1))*rn_hsro
       !
+      SELECT CASE( nn_mxlice )       ! Type of scaling under sea-ice
+      !
+      CASE( 1 )                      ! scaling with constant sea-ice roughness
+         DO jj = 2, jpjm1
+               DO ji = fs_2, fs_jpim1   ! vector opt.
+                  zhsro(ji,jj) = ( (1._wp-zice_fra(ji,jj)) * zhsro(ji,jj) + zice_fra(ji,jj) * rn_hsri )*tmask(ji,jj,1)  + (1._wp - tmask(ji,jj,1))*rn_hsro
+               END DO
+         END DO
+         !
+      CASE( 2 )                      ! scaling with mean sea-ice thickness
+#if defined key_si3
+         DO jj = 2, jpjm1
+               DO ji = fs_2, fs_jpim1   ! vector opt.
+                  zhsro(ji,jj) = ( (1._wp-zice_fra(ji,jj)) * zhsro(ji,jj) + zice_fra(ji,jj) * hm_i(ji,jj) )*tmask(ji,jj,1)  + (1._wp - tmask(ji,jj,1))*rn_hsro
+               END DO
+         END DO
+#endif
+         !
+      CASE( 3 )                      ! scaling with max sea-ice thickness
+#if defined key_si3 || defined key_cice
+         DO jj = 2, jpjm1
+               DO ji = fs_2, fs_jpim1   ! vector opt.
+                  zhsro(ji,jj) = ( (1._wp-zice_fra(ji,jj)) * zhsro(ji,jj) + zice_fra(ji,jj) * MAXVAL(h_i(ji,jj,:)) )*tmask(ji,jj,1)  + (1._wp - tmask(ji,jj,1))*rn_hsro
+               END DO
+         END DO
+#endif
+         !
+      END SELECT
       DO jk = 2, jpkm1              !==  Compute dissipation rate  ==!
          DO jj = 2, jpjm1
             DO ji = 2, jpim1
@@ -237,7 +271,7 @@ CONTAINS
 
       IF( nn_clos == 0 ) THEN    ! Mellor-Yamada
          DO jk = 2, jpkm1
-            DO jj = 2, jpjm1 
+            DO jj = 2, jpjm1
                DO ji = fs_2, fs_jpim1   ! vector opt.
                   zup   = hmxl_n(ji,jj,jk) * gdepw_n(ji,jj,mbkt(ji,jj)+1)
                   zdown = vkarmn * gdepw_n(ji,jj,jk) * ( -gdepw_n(ji,jj,jk) + gdepw_n(ji,jj,mbkt(ji,jj)+1) )
@@ -284,7 +318,7 @@ CONTAINS
                ! Otherwise, this should be rsc_psi/rsc_psi0
                IF( ln_sigpsi ) THEN
                   zsigpsi = MIN( 1._wp, zesh2 / eps(ji,jj,jk) )     ! 0. <= zsigpsi <= 1.
-                  zwall_psi(ji,jj,jk) = rsc_psi /   & 
+                  zwall_psi(ji,jj,jk) = rsc_psi /   &
                      &     (  zsigpsi * rsc_psi + (1._wp-zsigpsi) * rsc_psi0 / MAX( zwall(ji,jj,jk), 1._wp )  )
                ELSE
                   zwall_psi(ji,jj,jk) = 1._wp
@@ -297,7 +331,7 @@ CONTAINS
                !                                        ! upper diagonal, in fact not used for jk = ibotm1 (see bottom conditions)
                zd_up(ji,jj,jk) = zcof * ( p_avm(ji,jj,jk+1) + p_avm(ji,jj,jk  ) ) / ( e3t_n(ji,jj,jk  ) * e3w_n(ji,jj,jk) )
                !                                        ! diagonal
-               zdiag(ji,jj,jk) = 1._wp - zd_lw(ji,jj,jk) - zd_up(ji,jj,jk)  + rdt * zdiss * wmask(ji,jj,jk) 
+               zdiag(ji,jj,jk) = 1._wp - zd_lw(ji,jj,jk) - zd_up(ji,jj,jk)  + rdt * zdiss * wmask(ji,jj,jk)
                !                                        ! right hand side in en
                en(ji,jj,jk) = en(ji,jj,jk) + rdt * zesh2 * wmask(ji,jj,jk)
             END DO
@@ -315,17 +349,17 @@ CONTAINS
       !
       SELECT CASE ( nn_bc_surf )
       !
-      CASE ( 0 )             ! Dirichlet boundary condition (set e at k=1 & 2) 
+      CASE ( 0 )             ! Dirichlet boundary condition (set e at k=1 & 2)
       ! First level
       en   (:,:,1) = MAX(  rn_emin , rc02r * ustar2_surf(:,:) * (1._wp + (1._wp-zice_fra(:,:))*rsbc_tke1)**r2_3  )
       zd_lw(:,:,1) = en(:,:,1)
       zd_up(:,:,1) = 0._wp
       zdiag(:,:,1) = 1._wp
-      ! 
+      !
       ! One level below
       en   (:,:,2) =  MAX(  rc02r * ustar2_surf(:,:) * (  1._wp + (1._wp-zice_fra(:,:))*rsbc_tke1 * ((zhsro(:,:)+gdepw_n(:,:,2)) &
          &                 / zhsro(:,:) )**(1.5_wp*ra_sf)  )**(2._wp/3._wp) , rn_emin   )
-      zd_lw(:,:,2) = 0._wp 
+      zd_lw(:,:,2) = 0._wp
       zd_up(:,:,2) = 0._wp
       zdiag(:,:,2) = 1._wp
       !
@@ -356,7 +390,7 @@ CONTAINS
       !
       SELECT CASE ( nn_bc_bot )
       !
-      CASE ( 0 )             ! Dirichlet 
+      CASE ( 0 )             ! Dirichlet
          !                      ! en(ibot) = u*^2 / Co2 and hmxl_n(ibot) = rn_lmin
          !                      ! Balance between the production and the dissipation terms
          DO jj = 2, jpjm1
@@ -369,8 +403,8 @@ CONTAINS
                !
                z_en =  MAX( rc02r * ustar2_bot(ji,jj), rn_emin )
                !
-               ! Dirichlet condition applied at: 
-               !     Bottom level (ibot)      &      Just above it (ibotm1)   
+               ! Dirichlet condition applied at:
+               !     Bottom level (ibot)      &      Just above it (ibotm1)
                zd_lw(ji,jj,ibot) = 0._wp   ;   zd_lw(ji,jj,ibotm1) = 0._wp
                zd_up(ji,jj,ibot) = 0._wp   ;   zd_up(ji,jj,ibotm1) = 0._wp
                zdiag(ji,jj,ibot) = 1._wp   ;   zdiag(ji,jj,ibotm1) = 1._wp
@@ -387,8 +421,8 @@ CONTAINS
                   z_en = MAX( rc02r * ustar2_top(ji,jj), rn_emin ) * ( 1._wp - tmask(ji,jj,1) )
                   !
  !!gm TO BE VERIFIED !!!
-                  ! Dirichlet condition applied at: 
-                  !     top level (itop)         &      Just below it (itopp1)   
+                  ! Dirichlet condition applied at:
+                  !     top level (itop)         &      Just below it (itopp1)
                   zd_lw(ji,jj,itop) = 0._wp   ;   zd_lw(ji,jj,itopp1) = 0._wp
                   zd_up(ji,jj,itop) = 0._wp   ;   zd_up(ji,jj,itopp1) = 0._wp
                   zdiag(ji,jj,itop) = 1._wp   ;   zdiag(ji,jj,itopp1) = 1._wp
@@ -398,7 +432,7 @@ CONTAINS
          ENDIF
          !
       CASE ( 1 )             ! Neumman boundary condition
-         !                      
+         !
          DO jj = 2, jpjm1
             DO ji = fs_2, fs_jpim1   ! vector opt.
                ibot   = mbkt(ji,jj) + 1      ! k   bottom level of w-point
@@ -407,7 +441,7 @@ CONTAINS
                z_en =  MAX( rc02r * ustar2_bot(ji,jj), rn_emin )
                !
                ! Bottom level Dirichlet condition:
-               !     Bottom level (ibot)      &      Just above it (ibotm1)   
+               !     Bottom level (ibot)      &      Just above it (ibotm1)
                !         Dirichlet            !         Neumann
                zd_lw(ji,jj,ibot) = 0._wp   !   ! Remove zd_up from zdiag
                zdiag(ji,jj,ibot) = 1._wp   ;   zdiag(ji,jj,ibotm1) = zdiag(ji,jj,ibotm1) + zd_up(ji,jj,ibotm1)
@@ -424,7 +458,7 @@ CONTAINS
                   z_en = MAX( rc02r * ustar2_top(ji,jj), rn_emin ) * ( 1._wp - tmask(ji,jj,1) )
                   !
                   ! Bottom level Dirichlet condition:
-                  !     Bottom level (ibot)      &      Just above it (ibotm1)   
+                  !     Bottom level (ibot)      &      Just above it (ibotm1)
                   !         Dirichlet            !         Neumann
                   zd_lw(ji,jj,itop) = 0._wp   !   ! Remove zd_up from zdiag
                   zdiag(ji,jj,itop) = 1._wp   ;   zdiag(ji,jj,itopp1) = zdiag(ji,jj,itopp1) + zd_up(ji,jj,itopp1)
@@ -460,7 +494,7 @@ CONTAINS
             END DO
          END DO
       END DO
-      !                                            ! set the minimum value of tke 
+      !                                            ! set the minimum value of tke
       en(:,:,:) = MAX( en(:,:,:), rn_emin )
 
       !!----------------------------------------!!
@@ -502,7 +536,7 @@ CONTAINS
          DO jk = 2, jpkm1
             DO jj = 2, jpjm1
                DO ji = fs_2, fs_jpim1   ! vector opt.
-                  psi(ji,jj,jk)  = rc02 * eb(ji,jj,jk) * hmxl_b(ji,jj,jk)**rnn 
+                  psi(ji,jj,jk)  = rc02 * eb(ji,jj,jk) * hmxl_b(ji,jj,jk)**rnn
                END DO
             END DO
          END DO
@@ -521,7 +555,7 @@ CONTAINS
             DO ji = fs_2, fs_jpim1   ! vector opt.
                !
                ! psi / k
-               zratio = psi(ji,jj,jk) / eb(ji,jj,jk) 
+               zratio = psi(ji,jj,jk) / eb(ji,jj,jk)
                !
                ! psi3+ : stable : B=-KhN²<0 => N²>0 if rn2>0 zdir = 1 (stable) otherwise zdir = 0 (unstable)
                zdir = 0.5_wp + SIGN( 0.5_wp, rn2(ji,jj,jk) )
@@ -541,7 +575,7 @@ CONTAINS
                !
                zesh2 = zdir * ( prod + buoy )          + (1._wp - zdir ) * prod                        ! production term
                zdiss = zdir * ( diss / psi(ji,jj,jk) ) + (1._wp - zdir ) * (diss-buoy) / psi(ji,jj,jk) ! dissipation term
-               !                                                        
+               !
                ! building the matrix
                zcof = rfact_psi * zwall_psi(ji,jj,jk) * tmask(ji,jj,jk)
                !                                               ! lower diagonal
@@ -579,7 +613,7 @@ CONTAINS
          zd_lw(:,:,2) = 0._wp
          zd_up(:,:,2) = 0._wp
          zdiag(:,:,2) = 1._wp
-         ! 
+         !
       CASE ( 1 )             ! Neumann boundary condition on d(psi)/dz
          !
          ! Surface value: Dirichlet
@@ -613,7 +647,7 @@ CONTAINS
 !
       SELECT CASE ( nn_bc_bot )     ! bottom boundary
       !
-      CASE ( 0 )             ! Dirichlet 
+      CASE ( 0 )             ! Dirichlet
          !                      ! en(ibot) = u*^2 / Co2 and hmxl_n(ibot) = vkarmn * r_z0_bot
          !                      ! Balance between the production and the dissipation terms
          DO jj = 2, jpjm1
@@ -636,7 +670,7 @@ CONTAINS
          END DO
          !
       CASE ( 1 )             ! Neumman boundary condition
-         !                      
+         !
          DO jj = 2, jpjm1
             DO ji = fs_2, fs_jpim1   ! vector opt.
                ibot   = mbkt(ji,jj) + 1      ! k   bottom level of w-point
@@ -716,7 +750,7 @@ CONTAINS
          DO jk = 1, jpkm1
             DO jj = 2, jpjm1
                DO ji = fs_2, fs_jpim1   ! vector opt.
-                  eps(ji,jj,jk) = rc04 * en(ji,jj,jk) * psi(ji,jj,jk) 
+                  eps(ji,jj,jk) = rc04 * en(ji,jj,jk) * psi(ji,jj,jk)
                END DO
             END DO
          END DO
@@ -743,12 +777,12 @@ CONTAINS
                ! limitation
                eps   (ji,jj,jk)  = MAX( eps(ji,jj,jk), rn_epsmin )
                hmxl_n(ji,jj,jk)  = rc03 * en(ji,jj,jk) * SQRT( en(ji,jj,jk) ) / eps(ji,jj,jk)
-               ! Galperin criterium (NOTE : Not required if the proper value of C3 in stable cases is calculated) 
+               ! Galperin criterium (NOTE : Not required if the proper value of C3 in stable cases is calculated)
                zrn2 = MAX( rn2(ji,jj,jk), rsmall )
                IF( ln_length_lim )   hmxl_n(ji,jj,jk) = MIN(  rn_clim_galp * SQRT( 2._wp * en(ji,jj,jk) / zrn2 ), hmxl_n(ji,jj,jk) )
             END DO
          END DO
-      END DO 
+      END DO
 
       !
       ! Stability function and vertical viscosity and diffusivity
@@ -813,7 +847,7 @@ CONTAINS
       zstm(:,:,1) = zstm(:,:,2)
 
       ! default value, in case jpk > mbkt(ji,jj)+1. Not needed but avoid a bug when looking for undefined values (-fpe0)
-      zstm(:,:,jpk) = 0.  
+      zstm(:,:,jpk) = 0.
       DO jj = 2, jpjm1                ! update bottom with good values
          DO ji = fs_2, fs_jpim1   ! vector opt.
             zstm(ji,jj,mbkt(ji,jj)+1) = zstm(ji,jj,mbkt(ji,jj))
@@ -851,12 +885,11 @@ CONTAINS
       !
    END SUBROUTINE zdf_gls
 
-
    SUBROUTINE zdf_gls_init
       !!----------------------------------------------------------------------
       !!                  ***  ROUTINE zdf_gls_init  ***
-      !!                     
-      !! ** Purpose :   Initialization of the vertical eddy diffivity and 
+      !!
+      !! ** Purpose :   Initialization of the vertical eddy diffivity and
       !!              viscosity computed using a GLS turbulent closure scheme
       !!
       !! ** Method  :   Read the namzdf_gls namelist and check the parameters
@@ -872,7 +905,7 @@ CONTAINS
       !!
       NAMELIST/namzdf_gls/rn_emin, rn_epsmin, ln_length_lim,       &
          &            rn_clim_galp, ln_sigpsi, rn_hsro, rn_hsri,   &
-         &            rn_crban, rn_charn, rn_frac_hs,              &
+         &            nn_mxlice, rn_crban, rn_charn, rn_frac_hs,   &
          &            nn_bc_surf, nn_bc_bot, nn_z0_met, nn_z0_ice, &
          &            nn_stab_func, nn_clos
       !!----------------------------------------------------------
@@ -914,11 +947,17 @@ CONTAINS
          WRITE(numout,*) '      Stability functions                           nn_stab_func   = ', nn_stab_func
          WRITE(numout,*) '      Type of closure                               nn_clos        = ', nn_clos
          WRITE(numout,*) '      Surface roughness (m)                         rn_hsro        = ', rn_hsro
-         WRITE(numout,*) '      Ice-ocean roughness (used if nn_z0_ice/=0)    rn_hsri        = ', rn_hsri
-         WRITE(numout,*)
-         WRITE(numout,*) '   Namelist namdrg_top/_bot:   used values:'
-         WRITE(numout,*) '      top    ocean cavity roughness (m)             rn_z0(_top)   = ', r_z0_top
-         WRITE(numout,*) '      Bottom seafloor     roughness (m)             rn_z0(_bot)   = ', r_z0_bot
+         WRITE(numout,*) '      type of scaling under sea-ice                 nn_mxlice      = ', nn_mxlice
+         IF( nn_mxlice == 1 ) &
+            WRITE(numout,*) '      Ice-ocean roughness (used if nn_z0_ice/=0) rn_hsri        = ', rn_hsri
+         SELECT CASE( nn_mxlice )             ! Type of scaling under sea-ice
+            CASE( 0 )   ;   WRITE(numout,*) '   ==>>>   No scaling under sea-ice'
+            CASE( 1 )   ;   WRITE(numout,*) '   ==>>>   scaling with constant sea-ice thickness'
+            CASE( 2 )   ;   WRITE(numout,*) '   ==>>>   scaling with mean     sea-ice thickness'
+            CASE( 3 )   ;   WRITE(numout,*) '   ==>>>   scaling with max      sea-ice thickness'
+            CASE DEFAULT
+               CALL ctl_stop( 'zdf_tke_init: wrong value for nn_mxlice, should be 0,1,2,3 ')
+         END SELECT
          WRITE(numout,*)
       ENDIF
 
@@ -1088,12 +1127,12 @@ CONTAINS
          rghcri  =  0.0414_wp
          !
       END SELECT
-    
+
       !                                !* Set Schmidt number for psi diffusion in the wave breaking case
       !                                     ! See Eq. (13) of Carniel et al, OM, 30, 225-239, 2009
       !                                     !  or Eq. (17) of Burchard, JPO, 31, 3133-3145, 2001
       IF( ln_sigpsi ) THEN
-         ra_sf = -1.5 ! Set kinetic energy slope, then deduce rsc_psi and rl_sf 
+         ra_sf = -1.5 ! Set kinetic energy slope, then deduce rsc_psi and rl_sf
          ! Verification: retrieve Burchard (2001) results by uncomenting the line below:
          ! Note that the results depend on the value of rn_cm_sf which is constant (=rc0) in his work
          ! ra_sf = -SQRT(2./3.*rc0**3./rn_cm_sf*rn_sc_tke)/vkarmn
@@ -1101,7 +1140,7 @@ CONTAINS
       ELSE
          rsc_psi0 = rsc_psi
       ENDIF
- 
+
       !                                !* Shear free turbulence parameters
       !
       ra_sf  = -4._wp*rnn*SQRT(rsc_tke) / ( (1._wp+4._wp*rmm)*SQRT(rsc_tke) &
@@ -1144,13 +1183,13 @@ CONTAINS
       rc03  = rc02 * rc0
       rc04  = rc03 * rc0
       rsbc_tke1 = -3._wp/2._wp*rn_crban*ra_sf*rl_sf                      ! Dirichlet + Wave breaking
-      rsbc_tke2 = rdt * rn_crban / rl_sf                                 ! Neumann + Wave breaking 
+      rsbc_tke2 = rdt * rn_crban / rl_sf                                 ! Neumann + Wave breaking
       zcr = MAX(rsmall, rsbc_tke1**(1./(-ra_sf*3._wp/2._wp))-1._wp )
-      rtrans = 0.2_wp / zcr                                              ! Ad. inverse transition length between log and wave layer 
+      rtrans = 0.2_wp / zcr                                              ! Ad. inverse transition length between log and wave layer
       rsbc_zs1  = rn_charn/grav                                          ! Charnock formula for surface roughness
-      rsbc_zs2  = rn_frac_hs / 0.85_wp / grav * 665._wp                  ! Rascle formula for surface roughness 
+      rsbc_zs2  = rn_frac_hs / 0.85_wp / grav * 665._wp                  ! Rascle formula for surface roughness
       rsbc_psi1 = -0.5_wp * rdt * rc0**(rpp-2._wp*rmm) / rsc_psi
-      rsbc_psi2 = -0.5_wp * rdt * rc0**rpp * rnn * vkarmn**rnn / rsc_psi ! Neumann + NO Wave breaking 
+      rsbc_psi2 = -0.5_wp * rdt * rc0**rpp * rnn * vkarmn**rnn / rsc_psi ! Neumann + NO Wave breaking
       !
       rfact_tke = -0.5_wp / rsc_tke * rdt                                ! Cst used for the Diffusion term of tke
       rfact_psi = -0.5_wp / rsc_psi * rdt                                ! Cst used for the Diffusion term of tke
@@ -1159,7 +1198,7 @@ CONTAINS
 !!gm tmask or wmask ????
       zwall(:,:,:) = 1._wp * tmask(:,:,:)
 
-      !                                !* read or initialize all required files  
+      !                                !* read or initialize all required files
       CALL gls_rst( nit000, 'READ' )      ! (en, avt_k, avm_k, hmxl_n)
       !
       IF( lwxios ) THEN
@@ -1171,15 +1210,14 @@ CONTAINS
       !
    END SUBROUTINE zdf_gls_init
 
-
    SUBROUTINE gls_rst( kt, cdrw )
       !!---------------------------------------------------------------------
       !!                   ***  ROUTINE gls_rst  ***
-      !!                     
+      !!
       !! ** Purpose :   Read or write TKE file (en) in restart file
       !!
       !! ** Method  :   use of IOM library
-      !!                if the restart does not contain TKE, en is either 
+      !!                if the restart does not contain TKE, en is either
       !!                set to rn_emin or recomputed (nn_igls/=0)
       !!----------------------------------------------------------------------
       USE zdf_oce , ONLY : en, avt_k, avm_k   ! ocean vertical physics
@@ -1193,7 +1231,7 @@ CONTAINS
       REAL(wp)::   cbx, cby
       !!----------------------------------------------------------------------
       !
-      IF( TRIM(cdrw) == 'READ' ) THEN        ! Read/initialise 
+      IF( TRIM(cdrw) == 'READ' ) THEN        ! Read/initialise
          !                                   ! ---------------
          IF( ln_rstart ) THEN                   !* Read the restart file
             id1 = iom_varid( numror, 'en'    , ldstop = .FALSE. )
@@ -1206,7 +1244,7 @@ CONTAINS
                CALL iom_get( numror, jpdom_autoglo, 'avt_k' , avt_k , ldxios = lrxios )
                CALL iom_get( numror, jpdom_autoglo, 'avm_k' , avm_k , ldxios = lrxios )
                CALL iom_get( numror, jpdom_autoglo, 'hmxl_n', hmxl_n, ldxios = lrxios )
-            ELSE                        
+            ELSE
                IF(lwp) WRITE(numout,*)
                IF(lwp) WRITE(numout,*) '   ==>>   previous run without GLS scheme, set en and hmxl_n to background values'
                en    (:,:,:) = rn_emin
@@ -1237,4 +1275,3 @@ CONTAINS
 
    !!======================================================================
 END MODULE zdfgls
-

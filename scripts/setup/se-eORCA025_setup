@@ -1,0 +1,198 @@
+#!/bin/bash
+# Lightweight script to set up SE-eORCA025 on ARCHER2
+ 
+display_usage() { 
+   echo
+   echo "  Auto-Config: SE-eORCA025 on ARCHER2"
+   echo "  ***************************************"
+   echo
+   echo "  usage: ${0##*/} -w path_to_install_nemo -x path_to_intall_xios -s path_to_repo"
+   echo "                  -m machine "
+   echo
+   echo "  flags:  -w full path to where nemo will be installed"
+   echo "          -x full path to where xios will be installed"
+   echo "          -s full path to where SE-NEMO repository resides"
+   echo "          -m machine name"
+   echo
+   exit 1
+	} 
+# if less than three arguments supplied, display usage 
+	if [  $# -le 7 ] 
+	then 
+		display_usage
+		exit 1
+	fi 
+# if less than two arguments supplied, display usage 
+	if [  $# -ge 9 ] 
+	then 
+		display_usage
+		exit 1
+	fi 
+# check whether user had supplied -h or --help . If yes display usage 
+	if [[ ( $# == "--help") ||  $# == "-h" ]] 
+	then 
+		display_usage
+		exit 0
+	fi 
+
+while getopts w:x:s:m: option
+  do
+  case "${option}"
+  in
+  w) export WORK_DIR=${OPTARG};;
+  x) export XIOS_DIR=${OPTARG};;
+  s) export REPO_DIR=${OPTARG};;
+  m) export HPC_TARG=${OPTARG};;
+  esac
+done
+
+if [ ${WORK_DIR:0:1} != "/" ]; then
+  echo "WORK_DIR must use full path"
+  exit 1
+fi
+
+if [ ${XIOS_DIR:0:1} != "/" ]; then
+  echo "XIOS_DIR must use full path"
+  exit 1
+fi
+
+if [ ${REPO_DIR:0:1} != "/" ]; then
+  echo "REPO_DIR must use full path"
+  exit 1
+fi
+
+# Change to some working directory of choice
+if [ ! -d "$WORK_DIR" ]; then
+  mkdir $WORK_DIR
+fi
+cd $WORK_DIR
+
+echo "Making sure that the correct modules are loaded"
+
+case "${HPC_TARG}"
+  in
+  archer2) . $REPO_DIR/scripts/env/gnu-mpich
+           ;;
+  *)       echo "Machine not recognised"
+           echo "Machines available: archer2"
+           exit 1
+esac
+
+export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
+
+# Currently running 4.0.4 for SE-NEMO
+NEMO_VER=4.0.4
+
+# Checkout the NEMO code from the SVN Paris repository 
+echo "Checking out NEMO repository"
+
+svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER --depth empty nemo
+svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/src --depth infinity nemo/src
+svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/SHARED nemo/cfgs/SHARED
+svn export http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/ref_cfgs.txt nemo/cfgs/ref_cfgs.txt
+
+cd nemo
+
+# Now check EXTERNALS revision number before checking out the rest
+for ext_name in mk FCM IOIPSL   
+  do   
+  ext=`svn propget svn:externals | grep $ext_name | cut -c2-`   
+  svn co http://forge.ipsl.jussieu.fr/nemo/svn/$ext
+done
+
+ext=`svn propget svn:externals | grep makenemo | cut -c2-`
+svn export http://forge.ipsl.jussieu.fr/nemo/svn/$ext
+
+mkdir arch
+
+# Setup the directory structure for the ENSEMBLE
+mkdir $WORK_DIR/nemo/cfgs/se-eORCA025
+# Define the location of where the AMM7 forcing files are to be downloaded 
+export DOWNLOAD_DIR="$WORK_DIR/nemo/cfgs/se-orca025/EXPREF/"
+
+echo $XIOS_DIR
+# Choose an appropriate directory for your XIOS installation
+if [ ! -d "$XIOS_DIR" ]; then
+  mkdir $XIOS_DIR
+fi
+cd $XIOS_DIR
+echo $PWD
+echo "Checking out xios repository"
+svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5@1964 xios
+cd xios
+cp $REPO_DIR/arch/xios/* ./arch
+
+echo "Compiling xios"
+./make_xios --full --prod --arch ${HPC_TARG} --netcdf_lib netcdf4_par --job 4
+
+# Let's update the path to xios
+export XIOS_DIR=$XIOS_DIR/xios
+
+cd $WORK_DIR/nemo
+cp $REPO_DIR/arch/nemo/* ./arch
+# Dirty fix to hard wire path otherwise user will have to set XIOS_DIR in every new shell session
+sed -i "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-${HPC_TARG}.fcm
+
+echo 'se-eORCA025 OCE ICE' >> $WORK_DIR/nemo/cfgs/work_cfgs.txt
+
+echo "Gathering forcing data"
+
+export CONFIG_DIR=$WORK_DIR/nemo/cfgs/se-eORCA025
+
+cd $CONFIG_DIR
+
+## Download the input data 
+case "${HPC_TARG}"
+  in
+  archer2) ln -s /work/n01/shared/se-eORCA025 INPUTS
+           ;;
+  *)       wget http://gws-access.ceda.ac.uk/public/jmmp/se-eORCA025/inputs.tar.gz
+	   tar xvfz inputs.tar.gz
+           ;;
+esac
+
+cp -r $REPO_DIR/EXPREF .
+cd $CONFIG_DIR/EXPREF
+
+mkdir meta_out
+mkdir RESTARTS
+mkdir OUTPUTS
+
+ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXPREF/xios_server.exe
+
+# Link some files from INPUTS that are hardwired to be in the experiment directory 
+ln -s INPUTS/K1rowdrg_R025_modif_nonpositive.nc K1rowdrg.nc
+ln -s INPUTS/M2rowdrg_R025_modif_nonpositive.nc M2rowdrg.nc
+ln -s INPUTS/mask_itf_ORCA025ext.nc mask_itf.nc
+ln -s INPUTS/bfr_coef.nc .
+ln -s INPUTS/shlat2d.nc .
+
+# First copy GO8 code
+cp -r $REPO_DIR/MY_SRC_GO8_FROZEN $CONFIG_DIR/MY_SRC
+# Then overwrite with any SE-NEMO mods
+cp $REPO_DIR/MY_SRC/* $CONFIG_DIR/MY_SRC/
+cp $REPO_DIR/MY_SRC_TIDE/* $CONFIG_DIR/MY_SRC/
+cp $REPO_DIR/MY_SRC_RIV/* $CONFIG_DIR/MY_SRC/
+cp $REPO_DIR/cpp_se-eORCA025.fcm $CONFIG_DIR/
+cp $REPO_DIR/scripts/run/* $CONFIG_DIR/EXPREF
+
+cd $WORK_DIR/nemo
+
+echo "Compiling nemo SE-ORCA025 Config"
+./makenemo -m ${HPC_TARG} -r se-eORCA025 -j 16
+
+echo
+echo "  Auto-Config: SE-eORCA025"
+echo "  *****************************"
+echo
+echo "  To run the SE-eORCA025 Configuration:"
+echo
+echo "  - cp -rP EXPREF EXP_MYRUN "
+echo "  - link the correct domain_cfg.nc "
+echo "  - update the runscript accordingly "
+echo "      (project code, nodes, modules, etc)"
+echo
+
+echo "  - submit via the sbatch command"
+
+echo    
