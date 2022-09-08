@@ -1,0 +1,23 @@
+{
+		"exp_names": [
+               "NOTIDE",
+               "EXP_ZPS_GLS_TIDE_WITH_TDRAG",
+               "EXP_MES_WAV_NTM",
+               "EXP_SZT_TIDE",
+               "EXP_MES_WAV_NTM_RIV"
+        		],
+		"dirs":[
+        		"/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/means/monthly/",
+                "/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_ZPS_GLS_TIDE_WITH_TDRAG/OUTPUTS/",
+                "/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM/",
+                "/gws/nopw/j04/class_vol2/senemo/jdha/LONG_TESTS/EXP_SZT_TIDE/",
+                "/gws/nopw/j04/class_vol2/senemo/slwa/EXP_MES_WAV_NTM_RIV/"
+                ],
+        "domains":[
+              "/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/domcfg_eORCA025_v2.nc",
+              "/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/domcfg_eORCA025_v2.nc",
+              "/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM/domain_cfg_r015-r010_007_004v2.nc",
+              "/gws/nopw/j04/class_vol2/senemo/jdha/TO_SORT/SE-NEMO/EXP_SZT39_TAPER_TIDE/domain_cfg_ztaper_match.nc",
+              "/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM/domain_cfg_r015-r010_007_004v2.nc"      
+              ]		
+	}
