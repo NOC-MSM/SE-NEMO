@@ -403,7 +403,9 @@ ln_dynvor_msk=.false.,
 nn_een_e3f=0,
 /
 &namdyn_hpg
-ln_hpg_djc=.false.,
+ln_hpg_djc=XXX_DJC_XXX,
+ln_hpg_djc_vN_hor=.true., 
+ln_hpg_djc_vN_vrt=.true.,
 ln_hpg_isf=.false.,
 ln_hpg_prj=XXX_PRJ_XXX,
 ln_hpg_sco=XXX_SCO_XXX,
@@ -488,7 +490,7 @@ sn_mld2=1,10.0,-0.2,0,
 &namzdf_iwm
 /
 &namzdf_tmx
-ln_tmx_itf=.true.,
+ln_tmx_itf=XXX_ITF_XXX,
 rn_htmx=500.0,
 rn_me=0.2,
 rn_n2min=1.0e-8,
@@ -569,10 +571,10 @@ nn_stockfl=5475,
 nn_writefl=75,
 /
 &nam_diaharm
-ln_diaharm=.false.,
-nit000_han=1,
-nitend_han=75,
-nstep_han=15,
+ln_diaharm=XXX_DHM_XXX,
+nit000_han=XXX_TST_XXX,
+nitend_han=XXX_TEN_XXX,
+nstep_han=1,
 tname(1)='M2',
 /
 &namdct
