@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=se-nemo
-#SBATCH --time=05:00:00
+#SBATCH --time=00:05:00
 #SBATCH --account=n01-CLASS
 #SBATCH --partition=standard
 #SBATCH --qos=standard
