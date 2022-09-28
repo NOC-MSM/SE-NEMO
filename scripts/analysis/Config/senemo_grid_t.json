@@ -20,6 +20,7 @@
 		"dimension_map": {
 			"time_counter": "t_dim",
 			"deptht": "z_dim",
+			"nav_lev": "z_dim",
 			"y": "y_dim",
 			"x": "x_dim",
 			"x_grid_T": "x_dim",
@@ -51,7 +52,8 @@
 			"t": "t_dim0",
 			"x": "x_dim",
 			"y": "y_dim",
-			"z": "z_dim"
+			"z": "z_dim",
+			"nav_lev": "z_dim"
 		},
 		"variable_map": {
 			"time_counter": "time0",
@@ -60,7 +62,7 @@
 			"e1t": "e1",
 			"e2t": "e2",
 			"e3t_0": "e3_0",
-                        "e3w_0": "e3w_0",
+            "e3w_0": "e3w_0",
 			"tmask":"mask",
 			"deptht_0": "depth_0",
 			"bottom_level": "bottom_level",

@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=se-nemo
-#SBATCH --time=00:05:00
+#SBATCH --time=05:00:00
 #SBATCH --account=n01-CLASS
 #SBATCH --partition=standard
 #SBATCH --qos=standard
@@ -28,12 +28,13 @@ fi
 #################### nemo runscript options ############################
 # For info on the parameters see namelist_ref                          #
 ########################################################################
-rn_rdt=600          ; ln_zps='.true.'       ;
+rn_rdt=600          ; ln_zps='.false.'      ; ln_tmx_itf='.true.'
 ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
 nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.false.'
-ln_rstdate='.true.' ; ln_shlat2d='.true.'
+ln_rstdate='.true.' ; ln_shlat2d='.true.'   ; nn_diaharm=1981
 rn_Cd0=2.5e-3       ; ln_loglayer='.false.' ; ln_tide='.true.'
 ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.' 
+ln_hpg_djc='.true.' ;
 ########################################################################
 
 
@@ -43,7 +44,7 @@ ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.'
 ln_spin='.true.'   # Do we require a spin up phase for the ice
 nn_spin=3          # How many years spin up
 year_st=1976       # Start year of the simulation (ramains constant)
-year_en=1977       # End year of this job submission
+year_en=1981       # End year of this job submission
 offset=0           # If rdt has changed, an offset to nn_it000 is needed
 nn_spin_cycle=1    # Change to nn_spin+1 if year is .gt. year_st
 year=$year_st      # Change if starting job part way through simulation
@@ -62,11 +63,16 @@ then
    ln_hpg_prj='.false.'
    ln_hpg_sco='.true.'
 else
-   ln_trabbl='.false.',
-   ln_traldf_hor='.true.',
-   ln_traldf_iso='.false.',
-   ln_hpg_prj='.true.',
-   ln_hpg_sco='.false.',
+   ln_trabbl='.false.'
+   ln_traldf_hor='.true.'
+   ln_traldf_iso='.false.'
+   if [ "$ln_hpg_djc" = ".true." ]
+   then
+      ln_hpg_prj='.false.'
+   else
+      ln_hpg_prj='.true.'
+   fi
+   ln_hpg_sco='.false.'
 fi
 
 if [ "$ln_loglayer" = ".true." ]
@@ -163,13 +169,20 @@ do
       nam="${ens%%:*}"
       jpk="${ens##*:}"
 
+      if [ $year -eq $nn_diaharm ]
+      then
+	 ln_diaharm='.true.'
+      else
+	 ln_diaharm='.false.'
+      fi
+
       if [ $year -eq 1976 ]
       then
          nn_it000=1
 	 if [ $nn_spin_cycle -eq 1 ]
          then
             ln_rstart='.false.'	  
-	    ln_tide_ramp='.true.'
+	    ln_tide_ramp='.false.'
 	 else
             ln_rstart='.true.'	  
 	    ln_tide_ramp='.false.'
@@ -224,6 +237,8 @@ do
       sed -i "s/XXX_BTC_XXX/$rn_bt_cmax/g" namelist_cfg
       sed -i "s/XXX_RNF_XXX/$sn_rnf/g" namelist_cfg
       sed -i "s/XXX_TID_XXX/$ln_tide/g" namelist_cfg
+      sed -i "s/XXX_ITF_XXX/$ln_tmx_itf/g" namelist_cfg
+      sed -i "s/XXX_DHM_XXX/$ln_diaharm/g" namelist_cfg
       sed -i "s/XXX_BOO_XXX/$ln_boost/g" namelist_cfg
       sed -i "s/XXX_SHA_XXX/$ln_shlat2d/g" namelist_cfg
       sed -i "s/XXX_CD0_XXX/$rn_Cd0/g" namelist_cfg
@@ -234,6 +249,7 @@ do
       sed -i "s/XXX_HOR_XXX/$ln_traldf_hor/g" namelist_cfg
       sed -i "s/XXX_ISO_XXX/$ln_traldf_iso/g" namelist_cfg
       sed -i "s/XXX_PRJ_XXX/$ln_hpg_prj/g" namelist_cfg
+      sed -i "s/XXX_DJC_XXX/$ln_hpg_djc/g" namelist_cfg
       sed -i "s/XXX_SCO_XXX/$ln_hpg_sco/g" namelist_cfg
       sed -i "s/XXX_LOG_XXX/$ln_loglayer/g" namelist_cfg
       sed -i "s/XXX_NLN_XXX/$ln_non_lin/g" namelist_cfg

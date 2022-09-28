@@ -1,0 +1,9 @@
+#!/bin/bash 
+#SBATCH --partition=long-serial 
+#SBATCH -o %j.out 
+#SBATCH -e %j.err
+#SBATCH --time=12:00:00
+#SBATCH --mem=64000
+cd /home/users/jholt/work/Git/SE-NEMO/Analysis/Python/
+source activate coast_env 
+python  make_nemo_climatology.py
