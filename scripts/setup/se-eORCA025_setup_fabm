@@ -83,7 +83,9 @@ echo "Making sure that the correct modules are loaded"
 
 case "${HPC_TARG}"
   in
-  archer2) . $REPO_DIR/scripts/env/gnu-mpich
+  # these two sets of modules result in the same module list, however the PML one start from a module purge, so it dos not inherit anything
+  #archer2) . $REPO_DIR/scripts/env/gnu-mpich
+  archer2) . $REPO_DIR/scripts/env/PML-gnu-mpich
            ;;
   GCC_ARCHER2) . $REPO_DIR/scripts/env/ucx_env
            ;;
@@ -139,7 +141,7 @@ cd $XIOS_DIR
 echo $PWD
 echo "Checking out xios repository"
 #svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5@1964 xios
-svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5 xios
+svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5@2254 xios
 cd xios
 cp $REPO_DIR/arch/xios/* ./arch
 
@@ -180,6 +182,16 @@ case "${HPC_TARG}"
 	   tar xvfz inputs.tar.gz
            ;;
 esac
+
+# copy the module files in the running folder to guarantee that the same combination of modules is used
+case "${HPC_TARG}"
+  in
+  archer2)  cp $REPO_DIR/scripts/env/PML-gnu-mpich $CONFIG_DIR
+           ;;
+  GCC_ARCHER2) cp $REPO_DIR/scripts/env/ucx_env $CONFIG_DIR
+	  ;;
+esac
+
 
 cp -r $REPO_DIR/EXPREF_FABM .
 cd $CONFIG_DIR/EXPREF_FABM

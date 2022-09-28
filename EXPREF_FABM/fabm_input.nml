@@ -24,3 +24,39 @@
    name='N7_flux/flux'
    sn=  'eORCA025_Fe_dep_GESAMP.nc', -1, 'LFe_dep', .false., .true., 'yearly', '', '', ''
 /
+!&riverdata
+!   name='N3_n'
+!   sn=   'RIVERS_BGC/JRA_BGC' , 24 , 'rono3' , .true. ,  .false. ,   'yearly' ,     '',         '',        ''
+!   rfac=71.4 ! 1000./14.0067 (g/s -> mmol/s)
+!/
+!&riverdata
+!   name='N4_n'
+!   sn=   'RIVERS_BGC/JRA_BGC' , 24 , 'ronh4' , .true. ,  .false. ,   'yearly' ,     '',         '',        ''
+!   rfac=71.4 ! 1000./14.0067 (g/s -> mmol/s)
+!/
+!&riverdata
+!   name='N1_p'
+!   sn=   'RIVERS_BGC/JRA_BGC' , 24 , 'rodip' , .true. ,  .false. ,   'yearly' ,     '',         '',        ''
+!   rfac=32.3 ! 1000./30.9738 (g/s -> mmol/s)
+!/
+!&riverdata
+!   name='N5_s'
+!   sn=  'RIVERS_BGC/JRA_BGC' , 24 , 'rosio2' , .true. ,  .false. ,   'yearly' ,     '',         '',        ''
+!   rfac=35.6 ! 1000./28.0855 (g/s -> mmol/s)
+!/
+!&riverdata
+!   name='O3_c'
+!   sn=   'RIVERS_BGC/JRA_BGC' , 24 , 'rodic' , .true. ,  .false. ,   'yearly' ,     '',         '',        ''
+!   rfac=83.3 ! 1000./12.011 (g/s -> mmol/s)
+!/
+!&riverdata
+!   name='O2_o'
+!   sn=   'RIVERS_BGC/JRA_BGC' , 24 , 'rodoxy' , .true. ,  .false. ,   'yearly' ,     '',         '',        ''
+!   rfac=62.5 ! 1000./15.9994 (g/s -> mmol/s)
+!/
+!&riverdata
+!   name='O3_TA'
+!   sn=  'RIVERS_BGC/JRA_BGC' , 24 , 'rotalk' , .true. ,  .false. ,   'yearly',     '',         '',        ''
+!   rfac=1. !   (mmol/s )
+!/
+

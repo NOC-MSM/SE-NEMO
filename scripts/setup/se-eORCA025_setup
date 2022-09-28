@@ -82,6 +82,13 @@ case "${HPC_TARG}"
            exit 1
 esac
 
+echo 'MOUDULE LIST'
+echo '############'
+module list
+echo '############'
+
+
+
 export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
 
 # Currently running 4.0.4 for SE-NEMO
