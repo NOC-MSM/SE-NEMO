@@ -36,12 +36,13 @@ RUNDIR=$PWD
 #################### nemo runscript options ############################
 # For info on the parameters see namelist_ref                          #
 ########################################################################
-rn_rdt=600          ; ln_zps='.true.'       ;
+rn_rdt=600          ; ln_zps='.true.'       ; ln_tmx_itf='.true.'
 ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
 nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.false.'
-ln_rstdate='.false.' ; ln_shlat2d='.true.'
+ln_rstdate='.false.' ; ln_shlat2d='.true.'  ; nn_diaharm=1981
 rn_Cd0=2.5e-3       ; ln_loglayer='.false.' ; ln_tide='.true.'
 ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.' 
+ln_hpg_djc='.true.' ;
 ########################################################################
 
 
@@ -64,7 +65,7 @@ nmmax=3            # number of months to go through before submitting a new job
 #                No need to edit below this line                       #
 ########################################################################
 
-if [ "$ln_zps" = ".true." ]
+     if [ "$ln_zps" = ".true." ]
 then
    ln_trabbl='.true.'
    ln_traldf_hor='.false.'
@@ -72,11 +73,16 @@ then
    ln_hpg_prj='.false.'
    ln_hpg_sco='.true.'
 else
-   ln_trabbl='.false.',
-   ln_traldf_hor='.true.',
-   ln_traldf_iso='.false.',
-   ln_hpg_prj='.true.',
-   ln_hpg_sco='.false.',
+ln_trabbl='.false.'
+ln_traldf_hor='.true.'
+ln_traldf_iso='.false.'
+if [ "$ln_hpg_djc" = ".true." ]
+then
+   ln_hpg_prj='.false.'
+else
+   ln_hpg_prj='.true.'
+fi
+ln_hpg_sco='.false.'
 fi
 
 if [ "$ln_loglayer" = ".true." ]
@@ -348,7 +354,10 @@ do
       sed -i "s/XXX_RNF_XXX/$sn_rnf/g" namelist_cfg
       sed -i "s/XXX_CNF_XXX/$sn_cnf/g" namelist_cfg
       sed -i "s/XXX_TID_XXX/$ln_tide/g" namelist_cfg
+      sed -i "s/XXX_ITF_XXX/$ln_tmx_itf/g" namelist_cfg
+      sed -i "s/XXX_DHM_XXX/$ln_diaharm/g" namelist_cfg
       sed -i "s/XXX_BOO_XXX/$ln_boost/g" namelist_cfg
+      sed -i "s/XXX_DJC_XXX/$ln_hpg_djc/g" namelist_cfg
       sed -i "s/XXX_SHA_XXX/$ln_shlat2d/g" namelist_cfg
       sed -i "s/XXX_CD0_XXX/$rn_Cd0/g" namelist_cfg
       sed -i "s/XXX_GLS_XXX/$ln_gls/g" namelist_cfg
