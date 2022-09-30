@@ -36,7 +36,7 @@ RUNDIR=$PWD
 #################### nemo runscript options ############################
 # For info on the parameters see namelist_ref                          #
 ########################################################################
-rn_rdt=600          ; ln_zps='.true.'       ; ln_tmx_itf='.true.'
+rn_rdt=600          ; ln_zps='.false.'       ; ln_tmx_itf='.true.'
 ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
 nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.false.'
 ln_rstdate='.false.' ; ln_shlat2d='.true.'  ; nn_diaharm=1981
