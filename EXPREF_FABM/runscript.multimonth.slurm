@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=se-025ERSEM
-#SBATCH --time=07:00:00
+#SBATCH --time=00:10:00
 #SBATCH --account=n01-PML
 #SBATCH --partition=standard
 #SBATCH --qos=standard
@@ -56,7 +56,7 @@ year_en=1977       # End year of this job submission
 offset=0           # If rdt has changed, an offset to nn_it000 is needed
 nn_spin_cycle=1    # Change to nn_spin+1 if year is .gt. year_st
 year=$y0           # Change if starting job part way through simulation
-nmmax=3            # number of months to go through before submitting a new job
+nmmax=1            # number of months to go through before submitting a new job
 
 ########################################################################
 

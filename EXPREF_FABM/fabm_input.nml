@@ -2,11 +2,11 @@
 !              !              !  (if <0  months)  !   name    !   (logical)  !  (T/F) ! 'monthly' ! filename ! pairing  ! filename      !
 &variable
    name='gelbstoff_absorption_satellite'
-   sn=         'eORCA025-CCI-ady-broadband-climatology', -1, 'ady', .false.,  .true.,   'monthly',  '',  '', ''
+   sn=         'eORCA025-CCI-ady-broadband-climatology', -1, 'ady', .false.,  .true.,   'yearly',  '',  '', ''
 /
 &variable
    name='mole_fraction_of_carbon_dioxide_in_air'
-   sn=         'eORCA025_v2_pCO2a_global',  -12,  'pCO2a', .false.,  .false., 'yearly', '', '', ''
+   sn=         'eORCA025_pCO2a_global',  -12,  'pCO2a', .false.,  .false., 'yearly', '', '', ''
 /
 &variable
    name='N4_flux/flux'

@@ -87,11 +87,14 @@ case "${HPC_TARG}"
   #archer2) . $REPO_DIR/scripts/env/gnu-mpich
   archer2) . $REPO_DIR/scripts/env/PML-gnu-mpich
            ;;
-  archer2-fabm) . $REPO_DIR/scripts/env/PML-gnu-mpich
+  archer2_debug) . $REPO_DIR/scripts/env/PML-gnu-mpich
+           ;;
+  GCC_ARCHER2) . $REPO_DIR/scripts/env/ucx_env
            ;;
   *)       echo "Machine not recognised"
            echo "Machines available: archer2"
-           echo "Machines available: archer2-fabm"
+           echo "Machines available: archer2_debug"
+           echo "Machines available: GCC_ARCHER2"
            exit 1
 esac
 
@@ -176,7 +179,9 @@ case "${HPC_TARG}"
   in
   archer2) ln -s /work/n01/shared/se-eORCA025 INPUTS
            ;;
-  archer2-fabm) ln -s /work/n01/shared/se-eORCA025 INPUTS
+  archer2_debug) ln -s /work/n01/shared/se-eORCA025 INPUTS
+           ;;
+  GCC_ARCHER2) ln -s /work/n01/shared/se-eORCA025 INPUTS
            ;;
   *)       wget http://gws-access.ceda.ac.uk/public/jmmp/se-eORCA025/inputs.tar.gz
 	   tar xvfz inputs.tar.gz
@@ -189,9 +194,11 @@ case "${HPC_TARG}"
   archer2)  cp $REPO_DIR/scripts/env/PML-gnu-mpich $CONFIG_DIR
             echo 'modules COPIED!!!!!!!!!!!!!!!!!' 
            ;;
-  archer2-fabm)  cp $REPO_DIR/scripts/env/PML-gnu-mpich $CONFIG_DIR
+  archer2_debug)  cp $REPO_DIR/scripts/env/PML-gnu-mpich $CONFIG_DIR
             echo 'modules COPIED!!!!!!!!!!!!!!!!!' 
            ;;
+  GCC_ARCHER2) cp $REPO_DIR/scripts/env/ucx_env $CONFIG_DIR
+	  ;;
 esac
 
 
