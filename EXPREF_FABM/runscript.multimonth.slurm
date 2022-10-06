@@ -4,7 +4,7 @@
 #SBATCH --account=n01-PML
 #SBATCH --partition=standard
 #SBATCH --qos=standard
-#SBATCH --nodes=19
+#SBATCH --nodes=164
 #SBATCH --ntasks-per-core=1
 
 # ARCHER2 support suggestion to reduce UCX error messages:
@@ -36,7 +36,7 @@ RUNDIR=$PWD
 #################### nemo runscript options ############################
 # For info on the parameters see namelist_ref                          #
 ########################################################################
-rn_rdt=600          ; ln_zps='.false.'       ; ln_tmx_itf='.true.'
+rn_rdt=600          ; ln_zps='.false.'       ; ln_tmx_itf='.false.'
 ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
 nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.false.'
 ln_rstdate='.false.' ; ln_shlat2d='.true.'  ; nn_diaharm=1981
@@ -250,6 +250,14 @@ do
 
       nam="${ens%%:*}"
       jpk="${ens##*:}"
+
+      if [ $year -eq $nn_diaharm ]
+      then
+         ln_diaharm='.true.'
+      else
+         ln_diaharm='.false.'
+      fi
+
 
       if [ $year -eq 1976 ] 
       then
