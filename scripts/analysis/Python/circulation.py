@@ -149,14 +149,14 @@ if __name__ == '__main__':
     fn_config_v_grid='./example_nemo_grid_v.json'
 
 
-    names,dpaths,DOMS,_  = coast. experiments(experiments='experiments1.json')  
+    names,dpaths,DOMS,_  = coast. experiments(experiments='experiments_james.json')  
     Unmean={}
     Untm={}
     Zmean={}
     Un={}
     Z={}
-    ystart=1993
-    ystop=2019
+    ystart=1979
+    ystop=1981
     A=np.load('../Data/LME_gridinfo_V4.npz')
     a=scipy.io.loadmat('../Data/ORCA025_ROAM_GLB_LMEmaskV4.mat')
     nlme=66
@@ -184,7 +184,8 @@ if __name__ == '__main__':
     #    fn_nemo_dat_u=dpaths[i]+'SENEMO_1m_19800101_19801231_grid_U_198007-198007.nc'
     #    fn_nemo_dat_v=dpaths[i]+'SENEMO_1m_19800101_19801231_grid_V_198007-198007.nc'
     
-        recalc=False            
+        recalc=True
+        cmems=False            
         nemo_t = coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid)#,calc_bathy=True)
         if recalc:        
     
@@ -225,15 +226,16 @@ if __name__ == '__main__':
                 save_currents(SP,US,VS,fn_out,nemo_t_out)
 
 #
-            name="CMEMS_ORCA12"
-            Name=name+' '+SEASON+' '+YEARS+' '+REGION   
-            fn_cmems=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
-            cmems=coast.Gridded(fn_data=fn_cmems,config="")
-            name=names[0]
-            Name=name+' '+SEASON+' '+YEARS+' '+REGION
-            fn_orca025=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
-            ORCA025=coast.Gridded(fn_data=fn_orca025,config="")
-            cmems_on_ORCA025=regrid_currents(cmems,ORCA025)
+            if cmems:
+                name="CMEMS_ORCA12"
+                Name=name+' '+SEASON+' '+YEARS+' '+REGION   
+                fn_cmems=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
+                cmems=coast.Gridded(fn_data=fn_cmems,config="")
+                name=names[0]
+                Name=name+' '+SEASON+' '+YEARS+' '+REGION
+                fn_orca025=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
+                ORCA025=coast.Gridded(fn_data=fn_orca025,config="")
+                cmems_on_ORCA025=regrid_currents(cmems,ORCA025)
             
     #    Un[name],Unmean[name],Z[name],Zmean[name]=flx_contour(nemo_f,nemo_u,nemo_v)
     
