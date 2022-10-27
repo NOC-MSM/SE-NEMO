@@ -445,7 +445,7 @@ do
       cp time.step meta_out/time.step.$suf
 
       fname=$y0/$m0str
-      echo "Archiving in $fname ..."
+      #echo "Archiving in $fname ..."
       #ARCHIVEDIR=/work/n01/n01/gig/eORCA1_ARCHIVE/TEST
       #sbatch --export=RUNDIR=$PWD,ARCHIVEDIR=$ARCHIVEDIR,folder=$fname archiveFolder.slurm
       #sbatch --export=RUNDIR=$PWD,folder=$fname archiveFolder.slurm
@@ -474,7 +474,7 @@ echo "Done $nmmax months in $(($SECONDS / 60)) minutes."
 if [ $y0 -le $year_en ]
 then
    echo 'Submitting' $y0 $m0 '...'
-   #sbatch --export=y0=$y0,m0=$m0 runscript.multimonth.slurm
+   sbatch --export=y0=$y0,m0=$m0 runscript.multimonth.slurm
    echo "Done."
 else
    echo "All done."
