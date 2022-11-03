@@ -26,6 +26,8 @@
 			"y_grid_T": "y_dim"
 		},
 		"variable_map": {
+		    "nav_lon":"longitude",
+            "nav_lat":"latitude",
 			"time_counter": "time",
 			"votemper": "temperature",
 			"thetao": "temperature",

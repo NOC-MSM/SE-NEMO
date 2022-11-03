@@ -1,0 +1,26 @@
+{
+		"exp_names": [
+		        "EXP_MES_WAV",
+                "EXP_MES_WAV_DJC",
+                "EXP_MES_WAV_DJC_INTERP",
+                "EXP_MES_WAV_NTM",
+                "EXP_MES_WAV_NTM_LL",
+                "EXP_SZT_WAV"
+        		],
+		"dirs":[
+                "/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV",
+                "/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_DJC",
+                "/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_DJC_INTERP",
+                "/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM",
+                "/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM_LL",                                                                                       
+                "/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_SZT_WAV"
+                ],
+        "domains":[    
+              "/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM/domain_cfg_r015-r010_007_004v2.nc",      
+              "/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM/domain_cfg_r015-r010_007_004v2.nc",      
+              "/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM/domain_cfg_r015-r010_007_004v2.nc",      
+              "/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM/domain_cfg_r015-r010_007_004v2.nc",      
+              "/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM/domain_cfg_r015-r010_007_004v2.nc",          
+              "/gws/nopw/j04/class_vol2/senemo/jdha/TO_SORT/SE-NEMO/EXP_SZT39_TAPER_TIDE/domain_cfg_ztaper_match.nc"     
+              ]		
+}

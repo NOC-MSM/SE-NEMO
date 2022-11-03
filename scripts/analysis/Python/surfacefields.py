@@ -50,7 +50,8 @@ def lightcolormap(Np,nt):
  cmap1=LinearSegmentedColormap.from_list('cmap1',colors1,cmap0.N-nt*2)
  return cmap1
 #%%
-def plot_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name, co_located=False,Vmax=0.16,Np=3): 
+def mean_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name,
+                             co_located=False): 
 #%%
  nx=nemo_u.dataset.x_dim.size
  ny=nemo_u.dataset.y_dim.size
@@ -80,9 +81,15 @@ def plot_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name, co_located=False,Vm
  VS[SP<0.02]=np.nan
  US=US/SP
  VS=VS/SP
- 
+ return SP, US, VS
 
-
+#%%
+def plot_surface_circulation(SP, US, VS,nemo_t,mask,name
+                             ,Vmax=0.16,Np=3
+                             ,headwidth=4,scale=50                            
+                             ,**kwargs): 
+ nx=nemo_t.dataset.x_dim.size
+ ny=nemo_t.dataset.y_dim.size   
  p=np.ma.masked_where(mask==0,SP)
  u=np.ma.masked_where(mask[0::Np,0::Np]==0,US[0::Np,0::Np])
  v=np.ma.masked_where(mask[0::Np,0::Np]==0,VS[0::Np,0::Np])
@@ -102,9 +109,10 @@ def plot_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name, co_located=False,Vm
  plt.clim([0,Vmax])
  plt.colorbar(orientation='vertical',cmap=cmap1)
  #plt.quiver(x,y,u,v,color=[0.1,0.1,0.1],headwidth=4,scale=50)
- plt.quiver(x,y,u,v,color=[0.1,0.1,0.1],headwidth=4,scale=50)
+ plt.quiver(x,y,u,v,color=[0.1,0.1,0.1],headwidth=headwidth,scale=scale,**kwargs)
  plt.title('Surface Currents ' + name)
- return SP, US, VS
+#%% 
+
 
 
 
@@ -218,7 +226,8 @@ if __name__ == '__main__':
                 nemo_t1=nemo_t.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
                 mask=nemo_t1.dataset.bathymetry != 0
                 Name=name+' '+SEASON+' '+YEARS+' '+REGION 
-                SP,US,VS=plot_surface_circulation(nemo_u1,nemo_v1,nemo_t1,mask,Name)
+                SP,US,VS=mean_surface_circulation(nemo_u1,nemo_v1,nemo_t1,mask,Name)
+                plot_surface_circulation(SP,US,VS,nemo_t1,mask,Name)
                 plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png')
                 fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
                 nemo_t_out=coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid)
