@@ -14,7 +14,7 @@ import coast
 import numpy as np
 import xarray as xr
 import scipy.io
-import circulation as circ
+import surfacefields as surf
 fn_config_u_grid='./example_nemo_grid_u.json'
 fn_config_v_grid='./example_nemo_grid_v.json'
 fn_config_t_grid='./example_nemo_grid_t.json'
@@ -32,7 +32,7 @@ fn_nemo_dom='/gws/nopw/j04/class_vol1/CLASS-MEDUSA/OUT_eORCA12/C001/domain/domai
 fn_nemo_dat_t=nemo_dir+'2012/eORCA12_MED_UKESM_y2012m12_grid_T.nc'
 
 
-#nemo_dom= coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid,multiple=False)
+nemo_dom= coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid,multiple=False)
 nemo_t = coast.Gridded(fn_data=fn_nemo_dat_t, config=fn_config_t_grid,multiple=True)
 nemo_u = coast.Gridded(fn_data=fn_nemo_dat_u, config=fn_config_u_grid,multiple=True)
 nemo_v = coast.Gridded(fn_data=fn_nemo_dat_v, config=fn_config_v_grid,multiple=True)
@@ -48,12 +48,12 @@ jmax=max(j)
 nemo_t.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
 nemo_u.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
 nemo_v.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
-mask=(nemo_t.dataset.sos>0).squeeze()
+mask=(nemo_t.dataset.salinity>0).squeeze()
 Name='ORCA12-{0}-{1}'.format(ystart,ystop)
 #%%
 #plotting
-SP,US,VS=circ.mean_surface_circulation(nemo_u,nemo_v,nemo_t,mask,Name)
-circ.plot_surface_circulation(SP,US,VS,nemo_t,mask,Name,
+SP,US,VS=circ.mean_surface_circulation(nemo_u,nemo_v,nemo_t,mask)
+surf.plot_surface_circulation(SP,US,VS,nemo_t,mask,Name,
                                        Np=6
                                        ,headwidth=5,scale=80,minshaft=2      
                                        )

@@ -83,6 +83,24 @@ def mean_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name,
  VS=VS/SP
  return SP, US, VS
 
+def mean_surface_TS(nemo_t,mask): 
+#%%
+ nx=nemo_t.dataset.x_dim.size
+ ny=nemo_t.dataset.y_dim.size
+
+
+ if len(nemo_t.dataset.temperature.dims)==2:
+     TMP=nemo_t.dataset.temperature.values
+     SAL=nemo_t.dataset.salinity.values
+ elif len(nemo_t.dataset.temperature.dims)==3:
+     TMP=nemo_t.dataset.temperature[:,:,:].mean(dim="t_dim").values
+     SAL=nemo_t.dataset.salinity[:,:,:].mean(dim="t_dim").values
+ else:     
+     TMP=nemo_t.dataset.temperature[:,0,:,:].mean(dim="t_dim").values
+     SAL=nemo_t.dataset.salinity[:,0,:,:].mean(dim="t_dim").values
+
+ return TMP,SAL
+
 #%%
 def plot_surface_circulation(SP, US, VS,nemo_t,mask,name
                              ,Vmax=0.16,Np=3
@@ -112,9 +130,16 @@ def plot_surface_circulation(SP, US, VS,nemo_t,mask,name
  plt.quiver(x,y,u,v,color=[0.1,0.1,0.1],headwidth=headwidth,scale=scale,**kwargs)
  plt.title('Surface Currents ' + name)
 #%% 
-
-
-
+def plot_surface_T_field(Var,nemo_t,mask,name,Vmin,Vmax):
+    nx=nemo_t.dataset.x_dim.size
+    ny=nemo_t.dataset.y_dim.size   
+    Var=np.ma.masked_where(mask==0,Var)
+    cmap1=lightcolormap(int(Vmax*100),2)
+    cmap1.set_bad([0.75,0.75,0.75])
+    fig=plt.figure(); fig.clear()
+    plt.pcolormesh(Var,cmap=cmap1,vmin=Vmin,vmax=Vmax)
+    plt.colorbar(orientation='vertical',cmap=cmap1)
+    plt.title('Surface Sal Anom ' + name)
 
 
 #%%
@@ -226,7 +251,7 @@ if __name__ == '__main__':
                 nemo_t1=nemo_t.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
                 mask=nemo_t1.dataset.bathymetry != 0
                 Name=name+' '+SEASON+' '+YEARS+' '+REGION 
-                SP,US,VS=mean_surface_circulation(nemo_u1,nemo_v1,nemo_t1,mask,Name)
+                SP,US,VS=mean_surface_circulation(nemo_u1,nemo_v1,nemo_t1,mask)
                 plot_surface_circulation(SP,US,VS,nemo_t1,mask,Name)
                 plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png')
                 fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
