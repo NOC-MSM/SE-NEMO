@@ -224,7 +224,8 @@ ln -s INPUTS/shlat2d.nc .
 # this was the domain to use with the final_tidy branch
 #ln -s ../INPUTS/domcfg_eORCA025_v2.nc ./domain_cfg.nc
 #this is the domani to use with master/FABM
-ln -s ../INPUTS/domain_cfg_r015-r010_007_004v2.nc ./domain_cfg.nc
+#ln -s ../INPUTS/domain_cfg_r015-r010_007_004v2.nc ./domain_cfg.nc
+ln -s ../INPUTS/domain_cfg_r018-010-010_glo-r018-010_ant_opt_v3_taper.nc ./domain_cfg.nc
 
 
 # First copy GO8 code
