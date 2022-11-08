@@ -4,14 +4,12 @@ Thisse - the setup script has been tested and will checkout, compile and run the
 
 Configuration files for SE-NEMO project
 
-
 Base Configuration: GO8p6 at NEMO 4.0.4
 
 ## Quick Start:
 
 ```
 git clone git@github.com:NOC-MSM/SE-NEMO.git
-git checkout final_tidy
 ./SE-NEMO/scripts/setup/se-eORCA025_setup -w $PWD/test -x $PWD/test -s $PWD/SE-NEMO -m archer2
 cd test/nemo/cfgs/se-eORCA025/
 cp -rP EXPREF EXP_MYRUN
