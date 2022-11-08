@@ -30,6 +30,12 @@ This will produce a 5 day mean output from the beginning of 1976. The run should
 
 _this is automatically transferred when the setup script is executed_
 
+For ARCHER2 users these data are held under `/work/n01/shared/senemo` and `/work/n01/shared/nemo/FORCING` and are linked during the setup.
+
+### Runs:
+
+A list of ongoing simluations can be found [here](https://github.com/NOC-MSM/SE-NEMO/blob/master/RUNS.md)
+
 ### Outputs:
 
 On JASMIN: /gws/nopw/j04/class_vol2/senemo
