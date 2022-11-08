@@ -50,7 +50,7 @@ def lightcolormap(Np,nt):
  cmap1=LinearSegmentedColormap.from_list('cmap1',colors1,cmap0.N-nt*2)
  return cmap1
 #%%
-def mean_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name,
+def mean_surface_circulation(nemo_u,nemo_v,nemo_t,mask,
                              co_located=False): 
 #%%
  nx=nemo_u.dataset.x_dim.size
@@ -182,7 +182,10 @@ if __name__ == '__main__':
     fn_config_v_grid='./example_nemo_grid_v.json'
 
 
-    names,dpaths,DOMS,_  = coast. experiments(experiments='experiments_james.json')  
+    #names,dpaths,DOMS,_  = coast. experiments(experiments='experiments_james.json')
+    names=["EXP_MES_WAV_NTM"]
+    dpaths=["/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM"]
+    DOMS=["/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM/domain_cfg_r015-r010_007_004v2.nc"]       
     Unmean={}
     Untm={}
     Zmean={}
@@ -209,9 +212,8 @@ if __name__ == '__main__':
     for i,name in enumerate(names): 
         print(name)
         print(dpaths[i])
-        fn_nemo_dat_u= coast.nemo_filenames(dpaths[i],'SENEMO',ystart,ystop,grid='U') 
-        fn_nemo_dat_v= coast.nemo_filenames(dpaths[i],'SENEMO',ystart,ystop,grid='V') 
-        fn_nemo_dat_u=    fn_nemo_dat_u[iseason]       
+        fn_nemo_dat_u= coast.nemo_filename_maker(dpaths[i],ystart,ystop,grid='U',runtype='SENEMO') 
+        fn_nemo_dat_v= coast.nemo_filename_maker(dpaths[i],ystart,ystop,grid='V',runtype='SENEMO')
         fn_nemo_dat_v=    fn_nemo_dat_v[iseason]   
         fn_nemo_dom=DOMS[i]
     #    fn_nemo_dat_u=dpaths[i]+'SENEMO_1m_19800101_19801231_grid_U_198007-198007.nc'
@@ -253,7 +255,7 @@ if __name__ == '__main__':
                 Name=name+' '+SEASON+' '+YEARS+' '+REGION 
                 SP,US,VS=mean_surface_circulation(nemo_u1,nemo_v1,nemo_t1,mask)
                 plot_surface_circulation(SP,US,VS,nemo_t1,mask,Name)
-                plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png')
+                plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'_v1.png')
                 fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
                 nemo_t_out=coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid)
                 nemo_t_out.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
