@@ -1,0 +1,18 @@
+module restore
+
+module load cpe/21.09
+module load PrgEnv-gnu
+
+module swap craype-network-ofi craype-network-ucx
+module swap cray-mpich cray-mpich-ucx
+
+module unload cray-mpich-ucx
+module unload cray-libsci
+
+module use /work/y07/shared/archer2-lmod/dev/openmpi
+module load openmpi/4.1.4-ucx-gcc11
+module load hdf5/1.12.0-ompi4-ucx-gcc11
+module load netcdf/fortran/4.6.0-ompi4-ucx-gcc11
+module load netcdf/c/4.9.0-ompi4-ucx-gcc11
+module load libxml2/2.9.7
+module load libfabric
