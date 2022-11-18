@@ -25,8 +25,8 @@ ystart=1991
 ystop=2000
 
 nemo_dir='/gws/nopw/j04/class_vol1/CLASS-MEDUSA/OUT_eORCA12/C001/monthly/'
-fn_nemo_dat_u= coast.nemo_filenames(nemo_dir,'CLASS-ORCA0083',ystart,ystop,grid='U') 
-fn_nemo_dat_v= coast.nemo_filenames(nemo_dir,'CLASS-ORCA0083',ystart,ystop,grid='V') 
+fn_nemo_dat_u= coast.nemo_filename_maker(nemo_dir,ystart,ystop,grid='U',runtype='CLASS-ORCA12') 
+fn_nemo_dat_v= coast.nemo_filename_maker(nemo_dir,ystart,ystop,grid='V',runtype='CLASS-ORCA12') 
 #%%
 fn_nemo_dom='/gws/nopw/j04/class_vol1/CLASS-MEDUSA/OUT_eORCA12/C001/domain/domain_cfg.nc'
 fn_nemo_dat_t=nemo_dir+'2012/eORCA12_MED_UKESM_y2012m12_grid_T.nc'
@@ -52,7 +52,7 @@ mask=(nemo_t.dataset.salinity>0).squeeze()
 Name='ORCA12-{0}-{1}'.format(ystart,ystop)
 #%%
 #plotting
-SP,US,VS=circ.mean_surface_circulation(nemo_u,nemo_v,nemo_t,mask)
+SP,US,VS=surf.mean_surface_circulation(nemo_u,nemo_v,nemo_t,mask)
 surf.plot_surface_circulation(SP,US,VS,nemo_t,mask,Name,
                                        Np=6
                                        ,headwidth=5,scale=80,minshaft=2      
@@ -60,4 +60,4 @@ surf.plot_surface_circulation(SP,US,VS,nemo_t,mask,Name,
 plt.savefig('../Figures/Circulation/Surface_Currents_NEA_' + Name.replace(' ','_')+'.png',dpi=300)
 fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_NEA_{0}.nc".format(Name)).replace(' ','_')
 nemo_t_out=coast.Gridded(nemo_t,config=fn_config_t_grid)
-circ.save_currents(SP,US,VS,fn_out,nemo_t_out)
+surf.save_currents(SP,US,VS,fn_out,nemo_t_out)
