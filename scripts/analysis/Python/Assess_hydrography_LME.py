@@ -57,17 +57,21 @@ lmonrange=len(monrange)
 mons='NHS'
 mons='YR'
 RUNNAMS=[
-    'ORCA025-SE-NEMO_1980_1985_EXP_MES_NOTIDE',
-    'ORCA025-SE-NEMO_1980_1985_EXP_MES_TIDE',
-    'ORCA025-SE-NEMO_1980_1985_NOTIDE',
-    'ORCA025-SE-NEMO_1980_1985_TIDE',
-    'ORCA025-SE-NEMO_1979_1981_EXP_MES',
-    'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM',
-    'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV'
+'ORCA025-SE-NEMO_1979_1981_EXP_MES',
+'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_DJC_INTERP',
+'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_DJC',
+'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM_LL',
+'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM_RIV',
+'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM',
+'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM',
+'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV',
+'ORCA025-SE-NEMO_1979_1981_EXP_REF_NOTIDE',
+'ORCA025-SE-NEMO_1979_1981_EXP_SZT_WAV',
+'ORCA025-SE-NEMO_1979_1981_EXP_ZPS_GLS_TIDE_WITH_TDRAG'
     ]
-RUNNAMS=['ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM_RIV']#,'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV_NTM_RIV']
-
-for RUNNAM in RUNNAMS:
+SS={}
+SN={}
+for iR,RUNNAM in enumerate(RUNNAMS):
     
     
     rmse_T=np.zeros(nlme)
@@ -134,9 +138,9 @@ for RUNNAM in RUNNAMS:
     #     rmse_T[ilme],me_T[ilme],cost_T[ilme],cc_T[ilme],n_T[ilme]          =error_stats(SSTy.ravel(),SST_EN4.ravel())
     #     rmse_S[ilme],me_S[ilme],cost_S[ilme],cc_S[ilme],n_S[ilme]          =error_stats(SSSy.ravel(),SSS_EN4.ravel())
     #     rmse_PEA[ilme],me_PEA[ilme],cost_PEA[ilme],cc_PEA[ilme],n_PEA[ilme]=error_stats(PEAy.ravel(),PEA_EN4.ravel())
-         metrics['rmse','SST',ilme],metrics['me','SST',ilme],metrics['cost','SST',ilme],metrics['cc','SST',ilme],metrics['N','SST',ilme]=error_stats(SSTy.ravel(),SST_EN4.ravel())
-         metrics['rmse','SSS',ilme],metrics['me','SSS',ilme],metrics['cost','SSS',ilme],metrics['cc','SSS',ilme],metrics['N','SSS',ilme]=error_stats(SSSy.ravel(),SSS_EN4.ravel())
-         metrics['rmse','PEA',ilme],metrics['me','PEA',ilme],metrics['cost','PEA',ilme],metrics['cc','PEA',ilme],metrics['N','PEA',ilme]=error_stats(PEAy.ravel(),PEA_EN4.ravel())
+         metrics['rmse','SST',ilme,iR],metrics['me','SST',ilme,iR],metrics['cost','SST',ilme,iR],metrics['cc','SST',ilme,iR],metrics['N','SST',ilme,iR]=error_stats(SSTy.ravel(),SST_EN4.ravel())
+         metrics['rmse','SSS',ilme,iR],metrics['me','SSS',ilme,iR],metrics['cost','SSS',ilme,iR],metrics['cc','SSS',ilme,iR],metrics['N','SSS',ilme,iR]=error_stats(SSSy.ravel(),SSS_EN4.ravel())
+         metrics['rmse','PEA',ilme,iR],metrics['me','PEA',ilme,iR],metrics['cost','PEA',ilme,iR],metrics['cc','PEA',ilme,iR],metrics['N','PEA',ilme,iR]=error_stats(PEAy.ravel(),PEA_EN4.ravel())
          LMEs=np.append(LMEs,ilme).astype(int)     
          if plot:     
              plt.figure(ilme)
@@ -170,34 +174,34 @@ for RUNNAM in RUNNAMS:
       
     #%%
       
-      
+    #Table for each experiment  
     DD={}
-    SS={}
-    SN={}
+
     DD['LME']=[]
     vars=['SST','SSS','PEA']
     Metrics=['me','cost','cc','N']
     for var in vars:
        for Metric in Metrics:
         DD[var+' '+Metric]=[]
-        SS[var+' '+Metric]=0
-        SN[var+' '+Metric]=0
+        SS[var+' '+Metric,iR]=0
+        SN[var+' '+Metric,iR]=0
         
     for ilme in LMEs:
         DD['LME']=np.append(DD['LME'],A['DOMNAM'][ilme])
         for var in vars:
             for Metric in Metrics:
-                DD[var+' '+Metric]=np.append(DD[var+' '+Metric],metrics[Metric,var,ilme])
-                if np.isfinite(metrics[Metric,var,ilme]) and np.isfinite(metrics['N',var,ilme]):
-                 SS[var+' '+Metric]=SS[var+' '+Metric]+metrics[Metric,var,ilme]*metrics['N',var,ilme]
-                 SN[var+' '+Metric]=SN[var+' '+Metric]+metrics['N',var,ilme]
+                DD[var+' '+Metric]=np.append(DD[var+' '+Metric],metrics[Metric,var,ilme,iR])
+                if np.isfinite(metrics[Metric,var,ilme,iR]) and np.isfinite(metrics['N',var,ilme,iR]):
+                 SS[var+' '+Metric,iR]=SS[var+' '+Metric,iR]+metrics[Metric,var,ilme,iR]*metrics['N',var,ilme,iR]
+                 SN[var+' '+Metric,iR]=SN[var+' '+Metric,iR]+metrics['N',var,ilme,iR]
                  
 
     for var in vars:
         for Metric in Metrics:
-            SS[var+' '+Metric]=SS[var+' '+Metric]/SN[var+' '+Metric]
+            SS[var+' '+Metric,iR]=SS[var+' '+Metric,iR]/SN[var+' '+Metric,iR]
 
-            DD[var+' '+Metric]=np.append(DD[var+' '+Metric],SS[var+' '+Metric])
+            DD[var+' '+Metric]=np.append(DD[var+' '+Metric],SS[var+' '+Metric,iR])
+            
     DD['LME']=np.append(DD['LME'],'N Weighted Mean')                                     
     df=pd.DataFrame(DD)
     df=df.set_index('LME')
@@ -207,8 +211,43 @@ for RUNNAM in RUNNAMS:
     #workbook  = writer.book
     #worksheet = writer.sheets['Sheet1']
     #writer.save()
-                    
+#%%                    
+    #Table for each LME  
+for ilme in LMEs:
+    LMENAME=A['DOMNAM'][ilme]
+    DD={}
+
+    DD['RUNNAM']=[]
+    vars=['SST','SSS','PEA']
+    Metrics=['me','cost','cc','N']
+    for var in vars:
+       for Metric in Metrics:
+        DD[var+' '+Metric]=[]
+
         
+    for iR,RUNNAM in enumerate(RUNNAMS):
         
-        
-      
+        DD['RUNNAM']=np.append(DD['RUNNAM'],RUNNAM)
+        for var in vars:
+            for Metric in Metrics:
+                DD[var+' '+Metric]=np.append(DD[var+' '+Metric],metrics[Metric,var,ilme,iR])
+             
+    df=pd.DataFrame(DD)
+    df=df.set_index('RUNNAM')
+    df.to_csv(Outdir +'Errorstats_'+ LMENAME +'_'+str(int(Depth_lim))+'m_'+mons+'_V2.csv')        
+#%% Summary
+DD={}
+DD['RUNNAM']=[]
+vars=['SST','SSS','PEA']
+Metrics=['me','cost','cc','N']
+for var in vars:
+   for Metric in Metrics:
+    DD[var+' '+Metric]=[]
+for iR,RUNNAM in enumerate(RUNNAMS):    
+    DD['RUNNAM']=np.append(DD['RUNNAM'],RUNNAM)        
+    for var in vars:
+            for Metric in Metrics:
+                DD[var+' '+Metric]=np.append(DD[var+' '+Metric],SS[var+' '+Metric,iR]) 
+df=pd.DataFrame(DD)
+df=df.set_index('RUNNAM')
+df.to_csv(Outdir +'Errorstats_'+ 'N_Weight_Mean' +'_'+str(int(Depth_lim))+'m_'+mons+'_V2.csv')        

@@ -50,7 +50,8 @@ def lightcolormap(Np,nt):
  cmap1=LinearSegmentedColormap.from_list('cmap1',colors1,cmap0.N-nt*2)
  return cmap1
 #%%
-def plot_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name, co_located=False,Vmax=0.16,Np=3): 
+def mean_surface_circulation(nemo_u,nemo_v,nemo_t,mask,
+                             co_located=False): 
 #%%
  nx=nemo_u.dataset.x_dim.size
  ny=nemo_u.dataset.y_dim.size
@@ -80,9 +81,33 @@ def plot_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name, co_located=False,Vm
  VS[SP<0.02]=np.nan
  US=US/SP
  VS=VS/SP
- 
+ return SP, US, VS
+
+def mean_surface_TS(nemo_t,mask): 
+#%%
+ nx=nemo_t.dataset.x_dim.size
+ ny=nemo_t.dataset.y_dim.size
 
 
+ if len(nemo_t.dataset.temperature.dims)==2:
+     TMP=nemo_t.dataset.temperature.values
+     SAL=nemo_t.dataset.salinity.values
+ elif len(nemo_t.dataset.temperature.dims)==3:
+     TMP=nemo_t.dataset.temperature[:,:,:].mean(dim="t_dim").values
+     SAL=nemo_t.dataset.salinity[:,:,:].mean(dim="t_dim").values
+ else:     
+     TMP=nemo_t.dataset.temperature[:,0,:,:].mean(dim="t_dim").values
+     SAL=nemo_t.dataset.salinity[:,0,:,:].mean(dim="t_dim").values
+
+ return TMP,SAL
+
+#%%
+def plot_surface_circulation(SP, US, VS,nemo_t,mask,name
+                             ,Vmax=0.16,Np=3
+                             ,headwidth=4,scale=50                            
+                             ,**kwargs): 
+ nx=nemo_t.dataset.x_dim.size
+ ny=nemo_t.dataset.y_dim.size   
  p=np.ma.masked_where(mask==0,SP)
  u=np.ma.masked_where(mask[0::Np,0::Np]==0,US[0::Np,0::Np])
  v=np.ma.masked_where(mask[0::Np,0::Np]==0,VS[0::Np,0::Np])
@@ -102,11 +127,19 @@ def plot_surface_circulation(nemo_u,nemo_v,nemo_t,mask,name, co_located=False,Vm
  plt.clim([0,Vmax])
  plt.colorbar(orientation='vertical',cmap=cmap1)
  #plt.quiver(x,y,u,v,color=[0.1,0.1,0.1],headwidth=4,scale=50)
- plt.quiver(x,y,u,v,color=[0.1,0.1,0.1],headwidth=4,scale=50)
+ plt.quiver(x,y,u,v,color=[0.1,0.1,0.1],headwidth=headwidth,scale=scale,**kwargs)
  plt.title('Surface Currents ' + name)
- return SP, US, VS
-
-
+#%% 
+def plot_surface_T_field(Var,nemo_t,mask,name,Vmin,Vmax):
+    nx=nemo_t.dataset.x_dim.size
+    ny=nemo_t.dataset.y_dim.size   
+    Var=np.ma.masked_where(mask==0,Var)
+    cmap1=lightcolormap(int(Vmax*100),2)
+    cmap1.set_bad([0.75,0.75,0.75])
+    fig=plt.figure(); fig.clear()
+    plt.pcolormesh(Var,cmap=cmap1,vmin=Vmin,vmax=Vmax)
+    plt.colorbar(orientation='vertical',cmap=cmap1)
+    plt.title('Surface Sal Anom ' + name)
 
 
 #%%
@@ -149,14 +182,17 @@ if __name__ == '__main__':
     fn_config_v_grid='./example_nemo_grid_v.json'
 
 
-    names,dpaths,DOMS,_  = coast. experiments(experiments='experiments1.json')  
+    #names,dpaths,DOMS,_  = coast. experiments(experiments='experiments_james.json')
+    names=["EXP_MES_WAV_NTM"]
+    dpaths=["/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM"]
+    DOMS=["/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/EXP_MES_WAV_NTM/domain_cfg_r015-r010_007_004v2.nc"]       
     Unmean={}
     Untm={}
     Zmean={}
     Un={}
     Z={}
-    ystart=1993
-    ystop=2019
+    ystart=1979
+    ystop=1981
     A=np.load('../Data/LME_gridinfo_V4.npz')
     a=scipy.io.loadmat('../Data/ORCA025_ROAM_GLB_LMEmaskV4.mat')
     nlme=66
@@ -176,15 +212,15 @@ if __name__ == '__main__':
     for i,name in enumerate(names): 
         print(name)
         print(dpaths[i])
-        fn_nemo_dat_u= coast.nemo_filenames(dpaths[i],'SENEMO',ystart,ystop,grid='U') 
-        fn_nemo_dat_v= coast.nemo_filenames(dpaths[i],'SENEMO',ystart,ystop,grid='V') 
-        fn_nemo_dat_u=    fn_nemo_dat_u[iseason]       
+        fn_nemo_dat_u= coast.nemo_filename_maker(dpaths[i],ystart,ystop,grid='U',runtype='SENEMO') 
+        fn_nemo_dat_v= coast.nemo_filename_maker(dpaths[i],ystart,ystop,grid='V',runtype='SENEMO')
         fn_nemo_dat_v=    fn_nemo_dat_v[iseason]   
         fn_nemo_dom=DOMS[i]
     #    fn_nemo_dat_u=dpaths[i]+'SENEMO_1m_19800101_19801231_grid_U_198007-198007.nc'
     #    fn_nemo_dat_v=dpaths[i]+'SENEMO_1m_19800101_19801231_grid_V_198007-198007.nc'
     
-        recalc=False            
+        recalc=True
+        cmems=False            
         nemo_t = coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid)#,calc_bathy=True)
         if recalc:        
     
@@ -217,23 +253,25 @@ if __name__ == '__main__':
                 nemo_t1=nemo_t.subset_as_copy(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
                 mask=nemo_t1.dataset.bathymetry != 0
                 Name=name+' '+SEASON+' '+YEARS+' '+REGION 
-                SP,US,VS=plot_surface_circulation(nemo_u1,nemo_v1,nemo_t1,mask,Name)
-                plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png')
+                SP,US,VS=mean_surface_circulation(nemo_u1,nemo_v1,nemo_t1,mask)
+                plot_surface_circulation(SP,US,VS,nemo_t1,mask,Name)
+                plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'_v1.png')
                 fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
                 nemo_t_out=coast.Gridded(fn_domain=fn_nemo_dom, config=fn_config_t_grid)
                 nemo_t_out.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
                 save_currents(SP,US,VS,fn_out,nemo_t_out)
 
 #
-            name="CMEMS_ORCA12"
-            Name=name+' '+SEASON+' '+YEARS+' '+REGION   
-            fn_cmems=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
-            cmems=coast.Gridded(fn_data=fn_cmems,config="")
-            name=names[0]
-            Name=name+' '+SEASON+' '+YEARS+' '+REGION
-            fn_orca025=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
-            ORCA025=coast.Gridded(fn_data=fn_orca025,config="")
-            cmems_on_ORCA025=regrid_currents(cmems,ORCA025)
+            if cmems:
+                name="CMEMS_ORCA12"
+                Name=name+' '+SEASON+' '+YEARS+' '+REGION   
+                fn_cmems=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
+                cmems=coast.Gridded(fn_data=fn_cmems,config="")
+                name=names[0]
+                Name=name+' '+SEASON+' '+YEARS+' '+REGION
+                fn_orca025=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
+                ORCA025=coast.Gridded(fn_data=fn_orca025,config="")
+                cmems_on_ORCA025=regrid_currents(cmems,ORCA025)
             
     #    Un[name],Unmean[name],Z[name],Zmean[name]=flx_contour(nemo_f,nemo_u,nemo_v)
     
