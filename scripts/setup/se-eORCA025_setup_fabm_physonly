@@ -7,24 +7,25 @@ display_usage() {
    echo "  ***************************************"
    echo
    echo "  usage: ${0##*/} -w path_to_install_nemo -x path_to_intall_xios -s path_to_repo"
-   echo "                  -m machine -f pah_to_fabm"
+   echo "                  -m machine -a MPI build -f path_to_fabm"
    echo
    echo "  flags:  -w full path to where nemo will be installed"
    echo "          -x full path to where xios will be installed"
    echo "          -s full path to where SE-NEMO repository resides"
    echo "          -m machine name"
+   echo "          -a MPI build [mpich|mpich4|ompi]"
    echo "          -f full path to where fabm was built"
    echo
    exit 1
 	} 
 # if less than three arguments supplied, display usage 
-	if [  $# -le 7 ] 
+	if [  $# -le 9 ] 
 	then 
 		display_usage
 		exit 1
 	fi 
 # if less than two arguments supplied, display usage 
-	if [  $# -ge 11 ] 
+	if [  $# -ge 13 ] 
 	then 
 		display_usage
 		exit 1
@@ -36,7 +37,7 @@ display_usage() {
 		exit 0
 	fi 
 
-while getopts w:x:s:m:f: option
+while getopts w:x:s:m:a:f: option
   do
   case "${option}"
   in
@@ -44,6 +45,7 @@ while getopts w:x:s:m:f: option
   x) export XIOS_DIR=${OPTARG};;
   s) export REPO_DIR=${OPTARG};;
   m) export HPC_TARG=${OPTARG};;
+  a) export MPI_TARG=${OPTARG};;
   f) export FABM_DIR=${OPTARG};;
   esac
 done
@@ -74,24 +76,30 @@ if [ ! -d "$WORK_DIR" ]; then
 fi
 cd $WORK_DIR
 
-# clean old stuff
-rm -rf $WORK_DIR/*
-
-module purge
-
 echo "Making sure that the correct modules are loaded"
 
 case "${HPC_TARG}"
   in
-  archer2) . $REPO_DIR/scripts/env/gnu-mpich
-  ;;
-  GCC_ARCHER2) . $REPO_DIR/scripts/env/ucx_env
+  # these two sets of modules result in the same module list, however the PML one start from a module purge, so it dos not inherit anything
+  archer2) . $REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}
+           ;;
+  archer2-fabm) . $REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}
+           ;;
+  archer2-fabm_debug) . $REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}
            ;;
   *)       echo "Machine not recognised"
            echo "Machines available: archer2"
-           echo "Machines available: GCC_ARCHER2"
+           echo "Machines available: archer2-fabm"
+           echo "Machines available: archer2-fabm_debug"
            exit 1
 esac
+
+echo 'MOUDULE LIST'
+echo '############'
+module list
+echo '############'
+
+
 
 export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
 
@@ -107,8 +115,8 @@ echo "Checking out NEMO repository"
 #svn export http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/ref_cfgs.txt nemo/cfgs/ref_cfgs.txt
 git clone https://github.com/pmlmodelling/NEMO4.0-FABM nemo
 
-#this is needed until the new arch is pushed to NEMO4
-cp /home/n01/n01/yuti/git-reps/NEMO4.0-FABM/arch/PML/arch-GCC_ARCHER2_PHYS.fcm nemo/arch/PML/
+# this is needed until the physics only architecture file is not in the pmlmodelling repo
+#cp /home/n01/n01/yuti/git-reps/NEMO4.0-FABM/arch/PML/arch-GCC_ARCHER2_PHYS.fcm $WORK_DIR/nemo/arch/PML/
 
 
 cd nemo
@@ -123,12 +131,12 @@ cd nemo
 #ext=`svn propget svn:externals | grep makenemo | cut -c2-`
 #svn export http://forge.ipsl.jussieu.fr/nemo/svn/$ext
 #
-#mkdir arch
+mkdir arch
 
 # Setup the directory structure for the ENSEMBLE
 mkdir $WORK_DIR/nemo/cfgs/se-eORCA025
 # Define the location of where the AMM7 forcing files are to be downloaded 
-export DOWNLOAD_DIR="$WORK_DIR/nemo/cfgs/se-orca025/EXPREF/"
+#export DOWNLOAD_DIR="$WORK_DIR/nemo/cfgs/se-orca025/EXPREF_FABM/"   # YA commented, seems unused
 
 echo $XIOS_DIR
 # Choose an appropriate directory for your XIOS installation
@@ -139,33 +147,33 @@ cd $XIOS_DIR
 echo $PWD
 echo "Checking out xios repository"
 #svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5@1964 xios
-svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5 xios
+svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5@2254 xios
 cd xios
 cp $REPO_DIR/arch/xios/* ./arch
 
 echo "Compiling xios"
-#./make_xios --full --prod --arch ${HPC_TARG} --netcdf_lib netcdf4_par --job 4
-./make_xios --full --debug --arch ${HPC_TARG} --netcdf_lib netcdf4_par --job 4
+./make_xios --full --prod --arch ${HPC_TARG}-${MPI_TARG} --netcdf_lib netcdf4_par --job 4
 
 # Let's update the path to xios
 export XIOS_DIR=$XIOS_DIR/xios
 export XIOS_HOME=$XIOS_DIR
 export FABM_HOME=$FABM_DIR
 
+# set cpp file that includes key_top and key_fabm (this allows to keep 1 config folder)
+rm $REPO_DIR/cpp_se-eORCA025.fcm
+cp $REPO_DIR/cpp_se-eORCA025.phys.fcm $REPO_DIR/cpp_se-eORCA025.fcm
+
+
 cd $WORK_DIR/nemo
 cp $REPO_DIR/arch/nemo/* ./arch
 # Dirty fix to hard wire path otherwise user will have to set XIOS_DIR in every new shell session
-sed -i "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-${HPC_TARG}.fcm
+sed -i "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-${HPC_TARG}-${MPI_TARG}.fcm
 
 echo 'se-eORCA025 OCE ICE' >> $WORK_DIR/nemo/cfgs/work_cfgs.txt
 
 echo "Gathering forcing data"
 
 export CONFIG_DIR=$WORK_DIR/nemo/cfgs/se-eORCA025
-
-# set cpp file that includes key_top and key_fabm (this allows to keep 1 config folder)
-rm $REPO_DIR/cpp_se-eORCA025.fcm
-cp $REPO_DIR/cpp_se-eORCA025.fabm.fcm $REPO_DIR/cpp_se-eORCA025.fcm
 
 cd $CONFIG_DIR
 
@@ -174,19 +182,41 @@ case "${HPC_TARG}"
   in
   archer2) ln -s /work/n01/shared/se-eORCA025 INPUTS
            ;;
-  GCC_ARCHER2) ln -s /work/n01/shared/se-eORCA025 INPUTS
+  archer2-fabm) ln -s /work/n01/shared/se-eORCA025 INPUTS
+           ;;
+  archer2-fabm_debug) ln -s /work/n01/shared/se-eORCA025 INPUTS
            ;;
   *)       wget http://gws-access.ceda.ac.uk/public/jmmp/se-eORCA025/inputs.tar.gz
 	   tar xvfz inputs.tar.gz
            ;;
 esac
 
-cp -r $REPO_DIR/EXPREF .
-cd $CONFIG_DIR/EXPREF
+
+cp -r $REPO_DIR/EXPREF_FABM .
+cd $CONFIG_DIR/EXPREF_FABM
+
+# copy the module files in the running folder to guarantee that the same combination of modules is used
+case "${HPC_TARG}"
+  in
+  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}?" runscript.slurm
+           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}?" runscript.mpirun
+           rm $CONFIG_DIR/PML-gnu-*
+           cp $REPO_DIR/scripts/env/PML-gnu-${MPI_TARG} $CONFIG_DIR
+           echo 'modules COPIED!!!!!!!!!!!!!!!!!' 
+           ;;
+  archer2-fabm)  sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}?" runscript.slurm
+                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}?" runscript.mpirun
+                 rm $CONFIG_DIR/PML-gnu-*
+                 cp $REPO_DIR/scripts/env/PML-gnu-${MPI_TARG} $CONFIG_DIR
+                 echo 'modules COPIED!!!!!!!!!!!!!!!!!' 
+           ;;
+esac
 
 mkdir meta_out
 mkdir RESTARTS
 mkdir OUTPUTS
+mkdir OUTPUTS_PROCESSED
+mkdir OUTPUTS_ZIP
 
 ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXPREF/xios_server.exe
 
@@ -200,6 +230,12 @@ ln -s INPUTS/M2rowdrg_R025_modif_nonpositive.nc M2rowdrg.nc
 ln -s INPUTS/mask_itf_ORCA025ext.nc mask_itf.nc
 ln -s INPUTS/bfr_coef.nc .
 ln -s INPUTS/shlat2d.nc .
+# this was the domain to use with the final_tidy branch
+#ln -s ../INPUTS/domcfg_eORCA025_v2.nc ./domain_cfg.nc
+#this is the domani to use with master/FABM
+#ln -s ../INPUTS/domain_cfg_r015-r010_007_004v2.nc ./domain_cfg.nc
+ln -s ../INPUTS/domain_cfg_r018-010-010_glo-r018-010_ant_opt_v3_notaper.nc ./domain_cfg.nc
+
 
 # First copy GO8 code
 cp -r $REPO_DIR/MY_SRC_GO8_FROZEN $CONFIG_DIR/MY_SRC
@@ -213,8 +249,7 @@ cp $REPO_DIR/scripts/run/* $CONFIG_DIR/EXPREF
 cd $WORK_DIR/nemo
 
 echo "Compiling nemo SE-ORCA025 Config"
-#./makenemo -m ${HPC_TARG} -r se-eORCA025 -j 16
-./makenemo -m GCC_ARCHER2_DEBUG -r se-eORCA025 -j 8
+./makenemo -m ${HPC_TARG}-${MPI_TARG} -r se-eORCA025 -j 16
 
 echo
 echo "  Auto-Config: SE-eORCA025"
@@ -229,6 +264,5 @@ echo "      (project code, nodes, modules, etc)"
 echo
 
 echo "  - submit via the sbatch command"
-
 
 echo    
