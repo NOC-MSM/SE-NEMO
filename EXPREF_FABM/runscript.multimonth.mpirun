@@ -4,28 +4,36 @@
 #SBATCH --account=n01-PML
 #SBATCH --partition=standard
 #SBATCH --qos=standard
-#SBATCH --nodes=75
+#SBATCH --nodes=19
 #SBATCH --ntasks=128
 #SBATCH --ntasks-per-core=1
 
 # ARCHER2 support suggestion to reduce UCX error messages:
 export UCX_IB_REG_METHODS=direct
-
 #################### nemo runscript options ############################
 # At present se-nemo has been run on 19 and 11 nodes                   #
 ########################################################################
+srun hostname -s > hostfile
 if [ $SLURM_NNODES -eq 164 ]
 then
-   ./build_rankfile  -S 164 -s 16 -m 1 -C 9172 -N 128 -n32 -H97 > rankfile
+   NXIOS=164
+   NNEMO=9172
+   ./build_rankfile  -S $NXIOS -s 16 -m 1 -C $NNEMO -c 22 -N 128 -n32 -H164 > rankfile
 elif [ $SLURM_NNODES -eq 97 ]
 then
-   ./build_rankfile -S 8 -s 16 -m 2 -C 8448 -c 22 -N 128 -n 32 -H 97 > rankfile
+   NXIOS=8
+   NNEMO=8448
+   ./build_rankfile -S $NXIOS -s 16 -m 2 -C $NNEMO -c 22 -N 128 -n 32 -H 97 > rankfile
 elif [ $SLURM_NNODES -eq 75 ]
 then
-   ./build_rankfile -S 8 -s 16 -m 2 -C 6429 -c 22 -N 128 -n 32 -H 75 > rankfile
+   NXIOS=8
+   NNEMO=6429
+   ./build_rankfile -S $NXIOS -s 16 -m 2 -C $NNEMO -c 22 -N 128 -n 32 -H 75 > rankfile
 elif [ $SLURM_NNODES -eq 19 ]
 then
-   ./build_rankfile -S 8 -s 16 -m 2 -C 1543 -c 22 -N 128 -n 32 -H 19 > rankfile
+   NXIOS=8
+   NNEMO=1543
+   ./build_rankfile -S $NXIOS -s 16 -m 2 -C $NNEMO -c 22 -N 128 -n 32 -H 19 > rankfile
 else
    exit
 fi
@@ -39,12 +47,12 @@ RUNDIR=$PWD
 #################### nemo runscript options ############################
 # For info on the parameters see namelist_ref                          #
 ########################################################################
-rn_rdt=600          ; ln_zps='.false.'       ; ln_tmx_itf='.false.'
+rn_rdt=600          ; ln_zps='.false.'      ; ln_tmx_itf='.false.'
 ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
 nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.false.'
-ln_rstdate='.false.' ; ln_shlat2d='.true.'  ; nn_diaharm=1981
+ln_rstdate='.true.' ; ln_shlat2d='.true.'   ; nn_diaharm=1981
 rn_Cd0=2.5e-3       ; ln_loglayer='.false.' ; ln_tide='.true.'
-ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.' 
+ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.'
 ln_hpg_djc='.true.' ;
 ########################################################################
 
@@ -118,15 +126,11 @@ fi
 echo $SLURM_NNODES
 
 . XXX_ENV_XXX
-export OMP_NUM_THREADS=1
 
-chmod u+x ./myscript_wrapper.sh
+export OMP_NUM_THREADS=1
 
 jpni=-1
 jpnj=-1
-
-cat > myscript_wrapper_small.sh << EOFB
-
 
 nsstart=$(date -d "$year_st-01-01 00:00:00 GMT" +%s) #seconds since EPOCH for total simulation start
 
@@ -317,13 +321,12 @@ do
       sed -i "s/XXX_RST_XXX/$ln_rstart_top/g" namelist_top_cfg
       sed -i "s/XXX_RCT_XXX/$nn_rstctl/g" namelist_top_cfg
 
-   done 
+   done
 
    # execution
    for ens in "${ARRAY[@]}"
    do
-      echo 'here'
-      mpirun --oversubscribe -rf rankfile --report-bindings -v -np 8 --bind-to core ./xios_server.exe : -np 6429 --bind-to core ./nemo  &
+      mpirun --oversubscribe -rf rankfile --report-bindings -v -np $NXIOS --bind-to core ./xios_server.exe : -np $NNEMO --bind-to core ./nemo  &
       ./time_step_chk $SLURM_JOB_ID $nn_itend &
    done
 
