@@ -22,6 +22,22 @@ sbatch runscript.[slurm|mpirun] # at present openMPI uses the .mpirun script
 ```
 This will produce a 5 day mean output from the beginning of 1976. The run should take 15 minutes to complete once in the machine.
 
+In the header of each runscript file there are three pre-defined core placements, for example in the mpirun file:
+```
+if [ $SLURM_NNODES -eq 97 ]
+then
+   ./build_rankfile -S 8 -s 16 -m 2 -C 8448 -c 22 -N 128 -n 32 -H 97 > rankfile
+elif [ $SLURM_NNODES -eq 75 ]
+then
+   ./build_rankfile -S 8 -s 16 -m 2 -C 6429 -c 22 -N 128 -n 32 -H 75 > rankfile
+elif [ $SLURM_NNODES -eq 19 ]
+then
+   ./build_rankfile -S 8 -s 16 -m 2 -C 1543 -c 22 -N 128 -n 32 -H 19 > rankfile
+else
+   exit
+fi
+```
+So all that is required to switch between these is to alter `#SBATCH --nodes=XX` at the top of the script. By following this simple syntax, additional experiments can easily be added.
 ### Forcing data:
 
 [SE-ORCA025](http://gws-access.ceda.ac.uk/public/jmmp_collab/)
