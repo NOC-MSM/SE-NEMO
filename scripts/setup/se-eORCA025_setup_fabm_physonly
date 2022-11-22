@@ -218,7 +218,7 @@ mkdir OUTPUTS
 mkdir OUTPUTS_PROCESSED
 mkdir OUTPUTS_ZIP
 
-ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXPREF/xios_server.exe
+ln -s $XIOS_DIR/bin/xios_server.exe $CONFIG_DIR/EXPREF_FABM/xios_server.exe
 
 
 echo 'se-eORCA025 OCE TOP ICE' >> $WORK_DIR/nemo/cfgs/work_cfgs.txt
@@ -244,7 +244,7 @@ cp $REPO_DIR/MY_SRC/* $CONFIG_DIR/MY_SRC/
 cp $REPO_DIR/MY_SRC_TIDE/* $CONFIG_DIR/MY_SRC/
 cp $REPO_DIR/MY_SRC_RIV/* $CONFIG_DIR/MY_SRC/
 cp $REPO_DIR/cpp_se-eORCA025.fcm $CONFIG_DIR/
-cp $REPO_DIR/scripts/run/* $CONFIG_DIR/EXPREF
+cp $REPO_DIR/scripts/run/* $CONFIG_DIR/EXPREF_FABM
 
 cd $WORK_DIR/nemo
 
@@ -257,7 +257,7 @@ echo "  *****************************"
 echo
 echo "  To run the SE-eORCA025 Configuration:"
 echo
-echo "  - cp -rP EXPREF EXP_MYRUN "
+echo "  - cp -rP EXPREF_FABM EXP_MYRUN "
 echo "  - link the correct domain_cfg.nc "
 echo "  - update the runscript accordingly "
 echo "      (project code, nodes, modules, etc)"
