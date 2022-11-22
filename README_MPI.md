@@ -38,9 +38,9 @@ _core count vs MPI_
 
 |  MES    | MPICH                      | MPICH4                           | OMPI|
 | :----:  |  :----:                    |   :----:                         |:----:  |
-| 1516    |  Runs                      | Hangs @ dia_ptr_init<sup>2</sup> ||
-| 6376    |  Hangs in XIOS<sup>1</sup> | Hangs @ dia_ptr_init<sup>2</sup> ||
-| 8448    |  Hangs in XIOS<sup>1</sup> | Hangs @ dia_ptr_init<sup>2</sup> ||
+| 1516    |  Runs                      | Hangs @ dia_ptr_init<sup>2</sup> | Falls over with Salt > 1e308 |
+| 6376    |  Hangs in XIOS<sup>1</sup> | Hangs @ dia_ptr_init<sup>2</sup> |Falls over with Salt > 1e308 |
+| 8448    |  Hangs in XIOS<sup>1</sup> | Hangs @ dia_ptr_init<sup>2</sup> |Falls over with Salt > 1e308 |
 
 |  ZPS    | MPICH | MPICH4    | OMPI|
 | :----:        |    :----:   |   :----:  |:----:  |
