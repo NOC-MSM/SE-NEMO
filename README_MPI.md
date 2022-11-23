@@ -53,17 +53,17 @@ At higher core counts NEMO/XIOS are not running. The thought is that it may be l
 
 _core count vs MPI_
 
-|  MES    | MPICH                      | MPICH4                           | OMPI|
-| :----:  |  :----:                    |   :----:                         |:----:  |
-| 1516    |  Runs                      | Hangs @ dia_ptr_init<sup>2</sup> | Falls over with Salt > 1e308 |
-| 6376    |  Hangs in XIOS<sup>1</sup> | Hangs @ dia_ptr_init<sup>2</sup> |Falls over with Salt > 1e308 |
-| 8448    |  Hangs in XIOS<sup>1</sup> | Hangs @ dia_ptr_init<sup>2</sup> |Falls over with Salt > 1e308 |
+|  MES    | MPICH                      | MPICH4                           | OMPI-srun|  OMPI-mpirun|
+| :----:  |  :----:                    |   :----:                         |:----:  |:----:  |
+| 1516    |  Runs                      | Hangs @ dia_ptr_init<sup>2</sup> |Falls over with Salt > 1e308 | Falls over with Salt > 1e308|
+| 6376    |  Hangs in XIOS<sup>1</sup> | Hangs @ dia_ptr_init<sup>2</sup> |Falls over with Salt > 1e308 | Falls over with Salt > 1e308|
+| 8448    |  Hangs in XIOS<sup>1</sup> | Hangs @ dia_ptr_init<sup>2</sup> |Falls over with Salt > 1e308 | Falls over with Salt > 1e308|
 
-|  ZPS    | MPICH                      | MPICH4    | OMPI|
-| :----:  |    :----:                  |   :----:  |:----:  |
-| 1516    |                            |                     |Runs|
-| 6376    |                            |           |  Transport retry count exceeded on mlx5_1:1/RoCE (synd 0x15 vend 0x81 hw_synd 0/0) |
-| 8448    |                            |           |  Transport retry count exceeded on mlx5_0:1/RoCE (synd 0x15 vend 0x81 hw_synd 0/0) |
+|  ZPS    | MPICH                      | MPICH4    | OMPI-srun|  OMPI-mpirun|
+| :----:  |    :----:                  |   :----:  |:----:  |:----:  |
+| 1516    |                            |                     |Runs||
+| 6376    |                            |           |  Transport retry count exceeded on mlx5_1:1/RoCE  ||
+| 8448    |                            |           |  Transport retry count exceeded on mlx5_0:1/RoCE  | Runs |
 
 Notes:
 
