@@ -44,8 +44,8 @@
 
 %CPP                 cpp -Dkey_nosignedzero
 %FC                  ftn
-%FCFLAGS             -O2 -cpp -fallow-argument-mismatch -fdefault-real-8 -fcray-pointer -ffree-line-length-none
-%FFLAGS              -O2 -cpp -fallow-argument-mismatch -fdefault-real-8 -fcray-pointer -ffree-line-length-none
+%FCFLAGS             -O2 -cpp -fallow-argument-mismatch -fdefault-real-8 -fcray-pointer -ffree-line-length-none -finit-real=zero -finit-integer=0
+%FFLAGS              -O2 -cpp -fallow-argument-mismatch -fdefault-real-8 -fcray-pointer -ffree-line-length-none -finit-real=zero -finit-integer=0
 %LD                  CC
 %FPPFLAGS            -P -traditional %FABM_INC
 %LDFLAGS             -lmpi -lmpi_mpifh
