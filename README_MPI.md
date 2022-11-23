@@ -18,7 +18,7 @@ ln -s INPUTS/domain_cfg_r018-010-010_glo-r018-010_ant_opt_v3_notaper.nc domain_c
 ```
 Edit the project code and options in  `runscript.[slurm|mpirun]` then:
 ```
-sbatch runscript.[slurm|mpirun] # at present openMPI uses the .mpirun script
+sbatch runscript.[slurm|mpirun] # the openMPI version can use either script
 ```
 This will produce a 5 day mean output from the beginning of 1976. The run should take 15 minutes to complete once in the machine.
 
@@ -38,6 +38,7 @@ else
 fi
 ```
 So all that is required to switch between these is to alter `#SBATCH --nodes=XX` at the top of the script. By following this simple syntax, additional experiments can easily be added.
+
 ### Forcing data:
 
 [SE-ORCA025](http://gws-access.ceda.ac.uk/public/jmmp_collab/)
