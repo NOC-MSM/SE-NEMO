@@ -22,6 +22,12 @@ sbatch runscript.[slurm|mpirun] # the openMPI version can use either script
 ```
 This will produce a 5 day mean output from the beginning of 1976. The run should take 15 minutes to complete once in the machine.
 
+If using the ZPS case the following need to be set in the `runscript.[slurm|mpirun]`:
+```
+ln_zps='.true.'
+ln_hpg_djc='.false.'
+```
+
 In the header of each runscript file there are three pre-defined core placements, for example in the mpirun file:
 ```
 if [ $SLURM_NNODES -eq 97 ]
@@ -37,7 +43,7 @@ else
    exit
 fi
 ```
-So all that is required to switch between these is to alter `#SBATCH --nodes=XX` at the top of the script. By following this simple syntax, additional experiments can easily be added.
+So all that is required to switch between these is to alter `#SBATCH --nodes=XX` at the top of the script. By following this simple syntax, additional experiments can easily be added. To get information about about the use of `build_rankfile` just issue: `build_rankfile -h`. Likewise for the `runscript.slurm`: `slurm_setup -h`.
 
 ### Forcing data:
 
