@@ -32,7 +32,7 @@
 #
 %NCDF_HOME           $NETCDF_DIR
 %HDF5_HOME           $HDF5_DIR
-%XIOS_HOME           /work/n01/n01/jdha/test_deploy_ompi/xios
+%XIOS_HOME           XXX_XIOS_DIR_XXX
 %FABM_HOME           $FABM_HOME
 
 %NCDF_INC            -I$NETCDF_C_DIR/include -I$NETCDF_FORTRAN_DIR/include -I%HDF5_HOME/include
