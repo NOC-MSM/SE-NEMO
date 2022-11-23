@@ -59,11 +59,11 @@ _core count vs MPI_
 | 6376    |  Hangs in XIOS<sup>1</sup> | Hangs @ dia_ptr_init<sup>2</sup> |Falls over with Salt > 1e308 |
 | 8448    |  Hangs in XIOS<sup>1</sup> | Hangs @ dia_ptr_init<sup>2</sup> |Falls over with Salt > 1e308 |
 
-|  ZPS    | MPICH | MPICH4    | OMPI|
-| :----:        |    :----:   |   :----:  |:----:  |
-|1516     |       |    ||
-| 6376   |        |      ||
-| 8448   |         |      ||
+|  ZPS    | MPICH                      | MPICH4    | OMPI|
+| :----:  |    :----:                  |   :----:  |:----:  |
+| 1516    |                            |                     |Runs|
+| 6376    |                            |           |  Transport retry count exceeded on mlx5_1:1/RoCE (synd 0x15 vend 0x81 hw_synd 0/0) |
+| 8448    |                            |           |  Transport retry count exceeded on mlx5_0:1/RoCE (synd 0x15 vend 0x81 hw_synd 0/0) |
 
 Notes:
 
