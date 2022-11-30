@@ -18,9 +18,15 @@ ln -s INPUTS/domain_cfg_r018-010-010_glo-r018-010_ant_opt_v3_notaper.nc domain_c
 ```
 Edit the project code and options in  `runscript.[slurm|mpirun]` then:
 ```
-sbatch runscript.[slurm|mpirun] # at present openMPI uses the .mpirun script
+sbatch runscript.[slurm|mpirun] # the openMPI version can use either script
 ```
 This will produce a 5 day mean output from the beginning of 1976. The run should take 15 minutes to complete once in the machine.
+
+If using the ZPS case the following need to be set in the `runscript.[slurm|mpirun]`:
+```
+ln_zps='.true.'
+ln_hpg_djc='.false.'
+```
 
 In the header of each runscript file there are three pre-defined core placements, for example in the mpirun file:
 ```
@@ -37,7 +43,8 @@ else
    exit
 fi
 ```
-So all that is required to switch between these is to alter `#SBATCH --nodes=XX` at the top of the script. By following this simple syntax, additional experiments can easily be added.
+So all that is required to switch between these is to alter `#SBATCH --nodes=XX` at the top of the script. By following this simple syntax, additional experiments can easily be added. To get information about about the use of `build_rankfile` just issue: `build_rankfile -h`. Likewise for the `runscript.slurm`: `slurm_setup -h`.
+
 ### Forcing data:
 
 [SE-ORCA025](http://gws-access.ceda.ac.uk/public/jmmp_collab/)
@@ -52,17 +59,17 @@ At higher core counts NEMO/XIOS are not running. The thought is that it may be l
 
 _core count vs MPI_
 
-|  MES    | MPICH                      | MPICH4                           | OMPI|
-| :----:  |  :----:                    |   :----:                         |:----:  |
-| 1516    |  Runs                      | Hangs @ dia_ptr_init<sup>2</sup> | Falls over with Salt > 1e308 |
-| 6376    |  Hangs in XIOS<sup>1</sup> | Hangs @ dia_ptr_init<sup>2</sup> |Falls over with Salt > 1e308 |
-| 8448    |  Hangs in XIOS<sup>1</sup> | Hangs @ dia_ptr_init<sup>2</sup> |Falls over with Salt > 1e308 |
+|  MES    | MPICH                      | MPICH4                           | OMPI-srun|  OMPI-mpirun|
+| :----:  |  :----:                    |   :----:                         |:----:  |:----:  |
+| 1516    |  Runs                      | Hangs @ dia_ptr_init<sup>2</sup> |Falls over with Salt > 1e308 | Falls over with Salt > 1e308|
+| 6376    |  Hangs in XIOS<sup>1</sup> | Hangs @ dia_ptr_init<sup>2</sup> |Falls over with Salt > 1e308 | Falls over with Salt > 1e308|
+| 8448    |  Hangs in XIOS<sup>1</sup> | Hangs @ dia_ptr_init<sup>2</sup> |Falls over with Salt > 1e308 | Falls over with Salt > 1e308|
 
-|  ZPS    | MPICH | MPICH4    | OMPI|
-| :----:        |    :----:   |   :----:  |:----:  |
-|1516     |       |    ||
-| 6376   |        |      ||
-| 8448   |         |      ||
+|  ZPS    | MPICH                      | MPICH4    | OMPI-srun|  OMPI-mpirun|
+| :----:  |    :----:                  |   :----:  |:----:  |:----:  |
+| 1516    |                            |                     |Runs||
+| 6376    |                            |           |  Transport retry count exceeded on mlx5_1:1/RoCE  ||
+| 8448    |                            |           |  Transport retry count exceeded on mlx5_0:1/RoCE  | Runs |
 
 Notes:
 

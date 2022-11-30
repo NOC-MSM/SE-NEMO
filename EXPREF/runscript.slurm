@@ -104,6 +104,7 @@ fi
 echo $SLURM_NNODES
 
 . XXX_ENV_XXX
+export LD_LIBRARY_PATH=${CRAY_LD_LIBRARY_PATH}:${LD_LIBRARY_PATH}
 export OMP_NUM_THREADS=1
 
 chmod u+x ./myscript_wrapper.sh

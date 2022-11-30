@@ -32,7 +32,7 @@
 #
 %NCDF_HOME           $NETCDF_DIR
 %HDF5_HOME           $HDF5_DIR
-%XIOS_HOME           /work/n01/n01/jdha/test_deploy_ompi/xios
+%XIOS_HOME           XXX_XIOS_DIR_XXX 
 
 %NCDF_INC            -I$NETCDF_C_DIR/include -I$NETCDF_FORTRAN_DIR/include -I%HDF5_HOME/include
 %NCDF_LIB            -L%HDF5_HOME/lib -L$NETCDF_C_DIR/lib -L$NETCDF_FORTRAN_DIR/lib -lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lcurl -lz
@@ -41,8 +41,8 @@
 
 %CPP                 cpp -Dkey_nosignedzero
 %FC                  ftn
-%FCFLAGS             -O2 -cpp -fallow-argument-mismatch -fdefault-real-8 -fcray-pointer -ffree-line-length-none
-%FFLAGS              -O2 -cpp -fallow-argument-mismatch -fdefault-real-8 -fcray-pointer -ffree-line-length-none
+%FCFLAGS             -O2 -cpp -fallow-argument-mismatch -fdefault-real-8 -fcray-pointer -ffree-line-length-none -finit-real=zero -finit-integer=0
+%FFLAGS              -O2 -cpp -fallow-argument-mismatch -fdefault-real-8 -fcray-pointer -ffree-line-length-none -finit-real=zero -finit-integer=0
 %LD                  CC
 %FPPFLAGS            -P -traditional
 %LDFLAGS             -lmpi -lmpi_mpifh
