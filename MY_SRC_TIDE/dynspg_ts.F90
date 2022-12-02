@@ -1488,8 +1488,8 @@ CONTAINS
       IF ( ln_int_wave_drag ) THEN
          DO jj = 2, jpjm1
             DO ji=2, jpim1
-               pCdU_u(ji,jj) = pCdU_u(ji,jj) - tdiss(ji, jj)
-               pCdU_v(ji,jj) = pCdU_v(ji,jj) - tdiss(ji, jj)
+               pCdU_u(ji,jj) = pCdU_u(ji,jj) - r1_2*( tdiss(ji+1,jj)+ tdiss(ji,jj) )
+               pCdU_v(ji,jj) = pCdU_v(ji,jj) - r1_2*( tdiss(ji,jj+1)+ tdiss(ji,jj) )
             END DO
          END DO
       ENDIF
