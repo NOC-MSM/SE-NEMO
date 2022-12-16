@@ -30,14 +30,15 @@ lon=bathy.dataset.longitude
 lat=bathy.dataset.latitude
 
 
-icluster=16
+icluster=15
 lims=clusters.values[icluster,2:6]
 
 lims=np.array(clusters.values[icluster,2:6],dtype=int)
-lims[2]=lims[2]-J_offset
-lims[3]=lims[3]-J_offset
+Lims=np.copy(lims)
+Lims[2]=lims[2]-J_offset
+Lims[3]=lims[3]-J_offset
 
-M=LME_mask[lims[2]:lims[3]+1,lims[0]:lims[1]+1]
+M=LME_mask[Lims[2]:Lims[3]+1,Lims[0]:Lims[1]+1]
 #%%
 I=np.where(~pd.isnull(clusters.values[icluster,6:]))[0]
 LMEs=[]
@@ -47,8 +48,8 @@ MM=np.ones(M.shape)*np.nan
 for LME in LMEs:
     MM[M==LME]=LME
 
-D=bathy.subset_as_copy(y_dim=range(lims[2],lims[3]),x_dim=range(lims[0],lims[1]))
-#D=np.ma.masked_where(bathy.dataset.Bathymetry.values==0,bathy.dataset.Bathymetry.values)
+Bathy=bathy.subset_as_copy(y_dim=range(lims[2],lims[3]),x_dim=range(lims[0],lims[1]))
+D=np.ma.masked_where(Bathy.dataset.Bathymetry.values==0,Bathy.dataset.Bathymetry.values)
 
     
 #%%
