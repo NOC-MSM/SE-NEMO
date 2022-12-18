@@ -1,0 +1,18 @@
+,Cluster,i min,i max,j min,j max,LME 1,LME 2,LME 3,LME 4,LME 5,LME 6,LME 7,LME 8
+0,NW Europe,1089.0,1234.0,881.0,1052.0,North_Sea_22,Baltic_Sea_23,Celtic-Biscay_Shelf_24,Faroe_Plateau_60,,,,
+1,Nordic Seas,980.0,1161.0,971.0,1135.0,Greenland_Sea_19,Norwegian_Sea_21,Iceland_Shelf_and_Sea_59,,,,,
+2,"Med, Ibi, Black Seas",1100.0,1314.0,812.0,929.0,Iberian_Coastal_25,Mediterranean_Sea_26,Black_Sea_62,,,,,
+3,N W Africa,1067.0,1198.0,656.0,839.0,Canary_Current_27,Guinea_Current_28,,,,,,
+4,S Africa,1181.0,1356.0,525.0,728.0,Benguela_Current_29,Agulhas_Current_30,Somali_Coastal_Current_31,,,,,
+5,S Asia,1280.0,122.0,687.0,812.0,Red_Sea_33,Arabian_Sea_32,Bay_of_Bengal_34,,,,,
+6,SE Asia,106.0,254.0,642.0,786.0,Gulf_of_Thailand_35,South_China_Sea_36,Sulu-Celebes_Sea_37,Indonesian_Sea_38,,,,
+7,"Australia,NZ",146.0,427.0,457.0,653.0,Northeast_Australian_Shelf_40,East_Central_Australian_Shelf_41,Southeast_Australian_Shelf_42,South_West_Australian_Shelf_43,West_Central_Australian_Shelf_44,Northwest_Australian_Shelf_45,North_Australian_Shelf_39,New_Zealand_Shelf_46
+8,E Asia,181.0,374.0,772.0,992.0,Yellow_Sea_48,East_China_Sea_47,Kuroshio_Current_49,Sea_of_Japan_50,Oyashio_Current_51,Sea_of_Okhotsk_52,,
+9,W N America,503.0,725.0,774.0,1004.0,Gulf_of_Alaska_02,California_Current_03,Gulf_of_California_04,,,,,
+10,C America,688.0,912.0,667.0,813.0,Pacific_Central-American_Coastal_11,Gulf_of_Mexico_05,Caribbean_Sea_12,,,,,
+11,NE S America,905.0,1021.0,590.0,733.0,North_Brazil_Shelf_17,East_Brazil_Shelf_16,,,,,,
+12,SE S America,873.0,996.0,420.0,593.0,South_Brazil_Shelf_15,Patagonian_Shelf_14,,,,,,
+13,W S America,817.0,888.0,402.0,666.0,Humboldt_Current_13,,,,,,,
+14,E N America,824.0,928.0,789.0,913.0,Southeast_U.S._Continental_Shelf_06,Northeast_U.S._Continental_Shelf_07,Scotian_Shelf_08,,,,,
+15,N E N America,784.0,981.0,874.0,1181.0,Hudson_Bay_Complex_63,Canadian_Eastern_Arctic_-_West_Greenland_18,Labrador_-_Newfoundland_09,,,,,
+16,Bering Sea,341.0,508.0,916.0,1128.0,East_Bering_Sea_01,Central_Arctic_64,West_Bering_Sea_53,,,,,
