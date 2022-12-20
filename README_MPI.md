@@ -76,3 +76,13 @@ Notes:
 <sup>1</sup> If the number of outputs is reduced in the `file*.xml` files then the simulation runs. It is thought this is linked to a known bug in MPICH3 which Cray-MPICH is built on.
 
 <sup>2</sup> At the moment it's unclear as to whether this is a NEMO issue or MPI issue.
+
+### Further updates
+
+By replacing `-O2` with `-O0 -g` in the `arch/nemo/arch-archer2-ompi.fcm` file there is progress:
+
+|  ZPS    |  OMPI-srun   |  OMPI-mpirun|
+| :----:  |      :----:  |:----:  |
+| 1516    |   Runs       |  Runs       |
+| 6376    |   Salt error |  Runs       |  
+| 8448    |   Runs       |  Runs       |  
