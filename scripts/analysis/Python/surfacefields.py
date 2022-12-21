@@ -73,8 +73,8 @@ def mean_surface_circulation(nemo_u,nemo_v,nemo_t,mask,
      VS=vs
      US=us
  else:
-     VS[:-1,:]=0.5*(vs[:-1,:]+vs[1:,:])
-     US[:,:-1]=0.5*(us[:,:-1]+us[:,1:]) 
+     VS[1:,:]=0.5*(vs[:-1,:]+vs[1:,:])
+     US[:,1:]=0.5*(us[:,:-1]+us[:,1:]) 
 
  SP=np.sqrt(US**2+VS**2)
  US[SP<0.02]=np.nan
