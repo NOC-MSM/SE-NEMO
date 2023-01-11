@@ -1,6 +1,6 @@
 # Shelf Enabled Global NEMO (SE-NEMO): MPI variations
 
-The setup script has been tested and will checkout, compile and run the ORCA025 (NEMO 4.0.4) code on ARCHER2 for three versions of MPI: Cray-MPICH, MPICH4 and openMPI.
+The setup script has been tested and will checkout, compile and run the ORCA025 (NEMO 4.0.4) code on ARCHER2 for three versions of MPI (and two compilers): Cray-MPICH, GNU-MPICH, GNU-MPICH4 and GNU-openMPI.
 
 ## Quick Start:
 
