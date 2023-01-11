@@ -9,7 +9,7 @@ git clone git@github.com:NOC-MSM/SE-NEMO.git
 
 MPI_OPT='mpich4' # other options are mpich | ompi
 
-./SE-NEMO/scripts/setup/se-eORCA025_setup -w $PWD/test_deploy_$MPI_OPT -x $PWD/test_deploy_$MPI_OPT -s $PWD/cfgs/SE-NEMO -m archer2 -a $MPI_OPT
+./SE-NEMO/scripts/setup/se-eORCA025_setup -w $PWD/test_deploy_$MPI_OPT -x $PWD/test_deploy_$MPI_OPT -s $PWD/SE-NEMO -m archer2 -a $MPI_OPT
 cd test/nemo/cfgs/se-eORCA025/
 cp -rP EXPREF EXP_MYRUN
 cd EXP_MYRUN
