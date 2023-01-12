@@ -81,11 +81,11 @@ echo "Making sure that the correct modules are loaded"
 case "${HPC_TARG}"
   in
   # these two sets of modules result in the same module list, however the PML one start from a module purge, so it dos not inherit anything
-  archer2) . $REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}
+  archer2) . $REPO_DIR/scripts/env/gnu-${MPI_TARG}
            ;;
-  archer2-fabm) . $REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}
+  archer2-fabm) . $REPO_DIR/scripts/env/gnu-${MPI_TARG}
            ;;
-  archer2-fabm_debug) . $REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}
+  archer2-fabm_debug) . $REPO_DIR/scripts/env/gnu-${MPI_TARG}
            ;;
   *)       echo "Machine not recognised"
            echo "Machines available: archer2"
@@ -153,6 +153,7 @@ cp $REPO_DIR/arch/xios/* ./arch
 
 echo "Compiling xios"
 ./make_xios --full --prod --arch ${HPC_TARG}-${MPI_TARG} --netcdf_lib netcdf4_par --job 4
+#./make_xios --full --debug --arch ${HPC_TARG}-${MPI_TARG} --netcdf_lib netcdf4_par --job 4
 
 # Let's update the path to xios
 export XIOS_DIR=$XIOS_DIR/xios
@@ -198,18 +199,18 @@ cd $CONFIG_DIR/EXPREF_FABM
 # copy the module files in the running folder to guarantee that the same combination of modules is used
 case "${HPC_TARG}"
   in
-  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}?" runscript.slurm
-           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}?" runscript.mpirun
-           rm $CONFIG_DIR/PML-gnu-*
-           cp $REPO_DIR/scripts/env/PML-gnu-${MPI_TARG} $CONFIG_DIR
+  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.slurm
+           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.mpirun
+           rm $CONFIG_DIR/gnu-*
+           cp $REPO_DIR/scripts/env/gnu-${MPI_TARG} $CONFIG_DIR
            echo 'modules COPIED!!!!!!!!!!!!!!!!!' 
            ;;
-  archer2-fabm)  sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}?" runscript.slurm
-                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}?" runscript.mpirun
-                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}?" runscript.multimonth.slurm
-                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/PML-gnu-${MPI_TARG}?" runscript.multimonth.mpirun
-                 rm $CONFIG_DIR/PML-gnu-*
-                 cp $REPO_DIR/scripts/env/PML-gnu-${MPI_TARG} $CONFIG_DIR
+  archer2-fabm)  sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.slurm
+                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.mpirun
+                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.multimonth.slurm
+                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.multimonth.mpirun
+                 rm $CONFIG_DIR/gnu-*
+                 cp $REPO_DIR/scripts/env/gnu-${MPI_TARG} $CONFIG_DIR
                  echo 'modules COPIED!!!!!!!!!!!!!!!!!' 
            ;;
 esac
