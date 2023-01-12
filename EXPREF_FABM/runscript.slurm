@@ -96,8 +96,12 @@ fi
 
 if [ "$ln_rnf_new" = ".true." ]
 then
+	cn_dir=""
+	sn_cnf="'runoff_1m_nomask.nc',0,'socoefr',.false.,.true.,'yearly'"
 	sn_rnf="'.\/JRA_RIVERS\/ORCA025_rivers_Antar_Green',24,'rorunoff',.false.,.false.,'yearly'"
 else
+	cn_dir="INPUTS"
+	sn_cnf="'runoff_1m_nomask.nc',0,'socoefr',.false.,.true.,'yearly'"
 	sn_rnf="'runoff_1m_nomask.nc',-1,'sornficb',.true.,.true.,'yearly'"
 fi
 
@@ -193,10 +197,13 @@ do
       sed -i "s/XXX_RCT_XXX/$nn_rstctl/g" namelist_cfg
       sed -i "s/XXX_RSD_XXX/$ln_rstdate/g" namelist_cfg
       sed -i "s/XXX_RTS_XXX/$ln_reset_ts/g" namelist_cfg
+      sed -i "s/XXX_DATE0_XXX/$nn_date0/g" namelist_cfg
       sed -i "s/XXX_RMP_XXX/$ln_tide_ramp/g" namelist_cfg
       sed -i "s/XXX_BTA_XXX/$ln_bt_auto/g" namelist_cfg
       sed -i "s/XXX_BTC_XXX/$rn_bt_cmax/g" namelist_cfg
+      sed -i "s/XXX_CNDIR_XXX/$cn_dir/g" namelist_cfg
       sed -i "s/XXX_RNF_XXX/$sn_rnf/g" namelist_cfg
+      sed -i "s/XXX_CNF_XXX/$sn_cnf/g" namelist_cfg
       sed -i "s/XXX_TID_XXX/$ln_tide/g" namelist_cfg
       sed -i "s/XXX_ITF_XXX/$ln_tmx_itf/g" namelist_cfg
       sed -i "s/XXX_DHM_XXX/$ln_diaharm/g" namelist_cfg
