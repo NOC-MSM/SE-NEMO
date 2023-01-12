@@ -1,15 +1,12 @@
 {
 		"exp_names": [
-                "EXP_REF_NOTIDE",
-                "EXP_ZPS_GLS_TIDE_WITH_TDRAG"
+                "EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2"
         		],
 		"dirs":[
-                 "/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_REF_NOTIDE/means/monthly/",
-                 "/gws/nopw/j04/class_vol2/senemo/cwilso01/senemo/EXP_ZPS_GLS_TIDE_WITH_TDRAG/OUTPUTS/"
+                 "/gws/nopw/j04/class_vol2/senemo/jdha/FINAL_TESTING/EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2/output/"
                 ],
         "domains":[    
-                  "/gws/nopw/j04/class_vol2/senemo/cwilso01/EXP_REF_NOTIDE/domcfg_eORCA025_v2.nc",
-                  "/gws/nopw/j04/class_vol2/senemo/cwilso01/EXP_REF_NOTIDE/domcfg_eORCA025_v2.nc"
+                  "/gws/nopw/j04/class_vol2/senemo/jdha/FINAL_TESTING/EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2/config/domain_cfg.nc"
               ]
 		
 }

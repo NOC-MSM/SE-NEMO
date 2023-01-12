@@ -24,7 +24,7 @@
 			"time_counter": "time",
 			"voce": "v_velocity",
 			"vomecrty": "v_velocity",
-            "vos": "v_velocity"
+            "vo": "v_velocity"
 		},
 		"coord_vars": [
 			"longitude",
