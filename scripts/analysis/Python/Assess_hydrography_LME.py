@@ -67,12 +67,13 @@ RUNNAMS=[
 'ORCA025-SE-NEMO_1979_1981_EXP_MES_WAV',
 'ORCA025-SE-NEMO_1979_1981_EXP_REF_NOTIDE',
 'ORCA025-SE-NEMO_1979_1981_EXP_SZT_WAV',
-'ORCA025-SE-NEMO_1979_1981_EXP_ZPS_GLS_TIDE_WITH_TDRAG'
+'ORCA025-SE-NEMO_1979_1981_EXP_ZPS_GLS_TIDE_WITH_TDRAG',
+'ORCA025-SE-NEMO_1979_1981_EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2'
     ]
 SS={}
 SN={}
 for iR,RUNNAM in enumerate(RUNNAMS):
-    
+#%%    
     
     rmse_T=np.zeros(nlme)
     me_T=np.zeros(nlme)
@@ -97,6 +98,9 @@ for iR,RUNNAM in enumerate(RUNNAMS):
     f = coast.Gridded(fn_data= fn_nemo_dat)
     f_bathy=coast.Gridded(fn_data= fn_bathymetry)
     LMEs=[]
+    vnames=['PEAy','SSTy','SSSy']
+    if iR==11:
+        vnames=['PEA_monthy_clim', 'SST_monthy_clim','SSS_monthy_clim']
     for ilme in range(nlme):    
      LMENAM=A['DOMNAM'][ilme]
      i_min=A['i_min'][ilme]
@@ -106,9 +110,9 @@ for iR,RUNNAM in enumerate(RUNNAMS):
      j_min0=A['j_min'][ilme]
      j_max0=A['j_max'][ilme]
      Depth=f_bathy.dataset.variables['Bathymetry'].values[j_min:j_max+1,i_min:i_max+1]     
-     PEAy=f.dataset.variables['PEAy'].values[monrange,j_min:j_max+1,i_min:i_max+1]
-     SSTy=f.dataset.variables['SSTy'].values[monrange,j_min:j_max+1,i_min:i_max+1]
-     SSSy=f.dataset.variables['SSSy'].values[monrange,j_min:j_max+1,i_min:i_max+1]
+     PEAy=f.dataset.variables[vnames[0]].values[monrange,j_min:j_max+1,i_min:i_max+1]
+     SSTy=f.dataset.variables[vnames[1]].values[monrange,j_min:j_max+1,i_min:i_max+1]
+     SSSy=f.dataset.variables[vnames[2]].values[monrange,j_min:j_max+1,i_min:i_max+1]
      mask=f.dataset.variables['bottom_level'].values[j_min:j_max+1,i_min:i_max+1] !=0
      mm=mask*LME_mask[j_min0:j_max0+1,i_min:i_max+1]==ilme+1
      mm=np.repeat(mm[np.newaxis,:,:],lmonrange,axis=0)
@@ -120,7 +124,7 @@ for iR,RUNNAM in enumerate(RUNNAMS):
      PEAy[mm==0]=np.nan
     
      try:
-    #%%
+
          EN4=coast.Gridded(datapath_LME + '/' + DATANAME  +'/'+ LMENAM + '_EN4mnthgrid_V3.nc')
          SST_EN4=EN4.dataset.SST_g.values.T[monrange,:,:]
          SSS_EN4=EN4.dataset.SSS_g.values.T[monrange,:,:]
@@ -167,7 +171,7 @@ for iR,RUNNAM in enumerate(RUNNAMS):
     
     
          
-    #%%     
+        
      except:     
       print('failed:',ilme)
       

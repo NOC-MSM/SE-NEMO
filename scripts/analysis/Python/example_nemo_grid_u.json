@@ -26,7 +26,7 @@
 			"time_counter": "time",
 			"uoce": "u_velocity",
 			"vozocrtx": "u_velocity",
-                        "uos": "u_velocity"
+            "uo": "u_velocity"
 		},
 		"coord_vars": [
 			"longitude",
