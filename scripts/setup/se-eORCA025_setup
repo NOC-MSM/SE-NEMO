@@ -103,19 +103,19 @@ git clone https://github.com/pmlmodelling/NEMO4.0-FABM nemo
 
 # this is needed until the physics only architecture file is not in the pmlmodelling repo
 
-cp /home/n01/n01/yuti/git-reps/NEMO4.0-FABM/arch/PML/arch-GCC_ARCHER2_PHYS.fcm nemo/arch/PML/
+#cp /home/n01/n01/yuti/git-reps/NEMO4.0-FABM/arch/PML/arch-GCC_ARCHER2_PHYS.fcm nemo/arch/PML/
 
 cd nemo
 
 # Now check EXTERNALS revision number before checking out the rest
-for ext_name in mk FCM IOIPSL   
-  do   
-  ext=`svn propget svn:externals | grep $ext_name | cut -c2-`   
-  svn co http://forge.ipsl.jussieu.fr/nemo/svn/$ext
-done
+#for ext_name in mk FCM IOIPSL   
+#  do   
+#  ext=`svn propget svn:externals | grep $ext_name | cut -c2-`   
+#  svn co http://forge.ipsl.jussieu.fr/nemo/svn/$ext
+#done
 
-ext=`svn propget svn:externals | grep makenemo | cut -c2-`
-svn export http://forge.ipsl.jussieu.fr/nemo/svn/$ext
+#ext=`svn propget svn:externals | grep makenemo | cut -c2-`
+#svn export http://forge.ipsl.jussieu.fr/nemo/svn/$ext
 
 mkdir arch
 
@@ -136,14 +136,11 @@ svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5@1964 xios
 cd xios
 cp $REPO_DIR/arch/xios/* ./arch
 
-
 echo "Compiling xios"
 ./make_xios --full --prod --arch ${HPC_TARG}-${MPI_TARG} --netcdf_lib netcdf4_par --job 4
 
 # Let's update the path to xios
 export XIOS_DIR=$XIOS_DIR/xios
-export XIOS_HOME=$XIOS_DIR
-export FABM_HOME=$FABM_DIR
 
 # set cpp file that includes key_top and key_fabm (this allows to keep 1 config folder)
 rm $REPO_DIR/cpp_se-eORCA025.fcm
@@ -167,10 +164,6 @@ cd $CONFIG_DIR
 case "${HPC_TARG}"
   in
   archer2) ln -s /work/n01/shared/se-eORCA025 INPUTS
-           ;;
-  GCC_ARCHER2) ln -s /work/n01/shared/se-eORCA025 INPUTS
-           ;;
-  GCC_ARCHER2_PHYS) ln -s /work/n01/shared/se-eORCA025 INPUTS
            ;;
   *)       wget http://gws-access.ceda.ac.uk/public/jmmp/se-eORCA025/inputs.tar.gz
 	   tar xvfz inputs.tar.gz

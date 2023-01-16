@@ -85,12 +85,15 @@ case "${HPC_TARG}"
            ;;
   archer2-fabm) . $REPO_DIR/scripts/env/gnu-${MPI_TARG}
            ;;
+  archer2-fabm-phys) . $REPO_DIR/scripts/env/gnu-${MPI_TARG}
+           ;;
   archer2-fabm_debug) . $REPO_DIR/scripts/env/gnu-${MPI_TARG}
            ;;
   *)       echo "Machine not recognised"
            echo "Machines available: archer2"
            echo "Machines available: archer2-fabm"
            echo "Machines available: archer2-fabm_debug"
+           echo "Machines available: archer2-fabm-phys"
            exit 1
 esac
 
@@ -156,7 +159,6 @@ echo "Compiling xios"
 
 # Let's update the path to xios
 export XIOS_DIR=$XIOS_DIR/xios
-export XIOS_HOME=$XIOS_DIR
 export FABM_HOME=$FABM_DIR
 
 # set cpp file that includes key_top and key_fabm (this allows to keep 1 config folder)
@@ -184,6 +186,8 @@ case "${HPC_TARG}"
            ;;
   archer2-fabm) ln -s /work/n01/shared/se-eORCA025 INPUTS
            ;;
+  archer2-fabm-phys) ln -s /work/n01/shared/se-eORCA025 INPUTS
+           ;;
   archer2-fabm_debug) ln -s /work/n01/shared/se-eORCA025 INPUTS
            ;;
   *)       wget http://gws-access.ceda.ac.uk/public/jmmp/se-eORCA025/inputs.tar.gz
@@ -210,6 +214,12 @@ case "${HPC_TARG}"
                  cp $REPO_DIR/scripts/env/gnu-${MPI_TARG} $CONFIG_DIR
                  echo 'modules COPIED!!!!!!!!!!!!!!!!!' 
            ;;
+  archer2-fabm-phys)  sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.slurm
+                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.mpirun
+                 rm $CONFIG_DIR/gnu-*
+                 cp $REPO_DIR/scripts/env/gnu-${MPI_TARG} $CONFIG_DIR
+                 echo 'modules COPIED!!!!!!!!!!!!!!!!!'
+	   ;; 
 esac
 
 mkdir meta_out
@@ -230,12 +240,6 @@ ln -s INPUTS/M2rowdrg_R025_modif_nonpositive.nc M2rowdrg.nc
 ln -s INPUTS/mask_itf_ORCA025ext.nc mask_itf.nc
 ln -s INPUTS/bfr_coef.nc .
 ln -s INPUTS/shlat2d.nc .
-# this was the domain to use with the final_tidy branch
-#ln -s ../INPUTS/domcfg_eORCA025_v2.nc ./domain_cfg.nc
-#this is the domani to use with master/FABM
-#ln -s ../INPUTS/domain_cfg_r015-r010_007_004v2.nc ./domain_cfg.nc
-ln -s ../INPUTS/domain_cfg_r018-010-010_glo-r018-010_ant_opt_v3_notaper.nc ./domain_cfg.nc
-
 
 # First copy GO8 code
 cp -r $REPO_DIR/MY_SRC_GO8_FROZEN $CONFIG_DIR/MY_SRC
