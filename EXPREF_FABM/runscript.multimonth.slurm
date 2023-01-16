@@ -8,33 +8,12 @@
 #SBATCH --ntasks-per-core=1
 
 # ARCHER2 support suggestion to reduce UCX error messages:
-# export UCX_IB_REG_METHODS=direct
-
-#################### nemo runscript options ############################
-# At present se-nemo has been run on 19 and 11 nodes                   #
-########################################################################
-if [ $SLURM_NNODES -eq 164 ]
-then
-   SRUN_CMD=`./slurm_setup -S 164 -s 16 -m 1 -C 9172 -g 2 -N 128 -t 24:00:00 -a n01-PML -j se-025ERSEM`
-elif [ $SLURM_NNODES -eq 19 ]
-then
-   SRUN_CMD=`./slurm_setup -S 8 -s 16 -m 2 -C 1543 -g 3 -N 128 -t 01:00:00 -a n01-PML -j se-nemo`
-elif [ $SLURM_NNODES -eq 76 ]
-then
-   SRUN_CMD=`./slurm_setup -S 8 -s 16 -m 1 -C 6429 -g 3 -N 128 -t 01:00:00 -a n01-PML -j se-nemo`
-elif [ $SLURM_NNODES -eq 100 ]
-then
-   SRUN_CMD=`./slurm_setup -S 8 -s 16 -m 2 -C 8448 -g 3 -N 128 -t 01:00:00 -a n01-PML -j se-nemo`
-else
-   exit
-fi
-
-########################################################################
+export UCX_IB_REG_METHODS=direct
 
 RUNDIR=$PWD
 
 # SUBMIT WITH:
-# "sbatch --export=y0=1970,m0=1 runscript.multimonth.slurm"
+# "sbatch --export=y0=1976,m0=1 runscript.multimonth.slurm"
 
 
 #################### nemo runscript options ############################
@@ -44,7 +23,7 @@ rn_rdt=600          ; ln_zps='.false.'       ; ln_tmx_itf='.false.'
 ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
 nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.false.'
 ln_rstdate='.false.' ; ln_shlat2d='.true.'  ; nn_diaharm=1981
-rn_Cd0=2.5e-3       ; ln_loglayer='.false.' ; ln_tide='.true.'
+rn_Cd0=2.5e-3       ; ln_loglayer='.true.' ; ln_tide='.true.'
 ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.' 
 ln_hpg_djc='.true.' ;
 ########################################################################
@@ -54,9 +33,9 @@ ln_hpg_djc='.true.' ;
 # Controls for the simulation                                          #
 ########################################################################
 ln_spin='.true.'   # Do we require a spin up phase for the ice
-nn_spin=1          # How many years spin up
+nn_spin=3          # How many years spin up
 year_st=1976       # Start year of the simulation (ramains constant)
-year_en=1977       # End year of this job submission
+year_en=1981       # End year of this job submission
 offset=0           # If rdt has changed, an offset to nn_it000 is needed
 nn_spin_cycle=1    # Change to nn_spin+1 if year is .gt. year_st
 year=$y0           # Change if starting job part way through simulation
@@ -68,6 +47,54 @@ nmmax=1            # number of months to go through before submitting a new job
 ########################################################################
 #                No need to edit below this line                       #
 ########################################################################
+
+if [ "$ln_zps" = ".false." ]
+then
+
+   #################### nemo runscript options #########################
+   # The following options are for the MES domain_cfg.nc               #
+   #####################################################################
+
+   if [ $SLURM_NNODES -eq 19 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 1524 -g 4 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 29 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 2973 -g 8 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 52 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 6270 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 68 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 32 -s 16 -m 2 -C 8090 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   else
+      exit
+   fi
+
+else
+
+   #################### nemo runscript options #########################
+   # The following options are for the ZPS domain_cfg.nc               #
+   #####################################################################
+
+   if [ $SLURM_NNODES -eq 19 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 1524 -g 4 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 29 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 2973 -g 8 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 52 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 6270 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 68 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 32 -s 16 -m 2 -C 8090 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   else
+      exit
+   fi
+
+fi
+
 
 if [ "$ln_zps" = ".true." ]
 then
@@ -118,7 +145,7 @@ fi
 
 echo $SLURM_NNODES
 
-. XXX_ENV_XXX
+. /work/n01/n01/yuti/SE-NEMO/scripts/env/gnu-mpich
 export OMP_NUM_THREADS=1
 
 chmod u+x ./myscript_wrapper.sh
