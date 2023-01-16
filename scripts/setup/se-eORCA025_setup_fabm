@@ -19,7 +19,7 @@ display_usage() {
    exit 1
 	} 
 # if less than three arguments supplied, display usage 
-	if [  $# -le 9 ] 
+	if [  $# -le 11 ] 
 	then 
 		display_usage
 		exit 1
@@ -121,7 +121,7 @@ git clone https://github.com/pmlmodelling/NEMO4.0-FABM nemo
 
 cd nemo
 
-## Now check EXTERNALS revision number before checking out the rest
+# Now check EXTERNALS revision number before checking out the rest
 #for ext_name in mk FCM IOIPSL   
 #  do   
 #  ext=`svn propget svn:externals | grep $ext_name | cut -c2-`   
@@ -130,7 +130,7 @@ cd nemo
 
 #ext=`svn propget svn:externals | grep makenemo | cut -c2-`
 #svn export http://forge.ipsl.jussieu.fr/nemo/svn/$ext
-#
+
 mkdir arch
 
 # Setup the directory structure for the ENSEMBLE
@@ -162,7 +162,7 @@ export FABM_HOME=$FABM_DIR
 
 # set cpp file that includes key_top and key_fabm (this allows to keep 1 config folder)
 rm $REPO_DIR/cpp_se-eORCA025.fcm
-cp $REPO_DIR/cpp_se-eORCA025.phys.fcm $REPO_DIR/cpp_se-eORCA025.fcm
+cp $REPO_DIR/cpp_se-eORCA025.fabm.fcm $REPO_DIR/cpp_se-eORCA025.fcm
 
 
 cd $WORK_DIR/nemo
@@ -213,6 +213,16 @@ case "${HPC_TARG}"
                  cp $REPO_DIR/scripts/env/gnu-${MPI_TARG} $CONFIG_DIR
                  echo 'modules COPIED!!!!!!!!!!!!!!!!!' 
            ;;
+  archer2-fabm_debug)  sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.slurm
+                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.mpirun
+                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.multimonth.slurm
+                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.multimonth.mpirun
+                 rm $CONFIG_DIR/gnu-*
+                 cp $REPO_DIR/scripts/env/gnu-${MPI_TARG} $CONFIG_DIR
+                 echo 'modules COPIED!!!!!!!!!!!!!!!!!' 
+           ;;
+  *)       sed -i "s?XXX_ENV_XXX??" runscript.slurm
+           sed -i "s?XXX_ENV_XXX??" runscript.mpirun 
 esac
 
 mkdir meta_out
