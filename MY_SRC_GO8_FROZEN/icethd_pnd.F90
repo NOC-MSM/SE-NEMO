@@ -647,7 +647,7 @@ CONTAINS
                   zTavg = zTavg + t_su(ji,jj,jl)*a_i(ji,jj,jl)
                END DO
 !! EWB: bug here - should be divided by at_i(ji,jj) but zTavg is not used anywhere
-               zTavg = zTavg / a_i(ji,jj,jl) !!! could get a division by zero here
+               !zTavg = zTavg / a_i(ji,jj,jl) !!! could get a division by zero here
          
                DO jl = 1, jpl-1
             
