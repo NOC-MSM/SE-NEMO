@@ -748,15 +748,17 @@ instances:
     long_name: benthic calcite
     model: ersem/benthic_calcite
     parameters:
-      iswcal: 1                                            # dissolution dependence on calcite saturation (0: none, 1: power law, 2: hyperbolic)
-      ndiss: 2.22                                          # power of the dissolution law (Keir 1980) (-)
-      fdissmax: 30.0                                       # maximum specific dissolution rate (1/d), default = 0.0
-      fdissmin: 0.05                                       # minimum specific dissolution rate (1/d), default = 0.03
+      iswcal: 0                                            # dissolution dependence on calcite saturation (0: none, 1: power law, 2: hyperbolic)
+      #ndiss: 2.22                                          # power of the dissolution law (Keir 1980) (-)
+      #KcalomX: 1000.                                       # michaelis mentenn constant for dissolution (MADE UP NUMBER SO IT DOESN'T DISSOLVE!!!)
+      #fdissmax: 30.0                                       # maximum specific dissolution rate (1/d), default = 0.0
+      #fdissmin: 0.05                                       # minimum specific dissolution rate (1/d), default = 0.03
+      fdiss: 0.05                                       # minimum specific dissolution rate (1/d), default = 0.03
       c0: 1e-05                                            # background calcite concentration (mg C/m^2), default = 0.0
     initialization:
       c: 0.05                                              # carbon (mg C/m^2)
     coupling:
-      Om_Cal: O3/Om_cal                                    # calcite saturation (-)
+      #Om_Cal: O3/Om_cal                                    # calcite saturation (-)
       O3c: O3/c                                            # dissolved inorganic carbon (mmol/m^3)
   ben_col:
     long_name: benthic column
@@ -972,7 +974,7 @@ instances:
     long_name: benthic aerobic bacteria POM
     model: ersem/benthic_column_particulate_matter_layer
     parameters:
-      composition: cnps                                    # elemental composition
+      composition: cnpsf                                   # elemental composition
       minimum_depth: 0.0                                   # minimum depth (m), default = 0.0
       variable_maximum_depth: true                         # maximum depth is variable, default = false
     coupling:
@@ -1025,7 +1027,7 @@ instances:
     long_name: benthic anaerobic bacteria POM
     model: ersem/benthic_column_particulate_matter_layer
     parameters:
-      composition: cnps                                    # elemental composition
+      composition: cnpsf                                   # elemental composition
       variable_minimum_depth: true                         # minimum depth is variable, default = false
       maximum_depth: 0.3                                   # maximum depth (m), default = 0.0
       source_depth_distribution: 3                         # vertical distribution of changes (1: constant absolute rate, 2: constant relative rate, 3: constant carbon-based relative rate), default = 1
@@ -1100,7 +1102,7 @@ instances:
     long_name: benthic deposit feeder total POM
     model: ersem/benthic_column_particulate_matter_layer
     parameters:
-      composition: cnps                                    # elemental composition
+      composition: cnpsf                                   # elemental composition
       minimum_depth: 0.0025                                # minimum depth (m), default = 0.0
       maximum_depth: 0.3                                   # maximum depth (m), default = 0.0
     coupling:
@@ -1109,7 +1111,7 @@ instances:
     long_name: benthic deposit feeder anaerobic POM
     model: ersem/benthic_column_particulate_matter_layer
     parameters:
-      composition: cnps                                    # elemental composition
+      composition: cnpsf                                   # elemental composition
       variable_minimum_depth: true                         # minimum depth is variable, default = false
       maximum_depth: 0.3                                   # maximum depth (m), default = 0.0
     coupling:
@@ -1119,7 +1121,7 @@ instances:
     long_name: benthic deposit feeder POM sink
     model: ersem/benthic_column_particulate_matter_layer
     parameters:
-      composition: cnps                                    # elemental composition
+      composition: cnpsf                                   # elemental composition
       minimum_depth: 0.0                                   # minimum depth (m), default = 0.0
       variable_maximum_depth: true                         # maximum depth is variable, default = false
     coupling:
@@ -1190,7 +1192,7 @@ instances:
     long_name: benthic suspension feeder POM
     model: ersem/benthic_column_particulate_matter_layer
     parameters:
-      composition: cnps                                    # elemental composition
+      composition: cnpsf                                   # elemental composition
       minimum_depth: 0.0                                   # minimum depth (m), default = 0.0
       maximum_depth: 0.0025                                # maximum depth (m), default = 0.0
     coupling:
@@ -1249,7 +1251,7 @@ instances:
     long_name: benthic meiofauna POM
     model: ersem/benthic_column_particulate_matter_layer
     parameters:
-      composition: cnps                                    # elemental composition
+      composition: cnpsf                                   # elemental composition
       minimum_depth: 0.0                                   # minimum depth (m), default = 0.0
       maximum_depth: 0.03                                  # maximum depth (m), default = 0.0
     coupling:
@@ -1269,3 +1271,107 @@ instances:
   erosion:
     model: ersem/benthic_erosion
   #Diagnostics:
+  Ptot_c:
+    long_name: total phytoplankton carbon
+    model: weighted_sum
+    parameters:
+      n: 4
+    coupling:
+      term1: P1/c
+      term2: P2/c
+      term3: P3/c
+      term4: P4/c
+  Ptot_Chl:
+    long_name: total phytoplankton chlorophyll-a
+    model: weighted_sum
+    parameters:
+      n: 4
+    coupling:
+      term1: P1/Chl
+      term2: P2/Chl
+      term3: P3/Chl
+      term4: P4/Chl
+  Ztot_c:
+    long_name: total zooplankton carbon
+    model: weighted_sum
+    parameters:
+      n: 3
+    coupling:
+      term1: Z4/c
+      term2: Z5/c
+      term3: Z6/c
+  Ptot_NPP:
+    long_name: total phytoplankton net primary production
+    model: weighted_sum
+    parameters:
+      n: 8
+      weight5: -1
+      weight6: -1
+      weight7: -1
+      weight8: -1
+    coupling:
+      term1: P1/fO3PIc
+      term2: P2/fO3PIc
+      term3: P3/fO3PIc
+      term4: P4/fO3PIc
+      term5: P1/fPIO3c
+      term6: P2/fPIO3c
+      term7: P3/fPIO3c
+      term8: P4/fPIO3c
+  Ptot_GPP:
+    long_name: total phytoplankton gross primary production
+    model: weighted_sum
+    parameters:
+      n: 4
+    coupling:
+      term1: P1/fO3PIc
+      term2: P2/fO3PIc
+      term3: P3/fO3PIc
+      term4: P4/fO3PIc
+  ZBtot_Resp:
+    long_name: zooplankton and bacteria respiartion 
+    model: weighted_sum
+    parameters:
+      n: 4
+    coupling:
+      term1: Z4/fZIO3c
+      term2: Z5/fZIO3c
+      term3: Z6/fZIO3c
+      term4: B1/fB1O3c
+  RD_c:
+    long_name: total dissolved organic carbon
+    model: weighted_sum
+    parameters:
+      n: 3
+    coupling:
+      term1: R1/c
+      term2: R2/c
+      term3: R3/c
+  RP_c:
+    long_name: total particulate organic carbon
+    model: weighted_sum
+    parameters:
+      n: 3
+    coupling:
+      term1: R4/c
+      term2: R6/c
+      term3: R8/c
+  RP_n:
+    long_name: total particulate organic nitrogen
+    model: weighted_sum
+    parameters:
+      n: 3
+    coupling:
+      term1: R4/n
+      term2: R6/n
+      term3: R8/n
+  RP_p:
+    long_name: total particulate organic nitrogen
+    model: weighted_sum
+    parameters:
+      n: 3
+    coupling:
+      term1: R4/p
+      term2: R6/p
+      term3: R8/p
+
