@@ -274,6 +274,8 @@ echo "  - cp -rP EXPREF_FABM EXP_MYRUN "
 echo "  - link the correct domain_cfg.nc "
 echo "  - update the runscript accordingly "
 echo "      (project code, nodes, modules, etc)"
+echo "  - link the tracer restart file to ./RESTARTS/SENEMO_S0_00000000_restart_trc.nc"
+echo "      (usually /work/n01/shared/gig/eORCA025_INPUTS/eORCA025_restart_trc-fromGLODAPandORCA1_domcfg_mes_v2_FlatBenthos.nc"
 echo
 
 echo "  - submit via the sbatch command"
