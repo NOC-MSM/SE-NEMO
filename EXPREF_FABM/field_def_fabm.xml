@@ -188,16 +188,6 @@
   <field id="R8_s_w" long_name="large-size pom silicate vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="R8__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="large-size pom light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Q1__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic dissolved organic matter light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="Q6_resuspended_c_sms" long_name="benthic particulate organic matter pelagic variable taking up resuspended carbon sources-sinks" unit="mg C/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="Q6_resuspended_c_w" long_name="benthic particulate organic matter pelagic variable taking up resuspended carbon vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="Q6_resuspended_p_sms" long_name="benthic particulate organic matter pelagic variable taking up resuspended phosphorus sources-sinks" unit="mmol P/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="Q6_resuspended_p_w" long_name="benthic particulate organic matter pelagic variable taking up resuspended phosphorus vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="Q6_resuspended_n_sms" long_name="benthic particulate organic matter pelagic variable taking up resuspended nitrogen sources-sinks" unit="mmol N/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="Q6_resuspended_n_w" long_name="benthic particulate organic matter pelagic variable taking up resuspended nitrogen vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="Q6_resuspended_s_sms" long_name="benthic particulate organic matter pelagic variable taking up resuspended silicate sources-sinks" unit="mmol Si/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="Q6_resuspended_s_w" long_name="benthic particulate organic matter pelagic variable taking up resuspended silicate vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="Q6_resuspended_f_sms" long_name="benthic particulate organic matter pelagic variable taking up resuspended iron sources-sinks" unit="umol Fe/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="Q6_resuspended_f_w" long_name="benthic particulate organic matter pelagic variable taking up resuspended iron vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Q6_surface_change_in_c_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic particulate organic matter surface change_in_c_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Q6_surface_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic particulate organic matter surface change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Q6_surface_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic particulate organic matter surface change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
@@ -266,6 +256,7 @@
   <field id="B1_fB1O3c" long_name="bacteria respiration" unit="mg C/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="B1_fB1NIn" long_name="bacteria release of DIN" unit="mmol N/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="B1_fB1N1p" long_name="bacteria release of DIP" unit="mmol P/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="B1_bgeff" long_name="bacteria bacterial growth efficiency" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="B1_fB1R1c" long_name="bacteria release of labile DOC" unit="mg C/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="B1_fB1R2c" long_name="bacteria release of semi-labile DOC" unit="mg C/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="B1_fB1R3c" long_name="bacteria release of semi-refractory DOC" unit="mg C/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
@@ -283,6 +274,7 @@
   <field id="B1_minp" long_name="bacteria mineralisation of DOP to DIP" unit="mmol P/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="B1__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="bacteria light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="pel_nit_rate" long_name="pelagic nitrification rate" unit="mmol/m3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="pel_nit_fN4N3n" long_name="pelagic nitrification nitrification" unit="mmol N/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="pel_nit_N3n_sms" long_name="pelagic nitrification nitrate sources-sinks" unit="mmol N/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="pel_nit_N3n_w" long_name="pelagic nitrification nitrate vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="pel_nit_N4n_sms" long_name="pelagic nitrification ammonium sources-sinks" unit="mmol N/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
@@ -833,6 +825,7 @@
   <field id="H1_Q6_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic aerobic bacteria POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="H1_Q6_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic aerobic bacteria POM change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="H1_Q6_change_in_s_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic aerobic bacteria POM change_in_s_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="H1_Q6_change_in_f_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic aerobic bacteria POM change_in_f_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="H1_Q6__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic aerobic bacteria POM light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="H1_Q7_change_in_c_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic aerobic bacteria refractory POM change_in_c_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="H1_Q7_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic aerobic bacteria refractory POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
@@ -843,6 +836,7 @@
   <field id="H2_Q6_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic anaerobic bacteria POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="H2_Q6_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic anaerobic bacteria POM change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="H2_Q6_change_in_s_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic anaerobic bacteria POM change_in_s_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="H2_Q6_change_in_f_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic anaerobic bacteria POM change_in_f_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="H2_Q6__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic anaerobic bacteria POM light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="H2_Q7_change_in_c_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic anaerobic bacteria refractory POM change_in_c_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="H2_Q7_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic anaerobic bacteria refractory POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
@@ -855,16 +849,19 @@
   <field id="Y2_Q6_source_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder total POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y2_Q6_source_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder total POM change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y2_Q6_source_change_in_s_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder total POM change_in_s_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Y2_Q6_source_change_in_f_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder total POM change_in_f_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y2_Q6_source__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder total POM light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y2_Q6_source_anaerobic_change_in_c_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder anaerobic POM change_in_c_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y2_Q6_source_anaerobic_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder anaerobic POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y2_Q6_source_anaerobic_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder anaerobic POM change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y2_Q6_source_anaerobic_change_in_s_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder anaerobic POM change_in_s_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Y2_Q6_source_anaerobic_change_in_f_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder anaerobic POM change_in_f_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y2_Q6_source_anaerobic__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder anaerobic POM light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y2_Q6_sink_change_in_c_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder POM sink change_in_c_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y2_Q6_sink_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder POM sink change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y2_Q6_sink_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder POM sink change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y2_Q6_sink_change_in_s_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder POM sink change_in_s_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Y2_Q6_sink_change_in_f_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder POM sink change_in_f_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y2_Q6_sink__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic deposit feeder POM sink light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y3_O2o_sms" long_name="benthic suspension feeder pelagic oxygen sources-sinks" unit="mmol O_2/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y3_O2o_w" long_name="benthic suspension feeder pelagic oxygen vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
@@ -873,6 +870,7 @@
   <field id="Y3_Q6_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic suspension feeder POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y3_Q6_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic suspension feeder POM change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y3_Q6_change_in_s_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic suspension feeder POM change_in_s_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Y3_Q6_change_in_f_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic suspension feeder POM change_in_f_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y3_Q6__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic suspension feeder POM light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y4_O2o_sms" long_name="benthic meiofauna pelagic oxygen sources-sinks" unit="mmol O_2/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y4_O2o_w" long_name="benthic meiofauna pelagic oxygen vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
@@ -881,8 +879,19 @@
   <field id="Y4_Q6_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic meiofauna POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y4_Q6_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic meiofauna POM change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y4_Q6_change_in_s_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic meiofauna POM change_in_s_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Y4_Q6_change_in_f_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic meiofauna POM change_in_f_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Y4_Q6__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic meiofauna POM light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="erosion__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="erosion light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Ptot_c_result" long_name="total phytoplankton carbon result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="Ptot_Chl_result" long_name="total phytoplankton chlorophyll-a result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="Ztot_c_result" long_name="total zooplankton carbon result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="Ptot_NPP_result" long_name="total phytoplankton net primary production result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="Ptot_GPP_result" long_name="total phytoplankton gross primary production result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="ZBtot_Resp_result" long_name="zooplankton and bacteria respiartion result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="RD_c_result" long_name="total dissolved organic carbon result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="RP_c_result" long_name="total particulate organic carbon result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="RP_n_result" long_name="total particulate organic nitrogen result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="RP_p_result" long_name="total particulate organic nitrogen result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="zero" long_name="zero" unit="" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="B1_RP1_state1_sms" long_name="bacteria RP1 state variable 1 sources-sinks" unit="mg C/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="B1_RP1_state1_w" long_name="bacteria RP1 state variable 1 vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
@@ -1465,35 +1474,15 @@
   <field id="Q1__surface_albedo" long_name="benthic dissolved organic matter albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="Q1__surface_drag_coefficient_in_air" long_name="benthic dissolved organic matter surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="Q6_c_sms" long_name="benthic particulate organic matter carbon sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
-  <field id="Q6_resuspended_c_sfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended carbon surface flux" unit="mg C/m^3*m/s" default_value="0.000E+00" />
-  <field id="Q6_resuspended_c_bfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended carbon bottom flux" unit="mg C/m^3*m/s" default_value="0.000E+00" />
-  <field id="Q6_resuspension_flux_c" long_name="benthic particulate organic matter resuspension of carbon" unit="mg C/m^2/d" default_value="-.200E+21" />
   <field id="Q6_p_sms" long_name="benthic particulate organic matter phosphorus sources-sinks" unit="mmol P/m^2/s" default_value="0.000E+00" />
-  <field id="Q6_resuspended_p_sfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended phosphorus surface flux" unit="mmol P/m^3*m/s" default_value="0.000E+00" />
-  <field id="Q6_resuspended_p_bfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended phosphorus bottom flux" unit="mmol P/m^3*m/s" default_value="0.000E+00" />
-  <field id="Q6_resuspension_flux_p" long_name="benthic particulate organic matter resuspension of phosphorus" unit="mmol P/m^2/d" default_value="-.200E+21" />
   <field id="Q6_n_sms" long_name="benthic particulate organic matter nitrogen sources-sinks" unit="mmol N/m^2/s" default_value="0.000E+00" />
-  <field id="Q6_resuspended_n_sfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended nitrogen surface flux" unit="mmol N/m^3*m/s" default_value="0.000E+00" />
-  <field id="Q6_resuspended_n_bfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended nitrogen bottom flux" unit="mmol N/m^3*m/s" default_value="0.000E+00" />
-  <field id="Q6_resuspension_flux_n" long_name="benthic particulate organic matter resuspension of nitrogen" unit="mmol N/m^2/d" default_value="-.200E+21" />
   <field id="Q6_s_sms" long_name="benthic particulate organic matter silicate sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
-  <field id="Q6_resuspended_s_sfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended silicate surface flux" unit="mmol Si/m^3*m/s" default_value="0.000E+00" />
-  <field id="Q6_resuspended_s_bfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended silicate bottom flux" unit="mmol Si/m^3*m/s" default_value="0.000E+00" />
-  <field id="Q6_resuspension_flux_s" long_name="benthic particulate organic matter resuspension of silicate" unit="mmol Si/m^2/d" default_value="-.200E+21" />
   <field id="Q6_f_sms" long_name="benthic particulate organic matter iron sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
-  <field id="Q6_resuspended_f_sfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended iron surface flux" unit="umol Fe/m^3*m/s" default_value="0.000E+00" />
-  <field id="Q6_resuspended_f_bfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended iron bottom flux" unit="umol Fe/m^3*m/s" default_value="0.000E+00" />
-  <field id="Q6_resuspension_flux_f" long_name="benthic particulate organic matter resuspension of iron" unit="umol Fe/m^2/d" default_value="-.200E+21" />
   <field id="Q6_pen_depth_c_sms" long_name="benthic particulate organic matter penetration depth of carbon sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="Q6_pen_depth_n_sms" long_name="benthic particulate organic matter penetration depth of nitrogen sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="Q6_pen_depth_p_sms" long_name="benthic particulate organic matter penetration depth of phosphorus sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="Q6_pen_depth_s_sms" long_name="benthic particulate organic matter penetration depth of silicate sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="Q6_pen_depth_f_sms" long_name="benthic particulate organic matter penetration depth of iron sources-sinks" unit="m/s" default_value="0.000E+00" />
-  <field id="Q6_resuspendable_c_sms" long_name="benthic particulate organic matter source of resuspended carbon sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
-  <field id="Q6_resuspendable_p_sms" long_name="benthic particulate organic matter source of resuspended phosphorus sources-sinks" unit="mmol P/m^2/s" default_value="0.000E+00" />
-  <field id="Q6_resuspendable_n_sms" long_name="benthic particulate organic matter source of resuspended nitrogen sources-sinks" unit="mmol N/m^2/s" default_value="0.000E+00" />
-  <field id="Q6_resuspendable_s_sms" long_name="benthic particulate organic matter source of resuspended silicate sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
-  <field id="Q6_resuspendable_f_sms" long_name="benthic particulate organic matter source of resuspended iron sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
   <field id="Q6_surface_c" long_name="benthic particulate organic matter surface carbon" unit="mg C/m^2" default_value="-.200E+21" />
   <field id="Q6_surface_change_in_c_processor__surface_albedo" long_name="benthic particulate organic matter surface change_in_c_processor albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="Q6_surface_change_in_c_processor__surface_drag_coefficient_in_air" long_name="benthic particulate organic matter surface change_in_c_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
@@ -2359,6 +2348,11 @@
   <field id="H1_Q6_change_in_s_processor__surface_drag_coefficient_in_air" long_name="benthic aerobic bacteria POM change_in_s_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="H1_Q6_change_in_s_processor_s_int_sms" long_name="benthic aerobic bacteria POM change_in_s_processor column-integrated silicate sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
   <field id="H1_Q6_change_in_s_processor_pen_depth_s_sms" long_name="benthic aerobic bacteria POM change_in_s_processor penetration depth for silicate sources-sinks" unit="m/s" default_value="0.000E+00" />
+  <field id="H1_Q6_f" long_name="benthic aerobic bacteria POM iron" unit="umol Fe/m^2" default_value="-.200E+21" />
+  <field id="H1_Q6_change_in_f_processor__surface_albedo" long_name="benthic aerobic bacteria POM change_in_f_processor albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
+  <field id="H1_Q6_change_in_f_processor__surface_drag_coefficient_in_air" long_name="benthic aerobic bacteria POM change_in_f_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
+  <field id="H1_Q6_change_in_f_processor_f_int_sms" long_name="benthic aerobic bacteria POM change_in_f_processor column-integrated iron sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
+  <field id="H1_Q6_change_in_f_processor_pen_depth_f_sms" long_name="benthic aerobic bacteria POM change_in_f_processor penetration depth for iron sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="H1_Q6__surface_albedo" long_name="benthic aerobic bacteria POM albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="H1_Q6__surface_drag_coefficient_in_air" long_name="benthic aerobic bacteria POM surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="H1_Q7_c" long_name="benthic aerobic bacteria refractory POM carbon" unit="mg C/m^2" default_value="-.200E+21" />
@@ -2433,6 +2427,11 @@
   <field id="H2_Q6_change_in_s_processor__surface_drag_coefficient_in_air" long_name="benthic anaerobic bacteria POM change_in_s_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="H2_Q6_change_in_s_processor_s_int_sms" long_name="benthic anaerobic bacteria POM change_in_s_processor column-integrated silicate sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
   <field id="H2_Q6_change_in_s_processor_pen_depth_s_sms" long_name="benthic anaerobic bacteria POM change_in_s_processor penetration depth for silicate sources-sinks" unit="m/s" default_value="0.000E+00" />
+  <field id="H2_Q6_f" long_name="benthic anaerobic bacteria POM iron" unit="umol Fe/m^2" default_value="-.200E+21" />
+  <field id="H2_Q6_change_in_f_processor__surface_albedo" long_name="benthic anaerobic bacteria POM change_in_f_processor albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
+  <field id="H2_Q6_change_in_f_processor__surface_drag_coefficient_in_air" long_name="benthic anaerobic bacteria POM change_in_f_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
+  <field id="H2_Q6_change_in_f_processor_f_int_sms" long_name="benthic anaerobic bacteria POM change_in_f_processor column-integrated iron sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
+  <field id="H2_Q6_change_in_f_processor_pen_depth_f_sms" long_name="benthic anaerobic bacteria POM change_in_f_processor penetration depth for iron sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="H2_Q6__surface_albedo" long_name="benthic anaerobic bacteria POM albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="H2_Q6__surface_drag_coefficient_in_air" long_name="benthic anaerobic bacteria POM surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="H2_Q7_c" long_name="benthic anaerobic bacteria refractory POM carbon" unit="mg C/m^2" default_value="-.200E+21" />
@@ -2467,6 +2466,7 @@
   <field id="Y2_Q6n_sms" long_name="benthic deposit feeder particulate organic nitrogen sources-sinks" unit="mmol N/m^2/s" default_value="0.000E+00" />
   <field id="Y2_Q6p_sms" long_name="benthic deposit feeder particulate organic phosphorus sources-sinks" unit="mmol P/m^2/s" default_value="0.000E+00" />
   <field id="Y2_Q6s_sms" long_name="benthic deposit feeder particulate organic silicate sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
+  <field id="Y2_Q6f_sms" long_name="benthic deposit feeder particulate organic silicate sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
   <field id="Y2_fprey1c" long_name="benthic deposit feeder uptake of carbon in food source 1" unit="mg C/m^2/d" default_value="-.200E+21" />
   <field id="Y2_fprey1n" long_name="benthic deposit feeder uptake of nitrogen in food source 1" unit="mmol N/m^2/d" default_value="-.200E+21" />
   <field id="Y2_fprey1p" long_name="benthic deposit feeder uptake of phosphorus in food source 1" unit="mmol P/m^2/d" default_value="-.200E+21" />
@@ -2517,6 +2517,11 @@
   <field id="Y2_Q6_source_change_in_s_processor__surface_drag_coefficient_in_air" long_name="benthic deposit feeder total POM change_in_s_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="Y2_Q6_source_change_in_s_processor_s_int_sms" long_name="benthic deposit feeder total POM change_in_s_processor column-integrated silicate sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
   <field id="Y2_Q6_source_change_in_s_processor_pen_depth_s_sms" long_name="benthic deposit feeder total POM change_in_s_processor penetration depth for silicate sources-sinks" unit="m/s" default_value="0.000E+00" />
+  <field id="Y2_Q6_source_f" long_name="benthic deposit feeder total POM iron" unit="umol Fe/m^2" default_value="-.200E+21" />
+  <field id="Y2_Q6_source_change_in_f_processor__surface_albedo" long_name="benthic deposit feeder total POM change_in_f_processor albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
+  <field id="Y2_Q6_source_change_in_f_processor__surface_drag_coefficient_in_air" long_name="benthic deposit feeder total POM change_in_f_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
+  <field id="Y2_Q6_source_change_in_f_processor_f_int_sms" long_name="benthic deposit feeder total POM change_in_f_processor column-integrated iron sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
+  <field id="Y2_Q6_source_change_in_f_processor_pen_depth_f_sms" long_name="benthic deposit feeder total POM change_in_f_processor penetration depth for iron sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="Y2_Q6_source__surface_albedo" long_name="benthic deposit feeder total POM albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="Y2_Q6_source__surface_drag_coefficient_in_air" long_name="benthic deposit feeder total POM surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="Y2_Q6_source_anaerobic_c" long_name="benthic deposit feeder anaerobic POM carbon" unit="mg C/m^2" default_value="-.200E+21" />
@@ -2539,6 +2544,11 @@
   <field id="Y2_Q6_source_anaerobic_change_in_s_processor__surface_drag_coefficient_in_air" long_name="benthic deposit feeder anaerobic POM change_in_s_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="Y2_Q6_source_anaerobic_change_in_s_processor_s_int_sms" long_name="benthic deposit feeder anaerobic POM change_in_s_processor column-integrated silicate sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
   <field id="Y2_Q6_source_anaerobic_change_in_s_processor_pen_depth_s_sms" long_name="benthic deposit feeder anaerobic POM change_in_s_processor penetration depth for silicate sources-sinks" unit="m/s" default_value="0.000E+00" />
+  <field id="Y2_Q6_source_anaerobic_f" long_name="benthic deposit feeder anaerobic POM iron" unit="umol Fe/m^2" default_value="-.200E+21" />
+  <field id="Y2_Q6_source_anaerobic_change_in_f_processor__surface_albedo" long_name="benthic deposit feeder anaerobic POM change_in_f_processor albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
+  <field id="Y2_Q6_source_anaerobic_change_in_f_processor__surface_drag_coefficient_in_air" long_name="benthic deposit feeder anaerobic POM change_in_f_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
+  <field id="Y2_Q6_source_anaerobic_change_in_f_processor_f_int_sms" long_name="benthic deposit feeder anaerobic POM change_in_f_processor column-integrated iron sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
+  <field id="Y2_Q6_source_anaerobic_change_in_f_processor_pen_depth_f_sms" long_name="benthic deposit feeder anaerobic POM change_in_f_processor penetration depth for iron sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="Y2_Q6_source_anaerobic__surface_albedo" long_name="benthic deposit feeder anaerobic POM albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="Y2_Q6_source_anaerobic__surface_drag_coefficient_in_air" long_name="benthic deposit feeder anaerobic POM surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="Y2_Q6_sink_c" long_name="benthic deposit feeder POM sink carbon" unit="mg C/m^2" default_value="-.200E+21" />
@@ -2561,6 +2571,11 @@
   <field id="Y2_Q6_sink_change_in_s_processor__surface_drag_coefficient_in_air" long_name="benthic deposit feeder POM sink change_in_s_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="Y2_Q6_sink_change_in_s_processor_s_int_sms" long_name="benthic deposit feeder POM sink change_in_s_processor column-integrated silicate sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
   <field id="Y2_Q6_sink_change_in_s_processor_pen_depth_s_sms" long_name="benthic deposit feeder POM sink change_in_s_processor penetration depth for silicate sources-sinks" unit="m/s" default_value="0.000E+00" />
+  <field id="Y2_Q6_sink_f" long_name="benthic deposit feeder POM sink iron" unit="umol Fe/m^2" default_value="-.200E+21" />
+  <field id="Y2_Q6_sink_change_in_f_processor__surface_albedo" long_name="benthic deposit feeder POM sink change_in_f_processor albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
+  <field id="Y2_Q6_sink_change_in_f_processor__surface_drag_coefficient_in_air" long_name="benthic deposit feeder POM sink change_in_f_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
+  <field id="Y2_Q6_sink_change_in_f_processor_f_int_sms" long_name="benthic deposit feeder POM sink change_in_f_processor column-integrated iron sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
+  <field id="Y2_Q6_sink_change_in_f_processor_pen_depth_f_sms" long_name="benthic deposit feeder POM sink change_in_f_processor penetration depth for iron sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="Y2_Q6_sink__surface_albedo" long_name="benthic deposit feeder POM sink albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="Y2_Q6_sink__surface_drag_coefficient_in_air" long_name="benthic deposit feeder POM sink surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="Y3_c_sms" long_name="benthic suspension feeder carbon sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
@@ -2578,6 +2593,7 @@
   <field id="Y3_Q6n_sms" long_name="benthic suspension feeder particulate organic nitrogen sources-sinks" unit="mmol N/m^2/s" default_value="0.000E+00" />
   <field id="Y3_Q6p_sms" long_name="benthic suspension feeder particulate organic phosphorus sources-sinks" unit="mmol P/m^2/s" default_value="0.000E+00" />
   <field id="Y3_Q6s_sms" long_name="benthic suspension feeder particulate organic silicate sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
+  <field id="Y3_Q6f_sms" long_name="benthic suspension feeder particulate organic silicate sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
   <field id="Y3_fprey1c" long_name="benthic suspension feeder uptake of carbon in food source 1" unit="mg C/m^2/d" default_value="-.200E+21" />
   <field id="Y3_fprey1n" long_name="benthic suspension feeder uptake of nitrogen in food source 1" unit="mmol N/m^2/d" default_value="-.200E+21" />
   <field id="Y3_fprey1p" long_name="benthic suspension feeder uptake of phosphorus in food source 1" unit="mmol P/m^2/d" default_value="-.200E+21" />
@@ -2638,6 +2654,11 @@
   <field id="Y3_Q6_change_in_s_processor__surface_drag_coefficient_in_air" long_name="benthic suspension feeder POM change_in_s_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="Y3_Q6_change_in_s_processor_s_int_sms" long_name="benthic suspension feeder POM change_in_s_processor column-integrated silicate sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
   <field id="Y3_Q6_change_in_s_processor_pen_depth_s_sms" long_name="benthic suspension feeder POM change_in_s_processor penetration depth for silicate sources-sinks" unit="m/s" default_value="0.000E+00" />
+  <field id="Y3_Q6_f" long_name="benthic suspension feeder POM iron" unit="umol Fe/m^2" default_value="-.200E+21" />
+  <field id="Y3_Q6_change_in_f_processor__surface_albedo" long_name="benthic suspension feeder POM change_in_f_processor albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
+  <field id="Y3_Q6_change_in_f_processor__surface_drag_coefficient_in_air" long_name="benthic suspension feeder POM change_in_f_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
+  <field id="Y3_Q6_change_in_f_processor_f_int_sms" long_name="benthic suspension feeder POM change_in_f_processor column-integrated iron sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
+  <field id="Y3_Q6_change_in_f_processor_pen_depth_f_sms" long_name="benthic suspension feeder POM change_in_f_processor penetration depth for iron sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="Y3_Q6__surface_albedo" long_name="benthic suspension feeder POM albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="Y3_Q6__surface_drag_coefficient_in_air" long_name="benthic suspension feeder POM surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="Y4_c_sms" long_name="benthic meiofauna carbon sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
@@ -2655,6 +2676,7 @@
   <field id="Y4_Q6n_sms" long_name="benthic meiofauna particulate organic nitrogen sources-sinks" unit="mmol N/m^2/s" default_value="0.000E+00" />
   <field id="Y4_Q6p_sms" long_name="benthic meiofauna particulate organic phosphorus sources-sinks" unit="mmol P/m^2/s" default_value="0.000E+00" />
   <field id="Y4_Q6s_sms" long_name="benthic meiofauna particulate organic silicate sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
+  <field id="Y4_Q6f_sms" long_name="benthic meiofauna particulate organic silicate sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
   <field id="Y4_fprey1c" long_name="benthic meiofauna uptake of carbon in food source 1" unit="mg C/m^2/d" default_value="-.200E+21" />
   <field id="Y4_fprey1n" long_name="benthic meiofauna uptake of nitrogen in food source 1" unit="mmol N/m^2/d" default_value="-.200E+21" />
   <field id="Y4_fprey1p" long_name="benthic meiofauna uptake of phosphorus in food source 1" unit="mmol P/m^2/d" default_value="-.200E+21" />
@@ -2705,6 +2727,11 @@
   <field id="Y4_Q6_change_in_s_processor__surface_drag_coefficient_in_air" long_name="benthic meiofauna POM change_in_s_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="Y4_Q6_change_in_s_processor_s_int_sms" long_name="benthic meiofauna POM change_in_s_processor column-integrated silicate sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
   <field id="Y4_Q6_change_in_s_processor_pen_depth_s_sms" long_name="benthic meiofauna POM change_in_s_processor penetration depth for silicate sources-sinks" unit="m/s" default_value="0.000E+00" />
+  <field id="Y4_Q6_f" long_name="benthic meiofauna POM iron" unit="umol Fe/m^2" default_value="-.200E+21" />
+  <field id="Y4_Q6_change_in_f_processor__surface_albedo" long_name="benthic meiofauna POM change_in_f_processor albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
+  <field id="Y4_Q6_change_in_f_processor__surface_drag_coefficient_in_air" long_name="benthic meiofauna POM change_in_f_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
+  <field id="Y4_Q6_change_in_f_processor_f_int_sms" long_name="benthic meiofauna POM change_in_f_processor column-integrated iron sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
+  <field id="Y4_Q6_change_in_f_processor_pen_depth_f_sms" long_name="benthic meiofauna POM change_in_f_processor penetration depth for iron sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="Y4_Q6__surface_albedo" long_name="benthic meiofauna POM albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="Y4_Q6__surface_drag_coefficient_in_air" long_name="benthic meiofauna POM surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="N3_flux_target_sfl" long_name="N3_flux target variable surface flux" unit="UNITS m-3*m/s" default_value="0.000E+00" />
@@ -2913,10 +2940,12 @@
   <field id="Y2_food3_bottom_state2_sms" long_name="benthic deposit feeder food3 bottom state variable 2 sources-sinks" unit="mmol N/m^2/s" default_value="0.000E+00" />
   <field id="Y2_food3_bottom_state3_sms" long_name="benthic deposit feeder food3 bottom state variable 3 sources-sinks" unit="mmol P/m^2/s" default_value="0.000E+00" />
   <field id="Y2_food3_bottom_state4_sms" long_name="benthic deposit feeder food3 bottom state variable 4 sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
+  <field id="Y2_food3_bottom_state5_sms" long_name="benthic deposit feeder food3 bottom state variable 5 sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
   <field id="Y2_food3_loss_source_bottom_state1_sms" long_name="benthic deposit feeder food3_loss_source bottom state variable 1 sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
   <field id="Y2_food3_loss_source_bottom_state2_sms" long_name="benthic deposit feeder food3_loss_source bottom state variable 2 sources-sinks" unit="mmol N/m^2/s" default_value="0.000E+00" />
   <field id="Y2_food3_loss_source_bottom_state3_sms" long_name="benthic deposit feeder food3_loss_source bottom state variable 3 sources-sinks" unit="mmol P/m^2/s" default_value="0.000E+00" />
   <field id="Y2_food3_loss_source_bottom_state4_sms" long_name="benthic deposit feeder food3_loss_source bottom state variable 4 sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
+  <field id="Y2_food3_loss_source_bottom_state5_sms" long_name="benthic deposit feeder food3_loss_source bottom state variable 5 sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
   <field id="Y2_food4_bottom_state1_sms" long_name="benthic deposit feeder food4 bottom state variable 1 sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
   <field id="Y2_food4_loss_source_bottom_state1_sms" long_name="benthic deposit feeder food4_loss_source bottom state variable 1 sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
   <field id="Y3_food1_state1_sfl" long_name="benthic suspension feeder food1 state variable 1 surface flux" unit="mg C/m^3*m/s" default_value="0.000E+00" />
@@ -3009,10 +3038,12 @@
   <field id="Y3_food6_bottom_state2_sms" long_name="benthic suspension feeder food6 bottom state variable 2 sources-sinks" unit="mmol N/m^2/s" default_value="0.000E+00" />
   <field id="Y3_food6_bottom_state3_sms" long_name="benthic suspension feeder food6 bottom state variable 3 sources-sinks" unit="mmol P/m^2/s" default_value="0.000E+00" />
   <field id="Y3_food6_bottom_state4_sms" long_name="benthic suspension feeder food6 bottom state variable 4 sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
+  <field id="Y3_food6_bottom_state5_sms" long_name="benthic suspension feeder food6 bottom state variable 5 sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
   <field id="Y3_food6_loss_source_bottom_state1_sms" long_name="benthic suspension feeder food6_loss_source bottom state variable 1 sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
   <field id="Y3_food6_loss_source_bottom_state2_sms" long_name="benthic suspension feeder food6_loss_source bottom state variable 2 sources-sinks" unit="mmol N/m^2/s" default_value="0.000E+00" />
   <field id="Y3_food6_loss_source_bottom_state3_sms" long_name="benthic suspension feeder food6_loss_source bottom state variable 3 sources-sinks" unit="mmol P/m^2/s" default_value="0.000E+00" />
   <field id="Y3_food6_loss_source_bottom_state4_sms" long_name="benthic suspension feeder food6_loss_source bottom state variable 4 sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
+  <field id="Y3_food6_loss_source_bottom_state5_sms" long_name="benthic suspension feeder food6_loss_source bottom state variable 5 sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
   <field id="Y4_food1_bottom_state1_sms" long_name="benthic meiofauna food1 bottom state variable 1 sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
   <field id="Y4_food1_loss_source_bottom_state1_sms" long_name="benthic meiofauna food1_loss_source bottom state variable 1 sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
   <field id="Y4_food2_bottom_state1_sms" long_name="benthic meiofauna food2 bottom state variable 1 sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
@@ -3023,10 +3054,12 @@
   <field id="Y4_food4_bottom_state2_sms" long_name="benthic meiofauna food4 bottom state variable 2 sources-sinks" unit="mmol N/m^2/s" default_value="0.000E+00" />
   <field id="Y4_food4_bottom_state3_sms" long_name="benthic meiofauna food4 bottom state variable 3 sources-sinks" unit="mmol P/m^2/s" default_value="0.000E+00" />
   <field id="Y4_food4_bottom_state4_sms" long_name="benthic meiofauna food4 bottom state variable 4 sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
+  <field id="Y4_food4_bottom_state5_sms" long_name="benthic meiofauna food4 bottom state variable 5 sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
   <field id="Y4_food4_loss_source_bottom_state1_sms" long_name="benthic meiofauna food4_loss_source bottom state variable 1 sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
   <field id="Y4_food4_loss_source_bottom_state2_sms" long_name="benthic meiofauna food4_loss_source bottom state variable 2 sources-sinks" unit="mmol N/m^2/s" default_value="0.000E+00" />
   <field id="Y4_food4_loss_source_bottom_state3_sms" long_name="benthic meiofauna food4_loss_source bottom state variable 3 sources-sinks" unit="mmol P/m^2/s" default_value="0.000E+00" />
   <field id="Y4_food4_loss_source_bottom_state4_sms" long_name="benthic meiofauna food4_loss_source bottom state variable 4 sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
+  <field id="Y4_food4_loss_source_bottom_state5_sms" long_name="benthic meiofauna food4_loss_source bottom state variable 5 sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
   <field id="surface_albedo_calculator_result" long_name="surface_albedo_calculator result" unit="1" default_value="-.200E+21" />
   <field id="surface_drag_coefficient_in_air_calculator_result" long_name="surface_drag_coefficient_in_air_calculator result" unit="1" default_value="-.200E+21" />
   <field id="total_carbon_at_bottom_calculator_result" long_name="total_carbon_at_bottom_calculator result" unit="mmol m-3*m" default_value="-.200E+21" />
@@ -3063,16 +3096,13 @@
   <field id="H2_Q6_total_carbon_at_bottom_calculator__1_target_sms" long_name="benthic anaerobic bacteria POM total_carbon_at_bottom_calculator _1 target variable sources-sinks" unit="UNITS m-2/s" default_value="0.000E+00" />
   <field id="H2_Q7_total_carbon_at_bottom_calculator_result" long_name="benthic anaerobic bacteria refractory POM total_carbon_at_bottom_calculator result" unit="mmol m-3*m" default_value="-.200E+21" />
   <field id="H2_Q7_total_carbon_at_bottom_calculator__1_target_sms" long_name="benthic anaerobic bacteria refractory POM total_carbon_at_bottom_calculator _1 target variable sources-sinks" unit="UNITS m-2/s" default_value="0.000E+00" />
-  <field id="Y2_Q6_source_total_iron_at_interfaces" long_name="benthic deposit feeder total POM total_iron_at_interfaces" unit="umol m-3*m" default_value="-.200E+21" />
   <field id="Y2_Q6_source_total_carbon_at_interfaces_calculator_result" long_name="benthic deposit feeder total POM total_carbon_at_interfaces_calculator result" unit="mmol m-3*m" default_value="-.200E+21" />
-  <field id="Y3_Q6_total_iron_at_interfaces" long_name="benthic suspension feeder POM total_iron_at_interfaces" unit="umol m-3*m" default_value="-.200E+21" />
   <field id="Y3_Q6_total_carbon_at_interfaces_calculator_result" long_name="benthic suspension feeder POM total_carbon_at_interfaces_calculator result" unit="mmol m-3*m" default_value="-.200E+21" />
   <field id="Y4_total_iron_at_interfaces" long_name="benthic meiofauna total_iron_at_interfaces" unit="umol m-3*m" default_value="-.200E+21" />
   <field id="Y4_total_silicate_at_interfaces" long_name="benthic meiofauna total_silicate_at_interfaces" unit="mmol m-3*m" default_value="-.200E+21" />
   <field id="Y4_total_phosphorus_at_interfaces_calculator_result" long_name="benthic meiofauna total_phosphorus_at_interfaces_calculator result" unit="mmol m-3*m" default_value="-.200E+21" />
   <field id="Y4_total_nitrogen_at_interfaces_calculator_result" long_name="benthic meiofauna total_nitrogen_at_interfaces_calculator result" unit="mmol m-3*m" default_value="-.200E+21" />
   <field id="Y4_total_carbon_at_interfaces_calculator_result" long_name="benthic meiofauna total_carbon_at_interfaces_calculator result" unit="mmol m-3*m" default_value="-.200E+21" />
-  <field id="Y4_Q6_total_iron_at_interfaces" long_name="benthic meiofauna POM total_iron_at_interfaces" unit="umol m-3*m" default_value="-.200E+21" />
   <field id="Y4_Q6_total_carbon_at_interfaces_calculator_result" long_name="benthic meiofauna POM total_carbon_at_interfaces_calculator result" unit="mmol m-3*m" default_value="-.200E+21" />
   <field id="zero_sfl_tot" long_name="zero_sfl_tot" unit="" default_value="0.000E+00" />
   <field id="zero_bfl_tot" long_name="zero_bfl_tot" unit="" default_value="0.000E+00" />
@@ -3273,29 +3303,35 @@
   <field id="H1_Q6_n_sms_tot_calculator_result" long_name="benthic aerobic bacteria POM n_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="H1_Q6_p_sms_tot_calculator_result" long_name="benthic aerobic bacteria POM p_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="H1_Q6_s_sms_tot" long_name="benthic aerobic bacteria POM s_sms_tot" unit="" default_value="0.000E+00" />
+  <field id="H1_Q6_f_sms_tot" long_name="benthic aerobic bacteria POM f_sms_tot" unit="" default_value="0.000E+00" />
   <field id="H1_Q6_total_carbon_at_bottom_calculator_result_sms_tot_calculator_result" long_name="benthic aerobic bacteria POM total_carbon_at_bottom_calculator result_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="H2_c_sms_tot_calculator_result" long_name="benthic anaerobic bacteria c_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="H2_Q6_n_sms_tot_calculator_result" long_name="benthic anaerobic bacteria POM n_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="H2_Q6_p_sms_tot_calculator_result" long_name="benthic anaerobic bacteria POM p_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="H2_Q6_s_sms_tot" long_name="benthic anaerobic bacteria POM s_sms_tot" unit="" default_value="0.000E+00" />
+  <field id="H2_Q6_f_sms_tot" long_name="benthic anaerobic bacteria POM f_sms_tot" unit="" default_value="0.000E+00" />
   <field id="H2_Q6_total_carbon_at_bottom_calculator_result_sms_tot_calculator_result" long_name="benthic anaerobic bacteria POM total_carbon_at_bottom_calculator result_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Y2_Q6_source_c_sms_tot_calculator_result" long_name="benthic deposit feeder total POM c_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Y2_Q6_source_n_sms_tot_calculator_result" long_name="benthic deposit feeder total POM n_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Y2_Q6_source_p_sms_tot_calculator_result" long_name="benthic deposit feeder total POM p_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Y2_Q6_source_s_sms_tot_calculator_result" long_name="benthic deposit feeder total POM s_sms_tot_calculator result" unit="" default_value="0.000E+00" />
+  <field id="Y2_Q6_source_f_sms_tot_calculator_result" long_name="benthic deposit feeder total POM f_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Y2_Q6_source_anaerobic_c_sms_tot" long_name="benthic deposit feeder anaerobic POM c_sms_tot" unit="" default_value="0.000E+00" />
   <field id="Y2_Q6_source_anaerobic_n_sms_tot" long_name="benthic deposit feeder anaerobic POM n_sms_tot" unit="" default_value="0.000E+00" />
   <field id="Y2_Q6_source_anaerobic_p_sms_tot" long_name="benthic deposit feeder anaerobic POM p_sms_tot" unit="" default_value="0.000E+00" />
   <field id="Y2_Q6_source_anaerobic_s_sms_tot" long_name="benthic deposit feeder anaerobic POM s_sms_tot" unit="" default_value="0.000E+00" />
+  <field id="Y2_Q6_source_anaerobic_f_sms_tot" long_name="benthic deposit feeder anaerobic POM f_sms_tot" unit="" default_value="0.000E+00" />
   <field id="Y3_Q6_c_sms_tot_calculator_result" long_name="benthic suspension feeder POM c_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Y3_Q6_n_sms_tot_calculator_result" long_name="benthic suspension feeder POM n_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Y3_Q6_p_sms_tot_calculator_result" long_name="benthic suspension feeder POM p_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Y3_Q6_s_sms_tot_calculator_result" long_name="benthic suspension feeder POM s_sms_tot_calculator result" unit="" default_value="0.000E+00" />
+  <field id="Y3_Q6_f_sms_tot_calculator_result" long_name="benthic suspension feeder POM f_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Y4_c_sms_tot_calculator_result" long_name="benthic meiofauna c_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Y4_Q6_c_sms_tot_calculator_result" long_name="benthic meiofauna POM c_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Y4_Q6_n_sms_tot_calculator_result" long_name="benthic meiofauna POM n_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Y4_Q6_p_sms_tot_calculator_result" long_name="benthic meiofauna POM p_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Y4_Q6_s_sms_tot_calculator_result" long_name="benthic meiofauna POM s_sms_tot_calculator result" unit="" default_value="0.000E+00" />
+  <field id="Y4_Q6_f_sms_tot_calculator_result" long_name="benthic meiofauna POM f_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="light_ADY_VINT" long_name="depth-integrated light gelbstoff absorption" unit="1/m*m" default_value="0.0" />
   <field id="N1_p_VINT" long_name="depth-integrated phosphate phosphorus" unit="mmol P/m^3*m" default_value="0.0" />
   <field id="N3_n_VINT" long_name="depth-integrated nitrate nitrogen" unit="mmol N/m^3*m" default_value="0.0" />
@@ -3441,16 +3477,6 @@
   <field id="R8_s_w_VINT" long_name="depth-integrated large-size pom silicate vertical velocity" unit="m/s*m" default_value="0.0" />
   <field id="R8__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated large-size pom light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Q1__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic dissolved organic matter light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
-  <field id="Q6_resuspended_c_sms_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended carbon sources-sinks" unit="mg C/m^3/s*m" default_value="0.0" />
-  <field id="Q6_resuspended_c_w_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended carbon vertical velocity" unit="m/s*m" default_value="0.0" />
-  <field id="Q6_resuspended_p_sms_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended phosphorus sources-sinks" unit="mmol P/m^3/s*m" default_value="0.0" />
-  <field id="Q6_resuspended_p_w_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended phosphorus vertical velocity" unit="m/s*m" default_value="0.0" />
-  <field id="Q6_resuspended_n_sms_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended nitrogen sources-sinks" unit="mmol N/m^3/s*m" default_value="0.0" />
-  <field id="Q6_resuspended_n_w_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended nitrogen vertical velocity" unit="m/s*m" default_value="0.0" />
-  <field id="Q6_resuspended_s_sms_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended silicate sources-sinks" unit="mmol Si/m^3/s*m" default_value="0.0" />
-  <field id="Q6_resuspended_s_w_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended silicate vertical velocity" unit="m/s*m" default_value="0.0" />
-  <field id="Q6_resuspended_f_sms_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended iron sources-sinks" unit="umol Fe/m^3/s*m" default_value="0.0" />
-  <field id="Q6_resuspended_f_w_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended iron vertical velocity" unit="m/s*m" default_value="0.0" />
   <field id="Q6_surface_change_in_c_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic particulate organic matter surface change_in_c_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Q6_surface_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic particulate organic matter surface change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Q6_surface_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic particulate organic matter surface change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
@@ -3519,6 +3545,7 @@
   <field id="B1_fB1O3c_VINT" long_name="depth-integrated bacteria respiration" unit="mg C/m^3/d*m" default_value="0.0" />
   <field id="B1_fB1NIn_VINT" long_name="depth-integrated bacteria release of DIN" unit="mmol N/m^3/d*m" default_value="0.0" />
   <field id="B1_fB1N1p_VINT" long_name="depth-integrated bacteria release of DIP" unit="mmol P/m^3/d*m" default_value="0.0" />
+  <field id="B1_bgeff_VINT" long_name="depth-integrated bacteria bacterial growth efficiency" unit="*m" default_value="0.0" />
   <field id="B1_fB1R1c_VINT" long_name="depth-integrated bacteria release of labile DOC" unit="mg C/m^3/d*m" default_value="0.0" />
   <field id="B1_fB1R2c_VINT" long_name="depth-integrated bacteria release of semi-labile DOC" unit="mg C/m^3/d*m" default_value="0.0" />
   <field id="B1_fB1R3c_VINT" long_name="depth-integrated bacteria release of semi-refractory DOC" unit="mg C/m^3/d*m" default_value="0.0" />
@@ -3536,6 +3563,7 @@
   <field id="B1_minp_VINT" long_name="depth-integrated bacteria mineralisation of DOP to DIP" unit="mmol P/m^3/d*m" default_value="0.0" />
   <field id="B1__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated bacteria light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="pel_nit_rate_VINT" long_name="depth-integrated pelagic nitrification rate" unit="mmol/m3/d*m" default_value="0.0" />
+  <field id="pel_nit_fN4N3n_VINT" long_name="depth-integrated pelagic nitrification nitrification" unit="mmol N/m^3/d*m" default_value="0.0" />
   <field id="pel_nit_N3n_sms_VINT" long_name="depth-integrated pelagic nitrification nitrate sources-sinks" unit="mmol N/m^3/s*m" default_value="0.0" />
   <field id="pel_nit_N3n_w_VINT" long_name="depth-integrated pelagic nitrification nitrate vertical velocity" unit="m/s*m" default_value="0.0" />
   <field id="pel_nit_N4n_sms_VINT" long_name="depth-integrated pelagic nitrification ammonium sources-sinks" unit="mmol N/m^3/s*m" default_value="0.0" />
@@ -4086,6 +4114,7 @@
   <field id="H1_Q6_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic aerobic bacteria POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="H1_Q6_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic aerobic bacteria POM change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="H1_Q6_change_in_s_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic aerobic bacteria POM change_in_s_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
+  <field id="H1_Q6_change_in_f_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic aerobic bacteria POM change_in_f_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="H1_Q6__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic aerobic bacteria POM light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="H1_Q7_change_in_c_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic aerobic bacteria refractory POM change_in_c_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="H1_Q7_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic aerobic bacteria refractory POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
@@ -4096,6 +4125,7 @@
   <field id="H2_Q6_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic anaerobic bacteria POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="H2_Q6_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic anaerobic bacteria POM change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="H2_Q6_change_in_s_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic anaerobic bacteria POM change_in_s_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
+  <field id="H2_Q6_change_in_f_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic anaerobic bacteria POM change_in_f_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="H2_Q6__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic anaerobic bacteria POM light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="H2_Q7_change_in_c_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic anaerobic bacteria refractory POM change_in_c_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="H2_Q7_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic anaerobic bacteria refractory POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
@@ -4108,16 +4138,19 @@
   <field id="Y2_Q6_source_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder total POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y2_Q6_source_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder total POM change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y2_Q6_source_change_in_s_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder total POM change_in_s_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
+  <field id="Y2_Q6_source_change_in_f_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder total POM change_in_f_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y2_Q6_source__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder total POM light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y2_Q6_source_anaerobic_change_in_c_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder anaerobic POM change_in_c_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y2_Q6_source_anaerobic_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder anaerobic POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y2_Q6_source_anaerobic_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder anaerobic POM change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y2_Q6_source_anaerobic_change_in_s_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder anaerobic POM change_in_s_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
+  <field id="Y2_Q6_source_anaerobic_change_in_f_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder anaerobic POM change_in_f_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y2_Q6_source_anaerobic__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder anaerobic POM light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y2_Q6_sink_change_in_c_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder POM sink change_in_c_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y2_Q6_sink_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder POM sink change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y2_Q6_sink_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder POM sink change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y2_Q6_sink_change_in_s_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder POM sink change_in_s_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
+  <field id="Y2_Q6_sink_change_in_f_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder POM sink change_in_f_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y2_Q6_sink__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic deposit feeder POM sink light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y3_O2o_sms_VINT" long_name="depth-integrated benthic suspension feeder pelagic oxygen sources-sinks" unit="mmol O_2/m^3/s*m" default_value="0.0" />
   <field id="Y3_O2o_w_VINT" long_name="depth-integrated benthic suspension feeder pelagic oxygen vertical velocity" unit="m/s*m" default_value="0.0" />
@@ -4126,6 +4159,7 @@
   <field id="Y3_Q6_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic suspension feeder POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y3_Q6_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic suspension feeder POM change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y3_Q6_change_in_s_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic suspension feeder POM change_in_s_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
+  <field id="Y3_Q6_change_in_f_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic suspension feeder POM change_in_f_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y3_Q6__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic suspension feeder POM light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y4_O2o_sms_VINT" long_name="depth-integrated benthic meiofauna pelagic oxygen sources-sinks" unit="mmol O_2/m^3/s*m" default_value="0.0" />
   <field id="Y4_O2o_w_VINT" long_name="depth-integrated benthic meiofauna pelagic oxygen vertical velocity" unit="m/s*m" default_value="0.0" />
@@ -4134,8 +4168,19 @@
   <field id="Y4_Q6_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic meiofauna POM change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y4_Q6_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic meiofauna POM change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y4_Q6_change_in_s_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic meiofauna POM change_in_s_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
+  <field id="Y4_Q6_change_in_f_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic meiofauna POM change_in_f_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Y4_Q6__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic meiofauna POM light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="erosion__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated erosion light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
+  <field id="Ptot_c_result_VINT" long_name="depth-integrated total phytoplankton carbon result" unit="*m" default_value="0.0" />
+  <field id="Ptot_Chl_result_VINT" long_name="depth-integrated total phytoplankton chlorophyll-a result" unit="*m" default_value="0.0" />
+  <field id="Ztot_c_result_VINT" long_name="depth-integrated total zooplankton carbon result" unit="*m" default_value="0.0" />
+  <field id="Ptot_NPP_result_VINT" long_name="depth-integrated total phytoplankton net primary production result" unit="*m" default_value="0.0" />
+  <field id="Ptot_GPP_result_VINT" long_name="depth-integrated total phytoplankton gross primary production result" unit="*m" default_value="0.0" />
+  <field id="ZBtot_Resp_result_VINT" long_name="depth-integrated zooplankton and bacteria respiartion result" unit="*m" default_value="0.0" />
+  <field id="RD_c_result_VINT" long_name="depth-integrated total dissolved organic carbon result" unit="*m" default_value="0.0" />
+  <field id="RP_c_result_VINT" long_name="depth-integrated total particulate organic carbon result" unit="*m" default_value="0.0" />
+  <field id="RP_n_result_VINT" long_name="depth-integrated total particulate organic nitrogen result" unit="*m" default_value="0.0" />
+  <field id="RP_p_result_VINT" long_name="depth-integrated total particulate organic nitrogen result" unit="*m" default_value="0.0" />
   <field id="zero_VINT" long_name="depth-integrated zero" unit="*m" default_value="0.0" />
   <field id="B1_RP1_state1_sms_VINT" long_name="depth-integrated bacteria RP1 state variable 1 sources-sinks" unit="mg C/m^3/s*m" default_value="0.0" />
   <field id="B1_RP1_state1_w_VINT" long_name="depth-integrated bacteria RP1 state variable 1 vertical velocity" unit="m/s*m" default_value="0.0" />
@@ -4583,5 +4628,12 @@
   <field id="INP_nhx" long_name="nhx input" unit="" default_value="-.200E+21" />
   <field id="INP_pCO2a" long_name="pCO2a input" unit="" default_value="-.200E+21" />
   <field id="INP_ady" long_name="ady input" unit="" default_value="-.200E+21" />
+  <field id="INP_rotalk" long_name="rotalk input" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="INP_rodoxy" long_name="rodoxy input" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="INP_rodic" long_name="rodic input" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="INP_rosio2" long_name="rosio2 input" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="INP_rodip" long_name="rodip input" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="INP_ronh4" long_name="ronh4 input" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="INP_rono3" long_name="rono3 input" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
  </field_group>
 </field_definition>

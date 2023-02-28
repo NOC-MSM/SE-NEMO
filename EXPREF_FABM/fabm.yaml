@@ -1266,6 +1266,8 @@ instances:
       target: N4/n
   N7_flux:
     model: external_surface_flux
+    parameters:
+      scale_factor: 0.59
     coupling:
       target: N7/f
   erosion:
