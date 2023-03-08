@@ -56,7 +56,7 @@ for icluster in range(clusters.values.shape[0]):
     
     fn_data='/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/ORCA025-SE-NEMO_1990_2019_EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2_SST_SSS_PEA_MonClimate.nc'
     fn_domain='/gws/nopw/j04/class_vol2/senemo/jdha/FINAL_TESTING/EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2/config/domain_cfg.nc'
-    nemo_clim=coast.Gridded(fn_data=fn_data,fn_domain=fn_domain,config=config)
+    #nemo_clim=coast.Gridded(fn_data=fn_data,fn_domain=fn_domain,config=config)
     
     #%%
     I=np.where(~pd.isnull(clusters.values[icluster,10:]))[0]
@@ -90,7 +90,7 @@ for icluster in range(clusters.values.shape[0]):
  
         plt.pcolormesh(x,y, PEA[7,:,:].squeeze(),transform=ccrs.PlateCarree())
 
-        ax.set_extent(xylims)
+        ax.set_extent(xylims,crs=ccrs.PlateCarree())
         ax.set_position(Position[icluster,:])
         #bounds[icluster ,:] =ax.get_position().bounds
         
