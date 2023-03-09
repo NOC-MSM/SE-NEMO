@@ -128,7 +128,7 @@ do
       nam="${ens%%:*}"
       jpk="${ens##*:}"
 
-      if [ $year -eq $nn_diaharm ]
+      if [ $year -eq $nn_diaharm ] && [ $ln_tide -eq '.true.']
       then
 	 ln_diaharm='.true.'
       else

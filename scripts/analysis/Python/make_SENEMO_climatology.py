@@ -13,23 +13,23 @@ import sys
 if isliv:
  sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
 else:
- sys.path.insert(0,'/home/users/jholt/work/Git/COAsT/')
+ sys.path.insert(0,'/home/users/jholt/Git/COAsT/')
 import coast
 
 #Specify years to average
-ystart=1979
-ystop=1981
+ystart=1990
+ystop=2019
 
 #EXPNAMS=['EXP_MES',  'EXP_MES_WAV',  'EXP_MES_WAV_NTM'] 
 #EXPNAMS=[ 'EXP_MES_WAV_NTM_RIV']
-names,dpaths,DOMS,_  = coast. experiments(experiments='experiments.json') 
+names,dpaths,DOMS,_  = coast.experiments(experiments='experiments_ZPS.json') 
 for i,EXPNAM in enumerate(names):     
     print(EXPNAM)
 #    domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/' + EXPNAM +'/'
 #    domain_datapath='/gws/nopw/j04/class_vol2/senemo/slwa/' + EXPNAM +'/'
     domain_datapath=dpaths[i]   
     #make list of filenames
-    fn_nemo_dat= coast.nemo_filenames(domain_datapath,'SENEMO',ystart,ystop)            
+    fn_nemo_dat= coast.nemo_filename_maker(domain_datapath,ystart,ystop)            
     
     #Provide a domain.cfg file
     fn_nemo_dom=DOMS[i]
@@ -50,6 +50,6 @@ for i,EXPNAM in enumerate(names):
     fn_out='{0}/{1}/{1}_{2}_{3}_{4}_SST_SSS_PEA_MonClimate.nc'.format(domain_outpath,DOMNAM,ystart,ystop,EXPNAM)
         
     #Do the hardwork
-    coast.Annual_Climatology(nemo,nemo_out,Zmax=200)        
+    coast.GriddedMonthlyHydrographicClimatology(nemo,nemo_out,Zmax=200)        
     #Write out as netcdf
     nemo_out.dataset.to_netcdf(fn_out)

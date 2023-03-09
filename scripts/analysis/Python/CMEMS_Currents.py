@@ -43,7 +43,7 @@ for im in [6,7,8]:
 T=np.sort(T).astype(int)    
 
 A=np.load('../Data/LME_gridinfo_equ025.npz')
-#a=scipy.io.loadmat('../Data/equalgrid_025_LMEmask.mat')
+a=scipy.io.loadmat('../Data/equalgrid_025_LMEmask.mat')
 nlme=66
 
 #LME_mask=a['LME_mask'][:,:].T
@@ -79,7 +79,7 @@ for ilme in lmelist:
         REGION=LMENAM
         #REGION='NWS'  
         Name=name+' '+SEASON+' '+YEARS+' '+REGION         
-        SP,US,VSsurfacefields.plot_surface_circulation(nemo_t1, nemo_t1,nemo_t1, mask,Name, co_located=True,Vmax=.16,Np=5)
+        SP,US,VS=surfacefields.plot_surface_circulation(nemo_t1, nemo_t1,nemo_t1, mask,Name, co_located=True,Vmax=.16,Np=5)
         plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png')
 
         fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
@@ -88,4 +88,4 @@ for ilme in lmelist:
             print(var)
             nemo_t_out.dataset=nemo_t_out.dataset.drop(var)  
  
-        circulation.save_currents(SP,US,VS,fn_out,nemo_t_out)        
+        #circulation.save_currents(SP,US,VS,fn_out,nemo_t_out)        

@@ -9,8 +9,8 @@ git clone git@github.com:NOC-MSM/SE-NEMO.git
 
 MPI_OPT='mpich4' # other options are mpich | ompi
 
-./SE-NEMO/scripts/setup/se-eORCA025_setup -w $PWD/test_deploy_$MPI_OPT -x $PWD/test_deploy_$MPI_OPT -s $PWD/cfgs/SE-NEMO -m archer2 -a $MPI_OPT
-cd test/nemo/cfgs/se-eORCA025/
+./SE-NEMO/scripts/setup/se-eORCA025_setup -w $PWD/test_deploy_$MPI_OPT -x $PWD/test_deploy_$MPI_OPT -s $PWD/SE-NEMO -m archer2 -a $MPI_OPT
+cd $PWD/test_deploy_$MPI_OPT/nemo/cfgs/se-eORCA025/
 cp -rP EXPREF EXP_MYRUN
 cd EXP_MYRUN
 ln -s INPUTS/domain_cfg_r018-010-010_glo-r018-010_ant_opt_v3_notaper.nc domain_cfg.nc # terrain following case (MES)
