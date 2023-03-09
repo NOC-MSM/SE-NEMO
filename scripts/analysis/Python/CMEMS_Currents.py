@@ -3,6 +3,7 @@
 """
 Created on Tue Aug 16 12:28:05 2022
 
+
 @author: jholt
 """
 import socket
@@ -16,7 +17,7 @@ sys.path.insert(0,coast_dir)
 import coast
 import numpy as np
 from getpass import getpass
-import circulation
+import surfacefields
 import scipy.io
 import matplotlib.pylab as plt
 USERNAME='jholt'
@@ -24,6 +25,7 @@ PASSWORD=getpass( 'Password: ' )
 
 database = coast.Copernicus(USERNAME, PASSWORD, "my")
 globcurrent=database.get_product("cmems_mod_glo_phy_my_0.083_P1M-m")
+#globcurrent=database.get_product("dataset-uv-rep-monthly")
 #globcurrent=database.get_product("dataset-uv-rep-monthly")
 
 
@@ -77,7 +79,7 @@ for ilme in lmelist:
         REGION=LMENAM
         #REGION='NWS'  
         Name=name+' '+SEASON+' '+YEARS+' '+REGION         
-        SP,US,VS=circulation.plot_surface_circulation(nemo_t1, nemo_t1,nemo_t1, mask,Name, co_located=True,Vmax=.16,Np=5)
+        SP,US,VSsurfacefields.plot_surface_circulation(nemo_t1, nemo_t1,nemo_t1, mask,Name, co_located=True,Vmax=.16,Np=5)
         plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png')
 
         fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
