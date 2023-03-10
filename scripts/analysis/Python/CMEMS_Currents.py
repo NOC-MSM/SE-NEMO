@@ -3,6 +3,7 @@
 """
 Created on Tue Aug 16 12:28:05 2022
 
+
 @author: jholt
 """
 import socket
@@ -23,8 +24,9 @@ USERNAME='jholt'
 PASSWORD=getpass( 'Password: ' )
 
 database = coast.Copernicus(USERNAME, PASSWORD, "my")
-#globcurrent=database.get_product("cmems_mod_glo_phy_my_0.083_P1M-m")
-globcurrent=database.get_product("dataset-uv-rep-monthly")
+globcurrent=database.get_product("cmems_mod_glo_phy_my_0.083_P1M-m")
+#globcurrent=database.get_product("dataset-uv-rep-monthly")
+#globcurrent=database.get_product("dataset-uv-rep-monthly")
 
 
 #%%
