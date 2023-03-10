@@ -18,10 +18,11 @@ from cartopy.feature import NaturalEarthFeature  # fine resolution coastline
 
 
 
+
 #sys.path.insert(0, 'C:\\Users\\Jason.Goliath\\Documents\\GitHub\\COAsT\\')
 sys.path.insert(0,'/home/users/jholt/Git/COAsT/')
 import coast
-
+import surfacefields as sf
 
 LME_Clusters='../Data/LME_Clusters_eORCA025.csv'
 clusters = pd.read_csv(LME_Clusters)
@@ -32,9 +33,15 @@ a=scipy.io.loadmat('../Data/ORCA025_ROAM_GLB_LMEmaskV4.mat')
 J_offset=186
 LME_mask=a['LME_mask'][:,:].T
 plt.figure(figsize=[11.69,8.27])
+
 A=np.load('Position.npz')
 Position=A['arr_0']
 bounds=np.zeros((clusters.values.shape[0],4))
+Vmax=800
+cmap1=sf.lightcolormap(32,2)
+cmap1.set_bad([0.75,0.75,0.75])
+EXP_NAM='EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2'
+EXP_NAM='ZPS_NOTIDE'
 for icluster in range(clusters.values.shape[0]):
     lims=clusters.values[icluster,2:6]
     xylims=clusters.values[icluster,6:10]
@@ -54,7 +61,7 @@ for icluster in range(clusters.values.shape[0]):
     #lat=bathy.dataset.latitude
     
     
-    fn_data='/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/ORCA025-SE-NEMO_1990_2019_EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2_SST_SSS_PEA_MonClimate.nc'
+    fn_data='/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/ORCA025-SE-NEMO_1990_2019_'+EXP_NAM+'_SST_SSS_PEA_MonClimate.nc'
     fn_domain='/gws/nopw/j04/class_vol2/senemo/jdha/FINAL_TESTING/EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2/config/domain_cfg.nc'
     #nemo_clim=coast.Gridded(fn_data=fn_data,fn_domain=fn_domain,config=config)
     
@@ -87,26 +94,30 @@ for icluster in range(clusters.values.shape[0]):
         else:    
             ax = plt.axes(projection=ccrs.PlateCarree())
             
- 
-        plt.pcolormesh(x,y, PEA[7,:,:].squeeze(),transform=ccrs.PlateCarree())
+        PEA_max=np.max(PEA,axis=0).squeeze()
+        plt.pcolormesh(x,y, PEA_max,transform=ccrs.PlateCarree(),vmin=0,vmax=Vmax,cmap=cmap1)
 
         ax.set_extent(xylims,crs=ccrs.PlateCarree())
         ax.set_position(Position[icluster,:])
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['bottom'].set_visible(False)
+        ax.spines['left'].set_visible(False)
         #bounds[icluster ,:] =ax.get_position().bounds
         
         #plt.colorbar(orientation='vertical')
         #coastline = NaturalEarthFeature(category="physical", scale="50m", facecolor="none", name="coastline")
         #ax.add_feature(coastline, edgecolor="gray")
     
-        #gl = ax.gridlines(
-        #        crs=ccrs.PlateCarree(), draw_labels=False, linewidth=0.5, color="gray", alpha=0.5, linestyle="-"
-        #    )
+        gl = ax.gridlines(
+                crs=ccrs.PlateCarree(), draw_labels=False, linewidth=0.5, color="gray", alpha=0.5, linestyle=":"
+            )
         
 
     plt.title('{0} {1}'.format(icluster+1,clusters.values[icluster,1]),fontsize=8)
     name=clusters.values[icluster,1].replace(' ','_')
     #plt.tight_layout()
-    #plt.savefig('../Figures/'+name+'_PEA.png',bbox_inches='tight')
+plt.savefig('../Figures/'+EXP_NAM+'_PEA_max.png',bbox_inches='tight')
     #np.savez('bounds.npz',bounds)
     
 
