@@ -34,7 +34,7 @@
   ln_cfc12   = .false. 
   ln_sf6     = .false. 
   ln_c14     = .false. 
-  jp_bgc     = 59            !  Number of passive tracers of the BGC model
+  jp_bgc     = 58 !59            !  Number of passive tracers of the BGC model
   jp_dia3d   = 0             !  Number of 3D diagnostics
   jp_dia2d   = 0             !  Number of 2D diagnostics
   jp_diabio  = 0             !  Number of bio diagnostics
@@ -98,7 +98,7 @@
    sn_tracer(56)   = 'Z6_c     ' , 'nanoflagellates carbon  ',                         ' '  , .true.  ,  .false. , .false. , .false. , .false.
    sn_tracer(57)   = 'Z6_n     ' , 'nanoflagellates nitrogen  ',                       ' '  , .true.  ,  .false. , .false. , .false. , .false.
    sn_tracer(58)   = 'Z6_p     ' , 'nanoflagellates phosphorous  ',                    ' '  , .true.  ,  .false. , .false. , .false. , .false.
-   sn_tracer(59)   = 'L2_c     ' , 'calcite  ',                                        ' '  , .true.  ,  .false. , .false. , .false. , .false.
+   !sn_tracer(59)   = 'L2_c     ' , 'calcite  ',                                        ' '  , .true.  ,  .false. , .false. , .false. , .false.
    ln_trcdta     =  .false.  !  Initialisation from data input file (T) or not (F)
    ln_trcdmp     =  .false.  !  add a damping termn (T) or not (F)
    ln_trcdmp_clo =  .false.  !  damping term (T) or not (F) on closed seas
@@ -135,7 +135,7 @@
    ln_trcldf_OFF   =  .false. !.false.    !  No explicit diffusion
    ln_trcldf_tra   =  .true.  !.true.    !  use active tracer setting
    !                          !  Coefficient (defined with namtra_ldf coefficient)
-   rn_ldf_multi    = 1.          !  multiplier of aht for TRC mixing coefficient
+   rn_ldf_multi    = 0.          !  multiplier of aht for TRC mixing coefficient
    rn_fact_lap     = 1.          !  Equatorial enhanced zonal eddy diffusivity (lap only)
 /
 !!-----------------------------------------------------------------------

@@ -26,19 +26,34 @@
         <file id="file14" name_suffix="_ptrc_T" description="ERSEM daily">
           <!--field field_ref="Ptot_Chl_result" operation="average" />
           <field field_ref="Ptot_NPP_result" operation="average" /-->
-	  <!--field field_ref="O2_o" operation="average" /-->
+	  <field field_ref="O2_o" operation="average" />
           <field field_ref="O3_c" operation="average" />
           <field field_ref="O3_TA" operation="average" />
           <field field_ref="N1_p" operation="average" />
           <field field_ref="N3_n" operation="average" />
           <field field_ref="K4_n" operation="average" />
+          <field field_ref="K1_p" operation="average" />
+          <field field_ref="K3_n" operation="average" />
+          <field field_ref="G2_o" operation="average" />
           <field field_ref="G3_c" operation="average" />
           <field field_ref="Y2_c" operation="average" />
           <field field_ref="Y3_c" operation="average" />
           <field field_ref="Y4_c" operation="average" />
           <field field_ref="Q6_c" operation="average" />
+          <field field_ref="Q6_n" operation="average" />
+          <field field_ref="Q6_p" operation="average" />
           <field field_ref="Q6_pen_depth_c" operation="average" />
-          <field field_ref="Q6_pen_depth_n" operation="average" />
+	  <field field_ref="Q6_pen_depth_n" operation="average" />
+	  <field field_ref="K4_n_pb_flux" operation="average" />
+          <field field_ref="K3_n_pb_flux" operation="average" />
+          <field field_ref="ben_col_D1m" operation="average" />
+          <field field_ref="ben_col_D2m" operation="average" />
+          <field field_ref="H1_c" operation="average" />
+          <field field_ref="H2_c" operation="average" />
+          <field field_ref="Q7_n" operation="average" />
+          <field field_ref="ben_nit_nrate" operation="average" />
+          <field field_ref="ben_nit_G4n" operation="average" />
+
 	</file>
       </file_group>
 

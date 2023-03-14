@@ -2,12 +2,13 @@
 #SBATCH --job-name=se-025ERSEM
 #SBATCH --output=out-se025-%j.out
 ##SBATCH --time=01:30:00
-#SBATCH --time=06:00:00
-##SBATCH --time=00:15:00
-#SBATCH --account=n01-PML
+##SBATCH --time=06:00:00
+#SBATCH --time=00:15:00
+#SBATCH --account=n01-SANH
 #SBATCH --partition=standard
 #SBATCH --qos=standard
 ##SBATCH --nodes=19
+##SBATCH --nodes=52
 #SBATCH --nodes=68
 ##SBATCH --nodes=99
 #SBATCH --ntasks-per-core=1
@@ -42,11 +43,11 @@ ln_hpg_djc='.true.' ;
 ln_spin='.true.'                # Do we require a spin up phase for the ice
 nn_spin=3                       # How many years spin up
 year_st=1976                    # Start year of the simulation (ramains constant)
-year_en=1977                    # End year of this job submission
+year_en=1976                    # End year of this job submission
 offset=0                        # If rdt has changed, an offset to nn_it000 is needed
 nn_spin_cycle=$nn_spin_cycle    # Change to nn_spin+1 if year is .gt. year_st
 year=$y0                        # Change if starting job part way through simulation
-nmmax=4                         # number of months to go through before submitting a new job
+nmmax=8                         # number of months to go through before submitting a new job
 
 ########################################################################
 
@@ -149,7 +150,8 @@ if [ "$ln_rnf_new" = ".true." ]
 then
 	cn_dir=""
 	sn_rnf="'JRA_BGC',24,'rorunoff',.true.,.false.,'yearly'"
-	sn_cnf="'runoff_1m_nomask.nc',0,'socoefr',.false.,.true.,'yearly'"
+	sn_cnf="'JRA_BGC',0,'socoefr',.false.,.false.,'yearly'"
+	sn_dep="'JRA_BGC',24,'rodepth',.false.,.false.,'yearly'"
 else
 	cn_dir="INPUTS"
 	sn_rnf="'runoff_1m_nomask.nc',-1,'sornficb',.true.,.true.,'yearly'"
@@ -175,13 +177,14 @@ nsstart=$(date -d "$year_st-01-01 00:00:00 GMT" +%s) #seconds since EPOCH for to
 stopflag=0
 
 nm=1
-rm timing.txt
-touch timing.txt
-echo start: >> timing.txt
-ls -lhrt timing.txt >> timing.txt
-
 while [ $y0 -le $year_en ] && [ $nm -le $nmmax ]
 do
+
+   rm timing_$nm.txt
+   touch timing_$nm.txt
+   echo start: >> timing_$nm.txt
+   ls -lhrt timing_$nm.txt >> timing_$nm.txt
+
    #Compute previous and next month:
    mp=$(( $m0 + 1 ))
    if [ $mp -eq 13 ]
@@ -330,7 +333,7 @@ do
          sed "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle_rst))_$rs0\_restart_trc/g" namelist_top_template > namelist_top_cfg
       else
          sed    "s/XXX_EXP_XXX/$nam/g" namelist_cfg_template > namelist_cfg
-         if [ $year -eq $year_st ]
+         if [ $year -eq $year_st ] && [ $m0 -eq 1 ]
          then
             sed -i "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle_rst))_$rs0\_restart/g" namelist_cfg  
             sed "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle_rst))_$rs0\_restart_ice/g" namelist_ice_cfg_template > namelist_ice_cfg
@@ -357,6 +360,7 @@ do
       sed -i "s/XXX_CNDIR_XXX/$cn_dir/g" namelist_cfg
       sed -i "s/XXX_RNF_XXX/$sn_rnf/g" namelist_cfg
       sed -i "s/XXX_CNF_XXX/$sn_cnf/g" namelist_cfg
+      sed -i "s/XXX_DEP_XXX/$sn_dep/g" namelist_cfg
       sed -i "s/XXX_TID_XXX/$ln_tide/g" namelist_cfg
       sed -i "s/XXX_ITF_XXX/$ln_tmx_itf/g" namelist_cfg
       sed -i "s/XXX_DHM_XXX/$ln_diaharm/g" namelist_cfg
@@ -459,6 +463,7 @@ do
       if [ $m0 -eq 2 ] || [ $m0 -eq 8 ]
       then
         rbld_id=$(sbatch --parsable --export=ITER=$nn_itend_mm2,SPIN=$nn_spin_cycle_rbld_rst rebuild_restart.slurm)
+        #rbld_id=$(sbatch --parsable --export=ITER=$nn_itend_mm2 rebuild_restart.slurm)
         sbatch --dependency=afterok:$rbld_id --export=ITER=$nn_itend_mm2 compress_restarts.slurm
       else
         bash clean_restarts.sh $nn_itend_mm2
@@ -487,19 +492,20 @@ do
    then
       exit
    fi
-   
+
+   echo done 1 month: >> timing_$nm.txt
+   touch timing_$nm.txt
+   ls -lhrt timing_$nm.txt >> timing_$nm.txt
+
    y0=$yp
    m0=$mp
    nm=$(( nm + 1 ))
 
 done
 
-echo done $nmmax months: >> timing.txt
-touch timing.txt
-ls -lhrt timing.txt >> timing.txt
 
 
-#resubmit:
+##resubmit:
 if [ $y0 -le $year_en ]
 then
    echo 'Submitting' $y0 $m0 '...'
