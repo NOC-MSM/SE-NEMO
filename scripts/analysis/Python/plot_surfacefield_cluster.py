@@ -42,7 +42,9 @@ cmap1=sf.lightcolormap(32,2)
 cmap1.set_bad([0.75,0.75,0.75])
 EXP_NAM='EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2'
 EXP_NAM='ZPS_NOTIDE'
+#%%
 for icluster in range(clusters.values.shape[0]):
+#%%
     lims=clusters.values[icluster,2:6]
     xylims=clusters.values[icluster,6:10]
     
@@ -52,8 +54,7 @@ for icluster in range(clusters.values.shape[0]):
     Lims[3]=lims[3]-J_offset
     
     M=LME_mask[Lims[2]:Lims[3]+1,Lims[0]:Lims[1]+1]
-    #%%
-    
+        
     bathyname='../Data/eORCA025_bathy_meter.nc'
     config='example_nemo_grid_t.json'
     #bathy=coast.Gridded(fn_data=bathyname,config=config)
@@ -65,7 +66,7 @@ for icluster in range(clusters.values.shape[0]):
     fn_domain='/gws/nopw/j04/class_vol2/senemo/jdha/FINAL_TESTING/EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2/config/domain_cfg.nc'
     #nemo_clim=coast.Gridded(fn_data=fn_data,fn_domain=fn_domain,config=config)
     
-    #%%
+    
     I=np.where(~pd.isnull(clusters.values[icluster,10:]))[0]
     LMEs=[]
     for i in I:
@@ -81,42 +82,49 @@ for icluster in range(clusters.values.shape[0]):
                            nemo_clim_cluster.dataset.PEA_monthy_clim.values)
     
         
-    #%%
+
 #    plt.figure(icluster)#,figsize=[11.69,8.27])
     
-    if True:
-        x=nemo_clim_cluster.dataset.longitude.values
-        y=nemo_clim_cluster.dataset.latitude.values
-        central_longitude=0.0
-        if np.max(x)-np.min(x)>350:
-            x[x<0]=x[x<0]+360
-            ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=180))
-        else:    
-            ax = plt.axes(projection=ccrs.PlateCarree())
-            
-        PEA_max=np.max(PEA,axis=0).squeeze()
-        plt.pcolormesh(x,y, PEA_max,transform=ccrs.PlateCarree(),vmin=0,vmax=Vmax,cmap=cmap1)
-
-        ax.set_extent(xylims,crs=ccrs.PlateCarree())
-        ax.set_position(Position[icluster,:])
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['bottom'].set_visible(False)
-        ax.spines['left'].set_visible(False)
-        #bounds[icluster ,:] =ax.get_position().bounds
+  
+    x=nemo_clim_cluster.dataset.longitude.values
+    y=nemo_clim_cluster.dataset.latitude.values
+    central_longitude=0.0
+    if np.max(x)-np.min(x)>350:
+        x[x<0]=x[x<0]+360
+        ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=180))
+    else:    
+        ax = plt.axes(projection=ccrs.PlateCarree())
         
-        #plt.colorbar(orientation='vertical')
-        #coastline = NaturalEarthFeature(category="physical", scale="50m", facecolor="none", name="coastline")
-        #ax.add_feature(coastline, edgecolor="gray")
+    PEA_max=np.max(PEA,axis=0).squeeze()
+    im=plt.pcolormesh(x,y, PEA_max,transform=ccrs.PlateCarree(),vmin=0,vmax=Vmax,cmap=cmap1)
+
+    ax.set_extent(xylims,crs=ccrs.PlateCarree())
+    ax.set_position(Position[icluster,:])
+
+    #bounds[icluster ,:] =ax.get_position().bounds
     
-        gl = ax.gridlines(
-                crs=ccrs.PlateCarree(), draw_labels=False, linewidth=0.5, color="gray", alpha=0.5, linestyle=":"
-            )
+    #plt.colorbar(orientation='vertical')
+    #coastline = NaturalEarthFeature(category="physical", scale="50m", facecolor="none", name="coastline")
+    #ax.add_feature(coastline, edgecolor="gray")
+
+    #gl = ax.gridlines(
+    #        crs=ccrs.PlateCarree(), draw_labels=False, linewidth=0.5, color="gray", alpha=0.5, linestyle=":"
+    #    )
         
 
+    
     plt.title('{0} {1}'.format(icluster+1,clusters.values[icluster,1]),fontsize=8)
     name=clusters.values[icluster,1].replace(' ','_')
+    
+    
+    
+    
+    
     #plt.tight_layout()
+#%%
+position_ax=[0.497+0.12+0.05,0.04253,.25,0.035]
+cax=plt.axes(position=position_ax)
+plt.colorbar(im,orientation='horizontal',cax=cax)    
 plt.savefig('../Figures/'+EXP_NAM+'_PEA_max.png',bbox_inches='tight')
     #np.savez('bounds.npz',bounds)
     
