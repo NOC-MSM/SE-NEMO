@@ -81,6 +81,13 @@ Row[4]=np.array([12,17,18,8,11]).astype(int)-1
 Row[5]=np.array([13,20,19,9,10]).astype(int)-1
 
 
+Row={}
+Row[1]=np.array([1,2,3]).astype(int)-1
+Row[2]=np.array([4,5,6,7]).astype(int)-1
+Row[3]=np.array([8,9,10,11,12,13]).astype(int)-1
+Row[4]=np.array([14,15,16,17,18]).astype(int)-1
+Row[5]=np.array([19,20,21,22,23]).astype(int)-1
+
 nrow=5
 
 plt.figure(figsize=[11.69,8.27])
