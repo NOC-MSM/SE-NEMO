@@ -1,0 +1,19 @@
+{
+		"exp_names": [
+                "ORCA1",
+                "ORCA025",
+                "ORCA12"
+                
+        		],
+		"dirs":[
+                 "/gws/nopw/j04/class_vol1/CLASS-MEDUSA/OUT_eORCA1/A009/monthly/",
+                 "/gws/nopw/j04/class_vol1/CLASS-MEDUSA/OUT_eORCA025/B002/monthly/",
+                 "/gws/nopw/j04/class_vol1/CLASS-MEDUSA/OUT_eORCA12/C001/monthly/"                 
+                ],
+        "domains":[    
+                  "/gws/nopw/j04/class_vol1/CLASS-MEDUSA/OUT_eORCA1/A009/domain/mesh_mask.nc",
+                  "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p0_notide/config/domain_cfg.nc",
+                  "/gws/nopw/j04/class_vol1/CLASS-MEDUSA/OUT_eORCA12/C001/domain/domain_cfg.nc"
+              ]
+}
+
