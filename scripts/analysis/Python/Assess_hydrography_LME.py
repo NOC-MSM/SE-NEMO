@@ -15,7 +15,7 @@ import pandas as pd
 if isliv:
  sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
 else:
- sys.path.insert(0,'/home/users/jholt/work/Git/COAsT/')
+ sys.path.insert(0,'/home/users/jholt/Git/COAsT/')
  
 import coast
 import scipy.io
@@ -45,7 +45,7 @@ else:
 DATANAME='ORCA025'
 
 nlme=66#len(A['i_min'])
-Depth_lim=1000.
+Depth_lim=400.
 if isliv:
  Assessdir='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/ORCA025-SE-NEMO/' 
 else:
