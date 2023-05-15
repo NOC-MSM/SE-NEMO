@@ -40,6 +40,13 @@ ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.'
 ln_hpg_djc='.false.' ;
 ########################################################################
 ```
+N.B. GS1p1_tide uses the namelist_ref wave drag file, defined as:
+```
+cn_int_wave_drag = './INPUTS/tdiss_R025.nc'  ! filename for internal wave drag dissipation
+```
+and is not modified further in namelist_cfg_template.
+
+
 
 **EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2 (a.k.a GS1p2_full):**
 
@@ -49,12 +56,16 @@ ln_hpg_djc='.false.' ;
 ########################################################################
 rn_rdt=600          ; ln_zps='.false.'      ; ln_tmx_itf='.false.'
 ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
-nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.false.'
+nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.true.'
 ln_rstdate='.true.' ; ln_shlat2d='.true.'   ; nn_diaharm=1981
-rn_Cd0=2.5e-3       ; ln_loglayer='.false.' ; ln_tide='.true.'
-ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.' 
-ln_hpg_djc='.true.' ; cn_int_wave_drag = './INPUTS/tdiss_R025.nc'
+rn_Cd0=2.5e-3       ; ln_loglayer='.true.'  ; ln_tide='.true.'
+ln_boost='.false.'   ; ln_gls='.true.'      ; ln_int_wave_drag='.true.'
+ln_hpg_djc='.true.' ;
 ########################################################################
+```
+N.B. In namelist_cfg_template, the wave drag file is defined for GS1p2_full as:
+```
+cn_int_wave_drag = 'INPUTS/tdiss_R025_fac2.nc',
 ```
 
 Data can be found on JASMIN under `/gws/nopw/j04/class_vol2/senemo`.
