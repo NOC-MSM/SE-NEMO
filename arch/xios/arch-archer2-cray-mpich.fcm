@@ -27,3 +27,4 @@
 %CPP            CC -EP
 %FPP            cpp -P
 %MAKE           gmake
+bld::tool::fc_modsearch -J

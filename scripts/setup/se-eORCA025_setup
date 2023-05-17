@@ -14,17 +14,18 @@ display_usage() {
    echo "          -s full path to where SE-NEMO repository resides"
    echo "          -m machine name"
    echo "          -a MPI build [mpich|mpich4|ompi]"
+   echo "          -c MPI build [gnu|cray]"
    echo
    exit 1
 	} 
 # if less than three arguments supplied, display usage 
-	if [  $# -le 9 ] 
+	if [  $# -le 11 ] 
 	then 
 		display_usage
 		exit 1
 	fi 
 # if less than two arguments supplied, display usage 
-	if [  $# -ge 11 ] 
+	if [  $# -ge 13 ] 
 	then 
 		display_usage
 		exit 1
@@ -36,7 +37,7 @@ display_usage() {
 		exit 0
 	fi 
 
-while getopts w:x:s:m:a: option
+while getopts w:x:s:m:a:c: option
   do
   case "${option}"
   in
@@ -45,6 +46,7 @@ while getopts w:x:s:m:a: option
   s) export REPO_DIR=${OPTARG};;
   m) export HPC_TARG=${OPTARG};;
   a) export MPI_TARG=${OPTARG};;
+  c) export CMP_TARG=${OPTARG};;
   esac
 done
 
@@ -73,7 +75,7 @@ echo "Making sure that the correct modules are loaded"
 
 case "${HPC_TARG}"
   in
-  archer2) . $REPO_DIR/scripts/env/gnu-${MPI_TARG}
+  archer2) . $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}
            ;;
   *)       echo "Machine not recognised"
            echo "Machines available: archer2"
@@ -125,7 +127,7 @@ cd xios
 cp $REPO_DIR/arch/xios/* ./arch
 
 echo "Compiling xios"
-./make_xios --full --prod --arch ${HPC_TARG}-${MPI_TARG} --netcdf_lib netcdf4_par --job 4
+./make_xios --full --prod --arch ${HPC_TARG}-${CMP_TARG}-${MPI_TARG} --netcdf_lib netcdf4_par --job 4
 
 # Let's update the path to xios
 export XIOS_DIR=$XIOS_DIR/xios
@@ -133,7 +135,7 @@ export XIOS_DIR=$XIOS_DIR/xios
 cd $WORK_DIR/nemo
 cp $REPO_DIR/arch/nemo/* ./arch
 # Dirty fix to hard wire path otherwise user will have to set XIOS_DIR in every new shell session
-sed -i "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-${HPC_TARG}-${MPI_TARG}.fcm
+sed -i "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-${HPC_TARG}-${CMP_TARG}-${MPI_TARG}.fcm
 
 echo 'se-eORCA025 OCE ICE' >> $WORK_DIR/nemo/cfgs/work_cfgs.txt
 
@@ -159,8 +161,8 @@ cd $CONFIG_DIR/EXPREF
 ## Add ENV into runscipts
 case "${HPC_TARG}"
   in
-  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.slurm
-           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.mpirun
+  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.slurm
+           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.mpirun
            ;;
   *)       sed -i "s?XXX_ENV_XXX??" runscript.slurm
            sed -i "s?XXX_ENV_XXX??" runscript.mpirun 
@@ -194,7 +196,7 @@ cp $REPO_DIR/scripts/run/* $CONFIG_DIR/EXPREF
 cd $WORK_DIR/nemo
 
 echo "Compiling nemo SE-ORCA025 Config"
-./makenemo -m ${HPC_TARG}-${MPI_TARG} -r se-eORCA025 -j 16
+./makenemo -m ${HPC_TARG}-${CMP_TARG}-${MPI_TARG} -r se-eORCA025 -j 16
 
 echo
 echo "  Auto-Config: SE-eORCA025"
