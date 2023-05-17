@@ -41,8 +41,8 @@
 
 %CPP                 cpp -Dkey_nosignedzero -P -traditional
 %FC                  ftn
-%FCFLAGS             -fdefault-double-8 -fdefault-real-8 -Ofast  -funroll-all-loops -fcray-pointer -ffree-line-length-none -w -fallow-argument-mismatch
-%FFLAGS              -fdefault-double-8 -fdefault-real-8 -Ofast  -funroll-all-loops -fcray-pointer -ffree-line-length-none -w -fallow-argument-mismatch
+%FCFLAGS             -fdefault-double-8 -fdefault-real-8 -O2  -funroll-all-loops -fcray-pointer -ffree-line-length-none -w -fallow-argument-mismatch
+%FFLAGS              -fdefault-double-8 -fdefault-real-8 -O2  -funroll-all-loops -fcray-pointer -ffree-line-length-none -w -fallow-argument-mismatch
 %LD                  ftn
 %FPPFLAGS            -P -traditional
 %LDFLAGS
@@ -53,5 +53,5 @@
 %USER_LIB            %XIOS_LIB %NCDF_LIB -L/opt/cray/pe/libsci/21.08.1.2/GNU/9.1/x86_64/lib -lsci_gnu_82
 
 %CC                  cc -Wl,"--allow-multiple-definition"
-%CFLAGS              -O2 -fcommon -Wl,"--allow-multiple-definition"
+%CFLAGS              -O0 -fcommon -Wl,"--allow-multiple-definition"
 bld::tool::fc_modsearch -J
