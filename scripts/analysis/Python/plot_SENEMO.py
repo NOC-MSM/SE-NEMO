@@ -4,7 +4,7 @@ sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
 import matplotlib.pylab as plt
 import coast
 import numpy as np
-cmap0=cm.get_cmap('BrBG_r',lut=16)
+#cmap0=cm.get_cmap('BrBG_r',lut=16)
 cmap0.set_bad(color=[0.65,0.65,0.65])
 #%%
 fn_nemo_dom='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'
@@ -63,7 +63,9 @@ Z1=nemo_t1.dataset.coords['depth_0'].values[:,j,i]
 plt.subplot(1,2,1)
 plt.plot(T1,-Z,T2,-Z,'--')
 plt.legend(['No Tide tmp','Tide tmp'])
-plt.title('Profiles at j,i={0},{1}'.format(j,i))
+# =============================================================================
+# plt.title('Profiles at j,i={0},{1}'.format(j,i))
+# =============================================================================
 plt.subplot(1,2,2)
 plt.plot(np.log10(avh1),-Z,np.log10(avh2),-Z,'--')
 plt.legend(['No Tide avt (log10)','Tide avt (log10)'])
