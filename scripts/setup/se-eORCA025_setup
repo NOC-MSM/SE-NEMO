@@ -77,7 +77,7 @@ echo "Making sure that the correct modules are loaded"
 
 case "${HPC_TARG}"
   in
-  archer2) . $REPO_DIR/scripts/env/${HPC_TARG}_${COMPILER}_${MPI_TARG}
+  archer2) . $REPO_DIR/scripts/env/${HPC_TARG}-${COMPILER}-${MPI_TARG}
            ;;
   *)       echo "Machine not recognised"
            echo "Machines available: archer2"
@@ -90,10 +90,12 @@ case "${NEMO_VER}"
   in
   4.0.4)   echo "NEMO Version 4.0.4 will be checked out"
            ;;
-  4.2)     echo "NEMO Version 4.2 will be checked out"
+  4.2.0)   echo "NEMO Version 4.2.0 will be checked out"
+           ;;
+  4.2)     echo "NEMO Head of branch 4.2  will be checked out"
            ;;
   *)       echo "NEMO Version not recognised"
-           echo "Versions available: 4.0.4, and 4.2"
+           echo "Versions available: 4.0.4, 4.2.0, branch 4.2"
            exit 1
 esac
 
@@ -101,7 +103,9 @@ esac
 echo "Checking out NEMO repository"
 case "${NEMO_VER}"
   in
-  4.2)     git clone --branch 4.2.0 https://forge.nemo-ocean.eu/nemo/nemo.git nemo
+  4.2)     git clone --branch branch_4.2 https://forge.nemo-ocean.eu/nemo/nemo.git nemo
+           ;;
+  4.2.0)   git clone --branch 4.2.0 https://forge.nemo-ocean.eu/nemo/nemo.git nemo
            ;;
   *)       svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER --depth empty nemo
            svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/src --depth infinity nemo/src
@@ -116,6 +120,8 @@ cd nemo
 case "${NEMO_VER}"
   in
   4.2)     echo "Nothing to do as EXTERNALS are integral to 4.2"
+           ;;
+  4.0.2)     echo "Nothing to do as EXTERNALS are integral to 4.2.0"
            ;;
   *)       for ext_name in mk FCM IOIPSL
              do
@@ -159,7 +165,7 @@ cd xios
 cp $REPO_DIR/arch/xios/* ./arch
 
 echo "Compiling xios"
-./make_xios --full --prod --arch ${HPC_TARG}-${MPI_TARG} --netcdf_lib netcdf4_par --job 4
+./make_xios --full --prod --arch ${HPC_TARG}-${COMPILER}-${MPI_TARG} --netcdf_lib netcdf4_par --job 10
 
 # Let's update the path to xios
 export XIOS_DIR=$XIOS_DIR/xios
@@ -169,7 +175,7 @@ export XIOS_DIR=$XIOS_DIR/xios
 cd $WORK_DIR/nemo
 cp $REPO_DIR/arch/nemo/* ./arch
 # Dirty fix to hard wire path otherwise user will have to set XIOS_DIR in every new shell session
-sed -i "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-${HPC_TARG}_${COMPILER}_${MPI_TARG}.fcm
+sed -i "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-${HPC_TARG}-${COMPILER}-${MPI_TARG}.fcm
 
 echo 'se-eORCA025 OCE ICE' >> $WORK_DIR/nemo/cfgs/work_cfgs.txt
 
@@ -189,14 +195,14 @@ case "${HPC_TARG}"
            ;;
 esac
 
-cp -r $REPO_DIR/EXPREF .
+cp -r $REPO_DIR/EXPREF/$NEMO_VER/ EXPREF
 cd $CONFIG_DIR/EXPREF
 
 ## Add ENV into runscipts
 case "${HPC_TARG}"
   in
-  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${HPC_TARG}_${COMPILER}_${MPI_TARG}?" runscript.slurm
-           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${HPC_TARG}_${COMPILER}_${MPI_TARG}?" runscript.mpirun
+  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${HPC_TARG}-${COMPILER}-${MPI_TARG}?" runscript.slurm
+           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${HPC_TARG}-${COMPILER}-${MPI_TARG}?" runscript.mpirun
            ;;
   *)       sed -i "s?XXX_ENV_XXX??" runscript.slurm
            sed -i "s?XXX_ENV_XXX??" runscript.mpirun 
@@ -229,14 +235,14 @@ cp $REPO_DIR/scripts/run/* $CONFIG_DIR/EXPREF
 
 cd $WORK_DIR/nemo
 
-echo "Compiling nemo SE-ORCA025 Config"
-./makenemo -m ${HPC_TARG}_${COMPILER}_${MPI_TARG} -r se-eORCA025 -j 16
+echo "Compiling nemo se-eORCA025 Config"
+./makenemo -m ${HPC_TARG}-${COMPILER}-${MPI_TARG} -r se-eORCA025 -j 10
 
 echo
-echo "  Auto-Config: SE-eORCA025"
-echo "  *****************************"
+echo "  Auto-Config: se-eORCA025"
+echo "  **********************"
 echo
-echo "  To run the SE-eORCA025 Configuration:"
+echo "  To run the se-eORCA025 Configuration:"
 echo
 echo "  - cp -rP EXPREF EXP_MYRUN "
 echo "  - link the correct domain_cfg.nc "
