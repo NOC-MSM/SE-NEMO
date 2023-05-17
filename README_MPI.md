@@ -22,7 +22,7 @@ cd $PWD/test_deploy_$MPI_OPT/nemo/cfgs/se-eORCA025/
 cp -rP EXPREF EXP_MYRUN
 cd EXP_MYRUN
 ln -s INPUTS/domain_cfg_mes.nc domain_cfg.nc # terrain following case (MES)
-# alternativly use INPUTS/domcfg_zps.nc for the geopotential vertical coordinate (ZPS) case
+# alternativly use INPUTS/domain_cfg_zps.nc for the geopotential vertical coordinate (ZPS) case
 ```
 Edit the project code and options in  `runscript.[slurm|mpirun]` then:
 ```
