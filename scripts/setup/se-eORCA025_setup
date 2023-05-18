@@ -85,7 +85,7 @@ case "${HPC_TARG}"
 esac
 
 export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
-ex
+
 # Currently running 4.0.4 for SE-NEMO
 NEMO_VER=4.0.4
 
