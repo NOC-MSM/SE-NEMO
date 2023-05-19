@@ -49,8 +49,8 @@
 %AR                  ar
 %ARFLAGS             rs
 %MK                  gmake
-%USER_INC            %XIOS_INC %OASIS_INC %NCDF_INC
-%USER_LIB            %XIOS_LIB %OASIS_LIB %NCDF_LIB
+%USER_INC            %XIOS_INC %NCDF_INC
+%USER_LIB            %XIOS_LIB %NCDF_LIB
 
 %CC                  cc -Wl,--allow-multiple-definition
 %CFLAGS              -O0
