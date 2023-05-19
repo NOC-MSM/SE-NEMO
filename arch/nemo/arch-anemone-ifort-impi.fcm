@@ -32,7 +32,7 @@
 #
 %NCDF_HOME           $EBROOTNETCDF
 %HDF5_HOME           $EBROOTHDF5
-%XIOS_HOME           path_to_xios
+%XIOS_HOME           XXX_XIOS_DIR_XXX
 
 %NCDF_INC            -I%NCDF_HOME/include
 %NCDF_LIB            -L%NCDF_HOME/lib -lnetcdff -lnetcdf -L%HDF5_HOME/lib -lhdf5_hl -lhdf5 -lhdf5
