@@ -81,7 +81,12 @@ MODULE dynspg_ts
    REAL(wp), ALLOCATABLE, SAVE, DIMENSION(:,:) ::   zwz                ! ff_f/h at F points
    REAL(wp), ALLOCATABLE, SAVE, DIMENSION(:,:) ::   ftnw, ftne         ! triad of coriolis parameter
    REAL(wp), ALLOCATABLE, SAVE, DIMENSION(:,:) ::   ftsw, ftse         ! (only used with een vorticity scheme)
-
+   
+!jth_IWD
+   REAL(wp), SAVE, ALLOCATABLE, DIMENSION(:,:)   :: un_detide,vn_detide ! arrays for de-tided barotropic currents
+   REAL(wp), SAVE, ALLOCATABLE, DIMENSION(:,:)   :: un_25,vn_25 !arrays for 25hr running means
+!
+!
    REAL(wp) ::   r1_12 = 1._wp / 12._wp   ! local ratios
    REAL(wp) ::   r1_8  = 0.125_wp         !
    REAL(wp) ::   r1_4  = 0.25_wp          !
@@ -109,6 +114,7 @@ CONTAINS
          &     ALLOCATE( ftnw(jpi,jpj) , ftne(jpi,jpj) , ftsw(jpi,jpj) , ftse(jpi,jpj), STAT=ierr(2)   )
          !
       ALLOCATE( un_adv(jpi,jpj), vn_adv(jpi,jpj)                    , STAT=ierr(3) )
+
       !
       dyn_spg_ts_alloc = MAXVAL( ierr(:) )
       !
@@ -614,6 +620,20 @@ CONTAINS
                END DO
             END DO
          ENDIF
+
+!jth_IWD Add internal wave drag
+
+	IF ( ln_int_wave_drag .AND. .NOT. ll_wd ) THEN
+            DO jj = 2, jpjm1
+               DO ji = fs_2, fs_jpim1   ! vector opt.
+                  zu_trd(ji,jj) = zu_trd(ji,jj) + tdiss(ji,jj) * ( un_e(ji,jj) - un_detide) * hur_e(ji,jj)
+                  zv_trd(ji,jj) = zv_trd(ji,jj) + tdiss(ji,jj) * ( vn_e(ji,jj) - vn_detide) * hvr_e(ji,jj)
+               END DO
+            END DO
+        ENDIF
+!!	
+
+
          !
          ! Set next velocities:
          !     Compute barotropic speeds at step jit+1    (h : total height of the water colomn)
@@ -1004,6 +1024,9 @@ CONTAINS
       REAL(wp) ::   zxr2, zyr2, zcmax   ! local scalar
       REAL(wp), DIMENSION(jpi,jpj) ::   zcu
       INTEGER  :: inum
+!jth_IWD
+      INTEGER  ::   ierr
+!
       !!----------------------------------------------------------------------
       !
       ! Max courant number for ext. grav. waves
@@ -1081,6 +1104,14 @@ CONTAINS
       !                             ! Allocate time-splitting arrays
       IF( dyn_spg_ts_alloc() /= 0    )   CALL ctl_stop('STOP', 'dyn_spg_init: failed to allocate dynspg_ts  arrays' )
       !
+!jth_IWD
+!     allocate arrays
+      IF (ln_int_wave_drag) THEN
+         ALLOCATE( un_detide(jpi,jpj), vn_detide(jpi,jpj),un_25(jpi,jpj,25), vn_25(jpi,jpj,25), STAT=ierr )
+         IF( ierr /= 0 )   CALL ctl_stop( 'dynspg_ts_init IWD: failed to allocate arrays' )
+
+      ENDIF
+!!
       !                             ! read restart when needed
       CALL ts_rst( nit000, 'READ' )
       !
@@ -1462,6 +1493,11 @@ CONTAINS
       INTEGER  ::   ikbu, ikbv, iktu, iktv
       REAL(wp) ::   zztmp
       REAL(wp), DIMENSION(jpi,jpj) ::   zu_i, zv_i
+!!jth_IWD
+      REAL(wp), SAVE ::   r1_25 = 0.04_wp   ! =1/25
+      INTEGER                          ::   i_steps                           ! no of timesteps per hour
+      INTEGER                          ::   i_is_25hrs                           ! flag if 1st 25hrs have passed (1=yes)
+!!  
       !!----------------------------------------------------------------------
       !
       !                    !==  Set the barotropic drag coef.  ==!
@@ -1484,16 +1520,18 @@ CONTAINS
       ENDIF
       !
       
-      !davbyr: Add tdiss parameter to the barotropic friction
-      IF ( ln_int_wave_drag ) THEN
-         DO jj = 2, jpjm1
-            DO ji=2, jpim1
-               pCdU_u(ji,jj) = pCdU_u(ji,jj) - r1_2*( tdiss(ji+1,jj)+ tdiss(ji,jj) )
-               pCdU_v(ji,jj) = pCdU_v(ji,jj) - r1_2*( tdiss(ji,jj+1)+ tdiss(ji,jj) )
-            END DO
-         END DO
-      ENDIF
-      !davbyr END
+!jth_IWD
+!      !davbyr: Add tdiss parameter to the barotropic friction
+!      IF ( ln_int_wave_drag ) THEN
+!         DO jj = 2, jpjm1
+!            DO ji=2, jpim1
+!               pCdU_u(ji,jj) = pCdU_u(ji,jj) - r1_2*( tdiss(ji+1,jj)+ tdiss(ji,jj) )
+!               pCdU_v(ji,jj) = pCdU_v(ji,jj) - r1_2*( tdiss(ji,jj+1)+ tdiss(ji,jj) )
+!            END DO
+!         END DO
+!      ENDIF
+!      !davbyr END
+
       
       !                    !==  BOTTOM stress contribution from baroclinic velocities  ==!
       !
@@ -1575,6 +1613,45 @@ CONTAINS
          END DO
          !
       ENDIF
+
+!jth IWD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+! Calculate detided barotropic velocity for use with internal wave drag
+      IF ( ln_int_wave_drag ) THEN
+	      IF( MOD( 3600,NINT(rdt) ) == 0 ) THEN
+		 i_steps = 3600/NINT(rdt)
+	      ELSE
+		 CALL ctl_stop('STOP', "dynspg_ts int_wave_drag : timestep must give MOD(3600,rdt) = 0 otherwise no hourly values are possible')
+	      ENDIF
+! is it first  hour ?
+       IF (kt < i_steps) THEN
+          un_detide(:,:) = un_b(:,:)  
+          vn_detide(:,:) = vn_b(:,:)  
+       ENDIF
+!is it next hour?
+       IF( MOD( kt, i_steps ) == 0  .AND. kt /= nn_it000 ) THEN
+		 IF (kt >= 25 * i_steps) THEN
+                  i_is_25hrs = 1
+                 ELSE
+ 	          i_is_25hrs = 0
+		 ENDIF
+!	
+		 DO jj = 2, jpjm1
+		    DO ji = 2, jpim1    ! INNER domain
+	! Shift arrays forward by 1 hr	
+		     	un_25(ji,jj,1:24) = un_25(ji,jj,2:25)
+		     	vn_25(ji,jj,1:24) = vn_25(ji,jj,2:25)
+	! fill last value
+			un_25(ji,jj,25) = un_b(ji,jj)
+			vn_25(ji,jj,25) = vn_b(ji,jj)
+	! set un_detide if more than 25hrs since start of run, otherwise set to un_b
+			un_detide(ji,jj) = r_25 * sum(un_25,3) * i_is_25hrs + ( 1 - i_is_25hrs ) * un_b(ji,jj)
+			vn_detide(ji,jj) = r_25 * sum(vn_25,3) * i_is_25hrs + ( 1 - i_is_25hrs ) * vn_b(ji,jj)
+		    ENDDO
+		 ENDDO
+       ENDIF
+      ENDIF
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       !
    END SUBROUTINE dyn_drg_init
 
