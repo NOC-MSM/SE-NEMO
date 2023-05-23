@@ -25,9 +25,9 @@ PASSWORD=getpass( 'Password: ' )
 
 database = coast.Copernicus(USERNAME, PASSWORD, "my")
 #Select global model 1/12
-globcurrent=database.get_product("cmems_mod_glo_phy_my_0.083_P1M-m")
+#globcurrent=database.get_product("cmems_mod_glo_phy_my_0.083_P1M-m")
 #Select Altimeter observations
-#globcurrent=database.get_product("dataset-uv-rep-monthly")
+globcurrent=database.get_product("dataset-uv-rep-monthly")
 
 
 #%%
@@ -39,13 +39,13 @@ nt=nemo_t.dataset.t_dim.size
 T=np.array([])
 
 #select months
-for im in [6,7,8]:
-    T=np.append(T,np.arange(im,nt,12))
+#for im in [6,7,8]:
+#    T=np.append(T,np.arange(im,nt,12))
 T=np.sort(T).astype(int)    
 #set time period
 T=np.arange(nt)
 T=np.arange(120)
-T=np.arange(12)
+#T=np.arange(12)
 A=np.load('../Data/LME_gridinfo_equ025.npz')
 a=scipy.io.loadmat('../Data/equalgrid_025_LMEmask.mat')
 nlme=66
@@ -69,6 +69,8 @@ x_min=-79
 x_max=12
 y_min=26
 y_max=69
+
+x_min=-98;x_max=26.5;y_min=-56;y_max=84
 nemo_t.make_lonLat_2d()
 j,i,_=nemo_t.find_j_i_list(lon=[x_min,x_max,x_max,x_min],lat=[y_min,y_min,y_max,y_max])
 
@@ -79,10 +81,10 @@ jmax=max(j)
 
 LMENAM='NWS'
 name="CMEMS Glob Current"
-name="CMEMS ORCA12 Current"
+#name="CMEMS ORCA12 Current"
 
-SEASON='JAS'
-YEARS="1993"#-2002"
+SEASON=''
+YEARS="1993-2002"
 nemo_t1=nemo_t.subset_as_copy(x_dim=range(imin,imax),y_dim=range(jmin,jmax),z_dim=0,t_dim=T)
 mask=nemo_t1.dataset.u_velocity[0,:,:].values != np.nan
 
@@ -91,7 +93,10 @@ REGION=LMENAM
 Name=name+' '+SEASON+' '+YEARS+' '+REGION
 #%%
 SP,US,VS=surfacefields.mean_surface_circulation(nemo_t1,nemo_t1,nemo_t1,mask,co_located=True)         
-surfacefields.plot_surface_circulation(SP, US, VS,nemo_t1, mask,Name,Vmax=.16,Np=12)
+surfacefields.plot_surface_circulation(SP, US, VS,nemo_t1, mask,Name,
+                                       Vmax=.3,Np=8 
+                                      ,headwidth=5,scale=80,minshaft=2 
+                                       )
 
 plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png',dpi=300)
 
