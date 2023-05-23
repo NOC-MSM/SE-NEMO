@@ -1,6 +1,6 @@
 # Shelf Enabled Global NEMO (SE-NEMO)
 
-Thisse - the setup script has been tested and will checkout, compile and run the ORCA025 (NEMO 4.0.4) code on ARCHER, but namelists and forcing files are yet to be configured for the 'Shelf Enabled' part_**
+The setup script has been tested and will checkout, compile and run the ORCA025 (NEMO 4.0.4) code on ARCHER2 for three versions of MPI: Cray-MPICH, MPICH4 and openMPI. This branch is under development and will provide an option to compile the newer NEMO 4.2 code base.
 
 Configuration files for SE-NEMO project
 

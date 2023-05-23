@@ -33,3 +33,5 @@
 
 # System
 .DS_Store
+*.swp
+.fuse*
