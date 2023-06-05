@@ -11,14 +11,14 @@
 
 
 <!-- Files definition -->
-    <file_definition src="./file_def_nemo-oce-BASIC.xml"/>     <!--  NEMO ocean dynamics                     -->
+    <file_definition src="./file_def_nemo-oce-BASIC_with_tidal_harmonic_output.xml"/>     <!--  NEMO ocean dynamics                     -->
     <file_definition src="./file_def_nemo-ice-BASIC.xml"/>     <!--  NEMO ocean sea ice                      -->
     <!-- 
 ============================================================================================================
 = grid definition = = DO NOT CHANGE =
 ============================================================================================================
     -->
-    
+
     <axis_definition>
       <axis id="deptht" long_name="Vertical T levels" unit="m" positive="down" />
       <axis id="deptht300" axis_ref="deptht" >
@@ -36,10 +36,9 @@
          <zoom_axis begin=" 0 " n=" 1 " />
       </axis>
     </axis_definition>
- 
+
     <domain_definition src="./domain_def_nemo.xml"/>
-  
+
     <grid_definition src="./grid_def_nemo.xml"/>
 
 </context>
-
