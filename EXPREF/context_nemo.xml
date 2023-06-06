@@ -18,7 +18,7 @@
 = grid definition = = DO NOT CHANGE =
 ============================================================================================================
     -->
-
+    
     <axis_definition>
       <axis id="deptht" long_name="Vertical T levels" unit="m" positive="down" />
       <axis id="deptht300" axis_ref="deptht" >
@@ -36,9 +36,10 @@
          <zoom_axis begin=" 0 " n=" 1 " />
       </axis>
     </axis_definition>
-
+ 
     <domain_definition src="./domain_def_nemo.xml"/>
-
+  
     <grid_definition src="./grid_def_nemo.xml"/>
 
 </context>
+
