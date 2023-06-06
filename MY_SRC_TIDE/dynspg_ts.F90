@@ -625,7 +625,7 @@ CONTAINS
 
 !jth_IWD Add internal wave drag
 
-	IF ( ln_int_wave_drag .AND. .NOT. ll_wd ) THEN
+        IF ( ln_int_wave_drag .AND. .NOT. ll_wd ) THEN
                  !jidbg=870
                  !jjdbg=770
 
@@ -1117,11 +1117,14 @@ CONTAINS
       IF( dyn_spg_ts_alloc() /= 0    )   CALL ctl_stop('STOP', 'dyn_spg_init: failed to allocate dynspg_ts  arrays' )
       !
 !jth_IWD
-!     allocate arrays
+!     allocate arrays and initialise
       IF (ln_int_wave_drag) THEN
          ALLOCATE( un_detide(jpi,jpj), vn_detide(jpi,jpj),un_25(jpi,jpj,25), vn_25(jpi,jpj,25), STAT=ierr )
          IF( ierr /= 0 )   CALL ctl_stop( 'dynspg_ts_init IWD: failed to allocate arrays' )
-
+         un_detide(:,:) = 0._wp
+         vn_detide(:,:) = 0._wp
+         un_25(:,:,:) = 0._wp
+         vn_25(:,:,:) = 0._wp
       ENDIF
 !!
       !                             ! read restart when needed
@@ -1129,6 +1132,15 @@ CONTAINS
       !
       IF( lwxios ) THEN
 ! define variables in restart file when writing with XIOS
+
+!cw_IWD start
+!        include IWD variables
+         CALL iom_set_rstw_var_active('un_detide')
+         CALL iom_set_rstw_var_active('vn_detide')
+         CALL iom_set_rstw_var_active('un_25')
+         CALL iom_set_rstw_var_active('vn_25')
+!cw_IWD end
+
          CALL iom_set_rstw_var_active('ub2_b')
          CALL iom_set_rstw_var_active('vb2_b')
          CALL iom_set_rstw_var_active('un_bf')
@@ -1632,41 +1644,54 @@ CONTAINS
 
 ! Calculate detided barotropic velocity for use with internal wave drag
       IF ( ln_int_wave_drag ) THEN
-              IF( MOD( 3600,NINT(rdt) ) == 0 ) THEN
-                 i_steps = 3600/NINT(rdt)
-              ELSE
-                 CALL ctl_stop('STOP', "dynspg_ts int_wave_drag : timestep must give MOD(3600,rdt) = 0 otherwise no hourly values are possible")
-              ENDIF
+       IF( MOD( 3600,NINT(rdt) ) == 0 ) THEN
+          i_steps = 3600/NINT(rdt)
+       ELSE
+          CALL ctl_stop('STOP', "dynspg_ts int_wave_drag : timestep must give MOD(3600,rdt) = 0 otherwise no hourly values are possible")
+       ENDIF
 
-! is it first  hour ?
+!cw_IWD start
+! The following loop may no longer be necessary, as un_detide, vn_detide are
+! now initialised to zero and are only updated if at least 25 hours after the
+! initialisation time or if restarted and stored variables read in.
+!cw_IWD end
+
+! is it first hour in a initialised (i.e. non-restarted) run?  If so, set un_detide, vn_detide to zero.
        IF (kt < i_steps) THEN
           un_detide(:,:) = 0.0 ! un_b(:,:)  
           vn_detide(:,:) = 0.0 ! vn_b(:,:)  
        ENDIF
 
 
-!is it next hour?
-       IF( MOD( kt, i_steps ) == 0  .AND. kt /= nn_it000 ) THEN
+
+!cw_IWD start
+! Doing restarts with un_25, un_detide, ... now, so amend following line to:
+!       IF( MOD( kt, i_steps ) == 0  .AND. kt /= nn_it000 ) THEN
+       IF( MOD( kt, i_steps ) == 0  ) THEN ! XXXXXXXXX HOURLY LOOP START XXXXXX
+!cw_IWD end
+
+! if at least 25 hrs after the initialisation time (from kt=1), then set
+! i_is_25hrs =1 else 0.
                 IF (kt >= 25 * i_steps) THEN
-                  i_is_25hrs = 1
-                 ELSE
- 	          i_is_25hrs = 0
-		 ENDIF
+                  i_is_25hrs = 1 !start accumulating hourly values into window
+                ELSE
+                  i_is_25hrs = 0 !do not accumulate yet
+                ENDIF
 
 !	
-		 DO jj = 2, jpjm1
-		    DO ji = 2, jpim1    ! INNER domain
-	! Shift arrays forward by 1 hr	
-		     	un_25(ji,jj,1:24) = un_25(ji,jj,2:25)
-		     	vn_25(ji,jj,1:24) = vn_25(ji,jj,2:25)
-	! fill last value
-			un_25(ji,jj,25) = un_b(ji,jj)
-			vn_25(ji,jj,25) = vn_b(ji,jj)
-	! set un_detide if more than 25hrs since start of run, otherwise set to un_b
-			un_detide(ji,jj) = r1_25 * sum(un_25(ji,jj,:)) * i_is_25hrs + ( 1 - i_is_25hrs ) * 0.0 !un_b(ji,jj)
-			vn_detide(ji,jj) = r1_25 * sum(vn_25(ji,jj,:)) * i_is_25hrs + ( 1 - i_is_25hrs ) * 0.0 !vn_b(ji,jj)
-		    ENDDO
-		 ENDDO
+                 DO jj = 2, jpjm1
+                    DO ji = 2, jpim1    ! INNER domain
+        ! Shift arrays forward by 1 hr	
+                        un_25(ji,jj,1:24) = un_25(ji,jj,2:25)
+                        vn_25(ji,jj,1:24) = vn_25(ji,jj,2:25)
+        ! fill last value
+                        un_25(ji,jj,25) = un_b(ji,jj)
+                        vn_25(ji,jj,25) = vn_b(ji,jj)
+        ! set un_detide if more than 25hrs since start of run, otherwise set to un_b
+                        un_detide(ji,jj) = r1_25 * sum(un_25(ji,jj,:)) * i_is_25hrs + ( 1 - i_is_25hrs ) * 0.0 !un_b(ji,jj)
+                        vn_detide(ji,jj) = r1_25 * sum(vn_25(ji,jj,:)) * i_is_25hrs + ( 1 - i_is_25hrs ) * 0.0 !vn_b(ji,jj)
+                    ENDDO
+                 ENDDO
 
                  !jidbg= 870
                  !jjdbg= 770
@@ -1679,8 +1704,8 @@ CONTAINS
                  !endif
 
 
-       ENDIF
-      ENDIF
+                ENDIF
+      ENDIF              ! XXXXXXXXXXX END OF HOURLY LOOP XXXXXX
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       !
    END SUBROUTINE dyn_drg_init
