@@ -36,9 +36,9 @@ then
   rst_ice=$( ls SENEMO_"$SERIAL"_restart_ice.nc )
   rst_trc=$( ls SENEMO_"$SERIAL"_restart_trc.nc )
 else
-  rst=$( ls SENEMO_S${SPIN}_"$SERIAL"_restart.nc )
-  rst_ice=$( ls SENEMO_S${SPIN}_"$SERIAL"_restart_ice.nc )
-  rst_trc=$( ls SENEMO_S$SPIN"_$SERIAL"_restart_trc.nc )
+  rst=$( ls SENEMO_S?_"$SERIAL"_restart.nc )
+  rst_ice=$( ls SENEMO_S?_"$SERIAL"_restart_ice.nc )
+  rst_trc=$( ls SENEMO_S?_"$SERIAL"_restart_trc.nc )
 fi
 
 rst=${rst:0:-3}

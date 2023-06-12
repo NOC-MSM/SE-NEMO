@@ -31,39 +31,31 @@
           <field field_ref="O3_TA" operation="average" />
           <field field_ref="N1_p" operation="average" />
           <field field_ref="N3_n" operation="average" />
-          <field field_ref="K4_n" operation="average" />
-          <field field_ref="K1_p" operation="average" />
-          <field field_ref="K3_n" operation="average" />
-          <field field_ref="G2_o" operation="average" />
-          <field field_ref="G3_c" operation="average" />
-          <field field_ref="Y2_c" operation="average" />
-          <field field_ref="Y3_c" operation="average" />
-          <field field_ref="Y4_c" operation="average" />
-          <field field_ref="Q6_c" operation="average" />
-          <field field_ref="Q6_n" operation="average" />
-          <field field_ref="Q6_p" operation="average" />
-          <field field_ref="Q6_pen_depth_c" operation="average" />
-	  <field field_ref="Q6_pen_depth_n" operation="average" />
-	  <field field_ref="K4_n_pb_flux" operation="average" />
-          <field field_ref="K3_n_pb_flux" operation="average" />
-          <field field_ref="ben_col_D1m" operation="average" />
-          <field field_ref="ben_col_D2m" operation="average" />
-          <field field_ref="H1_c" operation="average" />
-          <field field_ref="H2_c" operation="average" />
-          <field field_ref="Q7_n" operation="average" />
-          <field field_ref="ben_nit_nrate" operation="average" />
-          <field field_ref="ben_nit_G4n" operation="average" />
-
+          <field field_ref="N4_n" operation="average" />
+          <field field_ref="N5_s" operation="average" />
 	</file>
       </file_group>
 
-      <file_group id="5d" output_freq="5d"  output_level="10" enabled=".TRUE."/>  <!-- 5d files -->
+      <file_group id="5d" output_freq="5d"  output_level="10" enabled=".TRUE.">  <!-- 5d files -->
+        <file id="file15" name_suffix="_ptrc_T" description="ERSEM 5daily">
+          <field field_ref="P1_n" operation="average" />
+          <field field_ref="P234_n_result" operation="average" />
+          <field field_ref="Z56_n_result" operation="average" />
+          <field field_ref="Z4_c" operation="average" />
+          <field field_ref="RP_n_result" operation="average" />
+          <field field_ref="R1_n" operation="average" />
+          <field field_ref="B1_n" operation="average" />
+        </file>
+      </file_group>
+
 
       <file_group id="1m" output_freq="1mo" output_level="10" split_freq="1mo" enabled=".TRUE."> <!-- real monthly files -->
 
         <file id="file12" name_suffix="_diag_T" description="ERSEM monthly">
           <field field_ref="Ptot_c_result" operation="average" />
+          <field field_ref="P234_n_result" operation="average" />
           <field field_ref="Ptot_Chl_result" operation="average" />
+          <field field_ref="P234_Chl_result" operation="average" />
           <field field_ref="Ztot_c_result" operation="average" />
           <field field_ref="Ptot_NPP_result" operation="average" />
           <field field_ref="Ptot_GPP_result" operation="average" />
@@ -76,10 +68,11 @@
           <field field_ref="O2_osat" operation="average" />
           <field field_ref="O3_Om_arg" operation="average" />
           <field field_ref="O3_fair" operation="average" />
+          <field field_ref="net_PelBen_POC_result" operation="average" />
+          <field field_ref="light_EIR" operation="average" />
 	</file>
 
 	<file id="file13" name_suffix="_ptrc_T" description="ERSEM monthly">
-          <!--field field_ref="e3t" operation="average" /-->
           <field field_ref="N1_p" operation="average" />
           <field field_ref="N3_n" operation="average" />
           <field field_ref="N4_n" operation="average" />
@@ -90,24 +83,29 @@
           <field field_ref="O3_pH" operation="average" />
           <field field_ref="O3_TA" operation="average" />
           <field field_ref="P1_c" operation="average" />
+          <field field_ref="P1_n" operation="average" />
+          <field field_ref="P1_Chl" operation="average" />
           <field field_ref="P2_c" operation="average" />
           <field field_ref="P3_c" operation="average" />
           <field field_ref="P4_c" operation="average" />
           <field field_ref="Z4_c" operation="average" />
           <field field_ref="Z5_c" operation="average" />
+          <field field_ref="Z5_n" operation="average" />
           <field field_ref="Z6_c" operation="average" />
+          <field field_ref="Z6_n" operation="average" />
           <field field_ref="B1_c" operation="average" />
           <field field_ref="Q1_c" operation="average" />
           <field field_ref="Q6_c" operation="average" />
           <field field_ref="Q7_c" operation="average" />
           <field field_ref="Q17_c" operation="average" />
           <field field_ref="G2_o" operation="average" />
-          <!--field field_ref="light_parEIR" operation="average" />
-          <field field_ref="total_carbon_at_bottom_calculator_result" operation="average" />
-          <field field_ref="total_nitrogen_at_bottom_calculator_result" operation="average" />
-          <field field_ref="total_phosphorous_at_bottom_calculator_result" operation="average" />
-          <field field_ref="O2_fair" operation="average" />
-          <field field_ref="O3_fair" operation="average" /-->
+	  <field field_ref="ben_col_D1m" operation="average" />
+          <field field_ref="Y2_c" operation="average" />
+          <field field_ref="Y3_c" operation="average" />
+	  <field field_ref="Y4_c" operation="average" />
+          <field field_ref="K4_n" operation="average" />
+          <field field_ref="K1_p" operation="average" />
+          <field field_ref="K3_n" operation="average" />
 	</file>
 
       </file_group>

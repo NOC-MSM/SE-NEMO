@@ -29,21 +29,25 @@ CURR_DIR=$PWD
 SERIAL=$(printf "%08d" $ITER)
 INDIR=$PWD/RESTARTS
 OUTDIR=$PWD/RESTARTS_PROCESSED
-ndom=$(ls -1 $INDIR/SENEMO_S"$SPIN"_"$SERIAL"_restart_trc_????.nc | wc -l)
-#ndom=$(ls -1 $INDIR/SENEMO_"$SERIAL"_restart_trc_????.nc | wc -l)
 
 mkdir -p $OUTDIR
 
 rm nam_rebuild_trc
 rm nam_rebuild_ice
 rm nam_rebuild
-#echo -e "&nam_rebuild\nfilebase='"$INDIR"/SENEMO_"$SERIAL"_restart_trc'\nndomain=$ndom\n/" >> nam_rebuild_trc
-#echo -e "&nam_rebuild\nfilebase='"$INDIR"/SENEMO_"$SERIAL"_restart_ice'\nndomain=$ndom\n/" >> nam_rebuild_ice
-#echo -e "&nam_rebuild\nfilebase='"$INDIR"/SENEMO_"$SERIAL"_restart'\nndomain=$ndom\n/" >> nam_rebuild
 
-echo -e "&nam_rebuild\nfilebase='"$INDIR"/SENEMO_S"$SPIN"_"$SERIAL"_restart_trc'\nndomain=$ndom\n/" >> nam_rebuild_trc
-echo -e "&nam_rebuild\nfilebase='"$INDIR"/SENEMO_S"$SPIN"_"$SERIAL"_restart_ice'\nndomain=$ndom\n/" >> nam_rebuild_ice
-echo -e "&nam_rebuild\nfilebase='"$INDIR"/SENEMO_S"$SPIN"_"$SERIAL"_restart'\nndomain=$ndom\n/" >> nam_rebuild
+if [ $SPIN -ge 4 ] #NB: hardcoded 3y spin cycle
+then
+  ndom=$(ls -1 $INDIR/SENEMO_"$SERIAL"_restart_trc_????.nc | wc -l)
+  echo -e "&nam_rebuild\nfilebase='"$INDIR"/SENEMO_"$SERIAL"_restart_trc'\nndomain=$ndom\n/" >> nam_rebuild_trc
+  echo -e "&nam_rebuild\nfilebase='"$INDIR"/SENEMO_"$SERIAL"_restart_ice'\nndomain=$ndom\n/" >> nam_rebuild_ice
+  echo -e "&nam_rebuild\nfilebase='"$INDIR"/SENEMO_"$SERIAL"_restart'\nndomain=$ndom\n/" >> nam_rebuild
+else
+  ndom=$(ls -1 $INDIR/SENEMO_S"$SPIN"_"$SERIAL"_restart_trc_????.nc | wc -l)
+  echo -e "&nam_rebuild\nfilebase='"$INDIR"/SENEMO_S"$SPIN"_"$SERIAL"_restart_trc'\nndomain=$ndom\n/" >> nam_rebuild_trc
+  echo -e "&nam_rebuild\nfilebase='"$INDIR"/SENEMO_S"$SPIN"_"$SERIAL"_restart_ice'\nndomain=$ndom\n/" >> nam_rebuild_ice
+  echo -e "&nam_rebuild\nfilebase='"$INDIR"/SENEMO_S"$SPIN"_"$SERIAL"_restart'\nndomain=$ndom\n/" >> nam_rebuild
+fi
 
 echo $SERIAL
 

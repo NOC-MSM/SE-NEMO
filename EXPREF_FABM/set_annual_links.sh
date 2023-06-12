@@ -22,6 +22,11 @@ ln -sf  $INDIR_Ndep/eORCA025_r015-r010_007_004v2_N_dep_ISIMIP_y${yn}.nc $RUNPATH
 ln -sf  $INDIR_Ndep/eORCA025_r015-r010_007_004v2_N_dep_ISIMIP_y${yb}.nc $RUNPATH/eORCA025_N_dep_ISIMIP_y${yb}.nc
 ln -sf  $INDIR_Ndep/eORCA025_r015-r010_007_004v2_N_dep_ISIMIP_y${ya}.nc $RUNPATH/eORCA025_N_dep_ISIMIP_y${ya}.nc
 
+#cheat to do 2019 & 2020
+#ln -sf  $INDIR_Ndep/eORCA025_r015-r010_007_004v2_N_dep_ISIMIP_y2018.nc $RUNPATH/eORCA025_N_dep_ISIMIP_y${yn}.nc
+#ln -sf  $INDIR_Ndep/eORCA025_r015-r010_007_004v2_N_dep_ISIMIP_y2018.nc $RUNPATH/eORCA025_N_dep_ISIMIP_y${yb}.nc
+#ln -sf  $INDIR_Ndep/eORCA025_r015-r010_007_004v2_N_dep_ISIMIP_y2018.nc $RUNPATH/eORCA025_N_dep_ISIMIP_y${ya}.nc
+
 ln -sf  $INDIR_Fedep/eORCA025_r015-r010_007_004v2_Fe_dep_GESAMP.nc $RUNPATH/eORCA025_Fe_dep_GESAMP.nc
 
 #ln -sf  $INDIR_RIVERS/ORCA025_rivers_Antar_Green_BGC_y${yn}.nc ${RUNPATH}/JRA_BGC_y${yn}.nc

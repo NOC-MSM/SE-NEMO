@@ -2,9 +2,9 @@
 #SBATCH --job-name=se-025ERSEM
 #SBATCH --output=out-se025-%j.out
 ##SBATCH --time=01:30:00
-##SBATCH --time=06:00:00
-#SBATCH --time=00:15:00
-#SBATCH --account=n01-SANH
+##SBATCH --time=16:00:00
+##SBATCH --time=00:15:00
+#SBATCH --account=n01-pml
 #SBATCH --partition=standard
 #SBATCH --qos=standard
 ##SBATCH --nodes=19
@@ -22,6 +22,7 @@ RUNDIR=$PWD
 # "sbatch --export=y0=1976,m0=1,nn_spin_cycle=0 runscript.multimonth.slurm"
 # NB: m0 is month to run first, 
 #     nn_spin_cycle is spin cycle of the previous month (i.e. that tagged in the restart)
+#     After the spin cycle it should be sufficient to have any nn_spin_cycle>=nn_spin+1 (>=4)
 
 
 #################### nemo runscript options ############################
@@ -43,11 +44,11 @@ ln_hpg_djc='.true.' ;
 ln_spin='.true.'                # Do we require a spin up phase for the ice
 nn_spin=3                       # How many years spin up
 year_st=1976                    # Start year of the simulation (ramains constant)
-year_en=1976                    # End year of this job submission
+year_en=2019                    # End year of this job submission
 offset=0                        # If rdt has changed, an offset to nn_it000 is needed
 nn_spin_cycle=$nn_spin_cycle    # Change to nn_spin+1 if year is .gt. year_st
 year=$y0                        # Change if starting job part way through simulation
-nmmax=8                         # number of months to go through before submitting a new job
+nmmax=6                         # number of months to go through before submitting a new job
 
 ########################################################################
 
@@ -194,7 +195,6 @@ do
       then
         yp=$(( y0 + 1 ))
       else
-	#nn_spin_cycle=$(($nn_spin_cycle+1))
 	yp=$y0
       fi
    else
@@ -221,8 +221,6 @@ do
    mpstr=$(printf %02d $mp)
    mmstr=$(printf %02d $mm)
 
-   #clean leftover restarts
-   #rm -rf restart.nc restart_ice.nc restart_trc.nc restart_[0-9]???.nc restart_trc_[0-9]???.nc restart_ice_[0-9]???.nc
    # Array pretending to be a Pythonic dictionary {EXP_NAME:NZ}
    ARRAY=( "SENEMO:75"
          )
@@ -233,7 +231,7 @@ do
       nam="${ens%%:*}"
       jpk="${ens##*:}"
 
-      if [ $year -eq $nn_diaharm ]
+      if [ $y0 -eq $nn_diaharm ]
       then
 	 ln_diaharm='.true.'
       else
@@ -241,7 +239,7 @@ do
       fi
 
       ln_rstdate='.false.'
-      if [ $year -eq 1976 ]
+      if [ $y0 -eq 1976 ]
       then
 	if [ $m0 -eq 1 ]
 	then
@@ -249,7 +247,7 @@ do
 	fi
       fi
 
-      if [ $year -eq 1976 ]
+      if [ $y0 -eq 1976 ]
       then
          nn_it000=1
 	 if [ $nn_spin_cycle -eq 1 ]
@@ -265,7 +263,7 @@ do
 	 nn_rstctl=0
          ln_reset_ts='.true.'
       else
-         nn_it000=`./end_time_step $(( $year - 1 )) $rn_rdt $year_st` ; rs0=`printf "%08d" $nn_it000`; nn_it000=$(( $nn_it000 + 1 + $offset ))
+         nn_it000=`./end_time_step $(( $y0 - 1 )) $rn_rdt $year_st` ; rs0=`printf "%08d" $nn_it000`; nn_it000=$(( $nn_it000 + 1 + $offset ))
          ln_rstart=".true."
          ln_rstart_top=".true."
 	 nn_rstctl=2
@@ -300,23 +298,9 @@ do
        date_restart=$ym${mmstr}$mdays
        echo nn_it000: $nn_it000 !!!!!
 
-      #if [ "$ln_rstdate" = ".true." ]
-      #then
-      #   if [ $year -eq $year_st ]
-      #   then
-      #      rs0=$date_restart    # TODO consider if we want to split cases for spinup 
-      #   else
-      #      rs0=$date_restart
-      #   fi
-      #rs0=$date_restart
-      #fi
-
-      #if [ "$ln_rstdate" = ".true." ]
-      #then
       nn_itrst=$(( nn_it000 - 1 ))
       rs0=$(printf "%08d" $nn_itrst)
       echo rs0: $rs0 !!!!
-      #fi
 
       nn_spin_cycle_rst=$nn_spin_cycle
       if [ $m0 -eq 1 ]
@@ -333,7 +317,7 @@ do
          sed "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle_rst))_$rs0\_restart_trc/g" namelist_top_template > namelist_top_cfg
       else
          sed    "s/XXX_EXP_XXX/$nam/g" namelist_cfg_template > namelist_cfg
-         if [ $year -eq $year_st ] && [ $m0 -eq 1 ]
+         if [ $y0 -eq $year_st ] && [ $m0 -eq 1 ]
          then
             sed -i "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle_rst))_$rs0\_restart/g" namelist_cfg  
             sed "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle_rst))_$rs0\_restart_ice/g" namelist_ice_cfg_template > namelist_ice_cfg
@@ -346,7 +330,7 @@ do
       fi
 
       sed -i "s/XXX_TST_XXX/$nn_it000/g" namelist_cfg
-      sed -i "s/XXX_YEAR_XXX/$year/g" namelist_cfg
+      #sed -i "s/XXX_YEAR_XXX/$year/g" namelist_cfg
       sed -i "s/XXX_TEN_XXX/$nn_itend/g" namelist_cfg
       sed -i "s/XXX_RDT_XXX/$rn_rdt/g" namelist_cfg
       sed -i "s/XXX_RST_XXX/$ln_rstart/g" namelist_cfg
@@ -392,6 +376,7 @@ do
    # execution
    for ens in "${ARRAY[@]}"
    do
+      ##time_step_chk sometimes interferes with execution, makes the run hang.
       #eval $SRUN_CMD &
       #echo $SRUN_CMD &
       #./time_step_chk $SLURM_JOB_ID $nn_itend &
@@ -404,13 +389,13 @@ do
 
    for ens in "${ARRAY[@]}"
    do
-      if [ $year -eq $year_st ] && [ $nn_spin_cycle -le $nn_spin ]
+      if [ $y0 -eq $year_st ] && [ $nn_spin_cycle -le $nn_spin ]
       then
-         suf=$year$m0\_S$nn_spin_cycle
-	 res=$year$m0$ndays\_S$nn_spin_cycle
+         suf=$y0$m0\_S$nn_spin_cycle
+	 res=$y0$m0$ndays\_S$nn_spin_cycle
       else
-         suf=$year$m0
-	 res=$year$m0$ndays
+         suf=$y0$m0
+	 res=$y0$m0$ndays
       fi
 
       #prepare archive directory
@@ -418,29 +403,8 @@ do
       mkdir -p $ARCHIVEDIR
 
       # compress and archive output
-      #sbatch --export=ARCHIVEDIR=$ARCHIVEDIR compress_output.slurm
-      sbatch --export=ARCHIVEDIR=$ARCHIVEDIR,y0=$y0,m0str=$m0str compress_output.slurm
+      sbatch --export=ARCHIVEDIR=$ARCHIVEDIR,y0=$y0,m0str=$m0str,SPIN=$nn_spin_cycle compress_output.slurm
 
-      # MOVE THE RESTARTS LATER, ELSE IT DOES NOT FIND THEM!
-      #for file in ${nam}_*${nend}_restart_????.nc
-      #do
-      #        fn=${file: -7:4} #file number
-      #        mv $file RESTARTS/${nam}_${res}_restart_$fn.nc&
-      #done
-      #wait
-      #for file in ${nam}_*${nend}_restart_ice_????.nc
-      #do
-      #        fn=${file: -7:4} #file number
-      #        mv $file RESTARTS/${nam}_${res}_restart_ice_$fn.nc&
-      #done
-      #wait
-      #for file in ${nam}_*${nend}_restart_trc_????.nc
-      #do
-      #        fn=${file: -7:4} #file number
-      #        mv $file RESTARTS/${nam}_${res}_restart_trc_$fn.nc&
-      #done
-      #wait
-      #mv ${nam}_*_${nn_date0}_${res}*.nc $ARCHIVEDIR   # this hasn't worked
       mkdir -p meta_out
       mv -f ocean.output meta_out/ocean.output.bz2.$suf
       cp namelist_cfg meta_out/namelist_cfg.$suf
@@ -463,20 +427,13 @@ do
       if [ $m0 -eq 2 ] || [ $m0 -eq 8 ]
       then
         rbld_id=$(sbatch --parsable --export=ITER=$nn_itend_mm2,SPIN=$nn_spin_cycle_rbld_rst rebuild_restart.slurm)
-        #rbld_id=$(sbatch --parsable --export=ITER=$nn_itend_mm2 rebuild_restart.slurm)
-        sbatch --dependency=afterok:$rbld_id --export=ITER=$nn_itend_mm2 compress_restarts.slurm
+        sbatch --dependency=afterok:$rbld_id --export=ITER=$nn_itend_mm2,SPIN=$nn_spin_cycle_rbld_rst compress_restarts.slurm
       else
-        bash clean_restarts.sh $nn_itend_mm2
+        bash clean_restarts.sh $nn_itend_mm2 $nn_spin_cycle_rbld_rst
       fi
 
 
-      fname=$y0/$m0str
-      #echo "Archiving in $fname ..."
-      #ARCHIVEDIR=/work/n01/n01/gig/eORCA1_ARCHIVE/TEST
-      #sbatch --export=RUNDIR=$PWD,ARCHIVEDIR=$ARCHIVEDIR,folder=$fname archiveFolder.slurm
-      #sbatch --export=RUNDIR=$PWD,folder=$fname archiveFolder.slurm
-
-      # rename last restart of each year so it sees it during the spin cycle (have to test this)
+      # during the spin cycle rename last restart of each year so it sees it
       echo current parameters:
       echo m0: $m0, rs0: $rs0, nn_spin_cycle: $nn_spin_cycle, nn_spin: $nn_spin
       if [ $m0 -eq 12 ] && [ $nn_spin_cycle -le $nn_spin ]

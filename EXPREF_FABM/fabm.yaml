@@ -1283,6 +1283,15 @@ instances:
       term2: P2/c
       term3: P3/c
       term4: P4/c
+  P234_n:
+    long_name: non-diatom nitrogen
+    model: weighted_sum
+    parameters:
+      n: 3
+    coupling:
+      term1: P2/n
+      term2: P3/n
+      term3: P4/n
   Ptot_Chl:
     long_name: total phytoplankton chlorophyll-a
     model: weighted_sum
@@ -1293,6 +1302,15 @@ instances:
       term2: P2/Chl
       term3: P3/Chl
       term4: P4/Chl
+  P234_Chl:
+    long_name: non-diatom chlorophyll-a
+    model: weighted_sum
+    parameters:
+      n: 3
+    coupling:
+      term1: P2/Chl
+      term2: P3/Chl
+      term3: P4/Chl
   Ztot_c:
     long_name: total zooplankton carbon
     model: weighted_sum
@@ -1302,6 +1320,14 @@ instances:
       term1: Z4/c
       term2: Z5/c
       term3: Z6/c
+  Z56_n:
+    long_name: non meso zooplankton nitrogen
+    model: weighted_sum
+    parameters:
+      n: 2
+    coupling:
+      term1: Z5/n
+      term2: Z6/n
   Ptot_NPP:
     long_name: total phytoplankton net primary production
     model: weighted_sum
@@ -1376,4 +1402,28 @@ instances:
       term1: R4/p
       term2: R6/p
       term3: R8/p
+  net_PelBen_POC:
+    long_name: flux of particulate organic carbon from pelagic to benthos
+    model: horizontal_weighted_sum
+    parameters:
+      n: 17
+      weight17: -1.
+    coupling:
+      term1: R4/dep1c
+      term2: R4/dep2c
+      term3: R6/dep1c
+      term4: R6/dep2c
+      term5: R8/dep1c
+      term6: R8/dep2c
+      term7: P1/dep1c
+      term8: P1/dep2c
+      term9: P1/dep3c
+      term10: P4/dep1c
+      term11: P4/dep2c
+      term12: P4/dep3c
+      term13: Y3/fprey1c
+      term14: Y3/fprey2c
+      term15: Y3/fprey3c
+      term16: Y3/fprey4c
+      term17: Q6/resuspension_flux_c
 

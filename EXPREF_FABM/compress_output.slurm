@@ -25,8 +25,9 @@ ls -lhrt timing_compr_out.txt >> timing_compr_out.txt
 if [ $SPIN -ge 4 ] #NB: hardcoded 3y spin cycle 
 then
   regex=SENEMO_1?_$y0$m0str*.nc
+  regex5=SENEMO_5?_$y0$m0str*.nc
 else
-  regex=SENEMO_S${SPIN}_1?_$y0$m0str*.nc
+  regex=SENEMO_S?_[15]?_$y0$m0str*.nc
 fi
 
 for file in $regex 
@@ -35,6 +36,14 @@ do
   #nccopy -s -u -k 4 -d 5 $INDIR/$file $ARCHIVEDIR/$file && rm $INDIR/$file || echo $file compression failed !!!!
   nccopy -s -k 4 -d 5 $INDIR/$file $ARCHIVEDIR/$file && rm $INDIR/$file || echo $file compression failed !!!!
 done
+
+for file in $regex5
+do
+  echo compressing $file
+  #nccopy -s -u -k 4 -d 5 $INDIR/$file $ARCHIVEDIR/$file && rm $INDIR/$file || echo $file compression failed !!!!
+  nccopy -s -k 4 -d 5 $INDIR/$file $ARCHIVEDIR/$file && rm $INDIR/$file || echo $file compression failed !!!!
+done
+
 
 touch timing_compr_out.txt
 echo end: >> timing_compr_out.txt
