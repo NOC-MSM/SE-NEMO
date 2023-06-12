@@ -9,6 +9,7 @@ MODULE diahth
    !!                 !  1999-07  (E. Guilyardi)  hd28 + heat content 
    !!   NEMO     1.0  !  2002-06  (G. Madec)  F90: Free form and module
    !!            3.2  !  2009-07  (S. Masson) hc300 bugfix + cleaning + add new diag
+   !!          4.0.4  !  2023-01  (C. Wilson & A.G. Nurser) pycndep bugfix & to work with TEOS-10 
    !!----------------------------------------------------------------------
    !!   dia_hth      : Compute varius diagnostics associated with the mixed layer
    !!----------------------------------------------------------------------
@@ -120,7 +121,9 @@ CONTAINS
 
       IF( l_hth ) THEN
          !
-         IF( iom_use( 'mlddzt' ) .OR. iom_use( 'mldr0_3' ) .OR. iom_use( 'mldr0_1' ) ) THEN
+         IF( iom_use( 'mlddzt' ) .OR. iom_use( 'mldr0_3' ) .OR. iom_use( 'mldr0_1' )        .OR.   &
+            &  iom_use( 'mld_dt02' ) .OR. iom_use( 'topthdep' ) .OR. iom_use( 'mldr10_3' )  .OR.   &
+            &  iom_use( 'pycndep' ) .OR. iom_use( 'tinv'     ) .OR. iom_use( 'depti'    )  ) THEN
             ! initialization
             ztinv  (:,:) = 0._wp  
             zdepinv(:,:) = 0._wp  
@@ -144,21 +147,22 @@ CONTAINS
                   END DO
                END DO
             ENDIF
-      
+     
             ! Preliminary computation
             ! computation of zdelr = (dr/dT)(T,S,10m)*(-0.2 degC)
             DO jj = 1, jpj
                DO ji = 1, jpi
                   IF( tmask(ji,jj,nla10) == 1. ) THEN
-                     zu  =  1779.50 + 11.250 * tsn(ji,jj,nla10,jp_tem) - 3.80   * tsn(ji,jj,nla10,jp_sal)  &
-                        &           - 0.0745 * tsn(ji,jj,nla10,jp_tem) * tsn(ji,jj,nla10,jp_tem)   &
-                        &           - 0.0100 * tsn(ji,jj,nla10,jp_tem) * tsn(ji,jj,nla10,jp_sal)
-                     zv  =  5891.00 + 38.000 * tsn(ji,jj,nla10,jp_tem) + 3.00   * tsn(ji,jj,nla10,jp_sal)  &
-                        &           - 0.3750 * tsn(ji,jj,nla10,jp_tem) * tsn(ji,jj,nla10,jp_tem)
-                     zut =    11.25 -  0.149 * tsn(ji,jj,nla10,jp_tem) - 0.01   * tsn(ji,jj,nla10,jp_sal)
-                     zvt =    38.00 -  0.750 * tsn(ji,jj,nla10,jp_tem)
-                     zw  = (zu + 0.698*zv) * (zu + 0.698*zv)
-                     zdelr(ji,jj) = ztem2 * (1000.*(zut*zv - zvt*zu)/zw)
+                     ! zu  =  1779.50 + 11.250 * tsn(ji,jj,nla10,jp_tem) - 3.80   * tsn(ji,jj,nla10,jp_sal)  &
+                     !    &           - 0.0745 * tsn(ji,jj,nla10,jp_tem) * tsn(ji,jj,nla10,jp_tem)   &
+                     !    &           - 0.0100 * tsn(ji,jj,nla10,jp_tem) * tsn(ji,jj,nla10,jp_sal)
+                     ! zv  =  5891.00 + 38.000 * tsn(ji,jj,nla10,jp_tem) + 3.00   * tsn(ji,jj,nla10,jp_sal)  &
+                     !    &           - 0.3750 * tsn(ji,jj,nla10,jp_tem) * tsn(ji,jj,nla10,jp_tem)
+                     ! zut =    11.25 -  0.149 * tsn(ji,jj,nla10,jp_tem) - 0.01   * tsn(ji,jj,nla10,jp_sal)
+                     ! zvt =    38.00 -  0.750 * tsn(ji,jj,nla10,jp_tem)
+                     ! zw  = (zu + 0.698*zv) * (zu + 0.698*zv)
+                     ! zdelr(ji,jj) = ztem2 * (1000.*(zut*zv - zvt*zu)/zw)
+                     zdelr(ji,jj) = rab_n(ji,jj,nla10,jp_tem)*0.2*rau0
                   ELSE
                      zdelr(ji,jj) = 0._wp
                   ENDIF
