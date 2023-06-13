@@ -32,30 +32,26 @@
 #
 %NCDF_HOME           $NETCDF_DIR
 %HDF5_HOME           $HDF5_DIR
-%XIOS_HOME           XXX_XIOS_DIR_XXX
-%FABM_HOME           $FABM_HOME
+%XIOS_HOME           XXX_XIOS_DIR_XXX 
 
-%NCDF_INC            -I%NCDF_HOME/include -I%HDF5_HOME/include
-%NCDF_LIB            -L%HDF5_HOME/lib -L%NCDF_HOME/lib -lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lcurl -lz
+%NCDF_INC            -I$NETCDF_C_DIR/include -I$NETCDF_FORTRAN_DIR/include -I%HDF5_HOME/include
+%NCDF_LIB            -L%HDF5_HOME/lib -L$NETCDF_C_DIR/lib -L$NETCDF_FORTRAN_DIR/lib -lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lcurl -lz
 %XIOS_INC            -I%XIOS_HOME/inc
-%XIOS_LIB            -L%XIOS_HOME/lib -lxios -lstdc++
-%FABM_INC            -I%FABM_HOME/include
-%FABM_LIB            -L%FABM_HOME/lib -lfabm
+%XIOS_LIB            -L%XIOS_HOME/lib -lxios
 
-
-%CPP                 cpp -Dkey_nosignedzero -P -traditional
+%CPP                 cpp -Dkey_nosignedzero
 %FC                  ftn
-%FCFLAGS             -fdefault-double-8 -fdefault-real-8 -O0 -g  -funroll-all-loops -fcray-pointer -ffree-line-length-none -w -fallow-argument-mismatch
-%FFLAGS              -fdefault-double-8 -fdefault-real-8 -O0 -g  -funroll-all-loops -fcray-pointer -ffree-line-length-none -w -fallow-argument-mismatch
-%LD                  ftn
-%FPPFLAGS            -P -traditional %FABM_INC
-%LDFLAGS
+%FCFLAGS             -O0 -g -cpp -fallow-argument-mismatch -fdefault-real-8 -fcray-pointer -ffree-line-length-none -finit-real=zero -finit-integer=0
+%FFLAGS              -O0 -g -cpp -fallow-argument-mismatch -fdefault-real-8 -fcray-pointer -ffree-line-length-none -finit-real=zero -finit-integer=0
+%LD                  CC
+%FPPFLAGS            -P -traditional
+%LDFLAGS             -lmpi -lmpi_mpifh
 %AR                  ar
 %ARFLAGS             -r
 %MK                  gmake
-%USER_INC            %XIOS_INC %NCDF_INC %FABM_INC
-%USER_LIB            %XIOS_LIB %NCDF_LIB -L/opt/cray/pe/libsci/21.08.1.2/GNU/9.1/x86_64/lib -lsci_gnu_82 %FABM_LIB
+%USER_INC            %XIOS_INC %NCDF_INC -I$OPENMPI_DIR/include
+%USER_LIB            %XIOS_LIB %NCDF_LIB -L$OPENMPI_DIR/lib
 
 %CC                  cc -Wl,"--allow-multiple-definition"
-%CFLAGS              -O0 -g -fcommon -Wl,"--allow-multiple-definition"
+%CFLAGS              -O0 -Wl,"--allow-multiple-definition"
 bld::tool::fc_modsearch -J
