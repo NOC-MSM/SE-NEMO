@@ -250,6 +250,7 @@ ln_tide_pot   = .true.,
 ln_scal_load  = .true.,  
 rn_scal_load = 0.12,
 ln_int_wave_drag = XXX_TDG_XXX,
+cn_int_wave_drag = 'INPUTS/tdiss_R025_fac2.nc',
 ln_tide_ramp  = XXX_RMP_XXX,
 rdttideramp   =    28.,
 !
@@ -406,8 +407,8 @@ nn_een_e3f=0,
 /
 &namdyn_hpg
 ln_hpg_djc=XXX_DJC_XXX,
-ln_hpg_djc_vN_hor=.true., 
-ln_hpg_djc_vN_vrt=.true.,
+ln_hpg_djc_vN_hor=.false., 
+ln_hpg_djc_vN_vrt=.false.,
 ln_hpg_isf=.false.,
 ln_hpg_prj=XXX_PRJ_XXX,
 ln_hpg_sco=XXX_SCO_XXX,
