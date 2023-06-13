@@ -38,7 +38,7 @@ display_usage() {
 		exit 0
 	fi 
 
-while getopts w:x:s:m:a:f: option
+while getopts w:x:s:m:a:f:c: option
   do
   case "${option}"
   in
@@ -89,7 +89,8 @@ case "${HPC_TARG}"
            ;;
   archer2-fabm_debug) . $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}
            ;;
-  *)       echo "Machine not recognised"
+  *)       echo "Machine  not recognised"
+	   echo ${HPC_TARG}
            echo "Machines available: archer2"
            echo "Machines available: archer2-fabm"
            echo "Machines available: archer2-fabm_debug"
