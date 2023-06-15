@@ -58,7 +58,6 @@
   <field id="Z6_c" long_name="nanoflagellates carbon" unit="mg C/m^3" default_value="-.200E+21" />
   <field id="Z6_n" long_name="nanoflagellates nitrogen" unit="mmol N/m^3" default_value="-.200E+21" />
   <field id="Z6_p" long_name="nanoflagellates phosphorus" unit="mmol P/m^3" default_value="-.200E+21" />
-  <field id="L2_c" long_name="calcite carbon" unit="mg C/m^3" default_value="-.200E+21" />
  </field_group>
  <field_group id="sf_T" grid_ref="grid_T_2D">
   <field id="Q1_c" long_name="benthic dissolved organic matter carbon" unit="mg C/m^2" default_value="-.200E+21" />
@@ -83,7 +82,6 @@
   <field id="Q17_c" long_name="benthic buried matter carbon" unit="mg C/m^2" default_value="-.200E+21" />
   <field id="Q17_p" long_name="benthic buried matter phosphorus" unit="mmol P/m^2" default_value="-.200E+21" />
   <field id="Q17_n" long_name="benthic buried matter nitrogen" unit="mmol N/m^2" default_value="-.200E+21" />
-  <field id="bL2_c" long_name="benthic calcite carbon" unit="mg C/m^2" default_value="-.200E+21" />
   <field id="ben_col_D1m" long_name="benthic column depth of bottom interface of oxygenated layer" unit="m" default_value="-.200E+21" />
   <field id="ben_col_D2m" long_name="benthic column depth of bottom interface of oxidized layer" unit="m" default_value="-.200E+21" />
   <field id="K1_p" long_name="benthic phosphate phosphorus" unit="mmol/m^2" default_value="-.200E+21" />
@@ -188,6 +186,16 @@
   <field id="R8_s_w" long_name="large-size pom silicate vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="R8__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="large-size pom light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Q1__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic dissolved organic matter light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Q6_resuspended_c_sms" long_name="benthic particulate organic matter pelagic variable taking up resuspended carbon sources-sinks" unit="mg C/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Q6_resuspended_c_w" long_name="benthic particulate organic matter pelagic variable taking up resuspended carbon vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Q6_resuspended_p_sms" long_name="benthic particulate organic matter pelagic variable taking up resuspended phosphorus sources-sinks" unit="mmol P/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Q6_resuspended_p_w" long_name="benthic particulate organic matter pelagic variable taking up resuspended phosphorus vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Q6_resuspended_n_sms" long_name="benthic particulate organic matter pelagic variable taking up resuspended nitrogen sources-sinks" unit="mmol N/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Q6_resuspended_n_w" long_name="benthic particulate organic matter pelagic variable taking up resuspended nitrogen vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Q6_resuspended_s_sms" long_name="benthic particulate organic matter pelagic variable taking up resuspended silicate sources-sinks" unit="mmol Si/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Q6_resuspended_s_w" long_name="benthic particulate organic matter pelagic variable taking up resuspended silicate vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Q6_resuspended_f_sms" long_name="benthic particulate organic matter pelagic variable taking up resuspended iron sources-sinks" unit="umol Fe/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
+  <field id="Q6_resuspended_f_w" long_name="benthic particulate organic matter pelagic variable taking up resuspended iron vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Q6_surface_change_in_c_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic particulate organic matter surface change_in_c_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Q6_surface_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic particulate organic matter surface change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Q6_surface_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic particulate organic matter surface change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
@@ -399,10 +407,6 @@
   <field id="P2_fPIRPc" long_name="nanophytoplankton loss to POC" unit="mg C/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="P2_fPIRPn" long_name="nanophytoplankton loss to PON" unit="mmol N/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="P2_fPIRPp" long_name="nanophytoplankton loss to POP" unit="mmol P/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
-  <field id="P2_L2c_sms" long_name="nanophytoplankton free calcite sources-sinks" unit="mg C/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="P2_L2c_w" long_name="nanophytoplankton free calcite vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="P2_l" long_name="nanophytoplankton bound calcite" unit="mg C/m^3" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="P2_calcification" long_name="nanophytoplankton calcification rate" unit="mg C/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="P2__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="nanophytoplankton light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="P3_c_sms" long_name="picophytoplankton carbon sources-sinks" unit="mg C/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="P3_c_w" long_name="picophytoplankton carbon vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
@@ -764,20 +768,6 @@
   <field id="Z6_fZIRDn" long_name="nanoflagellates loss to DON" unit="mmol N/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="Z6_fZIRDp" long_name="nanoflagellates loss to DOP" unit="mmol P/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="Z6__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="nanoflagellates light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="L2_c_sms" long_name="calcite carbon sources-sinks" unit="mg C/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="L2_c_w" long_name="calcite carbon vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="L2_RainR" long_name="calcite rain ratio" unit="1" default_value="-.200E+21" grid_ref="grid_T_3D" />
-  <field id="L2_L2O3c" long_name="calcite calcite dissolution rate" unit="mg C/m^3/d" default_value="-.200E+21" grid_ref="grid_T_3D" />
-  <field id="L2_O3c_sms" long_name="calcite total dissolved inorganic carbon sources-sinks" unit="mmol C/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="L2_O3c_w" long_name="calcite total dissolved inorganic carbon vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="L2_alkalinity_expressed_as_mole_equivalent_sms" long_name="calcite alkalinity_expressed_as_mole_equivalent sources-sinks" unit="mmol m-3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="L2_alkalinity_expressed_as_mole_equivalent_w" long_name="calcite alkalinity_expressed_as_mole_equivalent vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="L2__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="calcite light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="bL2_O3c_sms" long_name="benthic calcite dissolved inorganic carbon sources-sinks" unit="mmol/m^3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="bL2_O3c_w" long_name="benthic calcite dissolved inorganic carbon vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="bL2_alkalinity_expressed_as_mole_equivalent_sms" long_name="benthic calcite alkalinity_expressed_as_mole_equivalent sources-sinks" unit="mmol m-3/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="bL2_alkalinity_expressed_as_mole_equivalent_w" long_name="benthic calcite alkalinity_expressed_as_mole_equivalent vertical velocity" unit="m/s" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="bL2__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic calcite light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="ben_col_bioturbation__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic column bioturbation light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="ben_col__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic column light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="K1_per_layer__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic phosphate per_layer light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
@@ -883,8 +873,11 @@
   <field id="Y4_Q6__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="benthic meiofauna POM light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="erosion__attenuation_coefficient_of_photosynthetic_radiative_flux" long_name="erosion light extinction contribution computed by get_light_extinction" unit="m-1" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Ptot_c_result" long_name="total phytoplankton carbon result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="P234_n_result" long_name="non-diatom nitrogen result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="Ptot_Chl_result" long_name="total phytoplankton chlorophyll-a result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="P234_Chl_result" long_name="non-diatom chlorophyll-a result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="Ztot_c_result" long_name="total zooplankton carbon result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="Z56_n_result" long_name="non meso zooplankton nitrogen result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="Ptot_NPP_result" long_name="total phytoplankton net primary production result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="Ptot_GPP_result" long_name="total phytoplankton gross primary production result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="ZBtot_Resp_result" long_name="zooplankton and bacteria respiartion result" unit="" default_value="-.200E+21" grid_ref="grid_T_3D" />
@@ -1185,6 +1178,7 @@
   <field id="B1_total_carbon_calculator_result" long_name="bacteria total_carbon_calculator result" unit="mmol m-3" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="P1_total_calcite_in_biota" long_name="diatoms total_calcite_in_biota" unit="mg C/m^3" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="P1_total_carbon_calculator_result" long_name="diatoms total_carbon_calculator result" unit="mmol m-3" default_value="-.200E+21" grid_ref="grid_T_3D" />
+  <field id="P2_total_calcite_in_biota" long_name="nanophytoplankton total_calcite_in_biota" unit="mg C/m^3" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="P2_total_silicate" long_name="nanophytoplankton total_silicate" unit="mmol m-3" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="P2_total_carbon_calculator_result" long_name="nanophytoplankton total_carbon_calculator result" unit="mmol m-3" default_value="-.200E+21" grid_ref="grid_T_3D" />
   <field id="P3_total_calcite_in_biota" long_name="picophytoplankton total_calcite_in_biota" unit="mg C/m^3" default_value="-.200E+21" grid_ref="grid_T_3D" />
@@ -1323,8 +1317,6 @@
   <field id="Z6_n_w_tot_calculator_result" long_name="nanoflagellates n_w_tot_calculator result" unit="" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Z6_p_sms_tot_calculator_result" long_name="nanoflagellates p_sms_tot_calculator result" unit="" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="Z6_p_w_tot_calculator_result" long_name="nanoflagellates p_w_tot_calculator result" unit="" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="L2_c_sms_tot_calculator_result" long_name="calcite c_sms_tot_calculator result" unit="" default_value="0.000E+00" grid_ref="grid_T_3D" />
-  <field id="L2_c_w_tot_calculator_result" long_name="calcite c_w_tot_calculator result" unit="" default_value="0.000E+00" grid_ref="grid_T_3D" />
   <field id="zenithAngle_zenithA" long_name="zenithAngle zenith_angle" unit="degrees" default_value="0.000E+00" />
   <field id="zenithAngle__surface_albedo" long_name="zenithAngle albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="zenithAngle__surface_drag_coefficient_in_air" long_name="zenithAngle surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
@@ -1474,15 +1466,35 @@
   <field id="Q1__surface_albedo" long_name="benthic dissolved organic matter albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="Q1__surface_drag_coefficient_in_air" long_name="benthic dissolved organic matter surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="Q6_c_sms" long_name="benthic particulate organic matter carbon sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
+  <field id="Q6_resuspended_c_sfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended carbon surface flux" unit="mg C/m^3*m/s" default_value="0.000E+00" />
+  <field id="Q6_resuspended_c_bfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended carbon bottom flux" unit="mg C/m^3*m/s" default_value="0.000E+00" />
+  <field id="Q6_resuspension_flux_c" long_name="benthic particulate organic matter resuspension of carbon" unit="mg C/m^2/d" default_value="-.200E+21" />
   <field id="Q6_p_sms" long_name="benthic particulate organic matter phosphorus sources-sinks" unit="mmol P/m^2/s" default_value="0.000E+00" />
+  <field id="Q6_resuspended_p_sfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended phosphorus surface flux" unit="mmol P/m^3*m/s" default_value="0.000E+00" />
+  <field id="Q6_resuspended_p_bfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended phosphorus bottom flux" unit="mmol P/m^3*m/s" default_value="0.000E+00" />
+  <field id="Q6_resuspension_flux_p" long_name="benthic particulate organic matter resuspension of phosphorus" unit="mmol P/m^2/d" default_value="-.200E+21" />
   <field id="Q6_n_sms" long_name="benthic particulate organic matter nitrogen sources-sinks" unit="mmol N/m^2/s" default_value="0.000E+00" />
+  <field id="Q6_resuspended_n_sfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended nitrogen surface flux" unit="mmol N/m^3*m/s" default_value="0.000E+00" />
+  <field id="Q6_resuspended_n_bfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended nitrogen bottom flux" unit="mmol N/m^3*m/s" default_value="0.000E+00" />
+  <field id="Q6_resuspension_flux_n" long_name="benthic particulate organic matter resuspension of nitrogen" unit="mmol N/m^2/d" default_value="-.200E+21" />
   <field id="Q6_s_sms" long_name="benthic particulate organic matter silicate sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
+  <field id="Q6_resuspended_s_sfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended silicate surface flux" unit="mmol Si/m^3*m/s" default_value="0.000E+00" />
+  <field id="Q6_resuspended_s_bfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended silicate bottom flux" unit="mmol Si/m^3*m/s" default_value="0.000E+00" />
+  <field id="Q6_resuspension_flux_s" long_name="benthic particulate organic matter resuspension of silicate" unit="mmol Si/m^2/d" default_value="-.200E+21" />
   <field id="Q6_f_sms" long_name="benthic particulate organic matter iron sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
+  <field id="Q6_resuspended_f_sfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended iron surface flux" unit="umol Fe/m^3*m/s" default_value="0.000E+00" />
+  <field id="Q6_resuspended_f_bfl" long_name="benthic particulate organic matter pelagic variable taking up resuspended iron bottom flux" unit="umol Fe/m^3*m/s" default_value="0.000E+00" />
+  <field id="Q6_resuspension_flux_f" long_name="benthic particulate organic matter resuspension of iron" unit="umol Fe/m^2/d" default_value="-.200E+21" />
   <field id="Q6_pen_depth_c_sms" long_name="benthic particulate organic matter penetration depth of carbon sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="Q6_pen_depth_n_sms" long_name="benthic particulate organic matter penetration depth of nitrogen sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="Q6_pen_depth_p_sms" long_name="benthic particulate organic matter penetration depth of phosphorus sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="Q6_pen_depth_s_sms" long_name="benthic particulate organic matter penetration depth of silicate sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="Q6_pen_depth_f_sms" long_name="benthic particulate organic matter penetration depth of iron sources-sinks" unit="m/s" default_value="0.000E+00" />
+  <field id="Q6_resuspendable_c_sms" long_name="benthic particulate organic matter source of resuspended carbon sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
+  <field id="Q6_resuspendable_p_sms" long_name="benthic particulate organic matter source of resuspended phosphorus sources-sinks" unit="mmol P/m^2/s" default_value="0.000E+00" />
+  <field id="Q6_resuspendable_n_sms" long_name="benthic particulate organic matter source of resuspended nitrogen sources-sinks" unit="mmol N/m^2/s" default_value="0.000E+00" />
+  <field id="Q6_resuspendable_s_sms" long_name="benthic particulate organic matter source of resuspended silicate sources-sinks" unit="mmol Si/m^2/s" default_value="0.000E+00" />
+  <field id="Q6_resuspendable_f_sms" long_name="benthic particulate organic matter source of resuspended iron sources-sinks" unit="umol Fe/m^2/s" default_value="0.000E+00" />
   <field id="Q6_surface_c" long_name="benthic particulate organic matter surface carbon" unit="mg C/m^2" default_value="-.200E+21" />
   <field id="Q6_surface_change_in_c_processor__surface_albedo" long_name="benthic particulate organic matter surface change_in_c_processor albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="Q6_surface_change_in_c_processor__surface_drag_coefficient_in_air" long_name="benthic particulate organic matter surface change_in_c_processor surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
@@ -1743,8 +1755,6 @@
   <field id="P2_O3c_bfl" long_name="nanophytoplankton carbon dioxide bottom flux" unit="mmol C/m^3*m/s" default_value="0.000E+00" />
   <field id="P2_alkalinity_expressed_as_mole_equivalent_sfl" long_name="nanophytoplankton alkalinity_expressed_as_mole_equivalent surface flux" unit="mmol m-3*m/s" default_value="0.000E+00" />
   <field id="P2_alkalinity_expressed_as_mole_equivalent_bfl" long_name="nanophytoplankton alkalinity_expressed_as_mole_equivalent bottom flux" unit="mmol m-3*m/s" default_value="0.000E+00" />
-  <field id="P2_L2c_sfl" long_name="nanophytoplankton free calcite surface flux" unit="mg C/m^3*m/s" default_value="0.000E+00" />
-  <field id="P2_L2c_bfl" long_name="nanophytoplankton free calcite bottom flux" unit="mg C/m^3*m/s" default_value="0.000E+00" />
   <field id="P2__surface_albedo" long_name="nanophytoplankton albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="P2__surface_drag_coefficient_in_air" long_name="nanophytoplankton surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="P3_w_bot" long_name="picophytoplankton near-bed vertical velocity" unit="m/s" default_value="-.200E+21" />
@@ -2020,25 +2030,6 @@
   <field id="Z6_L2c_bfl" long_name="nanoflagellates calcite bottom flux" unit="mg C/m^3*m/s" default_value="0.000E+00" />
   <field id="Z6__surface_albedo" long_name="nanoflagellates albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="Z6__surface_drag_coefficient_in_air" long_name="nanoflagellates surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
-  <field id="L2_w_bot" long_name="calcite near-bed vertical velocity" unit="m/s" default_value="-.200E+21" />
-  <field id="L2_c_sfl" long_name="calcite carbon surface flux" unit="mg C/m^3*m/s" default_value="0.000E+00" />
-  <field id="L2_c_bfl" long_name="calcite carbon bottom flux" unit="mg C/m^3*m/s" default_value="0.000E+00" />
-  <field id="L2_deposition_target1c_sms" long_name="calcite target pool 1 for carbon deposition sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
-  <field id="L2_dep1c" long_name="calcite deposition of carbon in target pool 1" unit="mg C/m^2/d" default_value="-.200E+21" />
-  <field id="L2_O3c_sfl" long_name="calcite total dissolved inorganic carbon surface flux" unit="mmol C/m^3*m/s" default_value="0.000E+00" />
-  <field id="L2_O3c_bfl" long_name="calcite total dissolved inorganic carbon bottom flux" unit="mmol C/m^3*m/s" default_value="0.000E+00" />
-  <field id="L2_alkalinity_expressed_as_mole_equivalent_sfl" long_name="calcite alkalinity_expressed_as_mole_equivalent surface flux" unit="mmol m-3*m/s" default_value="0.000E+00" />
-  <field id="L2_alkalinity_expressed_as_mole_equivalent_bfl" long_name="calcite alkalinity_expressed_as_mole_equivalent bottom flux" unit="mmol m-3*m/s" default_value="0.000E+00" />
-  <field id="L2__surface_albedo" long_name="calcite albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
-  <field id="L2__surface_drag_coefficient_in_air" long_name="calcite surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
-  <field id="bL2_c_sms" long_name="benthic calcite carbon sources-sinks" unit="mg C/m^2/s" default_value="0.000E+00" />
-  <field id="bL2_O3c_sfl" long_name="benthic calcite dissolved inorganic carbon surface flux" unit="mmol/m^3*m/s" default_value="0.000E+00" />
-  <field id="bL2_O3c_bfl" long_name="benthic calcite dissolved inorganic carbon bottom flux" unit="mmol/m^3*m/s" default_value="0.000E+00" />
-  <field id="bL2_alkalinity_expressed_as_mole_equivalent_sfl" long_name="benthic calcite alkalinity_expressed_as_mole_equivalent surface flux" unit="mmol m-3*m/s" default_value="0.000E+00" />
-  <field id="bL2_alkalinity_expressed_as_mole_equivalent_bfl" long_name="benthic calcite alkalinity_expressed_as_mole_equivalent bottom flux" unit="mmol m-3*m/s" default_value="0.000E+00" />
-  <field id="bL2_dissolution" long_name="benthic calcite dissolution" unit="mg C/m^2/d" default_value="-.200E+21" />
-  <field id="bL2__surface_albedo" long_name="benthic calcite albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
-  <field id="bL2__surface_drag_coefficient_in_air" long_name="benthic calcite surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
   <field id="ben_col_D1m_sms" long_name="benthic column depth of bottom interface of oxygenated layer sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="ben_col_D2m_sms" long_name="benthic column depth of bottom interface of oxidized layer sources-sinks" unit="m/s" default_value="0.000E+00" />
   <field id="ben_col_poro" long_name="benthic column porosity" unit="-" default_value="0.400E+00" />
@@ -2740,6 +2731,7 @@
   <field id="erosion_v_er" long_name="erosion erosion rate" unit="m/d" default_value="-.200E+21" />
   <field id="erosion__surface_albedo" long_name="erosion albedo contribution computed by get_albedo" unit="-" default_value="0.000E+00" />
   <field id="erosion__surface_drag_coefficient_in_air" long_name="erosion surface drag contribution computed by get_drag" unit="-" default_value="0.000E+00" />
+  <field id="net_PelBen_POC_result" long_name="flux of particulate organic carbon from pelagic to benthos result" unit="" default_value="-.200E+21" />
   <field id="zero_hz" long_name="zero_hz" unit="" default_value="0.000E+00" />
   <field id="Z4_integral_of_totprey_wrt_depth_calculator_result" long_name="mesozooplankton integral_of_totprey_wrt_depth_calculator result" unit="mg C/m^3*m" default_value="-.200E+21" />
   <field id="B1_RP1_state1_sfl" long_name="bacteria RP1 state variable 1 surface flux" unit="mg C/m^3*m/s" default_value="0.000E+00" />
@@ -3252,9 +3244,6 @@
   <field id="Z6_n_bfl_tot_calculator_result" long_name="nanoflagellates n_bfl_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Z6_p_sfl_tot_calculator_result" long_name="nanoflagellates p_sfl_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="Z6_p_bfl_tot_calculator_result" long_name="nanoflagellates p_bfl_tot_calculator result" unit="" default_value="0.000E+00" />
-  <field id="L2_c_sfl_tot_calculator_result" long_name="calcite c_sfl_tot_calculator result" unit="" default_value="0.000E+00" />
-  <field id="L2_c_bfl_tot_calculator_result" long_name="calcite c_bfl_tot_calculator result" unit="" default_value="0.000E+00" />
-  <field id="bL2_c_sms_tot_calculator_result" long_name="benthic calcite c_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="ben_col_D1m_sms_tot_calculator_result" long_name="benthic column D1m_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="ben_col_D2m_sms_tot_calculator_result" long_name="benthic column D2m_sms_tot_calculator result" unit="" default_value="0.000E+00" />
   <field id="K1_p_sms_tot_calculator_result" long_name="benthic phosphate p_sms_tot_calculator result" unit="" default_value="0.000E+00" />
@@ -3390,7 +3379,6 @@
   <field id="Z6_c_VINT" long_name="depth-integrated nanoflagellates carbon" unit="mg C/m^3*m" default_value="0.0" />
   <field id="Z6_n_VINT" long_name="depth-integrated nanoflagellates nitrogen" unit="mmol N/m^3*m" default_value="0.0" />
   <field id="Z6_p_VINT" long_name="depth-integrated nanoflagellates phosphorus" unit="mmol P/m^3*m" default_value="0.0" />
-  <field id="L2_c_VINT" long_name="depth-integrated calcite carbon" unit="mg C/m^3*m" default_value="0.0" />
   <field id="zenithAngle__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated zenithAngle light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="light_ADY_sms_VINT" long_name="depth-integrated light gelbstoff absorption sources-sinks" unit="1/m/s*m" default_value="0.0" />
   <field id="light_ADY_w_VINT" long_name="depth-integrated light gelbstoff absorption vertical velocity" unit="m/s*m" default_value="0.0" />
@@ -3477,6 +3465,16 @@
   <field id="R8_s_w_VINT" long_name="depth-integrated large-size pom silicate vertical velocity" unit="m/s*m" default_value="0.0" />
   <field id="R8__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated large-size pom light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Q1__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic dissolved organic matter light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
+  <field id="Q6_resuspended_c_sms_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended carbon sources-sinks" unit="mg C/m^3/s*m" default_value="0.0" />
+  <field id="Q6_resuspended_c_w_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended carbon vertical velocity" unit="m/s*m" default_value="0.0" />
+  <field id="Q6_resuspended_p_sms_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended phosphorus sources-sinks" unit="mmol P/m^3/s*m" default_value="0.0" />
+  <field id="Q6_resuspended_p_w_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended phosphorus vertical velocity" unit="m/s*m" default_value="0.0" />
+  <field id="Q6_resuspended_n_sms_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended nitrogen sources-sinks" unit="mmol N/m^3/s*m" default_value="0.0" />
+  <field id="Q6_resuspended_n_w_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended nitrogen vertical velocity" unit="m/s*m" default_value="0.0" />
+  <field id="Q6_resuspended_s_sms_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended silicate sources-sinks" unit="mmol Si/m^3/s*m" default_value="0.0" />
+  <field id="Q6_resuspended_s_w_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended silicate vertical velocity" unit="m/s*m" default_value="0.0" />
+  <field id="Q6_resuspended_f_sms_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended iron sources-sinks" unit="umol Fe/m^3/s*m" default_value="0.0" />
+  <field id="Q6_resuspended_f_w_VINT" long_name="depth-integrated benthic particulate organic matter pelagic variable taking up resuspended iron vertical velocity" unit="m/s*m" default_value="0.0" />
   <field id="Q6_surface_change_in_c_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic particulate organic matter surface change_in_c_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Q6_surface_change_in_n_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic particulate organic matter surface change_in_n_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Q6_surface_change_in_p_processor__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic particulate organic matter surface change_in_p_processor light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
@@ -3688,10 +3686,6 @@
   <field id="P2_fPIRPc_VINT" long_name="depth-integrated nanophytoplankton loss to POC" unit="mg C/m^3/d*m" default_value="0.0" />
   <field id="P2_fPIRPn_VINT" long_name="depth-integrated nanophytoplankton loss to PON" unit="mmol N/m^3/d*m" default_value="0.0" />
   <field id="P2_fPIRPp_VINT" long_name="depth-integrated nanophytoplankton loss to POP" unit="mmol P/m^3/d*m" default_value="0.0" />
-  <field id="P2_L2c_sms_VINT" long_name="depth-integrated nanophytoplankton free calcite sources-sinks" unit="mg C/m^3/s*m" default_value="0.0" />
-  <field id="P2_L2c_w_VINT" long_name="depth-integrated nanophytoplankton free calcite vertical velocity" unit="m/s*m" default_value="0.0" />
-  <field id="P2_l_VINT" long_name="depth-integrated nanophytoplankton bound calcite" unit="mg C/m^3*m" default_value="0.0" />
-  <field id="P2_calcification_VINT" long_name="depth-integrated nanophytoplankton calcification rate" unit="mg C/m^3/d*m" default_value="0.0" />
   <field id="P2__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated nanophytoplankton light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="P3_c_sms_VINT" long_name="depth-integrated picophytoplankton carbon sources-sinks" unit="mg C/m^3/s*m" default_value="0.0" />
   <field id="P3_c_w_VINT" long_name="depth-integrated picophytoplankton carbon vertical velocity" unit="m/s*m" default_value="0.0" />
@@ -4053,20 +4047,6 @@
   <field id="Z6_fZIRDn_VINT" long_name="depth-integrated nanoflagellates loss to DON" unit="mmol N/m^3/d*m" default_value="0.0" />
   <field id="Z6_fZIRDp_VINT" long_name="depth-integrated nanoflagellates loss to DOP" unit="mmol P/m^3/d*m" default_value="0.0" />
   <field id="Z6__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated nanoflagellates light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
-  <field id="L2_c_sms_VINT" long_name="depth-integrated calcite carbon sources-sinks" unit="mg C/m^3/s*m" default_value="0.0" />
-  <field id="L2_c_w_VINT" long_name="depth-integrated calcite carbon vertical velocity" unit="m/s*m" default_value="0.0" />
-  <field id="L2_RainR_VINT" long_name="depth-integrated calcite rain ratio" unit="1*m" default_value="0.0" />
-  <field id="L2_L2O3c_VINT" long_name="depth-integrated calcite calcite dissolution rate" unit="mg C/m^3/d*m" default_value="0.0" />
-  <field id="L2_O3c_sms_VINT" long_name="depth-integrated calcite total dissolved inorganic carbon sources-sinks" unit="mmol C/m^3/s*m" default_value="0.0" />
-  <field id="L2_O3c_w_VINT" long_name="depth-integrated calcite total dissolved inorganic carbon vertical velocity" unit="m/s*m" default_value="0.0" />
-  <field id="L2_alkalinity_expressed_as_mole_equivalent_sms_VINT" long_name="depth-integrated calcite alkalinity_expressed_as_mole_equivalent sources-sinks" unit="mmol m-3/s*m" default_value="0.0" />
-  <field id="L2_alkalinity_expressed_as_mole_equivalent_w_VINT" long_name="depth-integrated calcite alkalinity_expressed_as_mole_equivalent vertical velocity" unit="m/s*m" default_value="0.0" />
-  <field id="L2__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated calcite light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
-  <field id="bL2_O3c_sms_VINT" long_name="depth-integrated benthic calcite dissolved inorganic carbon sources-sinks" unit="mmol/m^3/s*m" default_value="0.0" />
-  <field id="bL2_O3c_w_VINT" long_name="depth-integrated benthic calcite dissolved inorganic carbon vertical velocity" unit="m/s*m" default_value="0.0" />
-  <field id="bL2_alkalinity_expressed_as_mole_equivalent_sms_VINT" long_name="depth-integrated benthic calcite alkalinity_expressed_as_mole_equivalent sources-sinks" unit="mmol m-3/s*m" default_value="0.0" />
-  <field id="bL2_alkalinity_expressed_as_mole_equivalent_w_VINT" long_name="depth-integrated benthic calcite alkalinity_expressed_as_mole_equivalent vertical velocity" unit="m/s*m" default_value="0.0" />
-  <field id="bL2__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic calcite light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="ben_col_bioturbation__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic column bioturbation light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="ben_col__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic column light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="K1_per_layer__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic phosphate per_layer light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
@@ -4172,8 +4152,11 @@
   <field id="Y4_Q6__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated benthic meiofauna POM light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="erosion__attenuation_coefficient_of_photosynthetic_radiative_flux_VINT" long_name="depth-integrated erosion light extinction contribution computed by get_light_extinction" unit="m-1*m" default_value="0.0" />
   <field id="Ptot_c_result_VINT" long_name="depth-integrated total phytoplankton carbon result" unit="*m" default_value="0.0" />
+  <field id="P234_n_result_VINT" long_name="depth-integrated non-diatom nitrogen result" unit="*m" default_value="0.0" />
   <field id="Ptot_Chl_result_VINT" long_name="depth-integrated total phytoplankton chlorophyll-a result" unit="*m" default_value="0.0" />
+  <field id="P234_Chl_result_VINT" long_name="depth-integrated non-diatom chlorophyll-a result" unit="*m" default_value="0.0" />
   <field id="Ztot_c_result_VINT" long_name="depth-integrated total zooplankton carbon result" unit="*m" default_value="0.0" />
+  <field id="Z56_n_result_VINT" long_name="depth-integrated non meso zooplankton nitrogen result" unit="*m" default_value="0.0" />
   <field id="Ptot_NPP_result_VINT" long_name="depth-integrated total phytoplankton net primary production result" unit="*m" default_value="0.0" />
   <field id="Ptot_GPP_result_VINT" long_name="depth-integrated total phytoplankton gross primary production result" unit="*m" default_value="0.0" />
   <field id="ZBtot_Resp_result_VINT" long_name="depth-integrated zooplankton and bacteria respiartion result" unit="*m" default_value="0.0" />
@@ -4474,6 +4457,7 @@
   <field id="B1_total_carbon_calculator_result_VINT" long_name="depth-integrated bacteria total_carbon_calculator result" unit="mmol m-3*m" default_value="0.0" />
   <field id="P1_total_calcite_in_biota_VINT" long_name="depth-integrated diatoms total_calcite_in_biota" unit="mg C/m^3*m" default_value="0.0" />
   <field id="P1_total_carbon_calculator_result_VINT" long_name="depth-integrated diatoms total_carbon_calculator result" unit="mmol m-3*m" default_value="0.0" />
+  <field id="P2_total_calcite_in_biota_VINT" long_name="depth-integrated nanophytoplankton total_calcite_in_biota" unit="mg C/m^3*m" default_value="0.0" />
   <field id="P2_total_silicate_VINT" long_name="depth-integrated nanophytoplankton total_silicate" unit="mmol m-3*m" default_value="0.0" />
   <field id="P2_total_carbon_calculator_result_VINT" long_name="depth-integrated nanophytoplankton total_carbon_calculator result" unit="mmol m-3*m" default_value="0.0" />
   <field id="P3_total_calcite_in_biota_VINT" long_name="depth-integrated picophytoplankton total_calcite_in_biota" unit="mg C/m^3*m" default_value="0.0" />
@@ -4612,8 +4596,6 @@
   <field id="Z6_n_w_tot_calculator_result_VINT" long_name="depth-integrated nanoflagellates n_w_tot_calculator result" unit="*m" default_value="0.0" />
   <field id="Z6_p_sms_tot_calculator_result_VINT" long_name="depth-integrated nanoflagellates p_sms_tot_calculator result" unit="*m" default_value="0.0" />
   <field id="Z6_p_w_tot_calculator_result_VINT" long_name="depth-integrated nanoflagellates p_w_tot_calculator result" unit="*m" default_value="0.0" />
-  <field id="L2_c_sms_tot_calculator_result_VINT" long_name="depth-integrated calcite c_sms_tot_calculator result" unit="*m" default_value="0.0" />
-  <field id="L2_c_w_tot_calculator_result_VINT" long_name="depth-integrated calcite c_w_tot_calculator result" unit="*m" default_value="0.0" />
  </field_group>
  <field_group id="fabm_scalar" grid_ref="grid_0">
   <field id="total_silicate" long_name="total_silicate" unit="mmol m-3" default_value="-.200E+21" />
