@@ -159,7 +159,7 @@
         <field id="BLT"          long_name="Barrier Layer Thickness"                                                                                                                          unit="m"   > topthdep - pycndep </field>
         <field id="tinv"         long_name="Max of vertical invertion of temperature"                                                                                                         unit="degC"                      />
         <field id="depti"        long_name="Depth of max. vert. inv. of temperature"                                                                                                          unit="m"                         />
-	<field id="20d"          long_name="Depth of 20C isotherm"                          standard_name="depth_of_isosurface_of_sea_water_potential_temperature"                            unit="m"   axis_ref="iax_20C" />
+	<field id="20d"          long_name="Depth of 20C isotherm"                          standard_name="depth_of_isosurface_of_sea_water_potential_temperature"                            unit="m"                         />
         <field id="26d"          long_name="Depth of 26C isotherm"                          standard_name="depth_of_isosurface_of_sea_water_potential_temperature"                            unit="m"   axis_ref="iax_26C"   />
         <field id="28d"          long_name="Depth of 28C isotherm"                          standard_name="depth_of_isosurface_of_sea_water_potential_temperature"                            unit="m"   axis_ref="iax_28C" />
         <field id="hc300"        long_name="Heat content 0-300m"                            standard_name="integral_of_sea_water_potential_temperature_wrt_depth_expressed_as_heat_content"   unit="J/m2"                      />
@@ -841,25 +841,25 @@
 
       <!-- Poleward transport : ptr -->     
       <field_group id="diaptr" >  
-        <field id="zomsf"         long_name="Overturning Stream-Function : All basins"                     unit="Sv"         grid_ref="grid_znl_W_3D" />
-        <field id="zotem"         long_name="Zonal Mean Temperature : All basins"                          unit="degree_C"   grid_ref="grid_znl_T_3D" />
-        <field id="zosal"         long_name="Zonal Mean Salinity : All basins"                             unit="0.001"      grid_ref="grid_znl_T_3D" />
-        <field id="zosrf"         long_name="Zonal Mean Surface : All basins"                              unit="m2"         grid_ref="grid_znl_T_3D" />
-        <field id="sophtove"      long_name="Overturning Heat Transport: All basins"                       unit="PW"         grid_ref="grid_znl_T_2D" />
-        <field id="sopstove"      long_name="Overturning Salt Transport: All basins"                       unit="Giga g/s"   grid_ref="grid_znl_T_2D" />
-        <field id="sophtbtr"      long_name="Barotropic Heat Transport: All basins"                        unit="PW"         grid_ref="grid_znl_T_2D" />
-        <field id="sopstbtr"      long_name="Barotropic Salt Transport: All basins"                        unit="Giga g/s"   grid_ref="grid_znl_T_2D" /> 
-        <field id="sophtadv"      long_name="Advective Heat Transport: All basins"                         unit="PW"         grid_ref="grid_znl_T_2D" />
-        <field id="sopstadv"      long_name="Advective Salt Transport: All basins"                         unit="Giga g/s"   grid_ref="grid_znl_T_2D" />
-        <field id="sophtldf"      long_name="Diffusive Heat Transport: All basins"                         unit="PW"         grid_ref="grid_znl_T_2D" />
-        <field id="sopstldf"      long_name="Diffusive Salt Transport: All basins"                         unit="Giga g/s"   grid_ref="grid_znl_T_2D" />
-        <field id="sophtvtr"      long_name="Heat Transport : All basins"                                  unit="PW"         grid_ref="grid_znl_T_2D" />
-        <field id="sopstvtr"      long_name="Salt Transport : All basins"                                  unit="Giga g/s"   grid_ref="grid_znl_T_2D" />  
-        <field id="sophteiv"      long_name="Heat Transport from mesoscale eddy advection: All basins"     unit="PW"         grid_ref="grid_znl_T_2D" />
-        <field id="sopsteiv"      long_name="Salt Transport from mesoscale eddy advection : All basins"    unit="Giga g/s"   grid_ref="grid_znl_T_2D" />
-	<field id="sopstadv"      long_name="Advective Salt Transport"                                     unit="Giga g/s"   grid_ref="grid_znl_T_2D" />
-        <field id="sophtgyre"     long_name="Overturning heat transport due to gyre" field_ref="sophtove"  unit="W"          grid_ref="grid_znl_T_2D" > sophtvtr - sophtove  </field>
-	<field id="sopstgyre"     long_name="Overturning salt transport due to gyre" field_ref="sopstove"  unit="kg/s"       grid_ref="grid_znl_T_2D" > sophtvtr - sopstove  </field>
+        <field id="zomsf"         long_name="Overturning Stream-Function : All basins"                     unit="Sv"         grid_ref="gznl_W_3D" />
+        <field id="zotem"         long_name="Zonal Mean Temperature : All basins"                          unit="degree_C"   grid_ref="gznl_T_3D" />
+        <field id="zosal"         long_name="Zonal Mean Salinity : All basins"                             unit="0.001"      grid_ref="gznl_T_3D" />
+        <field id="zosrf"         long_name="Zonal Mean Surface : All basins"                              unit="m2"         grid_ref="gznl_T_3D" />
+        <field id="sophtove"      long_name="Overturning Heat Transport: All basins"                       unit="PW"         grid_ref="gznl_T_2D" />
+        <field id="sopstove"      long_name="Overturning Salt Transport: All basins"                       unit="Giga g/s"   grid_ref="gznl_T_2D" />
+        <field id="sophtbtr"      long_name="Barotropic Heat Transport: All basins"                        unit="PW"         grid_ref="gznl_T_2D" />
+        <field id="sopstbtr"      long_name="Barotropic Salt Transport: All basins"                        unit="Giga g/s"   grid_ref="gznl_T_2D" /> 
+        <field id="sophtadv"      long_name="Advective Heat Transport: All basins"                         unit="PW"         grid_ref="gznl_T_2D" />
+        <field id="sopstadv"      long_name="Advective Salt Transport: All basins"                         unit="Giga g/s"   grid_ref="gznl_T_2D" />
+        <field id="sophtldf"      long_name="Diffusive Heat Transport: All basins"                         unit="PW"         grid_ref="gznl_T_2D" />
+        <field id="sopstldf"      long_name="Diffusive Salt Transport: All basins"                         unit="Giga g/s"   grid_ref="gznl_T_2D" />
+        <field id="sophtvtr"      long_name="Heat Transport : All basins"                                  unit="PW"         grid_ref="gznl_T_2D" />
+        <field id="sopstvtr"      long_name="Salt Transport : All basins"                                  unit="Giga g/s"   grid_ref="gznl_T_2D" />  
+        <field id="sophteiv"      long_name="Heat Transport from mesoscale eddy advection: All basins"     unit="PW"         grid_ref="gznl_T_2D" />
+        <field id="sopsteiv"      long_name="Salt Transport from mesoscale eddy advection : All basins"    unit="Giga g/s"   grid_ref="gznl_T_2D" />
+	<field id="sopstadv"      long_name="Advective Salt Transport"                                     unit="Giga g/s"   grid_ref="gznl_T_2D" />
+        <field id="sophtgyre"     long_name="Overturning heat transport due to gyre" field_ref="sophtove"  unit="W"          grid_ref="gznl_T_2D" > sophtvtr - sophtove  </field>
+	<field id="sopstgyre"     long_name="Overturning salt transport due to gyre" field_ref="sopstove"  unit="kg/s"       grid_ref="gznl_T_2D" > sophtvtr - sopstove  </field>
        </field_group>
 
        <field_group id="constant_fields"  grid_ref="grid_T_2D"  operation="once" >
