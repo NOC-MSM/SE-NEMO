@@ -626,13 +626,13 @@ CONTAINS
 !jth_IWD Add internal wave drag
 
 	IF ( ln_int_wave_drag .AND. .NOT. ll_wd ) THEN
-                 !jidbg=870
-                 !jjdbg=770
+                 !jidbg=850
+                 !jjdbg=839
 
                  !ji=jidbg-nimpp+1
                  !jj=jjdbg-njmpp+1
                  !if (ji>0 .and. ji < jpi .and. jj > 0 .and. jj < jpj)  then
-                 !write(67,*) 'DBG1',kt,un_detide(ji,jj),un_e(ji,jj),tdiss(ji,jj),hur_e(ji,jj)
+                 !write(67,'(I6,5E12.4)') kt,un_detide(ji,jj),un_b(ji,jj) ,un_e(ji,jj),zu_trd(ji,jj),- r1_2*( tdiss(ji+1,jj)+ tdiss(ji,jj))  * ( un_e(ji,jj) - un_detide(ji,jj) ) * hur_e(ji,jj) 
                  !flush(67)
                  !endif
 
@@ -1668,14 +1668,14 @@ CONTAINS
 		    ENDDO
 		 ENDDO
 
-                 !jidbg= 870
-                 !jjdbg= 770
+                 !jidbg= 850
+                 !jjdbg= 839
 
                  !ji=jidbg-nimpp+1
                  !jj=jjdbg-njmpp+1
                  !if (ji>0 .and. ji < jpi .and. jj > 0 .and. jj < jpj)  then
-                 !write(67,*) 'DBG',kt,i_is_25hrs,un_25(ji,jj,25),un_detide(ji,jj),un_b(ji,jj)
-                 !flush(67)
+                 !write(68,'(2I5,4e12.4)') kt,i_is_25hrs,un_25(ji,jj,25),un_25(ji,jj,24),un_detide(ji,jj),un_b(ji,jj)
+                 !flush(68)
                  !endif
 
 
