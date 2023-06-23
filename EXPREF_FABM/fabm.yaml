@@ -380,7 +380,7 @@ instances:
       iopABS: 0.0041                                       # specific shortwave absorption (m^2/mg Chl), default = 0.008
       iopBBS: 0.003                                        # specific shortwave backscatter (m^2/mg Chl), default = 0.003
       c0: 0.001                                            # background carbon concentration (mg C/m^3), default = 0.0
-      calcify: true                                        # calcify, default = false
+      calcify: false                                        # calcify, default = false
       resm: 0.0                                            # maximum nutrient-limitation-induced sinking velocity (m/d), default = 0.0
       esni: 0.7                                            # level of nutrient limitation below which sinking commences (-)
       cenh: false                                          # enable atmospheric CO2 influence on photosynthesis, default = false
@@ -414,8 +414,8 @@ instances:
       R2c: R2/c                                            # semi-labile dissolved organic carbon (mg C/m^3)
       O2o: O2/o                                            # oxygen (mmol O_2/m^3)
       O3c: O3/c                                            # carbon dioxide (mmol C/m^3)
-      RainR: L2/RainR                                      # rain ratio (PIC : POC) (-)
-      L2c: L2/c                                            # free calcite (mg C/m^3)
+      #RainR: L2/RainR                                      # rain ratio (PIC : POC) (-)
+      #L2c: L2/c                                            # free calcite (mg C/m^3)
   P3:
     long_name: picophytoplankton
     model: ersem/primary_producer
@@ -614,7 +614,7 @@ instances:
       R2c: R2/c                                            # semi-labile dissolved organic carbon (mg C/m^3)
       O2o: O2/o                                            # oxygen source (mmol O_2/m^3)
       O3c: O3/c                                            # carbon dioxide sink (mmol C/m^3)
-      L2c: L2/c                                            # calcite (mg C/m^3)
+      #L2c: L2/c                                            # calcite (mg C/m^3)
   Z5:
     long_name: microzooplankton
     model: ersem/microzooplankton
@@ -673,7 +673,7 @@ instances:
       R2c: R2/c                                            # semi-labile dissolved organic carbon (mg C/m^3)
       O2o: O2/o                                            # oxygen source (mmol O_2/m^3)
       O3c: O3/c                                            # carbon dioxide sink (mmol C/m^3)
-      L2c: L2/c                                            # calcite (mg C/m^3)
+      #L2c: L2/c                                            # calcite (mg C/m^3)
   Z6:
     long_name: nanoflagellates
     model: ersem/microzooplankton
@@ -725,39 +725,41 @@ instances:
       RPs: R6/s                                            # particulate organic silicate (mmol Si/m^3)
       O2o: O2/o                                            # oxygen source (mmol O_2/m^3)
       O3c: O3/c                                            # carbon dioxide sink (mmol C/m^3)
-      L2c: L2/c                                            # calcite (mg C/m^3)
-  L2:
-    long_name: calcite
-    model: ersem/calcification
-    parameters:
-      iswcal: 1                                            # calcification/dissolution dependence on calcite saturation (1: power law, 2: hyperbolic)
-      ncalc: 0.81                                          # power of the calcification law (Ridgwell et al. 2007, mineral calcite) (-)
-      ndiss: 2.22                                          # power of the dissolution law (Keir 1980) (-)
-      Rain0: 0.6                                           # maximum rain ratio from PISCES (-)
-      sedL2: 10.0                                          # sinking velocity (m/d)
-      sL2O3: 0.03                                          # maximum specific dissolution rate (1/d), default = 1.0
-      c0: 1e-05                                            # background concentration (mg C/m^3), default = 0.0
-      ndeposition: 1                                       # number of target pools for sedimentation, default = 1
-    initialization:
-      c: 0.05                                              # carbon (mg C/m^3)
-    coupling:
-      deposition_target1: bL2
-      om_cal: O3/Om_cal                                    # calcite saturation (-)
-      O3c: O3/c                                            # total dissolved inorganic carbon (mmol C/m^3)
-  bL2:
-    long_name: benthic calcite
-    model: ersem/benthic_calcite
-    parameters:
-      iswcal: 1                                            # dissolution dependence on calcite saturation (0: none, 1: power law, 2: hyperbolic)
-      ndiss: 2.22                                          # power of the dissolution law (Keir 1980) (-)
-      fdissmax: 30.0                                       # maximum specific dissolution rate (1/d), default = 0.0
-      fdissmin: 0.05                                       # minimum specific dissolution rate (1/d), default = 0.03
-      c0: 1e-05                                            # background calcite concentration (mg C/m^2), default = 0.0
-    initialization:
-      c: 0.05                                              # carbon (mg C/m^2)
-    coupling:
-      Om_Cal: O3/Om_cal                                    # calcite saturation (-)
-      O3c: O3/c                                            # dissolved inorganic carbon (mmol/m^3)
+      #L2c: L2/c                                            # calcite (mg C/m^3)
+#  L2:
+#    long_name: calcite
+#    model: ersem/calcification
+#    parameters:
+#      iswcal: 1                                            # calcification/dissolution dependence on calcite saturation (1: power law, 2: hyperbolic)
+#      ncalc: 0.81                                          # power of the calcification law (Ridgwell et al. 2007, mineral calcite) (-)
+#      ndiss: 2.22                                          # power of the dissolution law (Keir 1980) (-)
+#      Rain0: 0.6                                           # maximum rain ratio from PISCES (-)
+#      sedL2: 10.0                                          # sinking velocity (m/d)
+#      sL2O3: 0.03                                          # maximum specific dissolution rate (1/d), default = 1.0
+#      c0: 1e-05                                            # background concentration (mg C/m^3), default = 0.0
+#      ndeposition: 1                                       # number of target pools for sedimentation, default = 1
+#    initialization:
+#      c: 0.05                                              # carbon (mg C/m^3)
+#    coupling:
+#      deposition_target1: bL2
+#      om_cal: O3/Om_cal                                    # calcite saturation (-)
+#      O3c: O3/c                                            # total dissolved inorganic carbon (mmol C/m^3)
+#  bL2:
+#    long_name: benthic calcite
+#    model: ersem/benthic_calcite
+#    parameters:
+#      iswcal: 0                                            # dissolution dependence on calcite saturation (0: none, 1: power law, 2: hyperbolic)
+#      #ndiss: 2.22                                          # power of the dissolution law (Keir 1980) (-)
+#      #KcalomX: 1000.                                       # michaelis mentenn constant for dissolution (MADE UP NUMBER SO IT DOESN'T DISSOLVE!!!)
+#      #fdissmax: 30.0                                       # maximum specific dissolution rate (1/d), default = 0.0
+#      #fdissmin: 0.05                                       # minimum specific dissolution rate (1/d), default = 0.03
+#      fdiss: 0.05                                       # minimum specific dissolution rate (1/d), default = 0.03
+#      c0: 1e-05                                            # background calcite concentration (mg C/m^2), default = 0.0
+#    initialization:
+#      c: 0.05                                              # carbon (mg C/m^2)
+#    coupling:
+#      #Om_Cal: O3/Om_cal                                    # calcite saturation (-)
+#      O3c: O3/c                                            # dissolved inorganic carbon (mmol/m^3)
   ben_col:
     long_name: benthic column
     model: ersem/benthic_column
@@ -972,7 +974,7 @@ instances:
     long_name: benthic aerobic bacteria POM
     model: ersem/benthic_column_particulate_matter_layer
     parameters:
-      composition: cnps                                    # elemental composition
+      composition: cnpsf                                   # elemental composition
       minimum_depth: 0.0                                   # minimum depth (m), default = 0.0
       variable_maximum_depth: true                         # maximum depth is variable, default = false
     coupling:
@@ -1025,7 +1027,7 @@ instances:
     long_name: benthic anaerobic bacteria POM
     model: ersem/benthic_column_particulate_matter_layer
     parameters:
-      composition: cnps                                    # elemental composition
+      composition: cnpsf                                   # elemental composition
       variable_minimum_depth: true                         # minimum depth is variable, default = false
       maximum_depth: 0.3                                   # maximum depth (m), default = 0.0
       source_depth_distribution: 3                         # vertical distribution of changes (1: constant absolute rate, 2: constant relative rate, 3: constant carbon-based relative rate), default = 1
@@ -1100,7 +1102,7 @@ instances:
     long_name: benthic deposit feeder total POM
     model: ersem/benthic_column_particulate_matter_layer
     parameters:
-      composition: cnps                                    # elemental composition
+      composition: cnpsf                                   # elemental composition
       minimum_depth: 0.0025                                # minimum depth (m), default = 0.0
       maximum_depth: 0.3                                   # maximum depth (m), default = 0.0
     coupling:
@@ -1109,7 +1111,7 @@ instances:
     long_name: benthic deposit feeder anaerobic POM
     model: ersem/benthic_column_particulate_matter_layer
     parameters:
-      composition: cnps                                    # elemental composition
+      composition: cnpsf                                   # elemental composition
       variable_minimum_depth: true                         # minimum depth is variable, default = false
       maximum_depth: 0.3                                   # maximum depth (m), default = 0.0
     coupling:
@@ -1119,7 +1121,7 @@ instances:
     long_name: benthic deposit feeder POM sink
     model: ersem/benthic_column_particulate_matter_layer
     parameters:
-      composition: cnps                                    # elemental composition
+      composition: cnpsf                                   # elemental composition
       minimum_depth: 0.0                                   # minimum depth (m), default = 0.0
       variable_maximum_depth: true                         # maximum depth is variable, default = false
     coupling:
@@ -1190,7 +1192,7 @@ instances:
     long_name: benthic suspension feeder POM
     model: ersem/benthic_column_particulate_matter_layer
     parameters:
-      composition: cnps                                    # elemental composition
+      composition: cnpsf                                   # elemental composition
       minimum_depth: 0.0                                   # minimum depth (m), default = 0.0
       maximum_depth: 0.0025                                # maximum depth (m), default = 0.0
     coupling:
@@ -1249,7 +1251,7 @@ instances:
     long_name: benthic meiofauna POM
     model: ersem/benthic_column_particulate_matter_layer
     parameters:
-      composition: cnps                                    # elemental composition
+      composition: cnpsf                                   # elemental composition
       minimum_depth: 0.0                                   # minimum depth (m), default = 0.0
       maximum_depth: 0.03                                  # maximum depth (m), default = 0.0
     coupling:
@@ -1264,8 +1266,164 @@ instances:
       target: N4/n
   N7_flux:
     model: external_surface_flux
+    parameters:
+      scale_factor: 0.59
     coupling:
       target: N7/f
   erosion:
     model: ersem/benthic_erosion
   #Diagnostics:
+  Ptot_c:
+    long_name: total phytoplankton carbon
+    model: weighted_sum
+    parameters:
+      n: 4
+    coupling:
+      term1: P1/c
+      term2: P2/c
+      term3: P3/c
+      term4: P4/c
+  P234_n:
+    long_name: non-diatom nitrogen
+    model: weighted_sum
+    parameters:
+      n: 3
+    coupling:
+      term1: P2/n
+      term2: P3/n
+      term3: P4/n
+  Ptot_Chl:
+    long_name: total phytoplankton chlorophyll-a
+    model: weighted_sum
+    parameters:
+      n: 4
+    coupling:
+      term1: P1/Chl
+      term2: P2/Chl
+      term3: P3/Chl
+      term4: P4/Chl
+  P234_Chl:
+    long_name: non-diatom chlorophyll-a
+    model: weighted_sum
+    parameters:
+      n: 3
+    coupling:
+      term1: P2/Chl
+      term2: P3/Chl
+      term3: P4/Chl
+  Ztot_c:
+    long_name: total zooplankton carbon
+    model: weighted_sum
+    parameters:
+      n: 3
+    coupling:
+      term1: Z4/c
+      term2: Z5/c
+      term3: Z6/c
+  Z56_n:
+    long_name: non meso zooplankton nitrogen
+    model: weighted_sum
+    parameters:
+      n: 2
+    coupling:
+      term1: Z5/n
+      term2: Z6/n
+  Ptot_NPP:
+    long_name: total phytoplankton net primary production
+    model: weighted_sum
+    parameters:
+      n: 8
+      weight5: -1
+      weight6: -1
+      weight7: -1
+      weight8: -1
+    coupling:
+      term1: P1/fO3PIc
+      term2: P2/fO3PIc
+      term3: P3/fO3PIc
+      term4: P4/fO3PIc
+      term5: P1/fPIO3c
+      term6: P2/fPIO3c
+      term7: P3/fPIO3c
+      term8: P4/fPIO3c
+  Ptot_GPP:
+    long_name: total phytoplankton gross primary production
+    model: weighted_sum
+    parameters:
+      n: 4
+    coupling:
+      term1: P1/fO3PIc
+      term2: P2/fO3PIc
+      term3: P3/fO3PIc
+      term4: P4/fO3PIc
+  ZBtot_Resp:
+    long_name: zooplankton and bacteria respiartion 
+    model: weighted_sum
+    parameters:
+      n: 4
+    coupling:
+      term1: Z4/fZIO3c
+      term2: Z5/fZIO3c
+      term3: Z6/fZIO3c
+      term4: B1/fB1O3c
+  RD_c:
+    long_name: total dissolved organic carbon
+    model: weighted_sum
+    parameters:
+      n: 3
+    coupling:
+      term1: R1/c
+      term2: R2/c
+      term3: R3/c
+  RP_c:
+    long_name: total particulate organic carbon
+    model: weighted_sum
+    parameters:
+      n: 3
+    coupling:
+      term1: R4/c
+      term2: R6/c
+      term3: R8/c
+  RP_n:
+    long_name: total particulate organic nitrogen
+    model: weighted_sum
+    parameters:
+      n: 3
+    coupling:
+      term1: R4/n
+      term2: R6/n
+      term3: R8/n
+  RP_p:
+    long_name: total particulate organic nitrogen
+    model: weighted_sum
+    parameters:
+      n: 3
+    coupling:
+      term1: R4/p
+      term2: R6/p
+      term3: R8/p
+  net_PelBen_POC:
+    long_name: flux of particulate organic carbon from pelagic to benthos
+    model: horizontal_weighted_sum
+    parameters:
+      n: 17
+      weight17: -1.
+    coupling:
+      term1: R4/dep1c
+      term2: R4/dep2c
+      term3: R6/dep1c
+      term4: R6/dep2c
+      term5: R8/dep1c
+      term6: R8/dep2c
+      term7: P1/dep1c
+      term8: P1/dep2c
+      term9: P1/dep3c
+      term10: P4/dep1c
+      term11: P4/dep2c
+      term12: P4/dep3c
+      term13: Y3/fprey1c
+      term14: Y3/fprey2c
+      term15: Y3/fprey3c
+      term16: Y3/fprey4c
+      term17: Q6/resuspension_flux_c
+

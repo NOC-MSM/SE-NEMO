@@ -15,7 +15,7 @@ import pandas as pd
 if isliv:
  sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
 else:
- sys.path.insert(0,'/home/users/jholt/work/Git/COAsT/')
+ sys.path.insert(0,'/home/users/jholt/Git/COAsT/')
  
 import coast
 import scipy.io
@@ -45,7 +45,7 @@ else:
 DATANAME='ORCA025'
 
 nlme=66#len(A['i_min'])
-Depth_lim=1000.
+Depth_lim=400.
 if isliv:
  Assessdir='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/ORCA025-SE-NEMO/' 
 else:
@@ -68,8 +68,18 @@ RUNNAMS=[
 'ORCA025-SE-NEMO_1979_1981_EXP_REF_NOTIDE',
 'ORCA025-SE-NEMO_1979_1981_EXP_SZT_WAV',
 'ORCA025-SE-NEMO_1979_1981_EXP_ZPS_GLS_TIDE_WITH_TDRAG',
-'ORCA025-SE-NEMO_1979_1981_EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2'
+'ORCA025-SE-NEMO_1979_1981_EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2',
+'ORCA025-SE-NEMO_1990_2019_EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2'
     ]
+
+
+RUNNAMS=[
+'ORCA025-SE-NEMO_1990_2019_EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2',
+'ORCA025-SE-NEMO_1990_2019_ZPS_TIDE',
+'ORCA025-SE-NEMO_1990_2019_ZPS_NOTIDE'  
+    ]
+
+
 SS={}
 SN={}
 for iR,RUNNAM in enumerate(RUNNAMS):
@@ -99,8 +109,8 @@ for iR,RUNNAM in enumerate(RUNNAMS):
     f_bathy=coast.Gridded(fn_data= fn_bathymetry)
     LMEs=[]
     vnames=['PEAy','SSTy','SSSy']
-    if iR==11:
-        vnames=['PEA_monthy_clim', 'SST_monthy_clim','SSS_monthy_clim']
+    #if iR==11:
+    vnames=['PEA_monthy_clim', 'SST_monthy_clim','SSS_monthy_clim']
     for ilme in range(nlme):    
      LMENAM=A['DOMNAM'][ilme]
      i_min=A['i_min'][ilme]
@@ -238,7 +248,7 @@ for ilme in LMEs:
              
     df=pd.DataFrame(DD)
     df=df.set_index('RUNNAM')
-    df.to_csv(Outdir +'Errorstats_'+ LMENAME +'_'+str(int(Depth_lim))+'m_'+mons+'_V2.csv')        
+    df.to_csv(Outdir +'Errorstats_'+ LMENAME +'_'+str(int(Depth_lim))+'m_'+mons+'_V4.csv')        
 #%% Summary
 DD={}
 DD['RUNNAM']=[]
@@ -254,4 +264,18 @@ for iR,RUNNAM in enumerate(RUNNAMS):
                 DD[var+' '+Metric]=np.append(DD[var+' '+Metric],SS[var+' '+Metric,iR]) 
 df=pd.DataFrame(DD)
 df=df.set_index('RUNNAM')
-df.to_csv(Outdir +'Errorstats_'+ 'N_Weight_Mean' +'_'+str(int(Depth_lim))+'m_'+mons+'_V2.csv')        
+df.to_csv(Outdir +'Errorstats_'+ 'N_Weight_Mean' +'_'+str(int(Depth_lim))+'m_'+mons+'_V4.csv')
+#%%
+VAR_ERR=np.zeros((len(RUNNAMS),nlme))*np.nan
+for iR,RUNNAM in enumerate(RUNNAMS):
+    for ilme in range(nlme):
+        try:
+            VAR_ERR[iR,ilme]=metrics['cost','PEA',ilme,iR]
+        except:
+            continue
+
+
+
+
+
+        

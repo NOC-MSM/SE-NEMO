@@ -3,12 +3,12 @@
 %LINKER              ftn
 
 %BASE_CFLAGS    -w -lcurl
-%PROD_CFLAGS    -O2 -D BOOST_DISABLE_ASSERTS -std=c++98
+%PROD_CFLAGS    -O0 -g -D BOOST_DISABLE_ASSERTS -std=c++98
 %DEV_CFLAGS     -g -O2
 %DEBUG_CFLAGS   -g
 
 %BASE_FFLAGS    -D__NONE__
-%PROD_FFLAGS    -O2 
+%PROD_FFLAGS    -O0 
 %DEV_FFLAGS     -g -O2
 %DEBUG_FFLAGS   -g
 

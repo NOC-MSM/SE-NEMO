@@ -1,42 +1,24 @@
 #!/bin/bash
 #SBATCH --job-name=se-nemo
-#SBATCH --time=00:05:00
+#SBATCH --time=00:20:00
 #SBATCH --account=n01-CLASS
 #SBATCH --partition=standard
 #SBATCH --qos=standard
-#SBATCH --nodes=19
+#SBATCH --nodes=68
 #SBATCH --ntasks-per-core=1
 
 # ARCHER2 support suggestion to reduce UCX error messages:
-# export UCX_IB_REG_METHODS=direct
-
-#################### nemo runscript options ############################
-# At present se-nemo has been run on 19 and 11 nodes                   #
-########################################################################
-if [ $SLURM_NNODES -eq 19 ]
-then
-   SRUN_CMD=`./slurm_setup -S 8 -s 16 -m 2 -C 1543 -g 3 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
-elif [ $SLURM_NNODES -eq 76 ]
-then
-   SRUN_CMD=`./slurm_setup -S 8 -s 16 -m 1 -C 6429 -g 3 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
-elif [ $SLURM_NNODES -eq 100 ]
-then
-   SRUN_CMD=`./slurm_setup -S 8 -s 16 -m 2 -C 8448 -g 3 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
-else
-   exit
-fi
-########################################################################
-
+export UCX_IB_REG_METHODS=direct
 
 #################### nemo runscript options ############################
 # For info on the parameters see namelist_ref                          #
 ########################################################################
 rn_rdt=600          ; ln_zps='.false.'      ; ln_tmx_itf='.false.'
 ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
-nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.false.'
+nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.true.'
 ln_rstdate='.true.' ; ln_shlat2d='.true.'   ; nn_diaharm=1981
-rn_Cd0=2.5e-3       ; ln_loglayer='.false.' ; ln_tide='.true.'
-ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.' 
+rn_Cd0=2.5e-3       ; ln_loglayer='.true.'  ; ln_tide='.true.'
+ln_boost='.false.'   ; ln_gls='.true.'      ; ln_int_wave_drag='.true.'
 ln_hpg_djc='.true.' ;
 ########################################################################
 
@@ -57,6 +39,54 @@ year=$year_st      # Change if starting job part way through simulation
 ########################################################################
 #                No need to edit below this line                       #
 ########################################################################
+
+
+if [ "$ln_zps" = ".false." ]
+then
+
+   #################### nemo runscript options #########################
+   # The following options are for the MES domain_cfg.nc               #
+   #####################################################################
+
+   if [ $SLURM_NNODES -eq 19 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 1524 -g 4 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 29 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 2973 -g 8 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 52 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 6270 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 68 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 32 -s 16 -m 2 -C 8090 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   else
+      exit
+   fi
+
+else
+
+   #################### nemo runscript options #########################
+   # The following options are for the ZPS domain_cfg.nc               #
+   #####################################################################
+
+   if [ $SLURM_NNODES -eq 19 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 1524 -g 4 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 29 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 2973 -g 8 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 52 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 6270 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 68 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 32 -s 16 -m 2 -C 8090 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   else
+      exit
+   fi
+
+fi
 
 if [ "$ln_zps" = ".true." ]
 then

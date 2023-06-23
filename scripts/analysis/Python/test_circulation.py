@@ -51,13 +51,13 @@ class CurrentsonT(coast.Gridded):
 LME_Clusters='../Data/LME_Clusters_eORCA025.csv'
 clusters = pd.read_csv(LME_Clusters)
 
-for icluster in [5]: #range (6,17):
+for icluster in [1]: #range (6,17):
 #%%    
     lims=np.array(clusters.values[icluster,2:6],dtype=int)
     datadir='/gws/nopw/j04/class_vol2/senemo/jdha/FINAL_TESTING/EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2/output/'
     domnam='/gws/nopw/j04/class_vol2/senemo/jdha/FINAL_TESTING/EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2/config/domain_cfg.nc'
     
-    nemo_t=CurrentsonT(fn_domain=domnam,config='example_nemo_grid_t.json',multiple =True,lims=lims)
+    nemo_t=coast.CurrentsonT(fn_domain=domnam,config='example_nemo_grid_t.json',multiple =True,lims=lims)
     
     fn_data_u=[datadir+'SENEMO_1m_20070101_20071231_grid_U_200711-200711.nc']
     #           datadir+'SENEMO_1m_20070101_20071231_grid_U_200712-200712.nc'
@@ -80,6 +80,10 @@ for icluster in [5]: #range (6,17):
     nemo_v.subset(z_dim=[0])
     nemo_t.currents_on_T(nemo_u,nemo_v)
     plt.figure(icluster+1)
-    plt.pcolormesh(nemo_t.dataset.speed_t[0,0,:,:])
+#    plt.pcolormesh(nemo_t.dataset.speed_t[0,0,:,:])
+    name = clusters.values[icluster,1]
+    nemo_t.plot_surface_circulation(name
+                                  ,Vmax=0.5,Np=5
+                                  ,headwidth=4,scale=50  )    
 #nemo_t=currents_on_T(nemo_t,nemo_u,nemo_v)
 

@@ -45,8 +45,8 @@
 
 %CPP                 cpp -Dkey_nosignedzero -P -traditional
 %FC                  ftn
-%FCFLAGS             -fdefault-double-8 -fdefault-real-8 -O0 -g  -funroll-all-loops -fcray-pointer -ffree-line-length-none -w -fallow-argument-mismatch
-%FFLAGS              -fdefault-double-8 -fdefault-real-8 -O0 -g  -funroll-all-loops -fcray-pointer -ffree-line-length-none -w -fallow-argument-mismatch
+%FCFLAGS             -fdefault-double-8 -fdefault-real-8 -O0 -g  -funroll-all-loops -fcray-pointer -ffree-line-length-none -w -fallow-argument-mismatch -fcheck=all -fbacktrace
+%FFLAGS              -fdefault-double-8 -fdefault-real-8 -O0 -g  -funroll-all-loops -fcray-pointer -ffree-line-length-none -w -fallow-argument-mismatch -fcheck=all -fbacktrace
 %LD                  ftn
 %FPPFLAGS            -P -traditional %FABM_INC
 %LDFLAGS

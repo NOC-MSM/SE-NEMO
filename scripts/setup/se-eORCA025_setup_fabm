@@ -7,25 +7,26 @@ display_usage() {
    echo "  ***************************************"
    echo
    echo "  usage: ${0##*/} -w path_to_install_nemo -x path_to_intall_xios -s path_to_repo"
-   echo "                  -m machine -a MPI build -f path_to_fabm"
+   echo "                  -m machine -a MPI build -c MPI build -f path_to_fabm"
    echo
    echo "  flags:  -w full path to where nemo will be installed"
    echo "          -x full path to where xios will be installed"
    echo "          -s full path to where SE-NEMO repository resides"
    echo "          -m machine name"
    echo "          -a MPI build [mpich|mpich4|ompi]"
+   echo "          -c MPI build [gnu|cray]"
    echo "          -f full path to where fabm was built"
    echo
    exit 1
 	} 
 # if less than three arguments supplied, display usage 
-	if [  $# -le 9 ] 
+	if [  $# -le 13 ] 
 	then 
 		display_usage
 		exit 1
 	fi 
 # if less than two arguments supplied, display usage 
-	if [  $# -ge 13 ] 
+	if [  $# -ge 15 ] 
 	then 
 		display_usage
 		exit 1
@@ -37,7 +38,7 @@ display_usage() {
 		exit 0
 	fi 
 
-while getopts w:x:s:m:a:f: option
+while getopts w:x:s:m:a:f:c: option
   do
   case "${option}"
   in
@@ -47,6 +48,7 @@ while getopts w:x:s:m:a:f: option
   m) export HPC_TARG=${OPTARG};;
   a) export MPI_TARG=${OPTARG};;
   f) export FABM_DIR=${OPTARG};;
+  c) export CMP_TARG=${OPTARG};;
   esac
 done
 
@@ -81,13 +83,14 @@ echo "Making sure that the correct modules are loaded"
 case "${HPC_TARG}"
   in
   # these two sets of modules result in the same module list, however the PML one start from a module purge, so it dos not inherit anything
-  archer2) . $REPO_DIR/scripts/env/gnu-${MPI_TARG}
+  archer2) . $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}
            ;;
-  archer2-fabm) . $REPO_DIR/scripts/env/gnu-${MPI_TARG}
+  archer2-fabm) . $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}
            ;;
-  archer2-fabm_debug) . $REPO_DIR/scripts/env/gnu-${MPI_TARG}
+  archer2-fabm_debug) . $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}
            ;;
-  *)       echo "Machine not recognised"
+  *)       echo "Machine  not recognised"
+	   echo ${HPC_TARG}
            echo "Machines available: archer2"
            echo "Machines available: archer2-fabm"
            echo "Machines available: archer2-fabm_debug"
@@ -121,7 +124,7 @@ git clone https://github.com/pmlmodelling/NEMO4.0-FABM nemo
 
 cd nemo
 
-## Now check EXTERNALS revision number before checking out the rest
+# Now check EXTERNALS revision number before checking out the rest
 #for ext_name in mk FCM IOIPSL   
 #  do   
 #  ext=`svn propget svn:externals | grep $ext_name | cut -c2-`   
@@ -130,7 +133,7 @@ cd nemo
 
 #ext=`svn propget svn:externals | grep makenemo | cut -c2-`
 #svn export http://forge.ipsl.jussieu.fr/nemo/svn/$ext
-#
+
 mkdir arch
 
 # Setup the directory structure for the ENSEMBLE
@@ -152,7 +155,7 @@ cd xios
 cp $REPO_DIR/arch/xios/* ./arch
 
 echo "Compiling xios"
-./make_xios --full --prod --arch ${HPC_TARG}-${MPI_TARG} --netcdf_lib netcdf4_par --job 4
+./make_xios --full --prod --arch ${HPC_TARG}-${CMP_TARG}-${MPI_TARG} --netcdf_lib netcdf4_par --job 4
 #./make_xios --full --debug --arch ${HPC_TARG}-${MPI_TARG} --netcdf_lib netcdf4_par --job 4
 
 # Let's update the path to xios
@@ -162,13 +165,13 @@ export FABM_HOME=$FABM_DIR
 
 # set cpp file that includes key_top and key_fabm (this allows to keep 1 config folder)
 rm $REPO_DIR/cpp_se-eORCA025.fcm
-cp $REPO_DIR/cpp_se-eORCA025.phys.fcm $REPO_DIR/cpp_se-eORCA025.fcm
+cp $REPO_DIR/cpp_se-eORCA025.fabm.fcm $REPO_DIR/cpp_se-eORCA025.fcm
 
 
 cd $WORK_DIR/nemo
 cp $REPO_DIR/arch/nemo/* ./arch
 # Dirty fix to hard wire path otherwise user will have to set XIOS_DIR in every new shell session
-sed -i "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-${HPC_TARG}-${MPI_TARG}.fcm
+sed -i "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-${HPC_TARG}-${CMP_TARG}-${MPI_TARG}.fcm
 
 echo 'se-eORCA025 OCE ICE' >> $WORK_DIR/nemo/cfgs/work_cfgs.txt
 
@@ -199,20 +202,30 @@ cd $CONFIG_DIR/EXPREF_FABM
 # copy the module files in the running folder to guarantee that the same combination of modules is used
 case "${HPC_TARG}"
   in
-  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.slurm
-           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.mpirun
-           rm $CONFIG_DIR/gnu-*
-           cp $REPO_DIR/scripts/env/gnu-${MPI_TARG} $CONFIG_DIR
+  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.slurm
+           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.mpirun
+           rm $CONFIG_DIR/${CMP_TARG}-*
+           cp $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG} $CONFIG_DIR
            echo 'modules COPIED!!!!!!!!!!!!!!!!!' 
            ;;
-  archer2-fabm)  sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.slurm
-                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.mpirun
-                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.multimonth.slurm
-                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/gnu-${MPI_TARG}?" runscript.multimonth.mpirun
-                 rm $CONFIG_DIR/gnu-*
-                 cp $REPO_DIR/scripts/env/gnu-${MPI_TARG} $CONFIG_DIR
+  archer2-fabm)  sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.slurm
+                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.mpirun
+                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.multimonth.slurm
+                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.multimonth.mpirun
+                 rm $CONFIG_DIR/${CMP_TARG}-*
+                 cp $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG} $CONFIG_DIR
                  echo 'modules COPIED!!!!!!!!!!!!!!!!!' 
            ;;
+  archer2-fabm_debug)  sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.slurm
+                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.mpirun
+                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.multimonth.slurm
+                 sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.multimonth.mpirun
+                 rm $CONFIG_DIR/${CMP_TARG}-*
+                 cp $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG} $CONFIG_DIR
+                 echo 'modules COPIED!!!!!!!!!!!!!!!!!' 
+           ;;
+  *)       sed -i "s?XXX_ENV_XXX??" runscript.slurm
+           sed -i "s?XXX_ENV_XXX??" runscript.mpirun 
 esac
 
 mkdir meta_out
@@ -237,7 +250,7 @@ ln -s INPUTS/shlat2d.nc .
 #ln -s ../INPUTS/domcfg_eORCA025_v2.nc ./domain_cfg.nc
 #this is the domani to use with master/FABM
 #ln -s ../INPUTS/domain_cfg_r015-r010_007_004v2.nc ./domain_cfg.nc
-ln -s ../INPUTS/domain_cfg_r018-010-010_glo-r018-010_ant_opt_v3_notaper.nc ./domain_cfg.nc
+#ln -s ../INPUTS/domain_cfg_r018-010-010_glo-r018-010_ant_opt_v3_notaper.nc ./domain_cfg.nc
 
 
 # First copy GO8 code
@@ -252,7 +265,7 @@ cp $REPO_DIR/scripts/run/* $CONFIG_DIR/EXPREF_FABM
 cd $WORK_DIR/nemo
 
 echo "Compiling nemo SE-ORCA025 Config"
-./makenemo -m ${HPC_TARG}-${MPI_TARG} -r se-eORCA025 -j 16
+./makenemo -m ${HPC_TARG}-${CMP_TARG}-${MPI_TARG} -r se-eORCA025 -j 16
 
 echo
 echo "  Auto-Config: SE-eORCA025"
@@ -264,6 +277,8 @@ echo "  - cp -rP EXPREF_FABM EXP_MYRUN "
 echo "  - link the correct domain_cfg.nc "
 echo "  - update the runscript accordingly "
 echo "      (project code, nodes, modules, etc)"
+echo "  - link the tracer restart file to ./RESTARTS/SENEMO_S0_00000000_restart_trc.nc"
+echo "      (usually /work/n01/shared/gig/eORCA025_INPUTS/eORCA025_restart_trc-fromGLODAPandORCA1_domcfg_mes_v2_FlatBenthos.nc"
 echo
 
 echo "  - submit via the sbatch command"

@@ -13,6 +13,7 @@
 <!-- Files definition -->
     <file_definition src="./file_def_nemo-oce-BASIC.xml"/>     <!--  NEMO ocean dynamics                     -->
     <file_definition src="./file_def_nemo-ice-BASIC.xml"/>     <!--  NEMO ocean sea ice                      -->
+    <file_definition src="./file_def_nemo-oce-BASIC-ERSEM.xml"/>     <!--  ERSEM tracers                     -->
     <!-- 
 ============================================================================================================
 = grid definition = = DO NOT CHANGE =
