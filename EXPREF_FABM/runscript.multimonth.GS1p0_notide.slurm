@@ -56,6 +56,21 @@ nmmax=6                         # number of months to go through before submitti
 ########################################################################
 #                No need to edit below this line                       #
 ########################################################################
+# this has been added because on the new opearting system quite often if the file exists it is not overwritten
+if [ -f "myscript_wrapper.sh" ]; then
+        rm myscript_wrapper.sh
+fi
+
+# this has been added to ensure that right domain file is linked
+if [ -f "domain_cfg.nc" ]; then
+        rm domain_cfg.nc
+fi
+if [ "$ln_zps" = ".true." ]
+then
+        ln -s /work/n01/shared/yuti/se-ORCA025_domain_zps/domain_cfg_zps.closea.nc domain_cfg.nc
+else
+        ln -s INPUTS/domain_cfg_mes_v2.nc ./domain_cfg.nc
+fi
 
 if [ "$ln_zps" = ".false." ]
 then
