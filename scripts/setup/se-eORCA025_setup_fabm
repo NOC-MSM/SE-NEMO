@@ -277,8 +277,9 @@ echo "  - cp -rP EXPREF_FABM EXP_MYRUN "
 echo "  - link the correct domain_cfg.nc "
 echo "  - update the runscript accordingly "
 echo "      (project code, nodes, modules, etc)"
-echo "  - link the tracer restart file to ./RESTARTS/SENEMO_S0_00000000_restart_trc.nc"
-echo "      (usually /work/n01/shared/gig/eORCA025_INPUTS/eORCA025_restart_trc-fromGLODAPandORCA1_domcfg_mes_v2_FlatBenthos.nc"
+echo "  - link the tracer restart file:"
+echo "      - for MES you can link /work/n01/shared/gig/eORCA025_INPUTS/eORCA025_restart_trc-fromGLODAPandORCA1_domcfg_mes_v2_FlatBenthos.nc to RESTARTS/SENEMO_S0_00000000_restart_trc.nc or the divided 8090 restart_trc in /work/n01/shared/yuti/se-ORCA025_restart_trc_mes/split_8090/"
+echo "      - for ZPS you can link /work/n01/shared/yuti/se-ORCA025_restart_trc_zps/eORCA025_restart_trc-fromGLODAPandORCA1_domcfg_zps_FlatBenthos.nc to RESTARTS/SENEMO_S0_00000000_restart_trc.nc or the divided 8090 restart_trc in /work/n01/shared/yuti/se-ORCA025_restart_trc_zps/split_8090/"
 echo
 
 echo "  - submit via the sbatch command"
