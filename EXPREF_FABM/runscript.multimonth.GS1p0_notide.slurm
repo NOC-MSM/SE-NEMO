@@ -481,7 +481,7 @@ done
 if [ $y0 -le $year_en ]
 then
    echo 'Submitting' $y0 $m0 '...'
-   sbatch --export=y0=$y0,m0=$m0,nn_spin_cycle=$nn_spin_cycle runscript.multimonth.slurm
+   sbatch --export=y0=$y0,m0=$m0,nn_spin_cycle=$nn_spin_cycle runscript.multimonth.GS1p0_notide.slurm
    echo "Done."
 else
    echo "All done."
