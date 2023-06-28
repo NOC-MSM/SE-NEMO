@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=se-025ERSEM
 #SBATCH --output=out-se025-%j.out
-##SBATCH --time=01:30:00
+#SBATCH --time=04:30:00
 ##SBATCH --time=16:00:00
 ##SBATCH --time=00:15:00
 #SBATCH --account=n01-pml
@@ -28,7 +28,7 @@ RUNDIR=$PWD
 #################### nemo runscript options ############################
 # For info on the parameters see namelist_ref                          #
 ########################################################################
-rn_rdt=600          ; ln_zps='.true.'       ; ln_tmx_itf='.true.'
+rn_rdt=1800          ; ln_zps='.true.'       ; ln_tmx_itf='.true.'
 ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
 nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.true.'
 ln_rstdate='.false.' ; ln_shlat2d='.false.'  ; nn_diaharm=3333
@@ -48,7 +48,7 @@ year_en=2019                    # End year of this job submission
 offset=0                        # If rdt has changed, an offset to nn_it000 is needed
 nn_spin_cycle=$nn_spin_cycle    # Change to nn_spin+1 if year is .gt. year_st
 year=$y0                        # Change if starting job part way through simulation
-nmmax=6                         # number of months to go through before submitting a new job
+nmmax=12                        # number of months to go through before submitting a new job
 
 ########################################################################
 
