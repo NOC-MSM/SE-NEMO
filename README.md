@@ -9,7 +9,7 @@ Base Configuration: GO8p6 at NEMO 4.0.4
 ## Quick Start:
 
 ```
-git clone -b Anemone git@github.com:NOC-MSM/SE-NEMO.git
+git clone -b devIWD git@github.com:NOC-MSM/SE-NEMO.git
 ./SE-NEMO/scripts/setup/se-eORCA025_setup -w $PWD/test -x $PWD/test -s $PWD/SE-NEMO -m anemone -a impi -c ifort
 cd test/nemo/cfgs/se-eORCA025/
 cp -rP EXPREF EXP_MYRUN
