@@ -1518,6 +1518,7 @@ CONTAINS
       REAL(wp), DIMENSION(jpi,jpj) ::   zu_i, zv_i
 !!jth_IWD
       INTEGER, INTENT(in)  ::   kt   ! ocean time-step index
+      INTEGER  :: imk ! Index of bottom level
 
       REAL(wp), SAVE ::   r1_25 = 0.04_wp   ! =1/25
       INTEGER                          ::   i_steps                           ! no of timesteps per hour
@@ -1692,6 +1693,16 @@ CONTAINS
                     ENDDO
                  ENDDO
 
+                 IF ( ln_calc_tdiss ) THEN
+!!!! Simmons et al. Ocean Modelling (2004)
+                 DO jj = 2, jpjm1
+                  DO ji = 2, jpim1
+                     imk = max(mbkt(ji,jj)-1, 1)    ! ocean bottom level at W-points
+                     tdiss(ji,jj) = 0.5 * rn_kappa_tdiss * h2rough (ji,jj)*rn2(ji,jj,imk)*wmask(ji,jj,imk)
+                  ENDDO
+                 ENDDO
+                 ENDIF
+!!!!!!!!!!!!!!!!!!!!
                  !jidbg= 850
                  !jjdbg= 839
 
