@@ -17,6 +17,15 @@ The algorithm involves the following:
   * Using nonlinear least-squares optimisation, fit the surface H=a+bx+cy+dxy to the bathymetry, by solving for a, b, c, d.   Note that the coordinates x,y here relate to the ii, jj fine-grid indices of the bathymetry grid “patch”.  As the patch is assumed to be very small, these ii, jj approximate to Great Circle distances x,y anyway.    The surface fitted is a hyperbolic paraboloid.  See example in Jupyter notebook.  For small d, this approximates a bilinear fit of a plane to the bathymetry of each patch.
   * Define the anomaly from the fitted surface, h’=bathymetry-H,  and calculate the root-mean-square h’ defined over all the ii,jj of the patch, as the **roughness, h**.
 
+This python script can be run to calculate the bathymetric roughness:
+```
+barebones_calc_bathymetric_roughness.py
+```
+and this Jupyter notebook is similar to the above, but includes test plots and narrative:
+```
+calc_bathymetric_roughness.ipynb
+```
+
 Notes:
 
 1. It’s possible to use different choices of bathymetry data and model grid - just edit the script.  Here, we used GEBCO2023, which is 15’ lat-lon resolution, and the SENEMO grid corresponding to the domain_cfg for GS1p2_full, which is eORCA025 global, tripolar.
