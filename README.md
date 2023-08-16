@@ -17,7 +17,7 @@ cd EXP_MYRUN
 ln -s ../INPUTS/domcfg_eORCA025_v2.nc domain_cfg.nc # or whatever domain_cfg you are using
 
 ```
-or if using ANEMOME, replace the relevant line above with:
+or if using ANEMONE, replace the relevant line above with:
 ```
 ./SE-NEMO/scripts/setup/se-eORCA025_setup -w $PWD/test -x $PWD/test -s $PWD/SE-NEMO -m anemone -a impi -c ifort
 ```
