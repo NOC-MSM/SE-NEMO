@@ -1702,11 +1702,9 @@ CONTAINS
                  IF ( ln_calc_tdiss ) THEN
 !!!! Simmons et al. Ocean Modelling (2004)
                  N2mean(:,:) =  SUM( e3w_n(:,:,:) * rn2(:,:,:) * wmask(:,:,:) , DIM=3 ) / SUM( e3w_n(:,:,:) * tmask(:,:,:) , DIM=3 )  * tmask(:,:,1)  
-                 DO jj = 2, jpjm1
-                  DO ji = 2, jpim1
-!                      imk = max(mbkt(ji,jj)-1, 1)    ! ocean bottom level at W-points
-!                     tdiss(ji,jj) = 0.5 * rn_kappa_tdiss * h2rough (ji,jj)*sqrt(max(rn2(ji,jj,imk),0.0))*wmask(ji,jj,imk)
-                      tdiss(ji,jj) = 0.5 * rn_kappa_tdiss * h2rough(ji,jj)*sqrt(max(N2mean(ji,jj),0.0)) !wmask(ji,jj,imk)
+                 DO jj = 2, jpj
+                  DO ji = 2, jpi
+                      tdiss(ji,jj) = 0.5 * rn_kappa_tdiss * h2rough(ji,jj)*sqrt(max(N2mean(ji,jj),0.0)) 
 
                   ENDDO
                  ENDDO
