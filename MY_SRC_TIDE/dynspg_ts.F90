@@ -642,7 +642,7 @@ CONTAINS
                  !endif
 
             DO jj = 2, jpjm1
-               DO ji = fs_2, fs_jpim1   ! vector opt.
+               DO ji = 2, jpim1   
                   zu_trd(ji,jj) = zu_trd(ji,jj) - r1_2*( tdiss(ji+1,jj)+ tdiss(ji,jj))  * ( un_e(ji,jj) - un_detide(ji,jj) ) * hur_e(ji,jj)
                   zv_trd(ji,jj) = zv_trd(ji,jj) - r1_2*( tdiss(ji,jj+1)+ tdiss(ji,jj))  * ( vn_e(ji,jj) - vn_detide(ji,jj) ) * hvr_e(ji,jj)
                END DO
