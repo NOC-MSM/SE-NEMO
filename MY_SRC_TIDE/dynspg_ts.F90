@@ -1701,7 +1701,7 @@ CONTAINS
 
                  IF ( ln_calc_tdiss ) THEN
 !!!! Simmons et al. Ocean Modelling (2004)
-                 N2mean(:,:) =  SUM( e3w_n(:,:,:) * rn2(:,:,:) * wmask(:,:,:) , DIM=3 ) / SUM( e3w_n(:,:,:) * tmask(:,:,:) , DIM=3 )  * tmask(:,:,1)  
+                 N2mean(:,:) =  SUM( e3w_n(:,:,:) * rn2(:,:,:) * wmask(:,:,:) , DIM=3 ) / SUM( e3w_n(:,:,:) * wmask(:,:,:) , DIM=3 )  * tmask(:,:,1)  
                  DO jj = 2, jpj
                   DO ji = 2, jpi
                       tdiss(ji,jj) = 0.5 * rn_kappa_tdiss * h2rough(ji,jj)*sqrt(max(N2mean(ji,jj),0.0)) 
