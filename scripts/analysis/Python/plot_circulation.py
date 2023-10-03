@@ -19,16 +19,16 @@ fn_config_u_grid='./example_nemo_grid_u.json'
 fn_config_v_grid='./example_nemo_grid_v.json'
 fn_config_t_grid='./example_nemo_grid_t.json'
 
-ystart=2090
-ystop=2099
+
 ystart=1991
 ystop=2000
-
+ystart=1976
+ystop=1980
 names,dpaths,DOMS,_  = coast.experiments(experiments='experiments.json')
-#nemo_U={}
+nemo_U={}
 
 #iexp=1
-for iexp in [3]:
+for iexp in [6]:#[1,2,3,4,5,0]:
 #%%    
     print(names[iexp])
     #nemo_dir='/gws/nopw/j04/class_vol1/CLASS-MEDUSA/OUT_eORCA12/C001/monthly/'
@@ -47,8 +47,9 @@ for iexp in [3]:
     nemo_v.subset(z_dim=[0])
 
     nemo_t.currents_on_t(nemo_u,nemo_v)
-    
+    #NNA
     x_min=-79;x_max=12;y_min=26;y_max=69
+#    x_min=-98;x_max=26.5;y_min=-56;y_max=69
     
     j,i,_=nemo_t.find_j_i_list(lon=[x_min,x_max,x_max,x_min],lat=[y_min,y_min,y_max,y_max])
     imin=min(i)
@@ -63,12 +64,12 @@ for iexp in [3]:
     Name='{2}-{0}-{1}'.format(ystart,ystop,names[iexp])
     
     #plotting
-#    SP,US,VS=surf.mean_surface_circulation(nemo_u,nemo_v,nemo_t,mask)
-#    surf.plot_surface_circulation(SP,US,VS,nemo_t,mask,Name,
-#                                           Np=6
-#                                           ,headwidth=5,scale=80,minshaft=2      
-#                                           )
-#    plt.savefig('../Figures/Circulation/Surface_Currents_NNA_' + Name.replace(' ','_')+'.png',dpi=300)
+    SP,US,VS=surf.mean_surface_circulation(nemo_u,nemo_v,nemo_t,mask)
+    surf.plot_surface_circulation(SP,US,VS,nemo_t,mask,Name,Vmax=0.16,
+                                           Np=6
+                                           ,headwidth=5,scale=80,minshaft=2      
+                                           )
+    plt.savefig('../Figures/Circulation/Surface_Currents_NNA_' + Name.replace(' ','_')+'.png',dpi=300)
     #fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_NEA_{0}.nc".format(Name)).replace(' ','_')
     #nemo_t_out=coast.Gridded(nemo_t,config=fn_config_t_grid)
     #surf.save_currents(SP,US,VS,fn_out,nemo_t_out)
@@ -98,4 +99,4 @@ plt.title('Eastward surface current 54W')
 plt.xlabel('Latitude')
 plt.ylabel('m/s')
 plt.legend([names[0],names[1],names[2],names[3],'CMEMS Glob Current'])
-plt.savefig('../Figures/Circulation/Surface_Currents_GS_CMEMS_i100.png',dpi=300)
+#plt.savefig('../Figures/Circulation/Surface_Currents_GS_CMEMS_i100.png',dpi=300)
