@@ -75,7 +75,7 @@ echo "Making sure that the correct modules are loaded"
 
 case "${HPC_TARG}"
   in
-  archer2) . $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}
+  archer2) . $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}-ucx
            ;;
   anemone) . $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}
            ;;
@@ -167,8 +167,8 @@ cd $CONFIG_DIR/EXPREF
 ## Add ENV into runscipts
 case "${HPC_TARG}"
   in
-  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.slurm
-           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.mpirun
+  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}-ucx?" runscript.slurm
+           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}-ucx?" runscript.mpirun
            ;;
   anemone) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.slurm
            sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.mpirun
