@@ -1,9 +1,9 @@
 #!/bin/bash
-# Lightweight script to set up SE-eORCA025 on ARCHER2
+# Lightweight script to set up SE-eORCA025 on ARCHER2 or anemone (NOC and UoS cluster)
  
 display_usage() { 
    echo
-   echo "  Auto-Config: SE-eORCA025 on ARCHER2"
+   echo "  Auto-Config: SE-eORCA025 on ARCHER2 or anemone"
    echo "  ***************************************"
    echo
    echo "  usage: ${0##*/} -w path_to_install_nemo -x path_to_intall_xios -s path_to_repo"
@@ -13,8 +13,8 @@ display_usage() {
    echo "          -x full path to where xios will be installed"
    echo "          -s full path to where SE-NEMO repository resides"
    echo "          -m machine name"
-   echo "          -a MPI build [mpich|mpich4|ompi]"
-   echo "          -c MPI build [gnu|cray]"
+   echo "          -a MPI build [mpich|mpich4|ompi|impi]"
+   echo "          -c MPI build [gnu|cray|ifort]"
    echo
    exit 1
 	} 
@@ -77,8 +77,10 @@ case "${HPC_TARG}"
   in
   archer2) . $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}-ucx
            ;;
+  anemone) . $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}
+           ;;
   *)       echo "Machine not recognised"
-           echo "Machines available: archer2"
+           echo "Machines available: archer2, anemone"
            exit 1
 esac
 
@@ -150,6 +152,10 @@ case "${HPC_TARG}"
   in
   archer2) ln -s /work/n01/shared/se-eORCA025 INPUTS
            ;;
+	   
+  anemone) ln -s /dssgfs01/working/jdha/se-eORCA025 INPUTS
+           ;;
+	  
   *)       wget http://gws-access.ceda.ac.uk/public/jmmp/se-eORCA025/inputs.tar.gz
 	   tar xvfz inputs.tar.gz
            ;;
@@ -164,6 +170,9 @@ case "${HPC_TARG}"
   archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}-ucx?" runscript.slurm
            sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}-ucx?" runscript.mpirun
            ;;
+  anemone) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.slurm
+           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.mpirun
+           ;;	   
   *)       sed -i "s?XXX_ENV_XXX??" runscript.slurm
            sed -i "s?XXX_ENV_XXX??" runscript.mpirun 
            ;;
