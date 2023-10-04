@@ -33,25 +33,30 @@
 %NCDF_HOME           $NETCDF_DIR
 %HDF5_HOME           $HDF5_DIR
 %XIOS_HOME           XXX_XIOS_DIR_XXX
+#OASIS_HOME          
 
 %NCDF_INC            -I%NCDF_HOME/include -I%HDF5_HOME/include
-%NCDF_LIB            -L%HDF5_HOME/lib -L%NCDF_HOME/lib -lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lcurl -lz
-%XIOS_INC            -I%XIOS_HOME/inc
-%XIOS_LIB            -L%XIOS_HOME/lib -lxios -lstdc++
+%NCDF_LIB            -L%HDF5_HOME/lib -L%NCDF_HOME/lib -lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lz
+%XIOS_INC            -I%XIOS_HOME/inc 
+%XIOS_LIB            -L%XIOS_HOME/lib -lxios
+#OASIS_INC           -I%OASIS_HOME/build/lib/mct -I%OASIS_HOME/build/lib/psmile.MPI1
+#OASIS_LIB           -L%OASIS_HOME/lib -lpsmile.MPI1 -lmct -lmpeu -lscrip
 
-%CPP                 cpp -Dkey_nosignedzero -P -traditional
+%CPP	             cpp -Dkey_nosignedzero
 %FC                  ftn
-%FCFLAGS             -fdefault-double-8 -fdefault-real-8 -O2  -funroll-all-loops -fcray-pointer -ffree-line-length-none -w -fallow-argument-mismatch
-%FFLAGS              -fdefault-double-8 -fdefault-real-8 -O2  -funroll-all-loops -fcray-pointer -ffree-line-length-none -w -fallow-argument-mismatch
-%LD                  ftn
+%FCFLAGS             -em -s integer32 -s real64 -O2 -hflex_mp=intolerant
+%FFLAGS              -em -s integer32 -s real64 -O2 -hflex_mp=intolerant
+%LD                  CC -Wl,"--allow-multiple-definition"
 %FPPFLAGS            -P -traditional
-%LDFLAGS
-%AR                  ar
+%LDFLAGS             -lmpifort_cray
+%AR                  ar 
 %ARFLAGS             -r
 %MK                  gmake
 %USER_INC            %XIOS_INC %NCDF_INC
-%USER_LIB            %XIOS_LIB %NCDF_LIB -L/opt/cray/pe/libsci/22.12.1.1/GNU/9.1/x86_64/lib -lsci_gnu_82
+%USER_LIB            %XIOS_LIB %NCDF_LIB
+#USER_INC            %XIOS_INC %OASIS_INC %NCDF_INC
+#USER_LIB            %XIOS_LIB %OASIS_LIB %NCDF_LIB
 
-%CC                  cc -Wl,"--allow-multiple-definition"
-%CFLAGS              -O0 -fcommon -Wl,"--allow-multiple-definition"
+%CC                  cc
+%CFLAGS              -O0
 bld::tool::fc_modsearch -J
