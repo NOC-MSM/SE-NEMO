@@ -1,0 +1,8 @@
+module restore
+source /opt/cray/pe/cpe/22.12/restore_lmod_system_defaults.sh
+
+module swap PrgEnv-cray PrgEnv-gnu
+module swap craype-network-ofi craype-network-ucx
+module swap cray-mpich cray-mpich-ucx
+module load cray-hdf5-parallel
+module load cray-netcdf-hdf5parallel
