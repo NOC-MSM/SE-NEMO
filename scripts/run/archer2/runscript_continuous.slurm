@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --job-name=mes_ntapx2
-#SBATCH --time=24:00:00
+#SBATCH --job-name=se-nemo
+#SBATCH --time=00:05:00
 #SBATCH --account=n01-CLASS
 #SBATCH --partition=standard
 #SBATCH --qos=standard
@@ -60,8 +60,8 @@ ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
 nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.true.'
 ln_rstdate='.true.' ; ln_shlat2d='.true.'   ; nn_diaharm=1981
 rn_Cd0=2.5e-3       ; ln_loglayer='.true.'  ; ln_tide='.true.'
-ln_boost='.false.'  ; ln_gls='.true.'       ; ln_int_wave_drag='.false.' 
-ln_hpg_djc='.true.' ;
+ln_boost='.false.'  ; ln_gls='.true.'       ; ln_int_wave_drag='.true.' 
+ln_hpg_djc='.true.' ;                       ; ln_calc_tdiss='.false.'
 ########################################################################
 
 
@@ -293,6 +293,7 @@ do
       sed -i "s/XXX_PNI_XXX/$nn_jpni/g" namelist_cfg
       sed -i "s/XXX_PNJ_XXX/$nn_jpnj/g" namelist_cfg
       sed -i "s/XXX_TDG_XXX/$ln_int_wave_drag/g" namelist_cfg
+      sed -i "s/XXX_CTD_XXX/$ln_calc_tdiss/g" namelist_cfg
 
    done
 

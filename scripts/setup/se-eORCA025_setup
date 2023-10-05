@@ -180,20 +180,6 @@ esac
 cp -r $REPO_DIR/EXPREF .
 cd $CONFIG_DIR/EXPREF
 
-## Add ENV into runscipts
-case "${HPC_TARG}"
-  in
-  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx?" runscript.slurm
-           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx?" runscript_continuous.slurm
-           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx?" runscript.mpirun
-           ;;
-  anemone) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/anemone/${CMP_TARG}-${MPI_TARG}?" runscript.slurm
-           ;;	   
-  *)       sed -i "s?XXX_ENV_XXX??" runscript.slurm
-           sed -i "s?XXX_ENV_XXX??" runscript.mpirun 
-           ;;
-esac
-
 mkdir meta_out
 mkdir RESTARTS
 mkdir OUTPUTS
@@ -216,8 +202,24 @@ cp $REPO_DIR/MY_SRC/* $CONFIG_DIR/MY_SRC/
 cp $REPO_DIR/MY_SRC_TIDE/* $CONFIG_DIR/MY_SRC/
 cp $REPO_DIR/MY_SRC_RIV/* $CONFIG_DIR/MY_SRC/
 cp $REPO_DIR/cpp_se-eORCA025.fcm $CONFIG_DIR/
-cp $REPO_DIR/scripts/run/$HPC_TARG/* $CONFIG_DIR/EXPREF
+cp -r $REPO_DIR/scripts/run/$HPC_TARG/* $CONFIG_DIR/EXPREF
 find $REPO_DIR/scripts/run -maxdepth 1 -type f -execdir cp "{}" $CONFIG_DIR/EXPREF ";"
+
+cd $CONFIG_DIR/EXPREF
+
+## Add ENV into runscipts
+case "${HPC_TARG}"
+  in
+  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx?" runscript.slurm
+           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx?" runscript_continuous.slurm
+           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx?" runscript.mpirun
+           ;;
+  anemone) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/anemone/${CMP_TARG}-${MPI_TARG}?" runscript.slurm
+           ;;	   
+  *)       sed -i "s?XXX_ENV_XXX??" runscript.slurm
+           sed -i "s?XXX_ENV_XXX??" runscript.mpirun 
+           ;;
+esac
 
 cd $WORK_DIR/nemo
 
