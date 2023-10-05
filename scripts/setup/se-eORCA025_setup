@@ -1,9 +1,9 @@
 #!/bin/bash
-# Lightweight script to set up SE-eORCA025 on ARCHER2 or anemone (NOC and UoS cluster)
+# Lightweight script to set up SE-eORCA025 on ARCHER2 or Anemone (NOC and UoS cluster)
  
 display_usage() { 
    echo
-   echo "  Auto-Config: SE-eORCA025 on ARCHER2 or anemone"
+   echo "  Auto-Config: SE-eORCA025 on ARCHER2 or Anemone"
    echo "  ***************************************"
    echo
    echo "  usage: ${0##*/} -w path_to_install_nemo -x path_to_intall_xios -s path_to_repo"
@@ -13,7 +13,7 @@ display_usage() {
    echo "          -x full path to where xios will be installed"
    echo "          -s full path to where SE-NEMO repository resides"
    echo "          -m machine name"
-   echo "          -a MPI build [mpich|mpich4|ompi|impi]"
+   echo "          -a MPI build [mpich|impi]"
    echo "          -c MPI build [gnu|cray|ifort]"
    echo
    exit 1
@@ -75,9 +75,23 @@ echo "Making sure that the correct modules are loaded"
 
 case "${HPC_TARG}"
   in
-  archer2) . $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}-ucx
+  archer2) ENV_FILE=$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx
+           if [ -f "$ENV_FILE" ]; then
+             . $REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx
+	   else
+	     echo "ENV file not recognised"
+             echo "For archer2: [ cray || gnu ] && mpich are available"
+             exit 1
+           fi
            ;;
-  anemone) . $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}
+  anemone) ENV_FILE=$REPO_DIR/scripts/env/anemone/${CMP_TARG}-${MPI_TARG} 
+	  if [ -f "$ENV_FILE" ]; then
+	    . $REPO_DIR/scripts/env/anemone/${CMP_TARG}-${MPI_TARG}
+	  else
+             echo "ENV file not recognised"
+             echo "For anemone: ifort && impi are available"
+             exit 1
+           fi
            ;;
   *)       echo "Machine not recognised"
            echo "Machines available: archer2, anemone"
@@ -151,9 +165,11 @@ cd $CONFIG_DIR
 case "${HPC_TARG}"
   in
   archer2) ln -s /work/n01/shared/se-eORCA025 INPUTS
+           ln -s /work/n01/shared/nemo/FORCING FORCING
            ;;
 	   
   anemone) ln -s /dssgfs01/working/jdha/se-eORCA025 INPUTS
+	   ln -s /dssgfs01/working/acc/FORCING FORCING
            ;;
 	  
   *)       wget http://gws-access.ceda.ac.uk/public/jmmp/se-orca025/inputs.tar.gz
@@ -163,20 +179,6 @@ esac
 
 cp -r $REPO_DIR/EXPREF .
 cd $CONFIG_DIR/EXPREF
-
-## Add ENV into runscipts
-case "${HPC_TARG}"
-  in
-  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}-ucx?" runscript.slurm
-           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}-ucx?" runscript.mpirun
-           ;;
-  anemone) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.slurm
-           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}?" runscript.mpirun
-           ;;	   
-  *)       sed -i "s?XXX_ENV_XXX??" runscript.slurm
-           sed -i "s?XXX_ENV_XXX??" runscript.mpirun 
-           ;;
-esac
 
 mkdir meta_out
 mkdir RESTARTS
@@ -200,7 +202,24 @@ cp $REPO_DIR/MY_SRC/* $CONFIG_DIR/MY_SRC/
 cp $REPO_DIR/MY_SRC_TIDE/* $CONFIG_DIR/MY_SRC/
 cp $REPO_DIR/MY_SRC_RIV/* $CONFIG_DIR/MY_SRC/
 cp $REPO_DIR/cpp_se-eORCA025.fcm $CONFIG_DIR/
-cp $REPO_DIR/scripts/run/* $CONFIG_DIR/EXPREF
+cp -r $REPO_DIR/scripts/run/$HPC_TARG/* $CONFIG_DIR/EXPREF
+find $REPO_DIR/scripts/run -maxdepth 1 -type f -execdir cp "{}" $CONFIG_DIR/EXPREF ";"
+
+cd $CONFIG_DIR/EXPREF
+
+## Add ENV into runscipts
+case "${HPC_TARG}"
+  in
+  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx?" runscript.slurm
+           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx?" runscript_continuous.slurm
+           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx?" runscript.mpirun
+           ;;
+  anemone) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/anemone/${CMP_TARG}-${MPI_TARG}?" runscript.slurm
+           ;;	   
+  *)       sed -i "s?XXX_ENV_XXX??" runscript.slurm
+           sed -i "s?XXX_ENV_XXX??" runscript.mpirun 
+           ;;
+esac
 
 cd $WORK_DIR/nemo
 

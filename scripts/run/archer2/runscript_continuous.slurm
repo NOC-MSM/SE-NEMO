@@ -1,69 +1,136 @@
 #!/bin/bash
-#SBATCH --job-name=se-mes
+#SBATCH --job-name=se-nemo
 #SBATCH --time=00:05:00
 #SBATCH --account=n01-CLASS
 #SBATCH --partition=standard
 #SBATCH --qos=standard
 #SBATCH --nodes=19
-#SBATCH --ntasks=128
 #SBATCH --ntasks-per-core=1
+
+display_usage() {
+   echo
+   echo "  Runscript: SE-eORCA025 on ARCHER2"
+   echo "  ***************************************"
+   echo
+   echo "  usage: ${0##*/} -y year -s spin"
+   echo
+   echo "  flags:  -y first year to be run"
+   echo "          -s spin cycle (only valid for first year of the run)"
+   echo
+   exit 1
+        }
+# if less than two arguments supplied, display usage
+        if [  $# -le 3 ]
+        then
+                display_usage
+                exit 1
+        fi
+# if more than two arguments supplied, display usage
+        if [  $# -ge 5 ]
+        then
+                display_usage
+                exit 1
+        fi
+# check whether user had supplied -h or --help . If yes display usage
+        if [[ ( $# == "--help") ||  $# == "-h" ]]
+        then
+                display_usage
+                exit 0
+        fi
+
+while getopts y:s: option
+  do
+  case "${option}"
+  in
+  y) export YEAR=${OPTARG};;
+  s) export SPIN=${OPTARG};;
+  esac
+done
+
+echo $YEAR $SPIN 
 
 # ARCHER2 support suggestion to reduce UCX error messages:
 export UCX_IB_REG_METHODS=direct
-#################### nemo runscript options ############################
-# At present se-nemo has been run on 19 and 11 nodes                   #
-########################################################################
-srun hostname -s > hostfile
-if [ $SLURM_NNODES -eq 97 ]
-then
-   NXIOS=8
-   NNEMO=8448
-   ./build_rankfile -S $NXIOS -s 16 -m 2 -C $NNEMO -c 22 -N 128 -n 32 -H 97 > rankfile
-elif [ $SLURM_NNODES -eq 75 ]
-then
-   NXIOS=8
-   NNEMO=6429
-   ./build_rankfile -S $NXIOS -s 16 -m 2 -C $NNEMO -c 22 -N 128 -n 32 -H 75 > rankfile
-elif [ $SLURM_NNODES -eq 19 ]
-then
-   NXIOS=8
-   NNEMO=1543
-   ./build_rankfile -S $NXIOS -s 16 -m 2 -C $NNEMO -c 22 -N 128 -n 32 -H 19 > rankfile
-else
-   exit
-fi
-########################################################################
-
 
 #################### nemo runscript options ############################
 # For info on the parameters see namelist_ref                          #
 ########################################################################
 rn_rdt=600          ; ln_zps='.false.'      ; ln_tmx_itf='.false.'
 ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
-nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.false.'
+nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.true.'
 ln_rstdate='.true.' ; ln_shlat2d='.true.'   ; nn_diaharm=1981
-rn_Cd0=2.5e-3       ; ln_loglayer='.false.' ; ln_tide='.true.'
-ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.'
-ln_hpg_djc='.true.' ;
+rn_Cd0=2.5e-3       ; ln_loglayer='.true.'  ; ln_tide='.true.'
+ln_boost='.false.'  ; ln_gls='.true.'       ; ln_int_wave_drag='.true.' 
+ln_hpg_djc='.true.' ;                         ln_calc_tdiss='.false.'
 ########################################################################
 
 
 #################### runscript options #################################
 # Controls for the simulation                                          #
 ########################################################################
-ln_spin='.true.'   # Do we require a spin up phase for the ice
-nn_spin=3          # How many years spin up
-year_st=1976       # Start year of the simulation (ramains constant)
-year_en=1977       # End year of this job submission
-offset=0           # If rdt has changed, an offset to nn_it000 is needed
-nn_spin_cycle=1    # Change to nn_spin+1 if year is .gt. year_st
-year=$year_st      # Change if starting job part way through simulation
+ln_spin='.true.'    # Do we require a spin up phase for the ice
+nn_spin=3           # How many years spin up
+year_st=1976        # Start year of the simulation (ramains constant)
+year_en=2019        # End year of this job submission
+offset=0            # If rdt has changed, an offset to nn_it000 is needed
+nn_spin_cycle=$SPIN # Change to nn_spin+1 if year is .gt. year_st
+year=$YEAR          # Change if starting job part way through simulation
 ########################################################################
 
 
 ########################################################################
 #                No need to edit below this line                       #
 ########################################################################
+
+if [ "$ln_zps" = ".false." ]
+then
+
+   #################### nemo runscript options #########################
+   # The following options are for the MES domain_cfg.nc               #
+   #####################################################################
+
+   if [ $SLURM_NNODES -eq 19 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 1524 -g 4 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 29 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 2973 -g 8 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 52 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 6270 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 68 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 32 -s 16 -m 2 -C 8090 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 72 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 64 -s 16 -m 1 -C 8090 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   else
+      exit
+   fi
+
+else
+
+   #################### nemo runscript options #########################
+   # The following options are for the ZPS domain_cfg.nc               #
+   #####################################################################
+
+   if [ $SLURM_NNODES -eq 19 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 1524 -g 4 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 29 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 2973 -g 8 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 52 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 6270 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 68 ]
+   then
+      SRUN_CMD=`./slurm_setup -S 32 -s 16 -m 2 -C 8090 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   else
+      exit
+   fi
+
+fi
 
 if [ "$ln_zps" = ".true." ]
 then
@@ -112,14 +179,17 @@ echo $SLURM_NNODES
 
 . XXX_ENV_XXX
 export LD_LIBRARY_PATH=${CRAY_LD_LIBRARY_PATH}:${LD_LIBRARY_PATH}
-
 export OMP_NUM_THREADS=1
+
+chmod u+x ./myscript_wrapper.sh
 
 jpni=-1
 jpnj=-1
 
 nn_date0=$year_st\0101
-while [ $year -le $year_en ]
+nextyear=true
+
+while [ $year -le $year_en ] && $nextyear
 do
 
    echo $year
@@ -134,14 +204,14 @@ do
       nam="${ens%%:*}"
       jpk="${ens##*:}"
 
-      if [ $year -eq $nn_diaharm ]
+      if [ $year -eq $nn_diaharm ] &&  [ "$ln_tide" = ".true." ]
       then
 	 ln_diaharm='.true.'
       else
 	 ln_diaharm='.false.'
       fi
 
-      if [ $year -eq 1976 ]
+      if [ $year -eq $year_st ]
       then
          nn_it000=1
 	 if [ $nn_spin_cycle -eq 1 ]
@@ -223,12 +293,14 @@ do
       sed -i "s/XXX_PNI_XXX/$nn_jpni/g" namelist_cfg
       sed -i "s/XXX_PNJ_XXX/$nn_jpnj/g" namelist_cfg
       sed -i "s/XXX_TDG_XXX/$ln_int_wave_drag/g" namelist_cfg
+      sed -i "s/XXX_CTD_XXX/$ln_calc_tdiss/g" namelist_cfg
 
    done
 
    for ens in "${ARRAY[@]}"
    do
-      mpirun --oversubscribe -rf rankfile --report-bindings -v -np $NXIOS --bind-to core ./xios_server.exe : -np $NNEMO --bind-to core ./nemo  &
+      eval $SRUN_CMD &
+      echo $SRUN_CMD &
       ./time_step_chk $SLURM_JOB_ID $nn_itend &
    done
 
@@ -267,7 +339,21 @@ do
    else
       nn_spin_cycle=$(($nn_spin_cycle+1))
    fi
-      
+
+   nextyear=`./check_runtime $SLURM_JOB_ID $YEAR $year`
+
 done
+
+# chunk/zip data
+sbatch runzip.slurm
+
+# if year -gt year_end no need to go again
+if [ $year -gt $year_en ]
+then
+   exit
+else
+   echo 'Submitting runscript ' $year $nn_spin_cycle
+#   sbatch rs1 -y $year -s $nn_spin_cycle
+fi
 
 exit

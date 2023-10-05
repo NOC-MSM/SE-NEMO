@@ -1,6 +1,6 @@
 # Shelf Enabled Global NEMO (SE-NEMO)
 
-The setup script has been tested and will checkout, compile and run the ORCA025 (NEMO 4.0.4) code on ARCHER2 for three versions of MPI: Cray-MPICH, MPICH4 and openMPI. This branch is under development and will provide an option to compile the newer NEMO 4.2 code base.
+The setup script has been tested and will checkout, compile and run the ORCA025 (NEMO 4.0.4) code on: ARCHER2 for Cray-MPICH and GNU-MPICH, and Anemone for iFort. 
 
 Configuration files for SE-NEMO project
 
@@ -9,12 +9,12 @@ Base Configuration: GO8p6 at NEMO 4.0.4
 ## Quick Start:
 On ARCHER2
 ```
-git clone -b devIWD git@github.com:NOC-MSM/SE-NEMO.git
+git clone git@github.com:NOC-MSM/SE-NEMO.git
 ./SE-NEMO/scripts/setup/se-eORCA025_setup -w $PWD/test -x $PWD/test -s $PWD/SE-NEMO -m archer2 -a mpich -c gnu
 cd test/nemo/cfgs/se-eORCA025/
 cp -rP EXPREF EXP_MYRUN
 cd EXP_MYRUN
-ln -s ../INPUTS/domcfg_eORCA025_v2.nc domain_cfg.nc # or whatever domain_cfg you are using
+ln -s ../INPUTS/domain_cfg_zps.nc domain_cfg.nc # ZPS or domain_cfg_mes_v2.nc MES
 
 ```
 or if using ANEMONE, replace the relevant line above with:
