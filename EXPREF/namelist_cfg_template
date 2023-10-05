@@ -104,7 +104,7 @@ nn_lsm=-3,
 &namsbc_flx
 /
 &namsbc_blk
-cn_dir='/dssgfs01/working/acc/FORCING/JRA/',
+cn_dir='./FORCING/JRA/',
 ln_cd_l12=.false.,
 ln_cd_l15=.false.,
 ln_coare_3p0=.false.,

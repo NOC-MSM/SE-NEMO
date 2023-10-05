@@ -165,9 +165,11 @@ cd $CONFIG_DIR
 case "${HPC_TARG}"
   in
   archer2) ln -s /work/n01/shared/se-eORCA025 INPUTS
+           ln -s /work/n01/shared/nemo/FORCING FORCING
            ;;
 	   
   anemone) ln -s /dssgfs01/working/jdha/se-eORCA025 INPUTS
+	   ln -s /dssgfs01/working/acc/FORCING FORCING
            ;;
 	  
   *)       wget http://gws-access.ceda.ac.uk/public/jmmp/se-eORCA025/inputs.tar.gz
