@@ -13,7 +13,7 @@ display_usage() {
    echo "          -x full path to where xios will be installed"
    echo "          -s full path to where SE-NEMO repository resides"
    echo "          -m machine name"
-   echo "          -a MPI build [mpich|mpich4|ompi|impi]"
+   echo "          -a MPI build [mpich|impi]"
    echo "          -c MPI build [gnu|cray|ifort]"
    echo
    exit 1
