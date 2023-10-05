@@ -97,7 +97,7 @@ else
 fi
 echo $SLURM_NNODES
 
-. /home/cwi/senemo/SE-NEMO/scripts/env/ifort-impi
+. XXX_ENV_XXX
 export OMP_NUM_THREADS=1
 
 
