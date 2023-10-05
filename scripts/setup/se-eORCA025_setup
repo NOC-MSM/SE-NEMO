@@ -75,9 +75,23 @@ echo "Making sure that the correct modules are loaded"
 
 case "${HPC_TARG}"
   in
-  archer2) . $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}-ucx
+  archer2) ENV_FILE=$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx
+           if [ -f "$ENV_FILE" ]; then
+             . $REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx
+	   else
+	     echo "ENV file not recognised"
+             echo "For archer2: [ cray || gnu ] && mpich are available"
+             exit 1
+           fi
            ;;
-  anemone) . $REPO_DIR/scripts/env/${CMP_TARG}-${MPI_TARG}
+  anemone) ENV_FILE=$REPO_DIR/scripts/env/anemone/${CMP_TARG}-${MPI_TARG} 
+	  if [ -f "$ENV_FILE" ]; then
+	    . $REPO_DIR/scripts/env/anemone/${CMP_TARG}-${MPI_TARG}
+	  else
+             echo "ENV file not recognised"
+             echo "For anemone: ifort && impi are available"
+             exit 1
+           fi
            ;;
   *)       echo "Machine not recognised"
            echo "Machines available: archer2, anemone"
