@@ -156,7 +156,7 @@ case "${HPC_TARG}"
   anemone) ln -s /dssgfs01/working/jdha/se-eORCA025 INPUTS
            ;;
 	  
-  *)       wget http://gws-access.ceda.ac.uk/public/jmmp/se-eORCA025/inputs.tar.gz
+  *)       wget http://gws-access.ceda.ac.uk/public/jmmp/se-orca025/inputs.tar.gz
 	   tar xvfz inputs.tar.gz
            ;;
 esac
