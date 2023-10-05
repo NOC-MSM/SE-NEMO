@@ -642,12 +642,12 @@ CONTAINS
                ! Pond lid growth and melt
                !--------------------------
                ! Mean surface temperature
-               zTavg = 0._wp
-               DO jl = 1, jpl
-                  zTavg = zTavg + t_su(ji,jj,jl)*a_i(ji,jj,jl)
-               END DO
+               !CW: also commenting this out (see below) zTavg = 0._wp
+               !CW                                       DO jl = 1, jpl
+               !CW         zTavg = zTavg + t_su(ji,jj,jl)*a_i(ji,jj,jl)
+               !CW                                       END DO
 !! EWB: bug here - should be divided by at_i(ji,jj) but zTavg is not used anywhere
-               zTavg = zTavg / a_i(ji,jj,jl) !!! could get a division by zero here
+               !jth commenting out to avoid outof bounds error  zTavg = zTavg / a_i(ji,jj,jl) !!! could get a division by zero here
          
                DO jl = 1, jpl-1
             

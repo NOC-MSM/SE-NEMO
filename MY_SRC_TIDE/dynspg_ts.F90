@@ -92,7 +92,7 @@ MODULE dynspg_ts
    REAL(wp) ::   r1_4  = 0.25_wp          !
    REAL(wp) ::   r1_2  = 0.5_wp           !
 
-   INTEGER                          ::   jidbg,jjdbg
+   INTEGER                          ::   jidbg,jjdbg,imk,imk1
 
    !! * Substitutions
 #  include "vectopt_loop_substitute.h90"
@@ -603,6 +603,7 @@ CONTAINS
          CALL dyn_cor_2d( zhup2_e, zhvp2_e, ua_e, va_e, zhU, zhV,    zu_trd, zv_trd   )
          !
          ! Add tidal astronomical forcing if defined
+
          IF ( ln_tide .AND. ln_tide_pot ) THEN
             DO jj = 2, jpjm1
                DO ji = fs_2, fs_jpim1   ! vector opt.
@@ -611,6 +612,7 @@ CONTAINS
                END DO
             END DO
          ENDIF
+
          !
          ! Add bottom stresses:
 !jth do implicitly instead
@@ -626,17 +628,21 @@ CONTAINS
 !jth_IWD Add internal wave drag
 
         IF ( ln_int_wave_drag .AND. .NOT. ll_wd ) THEN
-                 !jidbg=870
-                 !jjdbg=770
+                 !jidbg=477
+                 !jjdbg=170
                  !ji=jidbg-nimpp+1
                  !jj=jjdbg-njmpp+1
                  !if (ji>0 .and. ji < jpi .and. jj > 0 .and. jj < jpj)  then
-                 !write(67,'(I6,5E12.4)') kt,un_detide(ji,jj),un_b(ji,jj) ,un_e(ji,jj),zu_trd(ji,jj),- r1_2*( tdiss(ji+1,jj)+ tdiss(ji,jj))  * ( un_e(ji,jj) - un_detide(ji,jj) ) * hur_e(ji,jj) 
+                 !imk=max(mbkt(ji,jj)-1,1)
+                 !imk1=max(mbkt(ji+1,jj)-1,1)
+                 !write(67,'(I6,10E12.4)') kt,un_detide(ji,jj),un_b(ji,jj) ,un_e(ji,jj),zu_trd(ji,jj),&
+                 !- r1_2*( tdiss(ji+1,jj)+ tdiss(ji,jj))  * ( un_e(ji,jj) - un_detide(ji,jj) ) * hur_e(ji,jj),&
+                 !r1_2*(tdiss(ji+1,jj)+tdiss(ji,jj)),N2mean(ji+1,jj),N2mean(ji,jj),h2rough (ji+1,jj),h2rough (ji,jj)
                  !flush(67)
                  !endif
 
             DO jj = 2, jpjm1
-               DO ji = fs_2, fs_jpim1   ! vector opt.
+               DO ji = 2, jpim1   
                   zu_trd(ji,jj) = zu_trd(ji,jj) - r1_2*( tdiss(ji+1,jj)+ tdiss(ji,jj))  * ( un_e(ji,jj) - un_detide(ji,jj) ) * hur_e(ji,jj)
                   zv_trd(ji,jj) = zv_trd(ji,jj) - r1_2*( tdiss(ji,jj+1)+ tdiss(ji,jj))  * ( vn_e(ji,jj) - vn_detide(ji,jj) ) * hvr_e(ji,jj)
                END DO
@@ -1518,6 +1524,7 @@ CONTAINS
       REAL(wp), DIMENSION(jpi,jpj) ::   zu_i, zv_i
 !!jth_IWD
       INTEGER, INTENT(in)  ::   kt   ! ocean time-step index
+      INTEGER  :: imk ! Index of bottom level
 
       REAL(wp), SAVE ::   r1_25 = 0.04_wp   ! =1/25
       INTEGER                          ::   i_steps                           ! no of timesteps per hour
@@ -1692,13 +1699,24 @@ CONTAINS
                     ENDDO
                  ENDDO
 
-                 !jidbg= 850
-                 !jjdbg= 839
+                 IF ( ln_calc_tdiss ) THEN
+!!!! Simmons et al. Ocean Modelling (2004)
+                 N2mean(:,:) =  SUM( e3w_n(:,:,:) * rn2(:,:,:) * wmask(:,:,:) , DIM=3 ) / SUM( e3w_n(:,:,:) * wmask(:,:,:) , DIM=3 )  * tmask(:,:,1)  
+                 DO jj = 2, jpj
+                  DO ji = 2, jpi
+                      tdiss(ji,jj) = 0.5 * rn_kappa_tdiss * h2rough(ji,jj)*sqrt(max(N2mean(ji,jj),0.0)) 
 
+                  ENDDO
+                 ENDDO
+                 ENDIF
+!!!!!!!!!!!!!!!!!!!!
+                 !jidbg= 477
+                 !jjdbg= 170
+        
                  !ji=jidbg-nimpp+1
                  !jj=jjdbg-njmpp+1
                  !if (ji>0 .and. ji < jpi .and. jj > 0 .and. jj < jpj)  then
-                 !write(68,'(2I5,4e12.4)') kt,i_is_25hrs,un_25(ji,jj,25),un_25(ji,jj,24),un_detide(ji,jj),un_b(ji,jj)
+                 !write(68,'(1I5,4e12.4)') kt,tdiss(ji,jj),h2rough(ji,jj),sqrt(max(N2mean(ji,jj),0.0)), wmask(ji,jj,imk)
                  !flush(68)
                  !endif
 

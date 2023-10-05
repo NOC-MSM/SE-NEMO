@@ -35,8 +35,8 @@ MODULE sbctide
    REAL(wp), ALLOCATABLE, DIMENSION(:,:,:) ::   amp_load, phi_load
 
    ! davbyr: Tide drag
-   REAL(wp), ALLOCATABLE, SAVE, DIMENSION(:,:) ::   tdiss
- 
+   REAL(wp), ALLOCATABLE, SAVE, DIMENSION(:,:) ::   tdiss, h2rough,N2mean
+
    !!----------------------------------------------------------------------
    !! NEMO/OCE 4.0 , NEMO Consortium (2018)
    !! $Id: sbctide.F90 10068 2018-08-28 14:09:04Z nicolasmartin $
@@ -64,6 +64,10 @@ CONTAINS
             ENDIF
             IF( ln_int_wave_drag )THEN !davbyr: Allocation and read tdiss
                ALLOCATE( tdiss(jpi, jpj) )        
+               IF ( ln_calc_tdiss ) THEN
+                ALLOCATE( h2rough(jpi, jpj) )
+                ALLOCATE( N2mean(jpi, jpj) )
+               ENDIF
                CALL tide_init_diss
             ENDIF
          ENDIF
@@ -187,18 +191,44 @@ CONTAINS
       !!                 ***  ROUTINE tide_init_diss  ***
       !!----------------------------------------------------------------------
       INTEGER :: inum                 ! Logical unit of input file
-      INTEGER :: iii, jjj             ! dummy loop indices
+      INTEGER :: ji, jj,jidbg,jjdbg    ! dummy loop indices
+
       !!----------------------------------------------------------------------
-      IF(lwp) THEN
+      IF (ln_calc_tdiss) THEN
+        IF(lwp) THEN
+         WRITE(numout,*)
+         WRITE(numout,*) 'tide_init_diss : Read roughness (h) from file:',cn_h_rough
+         WRITE(numout,*) '~~~~~~~~~~~~~~ '
+        ENDIF
+
+        CALL iom_open(cn_h_rough, inum)
+        CALL iom_get (inum, jpdom_data, 'h', h2rough(:,:))
+        CALL iom_close(inum)
+        CALL iom_close( inum )
+        ! mask hrough in shllow water
+        DO ji=1,jpi
+         DO jj=1,jpj
+          h2rough(ji,jj) = h2rough(ji,jj) * h2rough(ji,jj) ! read in h, need h^2
+          IF ( gdepw_0(ji,jj,mbkt(ji,jj)+1) < tdiss_mindepth ) THEN
+           h2rough(ji,jj) = 0.0
+          ENDIF
+         ENDDO
+        ENDDO
+        !!!!!!!
+      ELSE
+        IF(lwp) THEN
          WRITE(numout,*)
          WRITE(numout,*) 'tide_init_diss : Read tidal dissipation from file:',cn_int_wave_drag
          WRITE(numout,*) '~~~~~~~~~~~~~~ '
-      ENDIF
+        ENDIF
          
-      CALL iom_open(cn_int_wave_drag, inum)
-      CALL iom_get (inum, jpdom_data, 'tdiss', tdiss(:,:))
-      CALL iom_close(inum)
-      CALL iom_close( inum )
+        CALL iom_open(cn_int_wave_drag, inum)
+        CALL iom_get (inum, jpdom_data, 'tdiss', tdiss(:,:))
+        CALL iom_close(inum)
+        CALL iom_close( inum )
+
+      ENDIF
+
    END SUBROUTINE tide_init_diss
 
   !!======================================================================

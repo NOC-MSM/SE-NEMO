@@ -7,14 +7,19 @@ Configuration files for SE-NEMO project
 Base Configuration: GO8p6 at NEMO 4.0.4
 
 ## Quick Start:
-
+On ARCHER2
 ```
-git clone -b Anemone git@github.com:NOC-MSM/SE-NEMO.git
-./SE-NEMO/scripts/setup/se-eORCA025_setup -w $PWD/test -x $PWD/test -s $PWD/SE-NEMO -m anemone -a impi -c ifort
+git clone -b devIWD git@github.com:NOC-MSM/SE-NEMO.git
+./SE-NEMO/scripts/setup/se-eORCA025_setup -w $PWD/test -x $PWD/test -s $PWD/SE-NEMO -m archer2 -a mpich -c gnu
 cd test/nemo/cfgs/se-eORCA025/
 cp -rP EXPREF EXP_MYRUN
 cd EXP_MYRUN
 ln -s ../INPUTS/domcfg_eORCA025_v2.nc domain_cfg.nc # or whatever domain_cfg you are using
+
+```
+or if using ANEMONE, replace the relevant line above with:
+```
+./SE-NEMO/scripts/setup/se-eORCA025_setup -w $PWD/test -x $PWD/test -s $PWD/SE-NEMO -m anemone -a impi -c ifort
 ```
 Edit the project code and options in  `runscript.slurm` then:
 ```

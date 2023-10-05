@@ -36,8 +36,10 @@ MODULE tideini
    REAL(wp), PUBLIC ::   dn_love_number  !:
    ! END NB
    ! davbyr : Switch for internal wave drag on barotropic currents.
-   LOGICAL , PUBLIC :: ln_int_wave_drag !:
+   LOGICAL , PUBLIC :: ln_int_wave_drag, ln_calc_tdiss !:
    CHARACTER(lc), PUBLIC ::   cn_int_wave_drag   !:
+   CHARACTER(lc), PUBLIC ::   cn_h_rough        !:
+   REAL(wp), PUBLIC      ::   rn_kappa_tdiss,tdiss_mindepth   !: Parameters for IW dissipation
    ! END davbyr
    REAL(wp), PUBLIC ::   rn_scal_load    !:
    CHARACTER(lc), PUBLIC ::   cn_tide_load   !: 
@@ -63,7 +65,7 @@ CONTAINS
       ! davbyr - read ln_int_wave_drag (one line)
       NAMELIST/nam_tide/ln_tide, ln_tide_pot, ln_scal_load, ln_read_load, cn_tide_load, &
                   &     ln_tide_ramp, rn_scal_load, rdttideramp, dn_love_number, &
-                  &     ln_int_wave_drag, cn_int_wave_drag, clname
+                  &     ln_int_wave_drag,ln_calc_tdiss,  cn_int_wave_drag,cn_h_rough,rn_kappa_tdiss, tdiss_mindepth, clname
       !!----------------------------------------------------------------------
       !
       ! Read Namelist nam_tide
