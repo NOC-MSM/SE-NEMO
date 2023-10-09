@@ -10,7 +10,6 @@
       <variable_definition>
 
           <variable_group id="buffer">
-             <variable id="optimal_buffer_size" type="string">memory</variable>
              <variable id="buffer_size_factor" type="double">2.0</variable>
           </variable_group>
 
