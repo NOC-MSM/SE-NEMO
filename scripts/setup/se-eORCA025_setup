@@ -1,64 +1,62 @@
 #!/bin/bash
 # Lightweight script to set up SE-eORCA025 on ARCHER2 or Anemone (NOC and UoS cluster)
- 
+set -e
+
 display_usage() { 
    echo
    echo "  Auto-Config: SE-eORCA025 on ARCHER2 or Anemone"
    echo "  ***************************************"
    echo
-   echo "  usage: ${0##*/} -w path_to_install_nemo -x path_to_intall_xios -s path_to_repo"
-   echo "                  -m machine "
+   echo "  usage: ${0##*/} -p path_to_install -r path_to_repo -n nemo_version"
+   echo "                  -x xios_version -m machine -c compiler -a mpi_build"
    echo
-   echo "  flags:  -w full path to where nemo will be installed"
-   echo "          -x full path to where xios will be installed"
-   echo "          -s full path to where SE-NEMO repository resides"
-   echo "          -v NEMO vserion [4.0.4|4.2.1]"
+   echo "  flags:  -p full path to where nemo/xios will be installed"
+   echo "          -r full path to where this reposiotry resides"
+   echo "          -n NEMO version"
+   echo "          -x XIOS version"
    echo "          -m machine name"
+   echo "          -c compiler [gnu|cray|ifort]"
    echo "          -a MPI build [mpich|impi]"
-   echo "          -c MPI build [gnu|cray|ifort]"
    echo
    exit 1
 	} 
-# if less than three arguments supplied, display usage 
-	if [  $# -le 11 ] 
-	then 
-		display_usage
-		exit 1
-	fi 
-# if less than two arguments supplied, display usage 
-	if [  $# -ge 13 ] 
-	then 
-		display_usage
-		exit 1
-	fi 
 # check whether user had supplied -h or --help . If yes display usage 
 	if [[ ( $# == "--help") ||  $# == "-h" ]] 
 	then 
 		display_usage
 		exit 0
 	fi 
+# if less than three arguments supplied, display usage 
+	if [  $# -le 13 ] 
+	then 
+		display_usage
+		exit 1
+	fi 
+# if less than two arguments supplied, display usage 
+	if [  $# -ge 15 ] 
+	then 
+		display_usage
+		exit 1
+	fi 
 
-while getopts w:x:s:m:v:c:a: option
+while getopts p:r:m:n:x:c:a: option
   do
   case "${option}"
   in
-  w) export WORK_DIR=${OPTARG};;
-  x) export XIOS_DIR=${OPTARG};;
-  s) export REPO_DIR=${OPTARG};;
+  p) export WORK_DIR=${OPTARG};;
+  r) export REPO_DIR=${OPTARG};;
   m) export HPC_TARG=${OPTARG};;
-  v) export NEMO_VER=${OPTARG};;
-  c) export CMP_TARG=${OPTARG};;
+  n) export NEMO_VER=${OPTARG};;
+  x) export XIOS_VER=${OPTARG};;
+  c) export COMPILER=${OPTARG};;
   a) export MPI_TARG=${OPTARG};;
+  :) printf "missing argument for -%s\n" "$OPTARG" >&2; display_usage; exit 1;;
+ \?) printf "illegal option: -%s\n" "$OPTARG" >&2; display_usage; exit 1;;
   esac
 done
 
 if [ ${WORK_DIR:0:1} != "/" ]; then
   echo "WORK_DIR must use full path"
-  exit 1
-fi
-
-if [ ${XIOS_DIR:0:1} != "/" ]; then
-  echo "XIOS_DIR must use full path"
   exit 1
 fi
 
@@ -77,18 +75,19 @@ echo "Making sure that the correct modules are loaded"
 
 case "${HPC_TARG}"
   in
-  archer2) ENV_FILE=$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx
+  archer2) ENV_FILE=$REPO_DIR/scripts/env/archer2/${COMPILER}-${MPI_TARG}-ucx
            if [ -f "$ENV_FILE" ]; then
-             . $REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx
+             . $REPO_DIR/scripts/env/archer2/${COMPILER}-${MPI_TARG}-ucx
 	   else
 	     echo "ENV file not recognised"
              echo "For archer2: [ cray || gnu ] && mpich are available"
              exit 1
            fi
+           export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
            ;;
-  anemone) ENV_FILE=$REPO_DIR/scripts/env/anemone/${CMP_TARG}-${MPI_TARG} 
+  anemone) ENV_FILE=$REPO_DIR/scripts/env/anemone/${COMPILER}-${MPI_TARG} 
 	  if [ -f "$ENV_FILE" ]; then
-	    . $REPO_DIR/scripts/env/anemone/${CMP_TARG}-${MPI_TARG}
+	    . $REPO_DIR/scripts/env/anemone/${COMPILER}-${MPI_TARG}
 	  else
              echo "ENV file not recognised"
              echo "For anemone: ifort && impi are available"
@@ -100,14 +99,11 @@ case "${HPC_TARG}"
            exit 1
 esac
 
-export LD_LIBRARY_PATH=$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
-
 case "${NEMO_VER}"
   in
-  4.0.4)   echo "NEMO Version 4.0.4 will be checked out"
-           ;;
-  4.2.1)   echo "NEMO Version 4.2.0 will be checked out"
-           ;;
+  4.0.4|4.2.1)   
+           echo "NEMO Version $NEMO_VER will be checked out"
+	   ;;
   *)       echo "NEMO Version not recognised"
            echo "Versions available: 4.0.4, 4.2.1"
            exit 1
@@ -117,79 +113,84 @@ esac
 echo "Checking out NEMO repository"
 case "${NEMO_VER}"
   in
-  4.2)     git clone --branch branch_4.2 https://forge.nemo-ocean.eu/nemo/nemo.git nemo
+  4.2)            
+           git clone --filter=blob:none --no-checkout --depth 1 --sparse --branch branch_4.2 https://forge.nemo-ocean.eu/nemo/nemo.git nemo
+           cd nemo
+           git sparse-checkout add /makenemo /mk /src /cfgs/SHARED /cfgs/ref_cfgs.txt /ext
            ;;
-  4.2.1)   git clone --branch 4.2.1 https://forge.nemo-ocean.eu/nemo/nemo.git nemo
+  4.2.0|4.2.1)   
+           git clone --filter=blob:none --no-checkout --depth 1 --sparse --branch $NEMO_VER https://forge.nemo-ocean.eu/nemo/nemo.git nemo
+           cd nemo
+           git sparse-checkout add /makenemo /mk /src /cfgs/SHARED /cfgs/ref_cfgs.txt /ext
            ;;
-  *)       svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER --depth empty nemo
+  *)       
+           svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER --depth empty nemo
            svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/src --depth infinity nemo/src
            svn co http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/SHARED nemo/cfgs/SHARED
            svn export http://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r$NEMO_VER/cfgs/ref_cfgs.txt nemo/cfgs/ref_cfgs.txt
+           cd nemo
            ;;
 esac
-
-cd nemo
 
 # Now check EXTERNALS revision number before checking out the rest
 case "${NEMO_VER}"
   in
-  4.2)     echo "Nothing to do as EXTERNALS are integral to 4.2"
-           ;;
-  4.2.1)   echo "Nothing to do as EXTERNALS are integral to 4.2.0"
-           ;;
-  *)       for ext_name in mk FCM IOIPSL
-             do
-             ext=`svn propget svn:externals | grep $ext_name | cut -c2-`
-             svn co http://forge.ipsl.jussieu.fr/nemo/svn/$ext
-           done
-           ext=`svn propget svn:externals | grep makenemo | cut -c2-`
-           svn export http://forge.ipsl.jussieu.fr/nemo/svn/$ext
-           ;;
+  4.2|4.2.0|4.2.1)     
+      echo "Nothing to do as EXTERNALS are integral to $NEMO_VER"
+      ;;
+  *)  
+      for ext_name in mk FCM IOIPSL
+        do
+        ext=`svn propget svn:externals | grep $ext_name | cut -c2-`
+        svn co http://forge.ipsl.jussieu.fr/nemo/svn/$ext
+      done
+      ext=`svn propget svn:externals | grep makenemo | cut -c2-`
+      svn export http://forge.ipsl.jussieu.fr/nemo/svn/$ext
+      ;;
 esac
 
-mkdir arch
-
-# Setup the directory structure for the ENSEMBLE
+# Setup the directory structure
 mkdir $WORK_DIR/nemo/cfgs/se-eORCA025
+cd $WORK_DIR
 
 # Define the location of where the forcing files are to be downloaded 
-export DOWNLOAD_DIR="$WORK_DIR/nemo/cfgs/se-orca025/EXPREF/"
-
-echo $XIOS_DIR
-# Choose an appropriate directory for your XIOS installation
-if [ ! -d "$XIOS_DIR" ]; then
-  mkdir $XIOS_DIR
-fi
-
-# Checkout the XIOS code from the SVN repository
-cd $XIOS_DIR
+export DOWNLOAD_DIR="$WORK_DIR/nemo/cfgs/se-eORCA025/EXPREF/"
 
 echo "Checking out xios repository"
 
+#XIOS3/branches/xios-3.0-beta
 case "${NEMO_VER}"
   in
+  4.2)     svn checkout  http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk@2379 xios
+           cd xios
+           cp $REPO_DIR/arch/xios/2/* ./arch
+           ;;
+  4.2.0)   svn checkout  http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk@2379 xios
+           cd xios
+           cp $REPO_DIR/arch/xios/2/* ./arch
+           ;;
   4.2.1)   svn checkout  http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk@2379 xios
+           cd xios
+           cp $REPO_DIR/arch/xios/2/* ./arch
            ;;
   *)       svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/branchs/xios-2.5@1964 xios
+           cd xios
+           cp $REPO_DIR/arch/xios/2.5/* ./arch
            ;;
 esac
 
-
-cd xios
-cp $REPO_DIR/arch/xios/* ./arch
-
 echo "Compiling xios"
-./make_xios --full --prod --arch ${HPC_TARG}-${CMP_TARG}-${MPI_TARG} --netcdf_lib netcdf4_par --job 10
+./make_xios --full --prod --arch ${HPC_TARG}-${COMPILER}-${MPI_TARG} --netcdf_lib netcdf4_par --job 10
 
 # Let's update the path to xios
-export XIOS_DIR=$XIOS_DIR/xios
+export XIOS_DIR=$WORK_DIR/xios
 
 [ -f $XIOS_DIR/bin/xios_server.exe ] || exit 1
 
 cd $WORK_DIR/nemo
-cp $REPO_DIR/arch/nemo/* ./arch
+cp -r $REPO_DIR/arch/nemo/$NEMO_VER arch
 # Dirty fix to hard wire path otherwise user will have to set XIOS_DIR in every new shell session
-sed -i "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-${HPC_TARG}-${CMP_TARG}-${MPI_TARG}.fcm
+sed -i "s?XXX_XIOS_DIR_XXX?$XIOS_DIR?" ./arch/arch-${HPC_TARG}-${COMPILER}-${MPI_TARG}.fcm
 
 echo 'se-eORCA025 OCE ICE' >> $WORK_DIR/nemo/cfgs/work_cfgs.txt
 
@@ -218,6 +219,31 @@ esac
 cp -r $REPO_DIR/EXPREF/$NEMO_VER/ EXPREF
 cd $CONFIG_DIR/EXPREF
 
+# Add ENV into runscipts
+case "${HPC_TARG}"
+  in
+  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${COMPILER}-${MPI_TARG}-ucx?" runscript.slurm
+           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${COMPILER}-${MPI_TARG}-ucx?" runscript_continuous.slurm
+           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${COMPILER}-${MPI_TARG}-ucx?" runscript.mpirun
+           ;;
+  anemone) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/anemone/${COMPILER}-${MPI_TARG}?" runscript.slurm
+           ;;	   
+  *)       sed -i "s?XXX_ENV_XXX??" runscript.slurm
+           sed -i "s?XXX_ENV_XXX??" runscript.mpirun 
+           ;;
+esac
+
+# Issues with the Cray compiler require the addition of ',' to the namelist
+# this change shouldn't affect other compilers
+for nml in namelist*
+do
+  sed -i 's/= *.true./= .true.\,/g'   $nml
+  sed -i 's/= *.false./= .false.\,/g' $nml
+  sed -i 's/= *.FALSE./= .FALSE.\,/g' $nml
+  sed -i 's/= *.TRUE./= .TRUE.\,/g'   $nml
+  sed -i 's/.,,/.,/g'   $nml
+done
+
 mkdir meta_out
 mkdir RESTARTS
 mkdir OUTPUTS
@@ -233,36 +259,27 @@ ln -s INPUTS/mask_itf_ORCA025ext.nc mask_itf.nc
 ln -s INPUTS/bfr_coef.nc .
 ln -s INPUTS/shlat2d.nc .
 
-# First copy GO8 code
-cp -r $REPO_DIR/MY_SRC_GO8_FROZEN $CONFIG_DIR/MY_SRC
-# Then overwrite with any SE-NEMO mods
-cp $REPO_DIR/MY_SRC/* $CONFIG_DIR/MY_SRC/
-cp $REPO_DIR/MY_SRC_TIDE/* $CONFIG_DIR/MY_SRC/
-cp $REPO_DIR/MY_SRC_RIV/* $CONFIG_DIR/MY_SRC/
-cp $REPO_DIR/cpp_se-eORCA025.fcm $CONFIG_DIR/
+# Copy remaining information
+case "${NEMO_VER}"
+  in
+  4.0.4)   cp -r $REPO_DIR/MY_SRC_GO8_FROZEN/$NEMO_VER $CONFIG_DIR/MY_SRC
+           cp $REPO_DIR/MY_SRC/$NEMO_VER/* $CONFIG_DIR/MY_SRC/    
+           cp $REPO_DIR/MY_SRC_TIDE/$NEMO_VER/* $CONFIG_DIR/MY_SRC/
+           cp $REPO_DIR/MY_SRC_RIV/$NEMO_VER/* $CONFIG_DIR/MY_SRC/
+           ;;
+      *)   cp -r $REPO_DIR/MY_SRC/$NEMO_VER $CONFIG_DIR/MY_SRC
+           ;;
+esac
+
 cp -r $REPO_DIR/scripts/run/$HPC_TARG/* $CONFIG_DIR/EXPREF
 find $REPO_DIR/scripts/run -maxdepth 1 -type f -execdir cp "{}" $CONFIG_DIR/EXPREF ";"
 
-cd $CONFIG_DIR/EXPREF
-
-## Add ENV into runscipts
-case "${HPC_TARG}"
-  in
-  archer2) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx?" runscript.slurm
-           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx?" runscript_continuous.slurm
-           sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/archer2/${CMP_TARG}-${MPI_TARG}-ucx?" runscript.mpirun
-           ;;
-  anemone) sed -i "s?XXX_ENV_XXX?$REPO_DIR/scripts/env/anemone/${CMP_TARG}-${MPI_TARG}?" runscript.slurm
-           ;;	   
-  *)       sed -i "s?XXX_ENV_XXX??" runscript.slurm
-           sed -i "s?XXX_ENV_XXX??" runscript.mpirun 
-           ;;
-esac
+cp $REPO_DIR/CPP/$NEMO_VER/cpp_se-eORCA025.fcm $CONFIG_DIR/
 
 cd $WORK_DIR/nemo
 
 echo "Compiling nemo se-eORCA025 Config"
-./makenemo -m ${HPC_TARG}-${CMP_TARG}-${MPI_TARG} -r se-eORCA025 -j 16
+./makenemo -m ${HPC_TARG}-${COMPILER}-${MPI_TARG} -r se-eORCA025 -j 16
 
 echo
 echo "  Auto-Config: se-eORCA025"
