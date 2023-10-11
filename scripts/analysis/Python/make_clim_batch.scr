@@ -7,4 +7,6 @@
 cd /home/users/jholt/Git/SE-NEMO/scripts/analysis/Python/
 source activate coast_dev 
 #python circulation.py
-python  make_SENEMO_climatology.py
+#python  make_SENEMO_climatology.py
+python  plot_SENEMO_SL.py
+

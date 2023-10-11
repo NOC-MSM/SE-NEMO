@@ -23,12 +23,14 @@ fn_config_t_grid='./example_nemo_grid_t.json'
 ystart=1991
 ystop=2000
 ystart=1976
-ystop=1980
+ystop=1981
+ystart=1980
+ystop=1982
 names,dpaths,DOMS,_  = coast.experiments(experiments='experiments.json')
 nemo_U={}
 
 #iexp=1
-for iexp in [6]:#[1,2,3,4,5,0]:
+for iexp in [8,0,2,7]:#[1,2,3,4,5,0]:
 #%%    
     print(names[iexp])
     #nemo_dir='/gws/nopw/j04/class_vol1/CLASS-MEDUSA/OUT_eORCA12/C001/monthly/'
@@ -49,6 +51,7 @@ for iexp in [6]:#[1,2,3,4,5,0]:
     nemo_t.currents_on_t(nemo_u,nemo_v)
     #NNA
     x_min=-79;x_max=12;y_min=26;y_max=69
+#Atlantic
 #    x_min=-98;x_max=26.5;y_min=-56;y_max=69
     
     j,i,_=nemo_t.find_j_i_list(lon=[x_min,x_max,x_max,x_min],lat=[y_min,y_min,y_max,y_max])
@@ -65,7 +68,7 @@ for iexp in [6]:#[1,2,3,4,5,0]:
     
     #plotting
     SP,US,VS=surf.mean_surface_circulation(nemo_u,nemo_v,nemo_t,mask)
-    surf.plot_surface_circulation(SP,US,VS,nemo_t,mask,Name,Vmax=0.16,
+    surf.plot_surface_circulation(SP,US,VS,nemo_t,mask,Name,Vmax=0.3,
                                            Np=6
                                            ,headwidth=5,scale=80,minshaft=2      
                                            )
@@ -77,26 +80,25 @@ for iexp in [6]:#[1,2,3,4,5,0]:
     
     
     
-    #%%
+#%%
 U_cmems=nemo_t1.subset_as_copy(x_dim=100).dataset.u_velocity.mean(dim='t_dim').values
 lat_cmems=nemo_t1.subset_as_copy(x_dim=100).dataset.latitude
 #%%
-U1=nemo_U[1].subset_as_copy(x_dim=100).dataset.u_velocity.mean(dim='t_dim').values
-U2=nemo_U[2].subset_as_copy(x_dim=100).dataset.u_velocity.mean(dim='t_dim').values
+U1=nemo_U[2].subset_as_copy(x_dim=100).dataset.u_velocity.mean(dim='t_dim').values
+U2=nemo_U[8].subset_as_copy(x_dim=100).dataset.u_velocity.mean(dim='t_dim').values
 U0=nemo_U[0].subset_as_copy(x_dim=100).dataset.u_velocity.mean(dim='t_dim').values
-U3=nemo_U[3].subset_as_copy(x_dim=100).dataset.u_velocity.mean(dim='t_dim').values
+#U3=nemo_U[3].subset_as_copy(x_dim=100).dataset.u_velocity.mean(dim='t_dim').values
 
-lat1=nemo_u.subset_as_copy(x_dim=100).dataset.latitude.values
+lat1=nemo_U[0].subset_as_copy(x_dim=100).dataset.latitude.values
 
 #%%
 j1=120
 j2=95    
 plt.plot(lat1[:j1],U0.squeeze()[:j1],lat1[:j1],
                           U1.squeeze()[:j1],lat1[:j1],U2.squeeze()[:j1],
-                          lat1[:j1],U3.squeeze()[:j1],
                           lat_cmems[:j2],U_cmems[:j2],'.-')
 plt.title('Eastward surface current 54W')
 plt.xlabel('Latitude')
 plt.ylabel('m/s')
-plt.legend([names[0],names[1],names[2],names[3],'CMEMS Glob Current'])
+plt.legend([names[0],names[2],names[8],'CMEMS Glob Current'])
 #plt.savefig('../Figures/Circulation/Surface_Currents_GS_CMEMS_i100.png',dpi=300)

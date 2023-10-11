@@ -31,7 +31,7 @@ globcurrent=database.get_product("dataset-uv-rep-monthly")
 
 
 #%%
-nemo_t = coast.Gridded(fn_data=globcurrent, 
+nemo_t = coast.Gridded(fn_data=globcurrent,
                        config="example_cmems_grid_uv.json",
                        Make_LonLat_2D=True)
 nt=nemo_t.dataset.t_dim.size
@@ -41,7 +41,7 @@ T=np.array([])
 #select months
 #for im in [6,7,8]:
 #    T=np.append(T,np.arange(im,nt,12))
-T=np.sort(T).astype(int)    
+T=np.sort(T).astype(int)
 #set time period
 T=np.arange(nt)
 T=np.arange(120)
@@ -53,13 +53,13 @@ nlme=66
 #LME_mask=a['LME_mask'][:,:].T
 lmelist=np.array([34])-1
 #lmelist=np.arange(nlme)
-#for ilme in lmelist:    
+#for ilme in lmelist:
 #        LMENAM=A['DOMNAM'][ilme]
 #        x_min=A['x_min'][ilme]
 #        x_max=A['x_max'][ilme]
 #        y_min=A['y_min'][ilme]
-#        y_max=A['y_max'][ilme]        
-        
+#        y_max=A['y_max'][ilme]
+
 x_min=-15
 x_max=13
 y_min=45
@@ -70,14 +70,15 @@ x_max=12
 y_min=26
 y_max=69
 
-x_min=-98;x_max=26.5;y_min=-56;y_max=84
+#x_min=-98;x_max=26.5;y_min=-56;y_max=84
+
 nemo_t.make_lonLat_2d()
 j,i,_=nemo_t.find_j_i_list(lon=[x_min,x_max,x_max,x_min],lat=[y_min,y_min,y_max,y_max])
 
 imin=min(i)
 imax=max(i)
 jmin=min(j)
-jmax=max(j)        
+jmax=max(j)
 
 LMENAM='NWS'
 name="CMEMS Glob Current"
@@ -98,7 +99,7 @@ surfacefields.plot_surface_circulation(SP, US, VS,nemo_t1, mask,Name,
                                       ,headwidth=5,scale=80,minshaft=2 
                                        )
 
-plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png',dpi=300)
+#plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png',dpi=300)
 
 #fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
 #nemo_t_out=nemo_t1.copy()

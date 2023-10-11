@@ -38,7 +38,7 @@ for iexp in [0,1,2]:#range(3):
         ssh_std[icluster,iexp]=np.std(nemo.dataset.ssh.values[:,:,:],axis=0)
         nt = nemo.dataset.dims['t_dim']
         DX=np.repeat(nemo.dataset.e1.values[np.newaxis,:,:],nt,axis=0)
-        DY=np.repeat(nemo.dataset.e1.values[np.newaxis,:,:],nt,axis=0)
+        DY=np.repeat(nemo.dataset.e2.values[np.newaxis,:,:],nt,axis=0)
         
         slmean[icluster,iexp]=np.nansum(nemo.dataset.ssh.values[:,:,:]*DX*DY)/np.nansum(DX*DY)
         ssh_mn[icluster,iexp]=np.mean(nemo.dataset.ssh.values[:,:,:],axis=0) - slmean[icluster,iexp]
