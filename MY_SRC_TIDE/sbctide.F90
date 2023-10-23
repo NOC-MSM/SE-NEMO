@@ -205,6 +205,7 @@ CONTAINS
         CALL iom_get (inum, jpdom_data, 'h', h2rough(:,:))
         CALL iom_close(inum)
         CALL iom_close( inum )
+        CALL lbc_lnk( 'tide_init_diss', h2rough, 'T', 1._wp )
         ! mask hrough in shllow water
         DO ji=1,jpi
          DO jj=1,jpj
