@@ -205,16 +205,17 @@ CONTAINS
         CALL iom_get (inum, jpdom_data, 'h', h2rough(:,:))
         CALL iom_close(inum)
         CALL iom_close( inum )
-        CALL lbc_lnk( 'tide_init_diss', h2rough, 'T', 1._wp )
         ! mask hrough in shllow water
-        DO ji=1,jpi
-         DO jj=1,jpj
+        DO ji=2,jpim1
+         DO jj=2,jpjm1
           h2rough(ji,jj) = h2rough(ji,jj) * h2rough(ji,jj) ! read in h, need h^2
           IF ( gdepw_0(ji,jj,mbkt(ji,jj)+1) < tdiss_mindepth ) THEN
            h2rough(ji,jj) = 0.0
           ENDIF
          ENDDO
         ENDDO
+        CALL lbc_lnk( 'tide_init_diss', h2rough, 'T', 1._wp )
+
         !!!!!!!
       ELSE
         IF(lwp) THEN
