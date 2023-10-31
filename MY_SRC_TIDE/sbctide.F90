@@ -63,10 +63,14 @@ CONTAINS
                CALL tide_init_load
             ENDIF
             IF( ln_int_wave_drag )THEN !davbyr: Allocation and read tdiss
-               ALLOCATE( tdiss(jpi, jpj) )        
+               ALLOCATE( tdiss(jpi, jpj) ) 
+               tdiss(:,:) = 0.0_wp       
                IF ( ln_calc_tdiss ) THEN
                 ALLOCATE( h2rough(jpi, jpj) )
                 ALLOCATE( N2mean(jpi, jpj) )
+                h2rough(:,:)     = 0.0_wp
+                N2mean(:, :) = 0.0_wp
+
                ENDIF
                CALL tide_init_diss
             ENDIF
