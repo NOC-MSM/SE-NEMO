@@ -1701,7 +1701,10 @@ CONTAINS
 
                  IF ( ln_calc_tdiss ) THEN
 !!!! Simmons et al. Ocean Modelling (2004)
-                 N2mean(:,:) =  SUM( e3w_n(:,:,:) * rn2(:,:,:) * wmask(:,:,:) , DIM=3 ) / SUM( e3w_n(:,:,:) * wmask(:,:,:) , DIM=3 )  * tmask(:,:,1)  
+!jth              N2mean(:,:) =  SUM( e3w_n(:,:,:) * rn2(:,:,:) * wmask(:,:,:) , DIM=3 ) / SUM( e3w_n(:,:,:) * wmask(:,:,:) , DIM=3 )  * tmask(:,:,1)
+!jth avoid divide by zero
+                 N2mean(:,:) =  SUM( e3w_n(:,:,:) * rn2(:,:,:) * wmask(:,:,:) , DIM=3 ) / (ht_n(:,:) + 1._wp - tmask(:,:,1) ) * tmask(:,:,1)
+
                  DO jj = 2, jpj
                   DO ji = 2, jpi
                       tdiss(ji,jj) = 0.5 * rn_kappa_tdiss * h2rough(ji,jj)*sqrt(max(N2mean(ji,jj),0.0)) 
@@ -1717,7 +1720,9 @@ CONTAINS
                  !jj=jjdbg-njmpp+1
                  !if (ji>0 .and. ji < jpi .and. jj > 0 .and. jj < jpj)  then
                  !write(68,'(1I5,4e12.4)') kt,tdiss(ji,jj),h2rough(ji,jj),sqrt(max(N2mean(ji,jj),0.0)), wmask(ji,jj,imk)
-                 !flush(68)
+                 !write(68,*) kt,(ht_n(ji,jj) + 1._wp - tmask(ji,jj,1) ),SUM( e3w_n(ji,jj,:) * wmask(ji,jj,:) , DIM=1 )
+
+                 !    flush(68)
                  !endif
 
 
