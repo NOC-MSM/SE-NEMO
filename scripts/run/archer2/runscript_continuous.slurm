@@ -60,7 +60,7 @@ ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
 nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.true.'
 ln_rstdate='.true.' ; ln_shlat2d='.true.'   ; nn_diaharm=1981
 rn_Cd0=2.5e-3       ; ln_loglayer='.true.'  ; ln_tide='.true.'
-ln_boost='.false.'  ; ln_gls='.true.'       ; ln_int_wave_drag='.true.' 
+ln_boost='.false.'  ; ln_gls='.true.'       ; ln_int_wave_drag='.true.'
 ln_hpg_djc='.true.' ;                         ln_calc_tdiss='.false.'
 ########################################################################
 
@@ -81,6 +81,7 @@ year=$YEAR          # Change if starting job part way through simulation
 ########################################################################
 #                No need to edit below this line                       #
 ########################################################################
+
 
 if [ "$ln_zps" = ".false." ]
 then
