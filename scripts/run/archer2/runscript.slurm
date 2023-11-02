@@ -158,20 +158,20 @@ do
       nam="${ens%%:*}"
       jpk="${ens##*:}"
 
-      if [ $year -eq $nn_diaharm ] && [ $ln_tide -eq '.true.']
+      if [ $year -eq $nn_diaharm ] && [ "$ln_tide" = ".true." ]
       then
 	 ln_diaharm='.true.'
       else
 	 ln_diaharm='.false.'
       fi
 
-      if [ $year -eq 1976 ]
+      if [ $year -eq $year_st ]
       then
          nn_it000=1
 	 if [ $nn_spin_cycle -eq 1 ]
          then
             ln_rstart='.false.'	  
-	    ln_tide_ramp='.false.'
+	    ln_tide_ramp='.true.'
 	 else
             ln_rstart='.true.'	  
 	    ln_tide_ramp='.false.'
