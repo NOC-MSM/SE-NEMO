@@ -114,18 +114,18 @@ else
    # The following options are for the ZPS domain_cfg.nc               #
    #####################################################################
 
-   if [ $SLURM_NNODES -eq 19 ]
+   if [ $SLURM_NNODES -eq 18 ]
    then
-      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 1524 -g 4 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 1509 -g 4 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
    elif [ $SLURM_NNODES -eq 29 ]
    then
-      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 2973 -g 8 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
-   elif [ $SLURM_NNODES -eq 52 ]
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 2964 -g 8 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 51 ]
    then
-      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 6270 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
-   elif [ $SLURM_NNODES -eq 68 ]
+      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 6221 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+   elif [ $SLURM_NNODES -eq 67 ]
    then
-      SRUN_CMD=`./slurm_setup -S 32 -s 16 -m 2 -C 8090 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+      SRUN_CMD=`./slurm_setup -S 32 -s 16 -m 2 -C 7948 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
    else
       exit
    fi
