@@ -40,10 +40,10 @@ fi
 ########################################################################
 rn_rdt=600          ; ln_zps='.false.'      ; ln_tmx_itf='.false.'
 ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
-nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.false.'
+nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.true.'
 ln_rstdate='.true.' ; ln_shlat2d='.true.'   ; nn_diaharm=1981
-rn_Cd0=2.5e-3       ; ln_loglayer='.false.' ; ln_tide='.true.'
-ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.'
+rn_Cd0=2.5e-3       ; ln_loglayer='.true.'  ; ln_tide='.true.'
+ln_boost='.false.'  ; ln_gls='.true.'       ; ln_int_wave_drag='.true.'
 ln_hpg_djc='.true.' ;                         ln_calc_tdiss='.false.'
 ########################################################################
 
@@ -54,7 +54,7 @@ ln_hpg_djc='.true.' ;                         ln_calc_tdiss='.false.'
 ln_spin='.true.'   # Do we require a spin up phase for the ice
 nn_spin=3          # How many years spin up
 year_st=1976       # Start year of the simulation (ramains constant)
-year_en=1977       # End year of this job submission
+year_en=1981       # End year of this job submission
 offset=0           # If rdt has changed, an offset to nn_it000 is needed
 nn_spin_cycle=1    # Change to nn_spin+1 if year is .gt. year_st
 year=$year_st      # Change if starting job part way through simulation
@@ -112,7 +112,6 @@ echo $SLURM_NNODES
 
 . XXX_ENV_XXX
 export LD_LIBRARY_PATH=${CRAY_LD_LIBRARY_PATH}:${LD_LIBRARY_PATH}
-
 export OMP_NUM_THREADS=1
 
 jpni=-1
@@ -134,20 +133,20 @@ do
       nam="${ens%%:*}"
       jpk="${ens##*:}"
 
-      if [ $year -eq $nn_diaharm ]
+      if [ $year -eq $nn_diaharm ] && [ "$ln_tide" = ".true." ]
       then
 	 ln_diaharm='.true.'
       else
 	 ln_diaharm='.false.'
       fi
 
-      if [ $year -eq 1976 ]
+      if [ $year -eq $year_st ]
       then
          nn_it000=1
 	 if [ $nn_spin_cycle -eq 1 ]
          then
             ln_rstart='.false.'	  
-	    ln_tide_ramp='.false.'
+	    ln_tide_ramp='.true.'
 	 else
             ln_rstart='.true.'	  
 	    ln_tide_ramp='.false.'
