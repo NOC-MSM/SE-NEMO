@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+
+<!--
+============================================================================================================
+=                                           output files definition                                        =
+=                                            Define your own filesfor ocean dynamics context                                         =
+=                                         put the variables you want...                                    =
+============================================================================================================
+    -->
+   
+    <file_definition type="one_file" name="@expname@_@freq@_@startdate@_@enddate@" sync_freq="1d" min_digits="4">
+    
+      <file_group id="1ts" output_freq="1ts"  output_level="10" enabled=".TRUE."/> <!-- 1 time step files -->
+
+      <file_group id="1h" output_freq="1h"  output_level="10" enabled=".TRUE."/> <!-- 1h files -->
+
+      <file_group id="2h" output_freq="2h"  output_level="10" enabled=".TRUE."/> <!-- 2h files -->
+
+      <file_group id="3h" output_freq="3h"  output_level="10" enabled=".TRUE."/> <!-- 3h files -->     
+
+      <file_group id="4h" output_freq="4h"  output_level="10" enabled=".TRUE."/> <!-- 4h files -->
+
+      <file_group id="6h" output_freq="6h"  output_level="10" enabled=".TRUE."/> <!-- 6h files -->     
+
+      <file_group id="5d" output_freq="5d"  output_level="10" enabled=".TRUE.">  <!-- 5d files -->
+
+        <file id="file99" name_suffix="_grid_T" description="global means">
+          <field field_ref="sshtot"       name="sshtot"     />
+          <field field_ref="voltot"       name="voltot"     />
+          <field field_ref="temptot_pot"  name="temptot_pot" />
+          <field field_ref="saltot"       name="saltot"     />
+          <field field_ref="masstot"      name="masstot"     />
+          <field field_ref="sshsteric"    name="sshsteric"  />
+        </file>
+
+      </file_group>
+
+      <file_group id="1m" output_freq="1mo" output_level="10" split_freq="1mo" enabled=".TRUE."/> <!-- real monthly files -->
+      <file_group id="2m" output_freq="2mo" output_level="10" enabled=".TRUE."/> <!-- real 2m files -->
+      <file_group id="3m" output_freq="3mo" output_level="10" enabled=".TRUE."/> <!-- real 3m files -->
+      <file_group id="4m" output_freq="4mo" output_level="10" enabled=".TRUE."/> <!-- real 4m files -->
+      <file_group id="6m" output_freq="6mo" output_level="10" enabled=".TRUE."/> <!-- real 6m files -->
+
+      <file_group id="1y"  output_freq="1y" output_level="10" enabled=".TRUE."> <!-- real 1y files -->
+        <file id="file54" name_suffix="_grid_T_2D" description="tidal harmonics">
+         <field field_ref="M2x"       name="M2x"     />
+         <field field_ref="M2y"       name="M2y"     />
+	 <field field_ref="S2x"       name="S2x"     />
+	 <field field_ref="S2y"       name="S2y"     />
+	 <field field_ref="N2x"       name="N2x"     />
+	 <field field_ref="N2y"       name="N2y"     />
+	 <field field_ref="K1x"       name="K1x"     />
+	 <field field_ref="K1y"       name="K1y"     />
+	 <field field_ref="O1x"       name="O1x"     />
+	 <field field_ref="O1y"       name="O1y"     />
+	 <field field_ref="Q1x"       name="Q1x"     />
+         <field field_ref="Q1y"       name="Q1y"     />
+         <field field_ref="M4x"       name="M4x"     />
+         <field field_ref="M4y"       name="M4y"     />
+         <field field_ref="K2x"       name="K2x"     />
+         <field field_ref="K2y"       name="K2y"     />
+         <field field_ref="P1x"       name="P1x"     />
+         <field field_ref="P1y"       name="P1y"     />
+         <field field_ref="MS4x"       name="MS4x"   />
+         <field field_ref="MS4y"       name="MS4y"   />
+        </file>
+        <file id="file55" name_suffix="_grid_U_2D" description="tidal harmonics">
+         <field field_ref="M2x_u"     name="M2x_u"       />
+         <field field_ref="M2y_u"     name="M2y_u"       />
+         <field field_ref="S2x_u"       name="S2x_u"     />
+         <field field_ref="S2y_u"       name="S2y_u"     />
+         <field field_ref="N2x_u"       name="N2x_u"     />
+         <field field_ref="N2y_u"       name="N2y_u"     />
+         <field field_ref="K1x_u"       name="K1x_u"     />
+         <field field_ref="K1y_u"       name="K1y_u"     />
+         <field field_ref="O1x_u"       name="O1x_u"     />
+         <field field_ref="O1y_u"       name="O1y_u"     />
+         <field field_ref="Q1x_u"       name="Q1x_u"     />
+         <field field_ref="Q1y_u"       name="Q1y_u"     />
+         <field field_ref="M4x_u"       name="M4x_u"     />
+         <field field_ref="M4y_u"       name="M4y_u"     />
+         <field field_ref="K2x_u"       name="K2x_u"     />
+         <field field_ref="K2y_u"       name="K2y_u"     />
+         <field field_ref="P1x_u"       name="P1x_u"     />
+         <field field_ref="P1y_u"       name="P1y_u"     />
+         <field field_ref="MS4x_u"       name="MS4x_u"   />
+         <field field_ref="MS4y_u"       name="MS4y_u"   />
+        </file>
+        <file id="file56" name_suffix="_grid_V_2D" description="tidal harmonics">
+         <field field_ref="M2x_v"     name="M2x_v"       />
+         <field field_ref="M2y_v"     name="M2y_v"       />
+         <field field_ref="S2x_v"       name="S2x_v"     />
+         <field field_ref="S2y_v"       name="S2y_v"     />
+         <field field_ref="N2x_v"       name="N2x_v"     />
+         <field field_ref="N2y_v"       name="N2y_v"     />
+         <field field_ref="K1x_v"       name="K1x_v"     />
+         <field field_ref="K1y_v"       name="K1y_v"     />
+         <field field_ref="O1x_v"       name="O1x_v"     />
+         <field field_ref="O1y_v"       name="O1y_v"     />
+         <field field_ref="Q1x_v"       name="Q1x_v"     />
+         <field field_ref="Q1y_v"       name="Q1y_v"     />
+         <field field_ref="M4x_v"       name="M4x_v"     />
+         <field field_ref="M4y_v"       name="M4y_v"     />
+         <field field_ref="K2x_v"       name="K2x_v"     />
+         <field field_ref="K2y_v"       name="K2y_v"     />
+         <field field_ref="P1x_v"       name="P1x_v"     />
+         <field field_ref="P1y_v"       name="P1y_v"     />
+         <field field_ref="MS4x_v"       name="MS4x_v"   />
+         <field field_ref="MS4y_v"       name="MS4y_v"   />
+        </file>
+      </file_group>
+
+      <file_group id="2y"  output_freq="2y" output_level="10" enabled=".TRUE."/> <!-- real 2y files -->
+      <file_group id="5y"  output_freq="5y" output_level="10" enabled=".TRUE."/> <!-- real 5y files -->
+      <file_group id="10y" output_freq="10y" output_level="10" enabled=".TRUE."/> <!-- real 10y files -->
+
+   </file_definition>
+    
+
+
+
