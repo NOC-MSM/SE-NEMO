@@ -148,7 +148,9 @@ CONTAINS
             END WHERE
          ELSE                                                        ! use SST as runoffs temperature
             !CEOD River is fresh water so must at least be 0 unless we consider ice
-            rnf_tsc(:,:,jp_tem) = MAX( sst_m(:,:), 0.0_wp ) * rnf(:,:) * r1_rho0
+            !rnf_tsc(:,:,jp_tem) = MAX( sst_m(:,:), 0.0_wp ) * rnf(:,:) * r1_rho0
+            ! SLWA sst_m is potential temperature - use conservative temperature instead
+            rnf_tsc(:,:,jp_tem) = MAX( sst_m_con(:,:), 0.0_wp ) * rnf(:,:) * r1_rho0 ! SLWA
          ENDIF
          !                                                           ! use runoffs salinity data
          IF( ln_rnf_sal )   rnf_tsc(:,:,jp_sal) = ( sf_s_rnf(1)%fnow(:,:,1) ) * rnf(:,:) * r1_rho0
@@ -398,7 +400,7 @@ CONTAINS
          IF(lwp) WRITE(numout,*) '        depth over which runoffs is spread                        rn_dep_max = ', rn_dep_max
          IF(lwp) WRITE(numout,*) '        create (=1) a runoff depth file or not (=0)      nn_rnf_depth_file  = ', nn_rnf_depth_file
 
-         CALL iom_open( TRIM( sn_rnf%clname ), inum )    !  open runoff file
+         CALL iom_open( TRIM( cn_dir )//TRIM( sn_rnf%clname ), inum )    !  open runoff file
          nbrec = iom_getszuld( inum )
          zrnfcl(:,:,1) = 0._wp                                                            ! init the max to 0. in 1
          DO jm = 1, nbrec
@@ -440,8 +442,8 @@ CONTAINS
          END_2D
          !
          IF( nn_rnf_depth_file == 1 ) THEN      !  save  output nb levels for runoff
-            IF(lwp) WRITE(numout,*) '   ==>>>   create runoff depht file'
-            CALL iom_open  ( TRIM( sn_dep_rnf%clname ), inum, ldwrt = .TRUE. )
+            IF(lwp) WRITE(numout,*) '   ==>>>   create runoff depht file', TRIM( cn_dir )//TRIM( sn_dep_rnf%clname )
+            CALL iom_open  ( TRIM( cn_dir )//TRIM( sn_dep_rnf%clname ), inum, ldwrt = .TRUE. )
             CALL iom_rstput( 0, 0, inum, 'rodepth', h_rnf )
             CALL iom_close ( inum )
          ENDIF
