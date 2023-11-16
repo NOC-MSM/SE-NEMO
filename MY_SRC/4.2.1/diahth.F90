@@ -191,15 +191,16 @@ CONTAINS
             ! computation of zdelr = (dr/dT)(T,S,10m)*(-0.2 degC)
             DO_2D( 1, 1, 1, 1 )
                IF( tmask(ji,jj,nla10) == 1. ) THEN
-                  zu  =  1779.50 + 11.250 * ts(ji,jj,nla10,jp_tem,Kmm) - 3.80   * ts(ji,jj,nla10,jp_sal,Kmm)  &
-                     &           - 0.0745 * ts(ji,jj,nla10,jp_tem,Kmm) * ts(ji,jj,nla10,jp_tem,Kmm)   &
-                     &           - 0.0100 * ts(ji,jj,nla10,jp_tem,Kmm) * ts(ji,jj,nla10,jp_sal,Kmm)
-                  zv  =  5891.00 + 38.000 * ts(ji,jj,nla10,jp_tem,Kmm) + 3.00   * ts(ji,jj,nla10,jp_sal,Kmm)  &
-                     &           - 0.3750 * ts(ji,jj,nla10,jp_tem,Kmm) * ts(ji,jj,nla10,jp_tem,Kmm)
-                  zut =    11.25 -  0.149 * ts(ji,jj,nla10,jp_tem,Kmm) - 0.01   * ts(ji,jj,nla10,jp_sal,Kmm)
-                  zvt =    38.00 -  0.750 * ts(ji,jj,nla10,jp_tem,Kmm)
-                  zw  = (zu + 0.698*zv) * (zu + 0.698*zv)
-                  zdelr(ji,jj) = ztem2 * (1000.*(zut*zv - zvt*zu)/zw)
+                  !zu  =  1779.50 + 11.250 * ts(ji,jj,nla10,jp_tem,Kmm) - 3.80   * ts(ji,jj,nla10,jp_sal,Kmm)  &
+                  !   &           - 0.0745 * ts(ji,jj,nla10,jp_tem,Kmm) * ts(ji,jj,nla10,jp_tem,Kmm)   &
+                  !   &           - 0.0100 * ts(ji,jj,nla10,jp_tem,Kmm) * ts(ji,jj,nla10,jp_sal,Kmm)
+                  !zv  =  5891.00 + 38.000 * ts(ji,jj,nla10,jp_tem,Kmm) + 3.00   * ts(ji,jj,nla10,jp_sal,Kmm)  &
+                  !   &           - 0.3750 * ts(ji,jj,nla10,jp_tem,Kmm) * ts(ji,jj,nla10,jp_tem,Kmm)
+                  !zut =    11.25 -  0.149 * ts(ji,jj,nla10,jp_tem,Kmm) - 0.01   * ts(ji,jj,nla10,jp_sal,Kmm)
+                  !zvt =    38.00 -  0.750 * ts(ji,jj,nla10,jp_tem,Kmm)
+                  !zw  = (zu + 0.698*zv) * (zu + 0.698*zv)
+                  !zdelr(ji,jj) = ztem2 * (1000.*(zut*zv - zvt*zu)/zw)
+                  zdelr(ji,jj) = rab_n(ji,jj,nla10,jp_tem)*0.2*rho0
                ELSE
                   zdelr(ji,jj) = 0._wp
                ENDIF
