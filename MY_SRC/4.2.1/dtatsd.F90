@@ -34,6 +34,8 @@ MODULE dtatsd
    LOGICAL , PUBLIC ::   ln_tsd_init   !: T & S data flag
    LOGICAL , PUBLIC ::   ln_tsd_interp !: vertical interpolation flag
    LOGICAL , PUBLIC ::   ln_tsd_dmp    !: internal damping toward input data flag
+   INTEGER, PARAMETER ::   jp_dep = 3    !: indice for depth
+   INTEGER, PARAMETER ::   jp_msk = 4    !: indice for mask
 
    TYPE(FLD), ALLOCATABLE, DIMENSION(:) ::   sf_tsd   ! structure of input SST (file informations, fields read)
    INTEGER                                 ::   jpk_init , inum_dta
@@ -234,9 +236,10 @@ CONTAINS
       IF( ln_tsd_interp ) THEN
          !
          IF( .NOT. l_istiled .OR. ntile == 1 )  THEN                       ! Do only on the first tile
-            IF( kt == nit000 .AND. lwp )THEN
+            IF( kt == nit000 .AND. lwp ) THEN
                WRITE(numout,*)
-            WRITE(numout,*) 'dta_tsd: interpolates T & S data onto current mesh'
+               WRITE(numout,*) 'dta_tsd: interpolates T & S data onto current mesh'
+            ENDIF
          ENDIF
          !
          DO_2D( nn_hls, nn_hls, nn_hls, nn_hls )                  ! vertical interpolation of T & S
