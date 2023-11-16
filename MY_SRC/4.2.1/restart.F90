@@ -193,7 +193,7 @@ CONTAINS
          IF( .NOT.lk_SWE )   CALL iom_rstput( kt, nitrst, numrow, 'rhop', rhop )
 #endif
       ENDIF
-                     CALL iom_rstput( kt, nitrst, numrow, 'neos'    , REAL(neos)      , ldxios = lwxios)   ! equation of state
+                     CALL iom_rstput( kt, nitrst, numrow, 'neos'    , REAL(neos) )   ! equation of state
       
       IF( ln_diurnal )   CALL iom_rstput( kt, nitrst, numrow, 'Dsst', x_dsst )
       IF( kt == nitrst ) THEN
@@ -291,7 +291,7 @@ CONTAINS
          IF( iom_varid( numror, 'neos') == -1) THEN
             CALL ctl_stop( 'restart, rst_read: variable neos not found. STOP check that the equations of state in the restart file and in the namelist nameos are consistent and use ln_rst_eos=F')
          ELSE
-            CALL iom_get( numror, 'neos', zeos, ldxios = lrxios )
+            CALL iom_get( numror, 'neos', zeos )
             IF ( INT(zeos) /= neos ) CALL ctl_stop( 'restart, rst_read: equation of state used in restart file differs from namelist nameos')
          ENDIF
       ENDIF

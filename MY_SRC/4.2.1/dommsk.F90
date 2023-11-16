@@ -121,7 +121,7 @@ CONTAINS
          IF(lwp) WRITE(numout,*) '         READ shlat as a 2D coefficient in a file '
          ALLOCATE( zshlat2d(jpi,jpj) )
          CALL iom_open(TRIM(cn_shlat2d_file), inum)
-         CALL iom_get (inum, jpdom_data, TRIM(cn_shlat2d_var), zshlat2d, 1) !
+         CALL iom_get (inum, jpdom_global, TRIM(cn_shlat2d_var), zshlat2d, 1) !
          CALL iom_close(inum)
       ELSE
          IF     (      rn_shlat == 0.               ) THEN   ;   IF(lwp) WRITE(numout,*) '   ==>>>   ocean lateral  free-slip'

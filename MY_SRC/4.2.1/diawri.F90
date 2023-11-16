@@ -62,6 +62,7 @@ MODULE diawri
    USE timing          ! preformance summary
    USE diu_bulk        ! diurnal warm layer
    USE diu_coolskin    ! Cool skin
+   USE eosbn2
 
    IMPLICIT NONE
    PRIVATE
@@ -482,7 +483,7 @@ CONTAINS
       IF( (.NOT.l_ldfeiv_time) .AND. ( iom_use('RossRad')  .OR. iom_use('RossRadlim') &
             &                     .OR. iom_use('Tclinic_recip') .OR. iom_use('RR_GS')      &
             &                     .OR. iom_use('aeiu_2d')  .OR. iom_use('aeiv_2d') ) ) THEN
-         CALL ldf_eiv(kt, 75.0, z2d, z3d(:,:,1))
+         CALL ldf_eiv(kt, 75.0, z2d, z3d(:,:,1),Kmm)
          CALL iom_put('aeiu_2d', z2d)
          CALL iom_put('aeiv_2d', z3d(:,:,1))
       ENDIF

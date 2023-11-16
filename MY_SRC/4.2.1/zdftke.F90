@@ -839,15 +839,13 @@ CONTAINS
          CASE( 1 )                                 ! F(latitude) : 0.5m to 30m poleward of 40 degrees
             htau(:,:) = MAX(  0.5_wp, MIN( 30._wp, 45._wp* ABS( SIN( rpi/180._wp * gphit(:,:) ) ) )   )
          CASE( 4 )                                 ! F(latitude) : 0.5m to 10m/30m poleward of 13/40 degrees north/south
-            DO jj = 2, jpjm1
-               DO ji = fs_2, fs_jpim1   ! vector opt.
+            DO_2D( nn_hls-1, nn_hls-1, nn_hls-1, nn_hls-1 )
                   IF( gphit(ji,jj) <= 0._wp ) THEN
                      htau(ji,jj) = MAX(  0.5_wp, MIN( 30._wp, 45._wp* ABS( SIN( rpi/180._wp * gphit(ji,jj) ) ) )   )
                   ELSE
                      htau(ji,jj) = MAX(  0.5_wp, MIN( 10._wp, 45._wp* ABS( SIN( rpi/180._wp * gphit(ji,jj) ) ) )   )
                   ENDIF
-               END DO
-            END DO
+            END_2D
          END SELECT
       ENDIF
       !                                !* read or initialize all required files

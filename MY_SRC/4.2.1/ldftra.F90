@@ -674,11 +674,11 @@ CONTAINS
             ! of the square root of the resulting N^2 ( required to compute 
             ! internal Rossby radius Ro = .5 * sum_jpk(N) / f 
             zn2 = MAX( rn2b(ji,jj,jk), 0._wp )
-            zn(ji,jj) = zn(ji,jj) + SQRT( zn2 ) * e3w_n(ji,jj,jk)
+            zn(ji,jj) = zn(ji,jj) + SQRT( zn2 ) * e3w(ji,jj,jk,Kmm)
             ! Compute elements required for the inverse time scale of baroclinic
             ! eddies using the isopycnal slopes calculated in ldfslp.F : 
             ! T^-1 = sqrt(m_jpk(N^2*(r1^2+r2^2)*e3w))
-            ze3w = e3w_n(ji,jj,jk) * wmask(ji,jj,jk)
+            ze3w = e3w(ji,jj,jk,Kmm) * wmask(ji,jj,jk)
             zmodslp(ji,jj,jk) =  wslpi(ji,jj,jk) * wslpi(ji,jj,jk)   &
                &               + wslpj(ji,jj,jk) * wslpj(ji,jj,jk)
             zah(ji,jj) = zah(ji,jj) + zn2 * zmodslp(ji,jj,jk) * ze3w
