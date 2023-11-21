@@ -1,11 +1,11 @@
 {
 		"exp_names": [
-                "ZPS_TIDE"
+                "EXP_EXP_socen_no_tmx"
         		],
 		"dirs":[
-                 "/gws/nopw/j04/class_vol2/senemo/cwilso01/ZPS_REF_TIDE/OUTPUTS/"
+                 "/work/n01/n01/jholt/Git/test/nemo/cfgs/se-eORCA025/EXP_soc_enhance_full/OUTPUTS/"
                 ],
         "domains":[    
-                  "/gws/nopw/j04/class_vol2/senemo/cwilso01/EXP_REF_NOTIDE/domcfg_eORCA025_v2.nc" 
+                  "/work/n01/shared/se-eORCA025/domain_cfg_mes_v2.nc"
               ]
 }

@@ -1,12 +1,15 @@
 #!/bin/bash 
-#SBATCH --partition=short-serial 
+#SBATCH --partition=serial 
+#SBATCH --qos=serial
 #SBATCH -o %j.out 
 #SBATCH -e %j.err
 #SBATCH --time=12:00:00
-#SBATCH --mem=64000
-cd /home/users/jholt/Git/SE-NEMO/scripts/analysis/Python/
+#SBATCH --mem=64G
+#SBATCH --account=n01-CLASS
+#SBATCH --ntasks=1
+cd /work/n01/n01/jholt/Git/SE-NEMO/scripts/analysis/Python/
 source activate coast_dev 
 #python circulation.py
-#python  make_SENEMO_climatology.py
-python  plot_SENEMO_SL.py
+python  make_SENEMO_climatology.py
+#python  plot_SENEMO_SL.py
 

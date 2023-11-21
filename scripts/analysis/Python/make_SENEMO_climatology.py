@@ -14,6 +14,7 @@ if isliv:
  sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
 else:
  sys.path.insert(0,'/home/users/jholt/Git/COAsT/')
+sys.path.insert(0,'/home/n01/n01/jholt/Git/COAsT/')
 import coast
 
 #Specify years to average
@@ -44,7 +45,7 @@ for i,EXPNAM in enumerate(names):
     nemo.dataset['e3_0']=nemo_dom.dataset['e3_0']
     #Place to output data
     domain_outpath='/home/users/jholt/work/SENEMO/ASSESSMENT/'
-    
+    domain_outpath='/work/n01/n01/jholt/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/'
     nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid) #nemo_out = nemo_out. subset_as_copy(y_dim=range(86,1000),x_dim=range(1080,1180))  
     DOMNAM='ORCA025-SE-NEMO'
     fn_out='{0}/{1}/{1}_{2}_{3}_{4}_SST_SSS_PEA_MonClimate.nc'.format(domain_outpath,DOMNAM,ystart,ystop,EXPNAM)
