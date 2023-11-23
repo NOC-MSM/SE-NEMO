@@ -119,7 +119,7 @@ def plot_surface_circulation(SP, US, VS,nemo_t,mask,name
  cmap1=lightcolormap(int(Vmax*100),2)
  cmap1.set_bad([0.75,0.75,0.75])
  fig=plt.figure(figsize=[8.27,11.69]); fig.clear()
- fig=plt.figure(); fig.clear()
+ #fig=plt.figure(); fig.clear()
  
  plt.pcolormesh(p,cmap=cmap1)
  #plt.pcolormesh(X,Y,p,cmap=cmap1)

@@ -1,0 +1,14 @@
+{
+		"exp_names": [
+                "EXP_IWD02",
+                "EXP_socen_no_tmx"
+        		],
+		"dirs":[
+                 "/work/n01/n01/cwi/projects/senemo/buildIWD160823/testIWD/nemo/cfgs/se-eORCA025/EXPIWD02/OUTPUTS/",
+                 "/work/n01/n01/jholt/Git/test/nemo/cfgs/se-eORCA025/EXP_soc_enhance_full/OUTPUTS/"
+                ],
+        "domains":[ 
+                  "/work/n01/shared/se-eORCA025/domain_cfg_mes_v2.nc",
+                  "/work/n01/shared/se-eORCA025/domain_cfg_mes_v2.nc"
+              ]
+}
