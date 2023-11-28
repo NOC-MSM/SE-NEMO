@@ -327,6 +327,9 @@ do
    done
    wait
 
+   # chunk/zip data
+   sbatch runzip.slurm
+
    current_stp=`sed -n 1,1p time.step`
    if [ ! $current_stp -eq $nn_itend ]
    then
@@ -343,9 +346,6 @@ do
    nextyear=`./check_runtime $SLURM_JOB_ID $YEAR $year`
 
 done
-
-# chunk/zip data
-sbatch runzip.slurm
 
 # if year -gt year_end no need to go again
 if [ $year -gt $year_en ]
