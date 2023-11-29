@@ -28,7 +28,7 @@ nn_wxios=0,
 /
 &namcfg
 cn_domcfg='domain_cfg',
-ln_closea=.true.,
+ln_closea=.false.,
 ln_read_cfg=.true.,
 ln_use_jattr=.false.,
 ln_write_cfg=.false.,

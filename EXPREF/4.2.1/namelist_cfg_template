@@ -80,7 +80,7 @@
       !                      !  (=F) user defined configuration           (F => create/check namusr_def)
       cn_domcfg = "domain_cfg"  ! domain configuration filename
       !
-      ln_closea    = .true., !  (=T => fill namclo) 
+      ln_closea    = .false., !  (=T => fill namclo) 
       !                      !  (=F) no control of net precip/evap over closed sea
       !
    ln_write_cfg = .false.,    !  (=T) create the domain configuration file
