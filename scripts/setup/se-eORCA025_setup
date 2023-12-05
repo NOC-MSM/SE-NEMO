@@ -273,10 +273,10 @@ esac
 # this change shouldn't affect other compilers
 for nml in namelist*
 do
-  sed -i 's/= *.true./= .true.\,/g'   $nml
-  sed -i 's/= *.false./= .false.\,/g' $nml
-  sed -i 's/= *.FALSE./= .FALSE.\,/g' $nml
-  sed -i 's/= *.TRUE./= .TRUE.\,/g'   $nml
+  sed -i 's/= *.true./=.true.\,/g'   $nml
+  sed -i 's/= *.false./=.false.\,/g' $nml
+  sed -i 's/= *.FALSE./=.FALSE.\,/g' $nml
+  sed -i 's/= *.TRUE./=.TRUE.\,/g'   $nml
   sed -i 's/.,,/.,/g'   $nml
 done
 
