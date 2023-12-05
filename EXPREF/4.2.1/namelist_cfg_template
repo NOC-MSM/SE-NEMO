@@ -1,5 +1,5 @@
 !!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-!! NEMO/OCE :   Reference namelist_ref                                !!
+!! NEMO/OCE :   Configuration namelist_cfg                               !!
 !!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 !! NEMO/OCE  :  1 - Domain & run manager (namrun, namcfg, namdom, namtsd, namcrs, namc1d, namc1d_uvd)
 !! namelists    2 - Surface boundary (namsbc, namsbc_flx, namsbc_blk, namsbc_cpl,
@@ -40,7 +40,7 @@
    nn_date0    =  XXX_YEAR_XXX0101   !  date at nit_0000 (format yyyymmdd) used if ln_rstart=F or (ln_rstart=T and nn_rstctl=0 or 1)
    nn_time0    =       0000   !  initial time of day in hhmm
    nn_leapy    =       1   !  Leap year calendar (1) or not (0)
-   ln_rstart   = .XXX_RST_XXX.,   !  start from rest (F) or from a restart file (T)
+   ln_rstart   = XXX_RST_XXX,   !  start from rest (F) or from a restart file (T)
       ln_1st_euler = .false.,  !  =T force a start with forward time step (ln_rstart=T)
       nn_rstctl    = XXX_RCT_XXX   !  restart control ==> activated only if ln_rstart=T
       !                          !    = 0 nn_date0 read in namelist ; nn_it000 : read in namelist
@@ -65,7 +65,7 @@
 !-----------------------------------------------------------------------
    ln_linssh   = .false.,   !  =T  linear free surface  ==>>  model level are fixed in time
    !
-   rn_Dt       = XXX_RDT_XXX.     !  time step for the dynamics and tracer
+   rn_Dt       = XXX_RDT_XXX     !  time step for the dynamics and tracer
    rn_atfp     =    0.1    !  asselin time filter parameter
    !
    ln_crs      = .false.,   !  Logical switch for coarsening module      (T => fill namcrs)
