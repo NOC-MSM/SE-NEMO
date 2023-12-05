@@ -205,11 +205,11 @@ cd $CONFIG_DIR
 ## Download the input data
 case "${HPC_TARG}"
   in
-  archer2) ln -s /work/n01/shared/se-eORCA025 INPUTS
+  archer2) ln -s /work/n01/shared/se-eORCA025/$NEMO_VER INPUTS
            ln -s /work/n01/shared/nemo/FORCING FORCING
            ;;
 
-  anemone) ln -s /dssgfs01/working/jdha/se-eORCA025 INPUTS
+  anemone) ln -s /dssgfs01/working/jdha/se-eORCA025/$NEMO_VER INPUTS
 	   ln -s /dssgfs01/working/acc/FORCING FORCING
            ;;
 
