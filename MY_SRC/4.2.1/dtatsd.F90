@@ -127,6 +127,7 @@ CONTAINS
          CALL fld_fill( sf_tsd, slf_i, cn_dir, 'dta_tsd', 'Temperature & Salinity data', 'namtsd' )
 
          IF( ln_tsd_interp ) THEN
+            CALL fld_def ( sf_tsd(jp_dep) )
             CALL fld_clopn ( sf_tsd(jp_dep) ) 
             IF(lwp) WRITE(numout,*) 'INFO: ', sf_tsd(jp_dep)%num, sn_dep%clvar
             id = iom_varid( sf_tsd(jp_dep)%num, sn_dep%clvar, zdim )
