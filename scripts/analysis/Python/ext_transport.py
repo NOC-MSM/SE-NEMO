@@ -5,7 +5,7 @@ Created on Mon Nov 27 12:34:54 2023
 
 @author: jholt
 """
-
+import pickle
 import socket
 isliv = 'livljobs' in socket.gethostname()
 
@@ -16,10 +16,10 @@ else:
  sys.path.insert(0,'/home/users/jholt/Git/COAsT/')
 sys.path.insert(0,'/home/n01/n01/jholt/Git/COAsT/')
 import coast
-import matplotlib.pylab as plt
+
 import numpy as np
 ystart=1976
-ystop=1984
+ystop=2015
 names,dpaths,DOMS,_  = coast.experiments(experiments='experiments_arch.json')
 Q={}
 for i,EXPNAM in enumerate(names):    
@@ -44,3 +44,6 @@ for i,EXPNAM in enumerate(names):
     dy=nemo.dataset.e2.values
     DY=np.repeat(dy[np.newaxis,:,:],q.shape[0],axis=0)
     Q[EXPNAM]=np.sum(q*DY,axis=1).squeeze()
+with open('so_flx','wb') as f:
+    pickle.dump(Q, f)
+    
