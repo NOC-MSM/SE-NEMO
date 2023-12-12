@@ -1,5 +1,5 @@
 !!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-!! SI3 Configuration namelist:
+!! SI3 Reference namelist:
 !!              1 - Generic parameters                 (nampar)
 !!              2 - Ice thickness discretization       (namitd)
 !!              3 - Ice dynamics                       (namdyn)

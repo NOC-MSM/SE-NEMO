@@ -50,6 +50,8 @@
       cn_ocerst_indir = "."         !  directory from which to read input ocean restarts
       cn_ocerst_out   = "restart"   !  suffix of ocean restart name (output)
       cn_ocerst_outdir = "."        !  directory in which to write output ocean restarts
+      ln_rstdate=.false.,
+      ln_reset_ts=.false.,
    nn_istate   =       0   !  output the initial state (1) or not (0)
    ln_rst_list = .false.,   !  output restarts at list of times using nn_stocklist (T) or at set frequency with nn_stock (F)
    nn_stock    =       0   !  used only if ln_rst_list = F: output restart freqeuncy (modulo referenced to 1)
@@ -122,13 +124,16 @@
    !                       ! =T  read T-S fields for:
    ln_tsd_init = .false.,         !  ocean initialisation
    ln_tsd_dmp  = .false.,         !  T-S restoring   (see namtra_dmp)
-
+   ln_tsd_interp = .false.,       !  ocean initialisation
+   
    cn_dir      = './'      !  root directory for the T-S data location
    !___________!_________________________!___________________!___________!_____________!________!___________!__________________!__________!_______________!
    !           !  file name              ! frequency (hours) ! variable  ! time interp.!  clim  ! 'yearly'/ ! weights filename ! rotation ! land/sea mask !
    !           !                         !  (if <0  months)  !   name    !   (logical) !  (T/F) ! 'monthly' !                  ! pairing  !    filename   !
    sn_tem = 'data_1m_potential_temperature_nomask',  -1.     , 'votemper',   .true.    , .true. , 'yearly'  ,    ''            ,    ''    ,    ''
    sn_sal = 'data_1m_salinity_nomask'             ,  -1.     , 'vosaline',   .true.    , .true. , 'yearly'  ,    ''            ,    ''    ,    ''
+   sn_dep  = './depth.nc' ,     -12  ,'depth',   .false.   , .true.  , 'yearly'   , '' ,    ''    ,      ''
+   sn_msk  = './depth.nc' ,     -12  ,'mask'     ,   .false.   , .true.  , 'yearly'   , '' ,    ''    ,      ''
 /
 !-----------------------------------------------------------------------
 &namwad        !   Wetting and Drying (WaD)                             (default: OFF)
@@ -683,6 +688,9 @@
    !                       !  free slip  !   partial slip  !   no slip   ! strong slip
    rn_shlat    =  -9999.   !  shlat = 0  !  0 < shlat < 2  !  shlat = 2  !  2 < shlat
    ln_vorlat   = .false.,   !  consistency of vorticity boundary condition with analytical Eqs.
+   ln_shlat2d=.false.,
+   cn_shlat2d_file='./shlat2d.nc',
+   cn_shlat2d_var='shlat2d',
 /
 !-----------------------------------------------------------------------
 &namagrif      !  AGRIF zoom                                            ("key_agrif")

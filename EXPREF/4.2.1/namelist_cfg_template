@@ -115,12 +115,11 @@
    !___________!_________________________!___________________!___________!_____________!________!___________!__________________!__________!_______________!
    !           !  file name              ! frequency (hours) ! variable  ! time interp.!  clim  ! 'yearly'/ ! weights filename ! rotation ! land/sea mask !
    !           !                         !  (if <0  months)  !   name    !   (logical) !  (T/F) ! 'monthly' !                  ! pairing  !    filename   !
-   sn_sal='./EN.4.1.1.f.analysis.g10.1995-2014.eORCA025.teos10.nc',-1,'salinity',.true.,.true.,'yearly','','','',
-   sn_tem='./EN.4.1.1.f.analysis.g10.1995-2014.eORCA025.teos10.nc',-1,'temperature',.true.,.true.,'yearly','','','',
-   sn_dep  = './EN4_depth.nc' ,     -12  ,'depth_4D',   .false.   , .true.  , 'yearly'   , '' ,    ''    ,      ''
-   sn_msk  = './EN4_depth.nc' ,     -12  ,'mask'     ,   .false.   , .true.  , 'yearly'   , '' ,    ''    ,      ''
+   sn_sal='EN.4.1.1.f.analysis.g10.1995-2014.eORCA025.teos10.nc',-1,'salinity',.true.,.true.,'yearly','','','',
+   sn_tem='EN.4.1.1.f.analysis.g10.1995-2014.eORCA025.teos10.nc',-1,'temperature',.true.,.true.,'yearly','','','',
+   sn_dep  = 'EN4_depth.nc' ,     -12  ,'depth_4D',   .false.   , .true.  , 'yearly'   , '' ,    ''    ,      ''
+   sn_msk  = 'EN4_depth.nc' ,     -12  ,'mask'     ,   .false.   , .true.  , 'yearly'   , '' ,    ''    ,      ''
 /
-
 ======================================================================
 !!            ***  Surface Boundary Condition namelists  ***          !!
 !!                                                                    !!
@@ -195,15 +194,15 @@
    !___________!_________________________!___________________!___________!_____________!________!___________!______________________________________!__________!_______________!
    !           !  file name              ! frequency (hours) ! variable  ! time interp.!  clim  ! 'yearly'/ !       weights filename               ! rotation ! land/sea mask !
    !           !                         !  (if <0  months)  !   name    !   (logical) !  (T/F) ! 'monthly' !                                      ! pairing  !    filename   !
-   sn_wndi     = 'uas',                   3,                  'uas',      .true.,       .false., 'yearly',   'weights_grid_jra_bicubic_e025.nc',    'Ume',
-   sn_wndj     = 'vas',                   3,                  'vas',      .true.,       .false., 'yearly',   'weights_grid_jra_bicubic_e025.nc',    'Vme',
-   sn_qsr      = 'rsds',                  3,                  'rsds',     .false.,      .false., 'yearly',   'weights_grid_jra_bilin_e025.nc',      '',
-   sn_qlw      = 'rlds',                  3,                  'rlds',     .false.,      .false., 'yearly',   'weights_grid_jra_bilin_e025.nc',      '',
-   sn_tair     = 'tas',                   3,                  'tas',      .true.,       .false., 'yearly',   'weights_grid_jra_bilin_e025.nc',      '',
-   sn_humi     = 'huss',                  3,                  'huss',     .true.,       .false., 'yearly',   'weights_grid_jra_bilin_e025.nc',      '',
-   sn_prec     = 'ptot',                  3,                  'ptot',     .true.,       .false., 'yearly',   'weights_grid_jra_bilin_e025.nc',      '',
-   sn_snow     = 'prsn',                  3,                  'prsn',     .true.,       .false., 'yearly',   'weights_grid_jra_bilin_e025.nc',      '',
-   sn_slp      = 'psl',                   3,                  'psl',      .true.,       .false., 'yearly',   'weights_grid_jra_bilin_e025.nc',      '',
+   sn_wndi     = 'uas',                   3,                  'uas',      .true.,       .false., 'yearly',   'weights_grid_jra_bicubic_e025_nohaloes_full.nc',    'Ume',
+   sn_wndj     = 'vas',                   3,                  'vas',      .true.,       .false., 'yearly',   'weights_grid_jra_bicubic_e025_nohaloes_full.nc',    'Vme',
+   sn_qsr      = 'rsds',                  3,                  'rsds',     .false.,      .false., 'yearly',   'weights_grid_jra_bilin_e025_nohaloes_full.nc',      '',
+   sn_qlw      = 'rlds',                  3,                  'rlds',     .false.,      .false., 'yearly',   'weights_grid_jra_bilin_e025_nohaloes_full.nc',      '',
+   sn_tair     = 'tas',                   3,                  'tas',      .true.,       .false., 'yearly',   'weights_grid_jra_bilin_e025_nohaloes_full.nc',      '',
+   sn_humi     = 'huss',                  3,                  'huss',     .true.,       .false., 'yearly',   'weights_grid_jra_bilin_e025_nohaloes_full.nc',      '',
+   sn_prec     = 'ptot',                  3,                  'ptot',     .true.,       .false., 'yearly',   'weights_grid_jra_bilin_e025_nohaloes_full.nc',      '',
+   sn_snow     = 'prsn',                  3,                  'prsn',     .true.,       .false., 'yearly',   'weights_grid_jra_bilin_e025_nohaloes_full.nc',      '',
+   sn_slp      = 'psl',                   3,                  'psl',      .true.,       .false., 'yearly',   'weights_grid_jra_bilin_e025_nohaloes_full.nc',      '',
    sn_uoatm    = 'NOT USED'                   ,    6.        , 'UOATM'   ,   .false.   , .true. , 'yearly'  , 'weights_core_orca2_bilinear_noc.nc' , 'Uoceatm', ''
    sn_voatm    = 'NOT USED'                   ,    6.        , 'VOATM'   ,   .false.   , .true. , 'yearly'  , 'weights_core_orca2_bilinear_noc.nc' , 'Voceatm', ''
    sn_cc       = 'NOT USED'                   ,   24.        , 'CC'      ,   .false.   , .true. , 'yearly'  , 'weights_core_orca2_bilinear_noc.nc' , ''       , ''
@@ -279,11 +278,11 @@
 !-----------------------------------------------------------------------
     ln_isf = .true.,
     ln_isfpar_mlt = .true.,
-    sn_isfpar_zmax = 'INPUT/runoff_1m_nomask.nc', 0, 'sozisfmax', .false.,
+    sn_isfpar_zmax = 'INPUTS/JRA_RIVERS/runoff_1m_nomask.nc', 0, 'sozisfmax', .false.,
                      .true., 'yearly', '', '', '',
-    sn_isfpar_zmin = 'INPUT/runoff_1m_nomask.nc', 0, 'sozisfmin', .false.,
+    sn_isfpar_zmin = 'INPUTS/JRA_RIVERS/runoff_1m_nomask.nc', 0, 'sozisfmin', .false.,
                      .true., 'yearly', '', '', '',
-    sn_isfpar_fwf = 'INPUT/runoff_1m_nomask.nc', -1, 'sofwfisf', .false.,
+    sn_isfpar_fwf = 'INPUTS/JRA_RIVERS/runoff_1m_nomask.nc', -1, 'sofwfisf', .false.,
                     .true., 'yearly', '', '', '',
 /
 !-----------------------------------------------------------------------
@@ -334,11 +333,11 @@
 !        rn_kappa_tdiss = 0.00075398 ! x12 value  0.00006283,  ! wave number Jayne and Laurence 2004 value !282.74333! increasedwith x1500^2 x2
 !        tdiss_mindepth = 200.0 ! minimum depth to apply tdiss parameterisation 
 !
-      sn_tide_cnames(1) = 'SA',
-      sn_tide_cnames(2) = 'SSA',
-      sn_tide_cnames(3) = 'MM',
-      sn_tide_cnames(4) = 'MSF',
-      sn_tide_cnames(5) = 'MF',
+      sn_tide_cnames(1) = 'Sa',
+      sn_tide_cnames(2) = 'Ssa',
+      sn_tide_cnames(3) = 'Mm',
+      sn_tide_cnames(4) = 'Msf',
+      sn_tide_cnames(5) = 'Mf',
       sn_tide_cnames(6) = 'K1',
       sn_tide_cnames(7) = 'Q1',
       sn_tide_cnames(8) = 'O1',
@@ -348,14 +347,14 @@
       sn_tide_cnames(12) = 'M2',
       sn_tide_cnames(13) = 'S2',
       sn_tide_cnames(14) = '2N2',
-      sn_tide_cnames(15) = 'MU2',
+      sn_tide_cnames(15) = 'mu2',
       sn_tide_cnames(16) = 'N2',
-      sn_tide_cnames(17) = 'NU2',
+      sn_tide_cnames(17) = 'nu2',
       sn_tide_cnames(18) = 'L2',
       sn_tide_cnames(19) = 'T2',
       sn_tide_cnames(20) = 'K2',
       sn_tide_cnames(21) = 'MKS2',
-      sn_tide_cnames(22) = 'LA2',
+      sn_tide_cnames(22) = 'lam2',
       sn_tide_cnames(23) = 'R2',
 /
 
@@ -619,7 +618,7 @@
       rn_hsbfr =    1.6       !  heat/salt buoyancy flux ratio
    !
    !                       ! gravity wave-driven vertical mixing
-   ln_zdfiwm   = .false.,      ! internal wave-induced mixing            (T =>   fill namzdf_iwm)
+   ln_zdfiwm   = .true.,      ! internal wave-induced mixing            (T =>   fill namzdf_iwm)
    ln_zdfswm   = .false.,      ! surface  wave-induced mixing            (T => ln_wave=ln_sdw=T )
    !
    !                       ! coefficients
