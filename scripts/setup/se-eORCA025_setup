@@ -235,6 +235,11 @@ ln -s INPUTS/M2rowdrg_R025_modif_nonpositive.nc M2rowdrg.nc
 ln -s INPUTS/mask_itf_ORCA025ext.nc mask_itf.nc
 ln -s INPUTS/bfr_coef.nc .
 ln -s INPUTS/shlat2d.nc .
+case "${NEMO_VER}"
+  in
+  4.2.1|4.2.2)  ln -s INPUTS/zdfiwm_forcing.nc .
+           ;;
+esac
 
 # Copy remaining information
 case "${NEMO_VER}"
