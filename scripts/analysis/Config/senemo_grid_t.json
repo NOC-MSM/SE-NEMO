@@ -36,7 +36,9 @@
 			"so": "salinity",
 			"vosaline": "salinity",
 			"soce": "salinity",
-                        "so_abs": "salinity",
+            "so_abs": "salinity",
+            "sos_abs": "sss",
+            "tos_con": "sst",
 			"sossheig": "ssh",
 			"zos": "ssh"
 		},

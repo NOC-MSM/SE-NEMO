@@ -9,7 +9,7 @@
                  "/work/n01/n01/cwi/projects/senemo/buildIWD160823/testIWD/nemo/cfgs/se-eORCA025/EXPIWD02/OUTPUTS/",
                  "/work/n01/n01/jholt/Git/test/nemo/cfgs/se-eORCA025/EXP_soc_enhance_full/OUTPUTS/",
                  "/work/n01/n01/jholt/SENEMO/nemo/cfgs/se-eORCA025/EXP_GS1p4_full_IWD/OUTPUTS/",
-                 "/work/n01/n01/jholt/SENEMO/nemo/cfgs/se-eORCA025/EXP_G1sp6_full_IWD_soenhance/OUTPUTS/"               
+                 "/work/n01/n01/jholt/SENEMO/nemo/cfgs/se-eORCA025/EXP_GS1p6_full_IWD_soenhance/OUTPUTS/"
                 ],
         "domains":[ 
                   "/work/n01/shared/se-eORCA025/domain_cfg_mes_v2.nc",

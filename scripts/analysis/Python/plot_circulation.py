@@ -32,7 +32,7 @@ names,dpaths,DOMS,_  = coast.experiments(experiments='experiments_arch.json')
 nemo_U={}
 
 #iexp=1
-for iexp in [1]:#,1]:#[1,2,3,4,5,0]:
+for iexp in [3]:#,1]:#[1,2,3,4,5,0]:
 #%%    
     print(names[iexp])
     #nemo_dir='/gws/nopw/j04/class_vol1/CLASS-MEDUSA/OUT_eORCA12/C001/monthly/'

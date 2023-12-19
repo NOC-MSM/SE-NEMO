@@ -20,11 +20,11 @@ import coast
 #Specify years to average
 ystart=1990
 ystop=2019
-
+ystop=1991
 #EXPNAMS=['EXP_MES',  'EXP_MES_WAV',  'EXP_MES_WAV_NTM'] 
 #EXPNAMS=[ 'EXP_MES_WAV_NTM_RIV']
-names,dpaths,DOMS,_  = coast.experiments(experiments='experiments_ZPS.json') 
-for i,EXPNAM in enumerate(names):     
+names,dpaths,DOMS,_  = coast.experiments(experiments='experiments_arch.json') 
+for i,EXPNAM in enumerate([names[0]]):     
     print(EXPNAM)
 #    domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/' + EXPNAM +'/'
 #    domain_datapath='/gws/nopw/j04/class_vol2/senemo/slwa/' + EXPNAM +'/'
@@ -46,11 +46,12 @@ for i,EXPNAM in enumerate(names):
     #Place to output data
     domain_outpath='/home/users/jholt/work/SENEMO/ASSESSMENT/'
     domain_outpath='/work/n01/n01/jholt/SENEMO/ASSESSMENT/'
-    nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid) #nemo_out = nemo_out. subset_as_copy(y_dim=range(86,1000),x_dim=range(1080,1180))  
+    #nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid) #nemo_out = nemo_out. subset_as_copy(y_dim=range(86,1000),x_dim=range(1080,1180))  
     DOMNAM='ORCA025-SE-NEMO'
     fn_out='{0}/{1}/{1}_{2}_{3}_{4}_SST_SSS_PEA_MonClimate.nc'.format(domain_outpath,DOMNAM,ystart,ystop,EXPNAM)
         
     #Do the hardwork
-    coast.GriddedMonthlyHydrographicClimatology(nemo,nemo_out,Zmax=200)        
+    nemo_out=coast.GriddedMonthlyHydrographicClimatology(nemo,z_max=200) 
+    nemo_out.calc_climatologies()    
     #Write out as netcdf
     nemo_out.dataset.to_netcdf(fn_out)
