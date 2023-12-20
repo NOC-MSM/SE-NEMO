@@ -4,3 +4,4 @@ module swap craype-network-ofi craype-network-ucx
 module swap cray-mpich cray-mpich-ucx
 module load cray-hdf5-parallel
 module load cray-netcdf-hdf5parallel
+module load libfabric
