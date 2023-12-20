@@ -33,7 +33,7 @@ This will produce a 5 day mean output from the beginning of 1976. The run should
 
 ### Forcing data:
 
-[SE-ORCA025](http://gws-access.ceda.ac.uk/public/jmmp_collab/)
+[SE-ORCA025](https://gws-access.jasmin.ac.uk/public/jmmp/se-eORCA025/)
 
 _this is automatically transferred when the setup script is executed_
 
