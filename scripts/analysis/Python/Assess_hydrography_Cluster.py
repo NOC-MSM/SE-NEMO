@@ -45,7 +45,7 @@ else:
 DATANAME='ORCA025'
 
 nlmes=66#len(A['i_min'])
-Depth_lim=400.
+Depth_lim=800.
 if isliv:
  Assessdir='/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/ORCA025-SE-NEMO/' 
 else:
@@ -61,7 +61,7 @@ RUNNAMS=[
 'ORCA025-SE-NEMO_1990_2019_EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2',
 'ORCA025-SE-NEMO_1990_2019_ZPS_NOTIDE'  
     ]
-
+RUNNAMS=['ORCA025-SE-NEMO_1990_2016_EXP_G1sp6_full_IWD_soenhance']
 SS={}
 SN={}
 LME_Clusters='../Data/LME_Clusters_eORCA025.csv'
@@ -81,7 +81,9 @@ for iR,RUNNAM in enumerate(RUNNAMS):
     LMEs=[]
     vnames=['PEAy','SSTy','SSSy']
     #if iR==11:
-    vnames=['PEA_monthy_clim', 'SST_monthy_clim','SSS_monthy_clim']
+    #vnames=['PEA_monthy_clim', 'SST_monthy_clim','SSS_monthy_clim']
+    vnames=['pea_monthy_clim', 'sst_monthy_clim','sss_monthy_clim']
+   
     iwant_clusters=np.concatenate((np.arange(1,17),np.arange(18,23)))
     for icluster in iwant_clusters:
 #%%
@@ -108,7 +110,8 @@ for iR,RUNNAM in enumerate(RUNNAMS):
          PEAy=f.dataset.variables[vnames[0]].values[monrange,j_min1:j_max1+1,i_min1:i_max1+1]
          SSTy=f.dataset.variables[vnames[1]].values[monrange,j_min1:j_max1+1,i_min1:i_max1+1]
          SSSy=f.dataset.variables[vnames[2]].values[monrange,j_min1:j_max1+1,i_min1:i_max1+1]
-         mask=f.dataset.variables['bottom_level'].values[j_min1:j_max1+1,i_min1:i_max1+1] !=0
+         #mask=f.dataset.variables['bottom_level'].values[j_min1:j_max1+1,i_min1:i_max1+1] !=0
+         mask=np.isfinite(PEAy[0,:,:])
          #mm=mask*LME_mask[j_min0:j_max0+1,i_min:i_max+1]==ilme+1
          #mm=np.repeat(mm[np.newaxis,:,:],lmonrange,axis=0)
          Dmask=Depth<=Depth_lim
@@ -244,7 +247,7 @@ for iR,RUNNAM in enumerate(RUNNAMS):
         SN[var+' '+Metric,iR]=0
         
     for icluster in range(nclusters):
-        DD['LME']=np.append(DD['LME'],A['DOMNAM'][icluster])
+        DD['LME']=np.append(DD['LME'],clusters.values[icluster,1])
         for var in vars:
             for Metric in Metrics:
                 DD[var+' '+Metric]=np.append(DD[var+' '+Metric],metrics[Metric,var][icluster,iR])
