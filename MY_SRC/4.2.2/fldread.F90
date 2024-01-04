@@ -793,6 +793,7 @@ CONTAINS
       ! previous file parameters
       IF( llprev ) THEN
          IF( sdjf%clftyp(1:4) == 'week'    ) THEN   ! find the day of the beginning of previous week
+            isecwk = ksec_week( sdjf%clftyp(6:8) )  ! seconds between the beginning of the week and half of current time step
             isecwk = isecwk + 7 * idaysec           ! seconds between the beginning of previous week and half of the time step
             llprevmt = isecwk > nsec_month          ! longer time since beginning of the previous week than the current month
             llprevyr = llprevmt .AND. nmonth == 1
@@ -813,8 +814,9 @@ CONTAINS
       ! next file parameters
       IF( llnext ) THEN
          IF( sdjf%clftyp(1:4) == 'week'    ) THEN   ! find the day of the beginning of next week
+            isecwk = ksec_week( sdjf%clftyp(6:8) )  ! seconds between the beginning of the week and half of current time step
             isecwk = 7 * idaysec - isecwk           ! seconds between half of the time step and the beginning of next week
-            llnextmt = isecwk > ( nmonth_len(nmonth)*idaysec - nsec_month )   ! larger than the seconds to the end of the month
+            llnextmt = isecwk >= ( nmonth_len(nmonth)*idaysec - nsec_month )   ! larger than the seconds to the end of the month
             llnextyr = llnextmt .AND. nmonth == 12
             iyr = nyear  + COUNT((/llnextyr/))
             imt = nmonth + COUNT((/llnextmt/)) - 12 * COUNT((/llnextyr/))
