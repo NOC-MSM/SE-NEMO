@@ -20,11 +20,12 @@ import coast
 #Specify years to average
 ystart=1990
 ystop=2019
-ystop=1991
+ystop=2016
+#ystop=1991
 #EXPNAMS=['EXP_MES',  'EXP_MES_WAV',  'EXP_MES_WAV_NTM'] 
 #EXPNAMS=[ 'EXP_MES_WAV_NTM_RIV']
 names,dpaths,DOMS,_  = coast.experiments(experiments='experiments_arch.json') 
-for i,EXPNAM in enumerate([names[0]]):     
+for i,EXPNAM in enumerate([names[4]]):     
     print(EXPNAM)
 #    domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/' + EXPNAM +'/'
 #    domain_datapath='/gws/nopw/j04/class_vol2/senemo/slwa/' + EXPNAM +'/'

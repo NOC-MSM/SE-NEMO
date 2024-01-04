@@ -7,6 +7,9 @@ Created on Mon Nov 27 12:34:54 2023
 """
 import pickle
 import socket
+import matplotlib.pylab as plt
+import numpy as np
+
 isliv = 'livljobs' in socket.gethostname()
 
 import sys
@@ -19,7 +22,7 @@ import coast
 
 import numpy as np
 ystart=1976
-ystop=2015
+ystop=2016
 names,dpaths,DOMS,_  = coast.experiments(experiments='experiments_arch.json')
 Q={}
 for i,EXPNAM in enumerate(names):    
@@ -44,6 +47,15 @@ for i,EXPNAM in enumerate(names):
     dy=nemo.dataset.e2.values
     DY=np.repeat(dy[np.newaxis,:,:],q.shape[0],axis=0)
     Q[EXPNAM]=np.sum(q*DY,axis=1).squeeze()
-with open('so_flx','wb') as f:
+with open('so_flx-1','wb') as f:
     pickle.dump(Q, f)
-    
+
+
+#%%
+t=np.arange(Q['EXP_G1sp5_full_IWD_JRA'].shape[0])/12+1976    
+plt.plot(t,Q['EXP_IWD02']/1e6,t,Q['EXP_G1sp5_full_IWD_JRA']/1e6,t,Q['EXP_G1sp6_full_IWD_soenhance_1.5_tmx']/1e6,)
+plt.title('Drake Passage transport (Sv)')
+plt.legend(['EXP_IWD02','EXP_G1sp5_full_IWD_JRA','EXP_G1sp6_full_IWD_soenhance_1.5_tmx'])
+
+
+
