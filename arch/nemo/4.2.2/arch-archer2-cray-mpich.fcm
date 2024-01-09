@@ -1,4 +1,4 @@
-# generic ifort compiler options for linux
+# compiler options for Archer CRAY XC-30 (using crayftn compiler)
 #
 # NCDF_HOME   root directory containing lib and include subdirectories for netcdf4
 # HDF5_HOME   root directory containing lib and include subdirectories for HDF5
@@ -7,8 +7,8 @@
 #
 # NCDF_INC    netcdf4 include file
 # NCDF_LIB    netcdf4 library
-# XIOS_INC    xios include file    (taken into accound only if key_xios is activated)
-# XIOS_LIB    xios library         (taken into accound only if key_xios is activated)
+# XIOS_INC    xios include file    (taken into accound only if key_iomput is activated)
+# XIOS_LIB    xios library         (taken into accound only if key_iomput is activated)
 # OASIS_INC   oasis include file   (taken into accound only if key_oasis3 is activated)
 # OASIS_LIB   oasis library        (taken into accound only if key_oasis3 is activated)
 #
@@ -30,27 +30,33 @@
 #  - unix variables "$..." are accpeted and will be evaluated before calling fcm.
 #  - fcm variables are starting with a % (and not a $)
 #
-%NCDF_HOME           $EBROOTNETCDF
-%HDF5_HOME           $EBROOTHDF5
+%NCDF_HOME           $NETCDF_DIR
+%HDF5_HOME           $HDF5_DIR
 %XIOS_HOME           XXX_XIOS_DIR_XXX
+#OASIS_HOME          
 
-%NCDF_INC            -I%NCDF_HOME/include
-%NCDF_LIB            -L%NCDF_HOME/lib -lnetcdff -lnetcdf -L%HDF5_HOME/lib -lhdf5_hl -lhdf5 -lhdf5
-%XIOS_INC            -I%XIOS_HOME/inc
-%XIOS_LIB            -L%XIOS_HOME/lib -lxios -lstdc++
+%NCDF_INC            -I%NCDF_HOME/include -I%HDF5_HOME/include
+%NCDF_LIB            -L%HDF5_HOME/lib -L%NCDF_HOME/lib -lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lz
+%XIOS_INC            -I%XIOS_HOME/inc 
+%XIOS_LIB            -L%XIOS_HOME/lib -lxios
+#OASIS_INC           -I%OASIS_HOME/build/lib/mct -I%OASIS_HOME/build/lib/psmile.MPI1
+#OASIS_LIB           -L%OASIS_HOME/lib -lpsmile.MPI1 -lmct -lmpeu -lscrip
 
-%CPP                 cpp
-%FC                  mpiifort -c -fpp -fpp-name:/opt/software/eb/software/GCCcore/11.2.0/bin/cpp -Wp,-P,-traditional
-%FCFLAGS             -i4 -r8 -O3 -fp-model precise -fno-alias
-%FFLAGS              %FCFLAGS
-%LD                  mpiifort
-%LDFLAGS
+%CPP	             cpp -Dkey_nosignedzero
+%FC                  ftn
+%FCFLAGS             -em -s integer32 -s real64 -O1,vector0 -hflex_mp=intolerant -N1023 -M878
+%FFLAGS              -em -s integer32 -s real64 -O1,vector0 -hflex_mp=intolerant -N1023 -M878
+%LD                  CC -Wl,"--allow-multiple-definition"
 %FPPFLAGS            -P -traditional
-%AR                  ar
-%ARFLAGS             rs
+%LDFLAGS             -lmpifort_cray
+%AR                  ar 
+%ARFLAGS             -r
 %MK                  gmake
 %USER_INC            %XIOS_INC %NCDF_INC
 %USER_LIB            %XIOS_LIB %NCDF_LIB
+#USER_INC            %XIOS_INC %OASIS_INC %NCDF_INC
+#USER_LIB            %XIOS_LIB %OASIS_LIB %NCDF_LIB
 
-%CC                  cc -Wl,--allow-multiple-definition
+%CC                  cc
 %CFLAGS              -O0
+bld::tool::fc_modsearch -J

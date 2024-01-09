@@ -27,11 +27,6 @@
        <field field_ref="icesalt"          name="sisali" />
        <field field_ref="iceapnd"          name="siapnd" />
        <field field_ref="icevpnd"          name="sivpnd" />
-       <field field_ref="iceepnd"          name="siepnd" />
-       <field field_ref="icevlid"          name="sivlid" />
-       <!-- sst_m is always the potential temperature even when using teos10 -->
-       <field field_ref="sst_m_pot"        name="sst_m_pot"  />
-       <field field_ref="sss_m_abs"        name="sss_m_abs"  />
        
        <!-- heat -->
        <field field_ref="icetemp"          name="sitemp" />
@@ -60,9 +55,6 @@
        <field field_ref="icestr"           name="sistre"  />
        <field field_ref="normstr"          name="normstr" />
        <field field_ref="sheastr"          name="sheastr" />
-       <field field_ref="isig1"            name="isig1"   />
-       <field field_ref="isig2"            name="isig2"   />
-       <field field_ref="isig3"            name="isig3"   />
        
        <!-- heat fluxes -->
        <field field_ref="qt_oce_ai"        name="qt_oce_ai"  />

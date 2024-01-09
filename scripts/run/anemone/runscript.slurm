@@ -91,10 +91,11 @@ fi
 
 if [ "$ln_rnf_new" = ".true." ]
 then
-        sn_rnf="'.\/JRA_RIVERS\/ORCA025_rivers_Antar_Green',24,'rorunoff',.false.,.false.,'yearly'"
+	sn_rnf="'.\/JRA_RIVERS\/ORCA025_rivers_Antar_Green',24,'rorunoff',.false.,.false.,'yearly'"
 else
-        sn_rnf="'runoff_1m_nomask.nc',-1,'sornficb',.true.,.true.,'yearly'"
+	sn_rnf="'runoff_1m_nomask.nc',-1,'sornficb',.true.,.true.,'yearly'"
 fi
+
 echo $SLURM_NNODES
 
 . XXX_ENV_XXX
@@ -120,34 +121,34 @@ do
       nam="${ens%%:*}"
       jpk="${ens##*:}"
 
-      if [ $year -eq $nn_diaharm ] && [ $ln_tide -eq '.true.']
+      if [ $year -eq $nn_diaharm ] && [ "$ln_tide" = ".true." ]
       then
-         ln_diaharm='.true.'
+	 ln_diaharm='.true.'
       else
-         ln_diaharm='.false.'
+	 ln_diaharm='.false.'
       fi
 
-      if [ $year -eq 1976 ]
+      if [ $year -eq $year_st ]
       then
          nn_it000=1
-         if [ $nn_spin_cycle -eq 1 ]
+	 if [ $nn_spin_cycle -eq 1 ]
          then
-            ln_rstart='.false.'
-            ln_tide_ramp='.false.'
-         else
-            ln_rstart='.true.'
-            ln_tide_ramp='.false.'
+            ln_rstart='.false.'	  
+	    ln_tide_ramp='.true.'
+	 else
+            ln_rstart='.true.'	  
+	    ln_tide_ramp='.false.'
          fi
-         nn_rstctl=0
+	 nn_rstctl=0
          ln_reset_ts='.true.'
       else
          nn_it000=`./end_time_step $(( $year - 1 )) $rn_rdt $year_st` ; rs0=`printf "%08d" $nn_it000`; nn_it000=$(( $nn_it000 + 1 + $offset ))
          ln_rstart=".true."
-         nn_rstctl=2
-         ln_tide_ramp='.false.'
+	 nn_rstctl=2
+	 ln_tide_ramp='.false.'
          ln_reset_ts='.false.'
       fi
-
+       
       if [ "$ln_rstdate" = ".true." ]
       then
          if [ $year -eq $year_st ]
@@ -156,7 +157,7 @@ do
          else
             rs0=$year\0101
          fi
-      fi
+      fi 
 
       nn_itend=`./end_time_step $year $rn_rdt $year_st`; nn_itend=$(( $nn_itend + $offset ))
       if [ $nn_spin_cycle -le $nn_spin ]
@@ -166,7 +167,7 @@ do
          sed "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle-1))_$rs0\_restart_ice/g" namelist_ice_cfg_template > namelist_ice_cfg
       else
          sed    "s/XXX_EXP_XXX/$nam/g" namelist_cfg_template > namelist_cfg
-         if [ $year -eq $year_st ]
+	 if [ $year -eq $year_st ]
          then
             sed -i "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle-1))_$rs0\_restart/g" namelist_cfg
             sed "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle-1))_$rs0\_restart_ice/g" namelist_ice_cfg_template > namelist_ice_cfg
@@ -212,7 +213,7 @@ do
       sed -i "s/XXX_CTD_XXX/$ln_calc_tdiss/g" namelist_cfg
 
    done
-   
+
    for ens in "${ARRAY[@]}"
    do
       eval $SRUN_CMD &
@@ -255,7 +256,7 @@ do
    else
       nn_spin_cycle=$(($nn_spin_cycle+1))
    fi
-
+      
 done
 
 exit
