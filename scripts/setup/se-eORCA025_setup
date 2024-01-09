@@ -119,7 +119,7 @@ case "${NEMO_VER}"
            git sparse-checkout add /makenemo /mk /src /cfgs/SHARED /cfgs/ref_cfgs.txt /ext
 	   git checkout
            ;;
-  4.2.0|4.2.1|4.2.2)
+  4.2.?)
            git clone --filter=blob:none --no-checkout --depth 1 --sparse --branch $NEMO_VER https://forge.nemo-ocean.eu/nemo/nemo.git nemo
            cd nemo
            git sparse-checkout add /makenemo /mk /src /cfgs/SHARED /cfgs/ref_cfgs.txt /ext
@@ -137,7 +137,7 @@ esac
 # Now check EXTERNALS revision number before checking out the rest
 case "${NEMO_VER}"
   in
-  4.2|4.2.0|4.2.1|4.2.2)
+  4.2|4.2.?)
       echo "Nothing to do as EXTERNALS are integral to $NEMO_VER"
       ;;
   *)
@@ -163,15 +163,7 @@ echo "Checking out xios repository"
 #XIOS3/branches/xios-3.0-beta
 case "${NEMO_VER}"
   in
-  4.2)     svn checkout  http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk@2379 xios
-           cd xios
-           cp $REPO_DIR/arch/xios/2/* ./arch
-           ;;
-  4.2.0)   svn checkout  http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk@2379 xios
-           cd xios
-           cp $REPO_DIR/arch/xios/2/* ./arch
-           ;;
-  4.2.1|4.2.2)   svn checkout  http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk@2379 xios
+  4.2|4.2.?) svn checkout  http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk@2379 xios
            cd xios
            cp $REPO_DIR/arch/xios/2/* ./arch
            ;;
@@ -237,7 +229,7 @@ ln -s INPUTS/bfr_coef.nc .
 ln -s INPUTS/shlat2d.nc .
 case "${NEMO_VER}"
   in
-  4.2.1|4.2.2)  ln -s INPUTS/zdfiwm_forcing.nc .
+  4.2.?)  ln -s INPUTS/zdfiwm_forcing.nc .
            ;;
 esac
 
