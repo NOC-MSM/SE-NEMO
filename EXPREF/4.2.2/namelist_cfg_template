@@ -80,7 +80,7 @@
       !                      !  (=F) user defined configuration           (F => create/check namusr_def)
       cn_domcfg = "domain_cfg"  ! domain configuration filename
       !
-      ln_closea    = .false., !  (=T => fill namclo) 
+      ln_closea    = .true., !  (=T => fill namclo) 
       !                      !  (=F) no control of net precip/evap over closed sea
       !
    ln_write_cfg = .false.,    !  (=T) create the domain configuration file
@@ -92,7 +92,7 @@
 !-----------------------------------------------------------------------
 &namclo        !   parameters of the closed sea (cs) behavior                (default: OFF)
 !-----------------------------------------------------------------------
-   ln_maskcs = .false.,        ! (=T) cs are masked ; So, in this case ln_mask_csundef and ln_clo_rnf have no effect.
+   ln_maskcs = .true.,        ! (=T) cs are masked ; So, in this case ln_mask_csundef and ln_clo_rnf have no effect.
       !                       ! (=F => set ln_mask_csundef and ln_clo_rnf) 
       !                       ! cs masks are read and net evap/precip over closed sea spread out depending on domain_cfg.nc masks.
       !                       ! See ln_mask_csundef and ln_clo_rnf for specific option related to this case
