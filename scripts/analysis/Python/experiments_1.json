@@ -1,0 +1,28 @@
+{
+		"exp_names": [
+                "GS1p2_full",
+                "GS1p1_tide",
+                "GS1p0_notide",
+                "GS1p3_full_notide",
+                "GS1p4_notide_gls",
+		        "CNRM"
+        		],
+		"dirs":[
+                 "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p2_full/output_old/",
+                 "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p1_tide/output/",
+                 "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p0_notide/output/",
+                 "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p3_full_notide/output/",
+                "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p4_notide_gls/output/",                 
+                 "/gws/nopw/j04/class_vol2/annkat/SE_CNRM_OUTPUTS/"
+                ],
+        "domains":[    
+                  "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p2_full/config/domain_cfg.nc",
+                  "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p1_tide/config/domain_cfg.nc",
+                  "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p0_notide/config/domain_cfg.nc",
+                  "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p2_full/config/domain_cfg.nc",
+                  "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p0_notide/config/domain_cfg.nc",                                   
+		  "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p2_full/config/domain_cfg.nc"                 
+              ]
+		
+}
+

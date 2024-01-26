@@ -2,22 +2,22 @@
 		"exp_names": [
                 "EXP_IWD02",
                 "EXP_socen_no_tmx",
-                "EXP_G1sp6_full_IWD_soenhance", 
                 "EXP_G1sp6_full_IWD_soenhance_1.5_tmx",
-                "EXP_G1sp5_full_IWD_JRA"		
+                "EXP_G1sp5_full_IWD_JRA",
+                "EXP_4p2p2"
         		],
 		"dirs":[
                  "/work/n01/n01/cwi/projects/senemo/buildIWD160823/testIWD/nemo/cfgs/se-eORCA025/EXPIWD02/OUTPUTS/",
                  "/work/n01/n01/jholt/Git/test/nemo/cfgs/se-eORCA025/EXP_soc_enhance_full/OUTPUTS/",      
-                 "/work/n01/n01/jholt/SENEMO/nemo/cfgs/se-eORCA025/EXP_GS1p6_full_IWD_soenhance/OUTPUTS/",
                  "/work/n01/n01/jholt/SENEMO/nemo/cfgs/se-eORCA025/EXP_GS1p6_1_full_IWD_soenhance/OUTPUTS/",
-                 "/work/n01/n01/jdha/scratch/SN_JRA_RIV/nemo/cfgs/se-eORCA025/EXP_TEST/OUTPUTS_ZIP/"
+                 "/work/n01/n01/jdha/scratch/SN_JRA_RIV/nemo/cfgs/se-eORCA025/EXP_TEST/OUTPUTS_ZIP/",
+	 	 "/work/n01/n01/jdha/SN_115_4_2_1/nemo/cfgs/se-eORCA025/EXP_TEST/OUTPUTS_PROCESSED/"
                 ],
         "domains":[ 
                   "/work/n01/shared/se-eORCA025/domain_cfg_mes_v2.nc",
                   "/work/n01/shared/se-eORCA025/domain_cfg_mes_v2.nc",
-                  "/work/n01/shared/se-eORCA025/domain_cfg_mes_v2.nc",
                 "/work/n01/shared/se-eORCA025/domain_cfg_mes_v2.nc",
-               "/work/n01/shared/se-eORCA025/domain_cfg_mes_v2.nc"
+		"/work/n01/shared/se-eORCA025/domain_cfg_mes_v2.nc",
+               "/work/n01/shared/se-eORCA025/4.2.1/domain_cfg_mes_nohalos.nc"
               ]
 }

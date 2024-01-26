@@ -22,7 +22,7 @@ import coast
 
 import numpy as np
 ystart=1976
-ystop=2016
+ystop=2019
 names,dpaths,DOMS,_  = coast.experiments(experiments='experiments_arch.json')
 Q={}
 for i,EXPNAM in enumerate(names):    
@@ -56,6 +56,7 @@ t=np.arange(Q['EXP_G1sp5_full_IWD_JRA'].shape[0])/12+1976
 plt.plot(t,Q['EXP_IWD02']/1e6,t,Q['EXP_G1sp5_full_IWD_JRA']/1e6,t,Q['EXP_G1sp6_full_IWD_soenhance_1.5_tmx']/1e6,)
 plt.title('Drake Passage transport (Sv)')
 plt.legend(['EXP_IWD02','EXP_G1sp5_full_IWD_JRA','EXP_G1sp6_full_IWD_soenhance_1.5_tmx'])
+plt.savefig('../Figures/DP_transport.png')
 
 
 
