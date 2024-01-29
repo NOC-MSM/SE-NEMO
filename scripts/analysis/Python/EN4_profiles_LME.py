@@ -36,7 +36,7 @@ fn_domain='C:\\Users\\jholt\\OneDrive - NOC\\Documents\\Data\\SENEMO\\eORCA025_b
 ystart = 2019
 ystop = 2019
 nLME = LME_Data["DOMNAM"].shape[0]
-for iLME in  range(67): # needs to work for cluster 17
+for iLME in range(32,67): # needs to work for cluster 17
     LME_Name=LME_Data["DOMNAM"][iLME]
 
     nemo = coast.Gridded(fn_data=fn_domain, config='example_nemo_grid_t.json')
@@ -57,14 +57,16 @@ for iLME in  range(67): # needs to work for cluster 17
     profile = coast.Profile(config=fn_profile_config)
     fn_profile = profile.make_filenames(en4_path, 'EN4', ystart, ystop)
     profile= profile.extract_en4_profiles(fn_profile, region_bounds,chunks={"id_dim" : 100})
+    if profile.dataset.id_dim.shape[0] > 0:
+        pa = coast.ProfileStratification(profile)
+        Zmax = 200  # metres
 
-    pa = coast.ProfileStratification(profile)
-    Zmax = 200  # metres
+        pa.calc_pea(profile,nemo, Zmax,rmax=25.0,limits=limits)
+        pa.match_to_grid(nemo,rmax=25.0,limits=limits)#,grid_name="eorca025") # this over rights nemo
 
-    pa.calc_pea(profile,nemo, Zmax,rmax=25.0,limits=limits)
-    pa.match_to_grid(nemo,rmax=25.0,limits=limits)#,grid_name="eorca025") # this over rights nemo
-
-    fname='../Data/{0}_EN4_PEA_SST_SSS_v1.nc'.format(LME_Name)
-    pa.dataset.to_netcdf(fname)
+        fname='../Data/{0}_EN4_PEA_SST_SSS_v1.nc'.format(LME_Name)
+        pa.dataset.to_netcdf(fname)
+    else:
+        print('no data',LME_Name)
     stop_time = time.perf_counter()
     print(stop_time - start_time)
