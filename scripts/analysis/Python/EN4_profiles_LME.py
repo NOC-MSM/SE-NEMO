@@ -19,24 +19,23 @@ if isliv:
  sys.path.insert(0,'/login/jholt/work/Git/COAsT/')
 else:
  sys.path.insert(0,'/home/users/jholt/Git/COAsT/')
-coast_path='C:\\Users\\jholt\\Git\\COAsT'
-
-sys.path.insert(0,coast_path)
+#coast_path='C:\\Users\\jholt\\Git\\COAsT'
+#sys.path.insert(0,coast_path)
 import coast
 LME_Data=np.load('../Data/LME_gridinfo_V4.npz')
 en4_path='/projectsa/NEMO/OBS/EN4.2.1/'
 en4_name='EN.4.2.1.f.profiles.l09.'
 
-en4_path='C:\\Users\\jholt\\OneDrive - NOC\\Documents\\Data\\EN4\\'
+#en4_path='C:\\Users\\jholt\\OneDrive - NOC\\Documents\\Data\\EN4\\'
 
 fn_profile_config='../Config/example_en4_profiles.json'
-fn_domain='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/domcfg_eORCA025_v2.nc'
-fn_domain='C:\\Users\\jholt\\OneDrive - NOC\\Documents\\Data\\SENEMO\\eORCA025_bathy_meter.nc'
-
-ystart = 2019
+fn_domain='/projectsa/NEMO/jholt/SE-NEMO/INPUTS/eORCA025_bathy_meter.nc'
+#fn_domain='C:\\Users\\jholt\\OneDrive - NOC\\Documents\\Data\\SENEMO\\eORCA025_bathy_meter.nc'
+out_path = '/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/EN4.2.1/'
+ystart = 1978
 ystop = 2019
 nLME = LME_Data["DOMNAM"].shape[0]
-for iLME in range(32,67): # needs to work for cluster 17
+for iLME in range(66):
     LME_Name=LME_Data["DOMNAM"][iLME]
 
     nemo = coast.Gridded(fn_data=fn_domain, config='example_nemo_grid_t.json')
@@ -64,7 +63,7 @@ for iLME in range(32,67): # needs to work for cluster 17
         pa.calc_pea(profile,nemo, Zmax,rmax=25.0,limits=limits)
         pa.match_to_grid(nemo,rmax=25.0,limits=limits)#,grid_name="eorca025") # this over rights nemo
 
-        fname='../Data/{0}_EN4_PEA_SST_SSS_v1.nc'.format(LME_Name)
+        fname='{0}/{1}_{2}_{3}_EN4_PEA_SST_SSS_v1.nc'.format(out_path,LME_Name,ystart,ystop)
         pa.dataset.to_netcdf(fname)
     else:
         print('no data',LME_Name)

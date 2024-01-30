@@ -39,7 +39,8 @@
 			"soce": "salinity",
 			"sossheig": "ssh",
 			"zos": "ssh",
-			"Bathymetry": "bathymetry"
+			"Bathymetry": "bathymetry",
+			"bathy_metry": "bathymetry"
 		},
 		"coord_vars": [
 			"longitude",
