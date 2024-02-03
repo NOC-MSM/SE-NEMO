@@ -40,12 +40,14 @@ ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.'
 ln_hpg_djc='.false.';                         ln_calc_tdiss='.false.'
 ########################################################################
 ```
-N.B. GS1p1_tide uses the namelist_ref wave drag file, defined as:
+N.B. GS1p1_tide does not calculate tdiss (internal wave drag) online, 
+but also does not use the default input file 
+in namelist_ref (cn_int_wave_drag = './INPUTS/tdiss_R025.nc').
+Instead, that is modified by namelist_cfg_template to a field that's 
+double in amplitude:
 ```
-cn_int_wave_drag = './INPUTS/tdiss_R025.nc'  ! filename for internal wave drag dissipation
+cn_int_wave_drag = 'INPUTS/tdiss_R025_fac2.nc',
 ```
-and is not modified further in namelist_cfg_template.
-
 
 
 **EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2 (a.k.a GS1p2_full):**
@@ -63,9 +65,15 @@ ln_boost='.false.'   ; ln_gls='.true.'      ; ln_int_wave_drag='.true.'
 ln_hpg_djc='.true.';                         ln_calc_tdiss='.true.'
 ########################################################################
 ```
-N.B. In namelist_cfg_template, the wave drag file is defined for GS1p2_full as:
+N.B. GS1p2_full does calculate tdiss (internal wave drag) online.
+It's necessary for both ln_int_wave_drag and ln_calc_tdiss to be '.true.'
+to reach the appropriate subroutine.
+
+Therefore, although there is a definition in namelist_cfg_template of 
 ```
 cn_int_wave_drag = 'INPUTS/tdiss_R025_fac2.nc',
 ```
+it is not used in this case.
+
 
 Data can be found on JASMIN under `/gws/nopw/j04/class_vol2/senemo`.
