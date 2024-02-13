@@ -15,8 +15,6 @@ import os
 from os.path import join, isfile, basename, splitext
 import glob
 import numpy as np
-from matplotlib import pyplot as plt
-import matplotlib.gridspec as gridspec
 import xarray as xr
 from dask.diagnostics import ProgressBar
 from utils import compute_masks
@@ -40,9 +38,6 @@ Vvar = 'vo'
 # Name of the variable to chunk with dask and size of chunks
 chunk_var = 'time_counter'
 chunk_size = 1
-
-#cols = ["red","blue","dodgerblue","limegreen"]
-cols = ["limegreen"]
 
 # ==============================================================================
 # loc msk
@@ -79,8 +74,10 @@ HPGEdir = MAINdir + HPGElst
 Ufiles = sorted(glob.glob(HPGEdir+'/*grid_U*.nc'))
 Vfiles = sorted(glob.glob(HPGEdir+'/*grid_V*.nc'))
 
-v_max = []
-v_avg = []
+v_max     = []
+v_99p_tot = []
+v_99p_loc = []
+v_avg     = []
 
 for F in range(len(Ufiles)):
 
@@ -99,17 +96,21 @@ for F in range(len(Ufiles)):
     U = U4.rolling({'x':2}).mean().fillna(0.)
     V = V4.rolling({'y':2}).mean().fillna(0.) 
     
-    hpge = np.sqrt(np.power(U,2) + np.power(V,2)) 
-    vel = hpge.where(ds_dom.tmask==1)
-    vel = vel.where((msk_glo==1) & (msk_ant==1))
+    vel_t = np.sqrt(np.power(U,2) + np.power(V,2)) 
+    vel_l = vel_t.where(ds_dom.tmask==1)
+    vel_l = vel_l.where((msk_glo==1) & (msk_ant==1))
 
-    v_max.extend(hpge.max(dim=('z','y','x')).values.tolist())
-    v_avg.extend(((cel_vol*vel).sum(dim=["x","y","z"], skipna=True) / dom_vol).values.tolist())
+    v_max.extend(vel_t.max(dim=('z','y','x')).values.tolist())
+    v_99p_tot.extend(vel_t.quantile(0.99,dim=('z','y','x')).values.tolist())
+    v_99p_loc.extend(vel_l.quantile(0.99,dim=('z','y','x')).values.tolist())
+    v_avg.extend(((cel_vol*vel_l).sum(dim=["x","y","z"], skipna=True) / dom_vol).values.tolist())
 
 # Saving 
 
 ds = xr.Dataset()
 ds["max_u"] = xr.DataArray(np.asarray(v_max), dims=('t'))
+ds["u_99p_tot"] = xr.DataArray(np.asarray(v_99p_tot), dims=('t'))
+ds["u_99p_loc"] = xr.DataArray(np.asarray(v_99p_loc), dims=('t'))
 ds["avg_u"] = xr.DataArray(np.asarray(v_avg), dims=('t'))
 
 # -------------------------------------------------------------------------------------   
