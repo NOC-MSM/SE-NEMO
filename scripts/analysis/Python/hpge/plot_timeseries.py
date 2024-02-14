@@ -37,7 +37,7 @@ fig, ax = plt.subplots(figsize=(16,9))
 ds  = xr.open_dataset(join(join(MAINdir,HPGElst),FileVel)).squeeze()
 
 ax.plot(np.arange(1,32), ds.max_u*100., linestyle="-", linewidth=5, color='blue', label='max{$| \mathbf{u} |$}')
-#ax.plot(np.arange(1,32), ds.avg_u*100., linestyle="--", linewidth=5, color='red', label='mean $| \mathbf{u} |$')
+ax.plot(np.arange(1,32), ds.u_99p_loc*100., linestyle="--", linewidth=5, color='gold', label='99%{$| \mathbf{u} |$}')
 ax.plot(np.arange(1,32), ds.avg_u*100., linestyle="--", linewidth=5, color='red', label='$V_L^{-1} \int_{V_L} | \mathbf{u} | \mathrm{d}V$')
        
 plt.rc('legend', **{'fontsize':35})
