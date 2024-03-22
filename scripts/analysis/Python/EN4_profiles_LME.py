@@ -36,7 +36,7 @@ fn_domain='C:\\Users\\jholt\\OneDrive - NOC\\Documents\\Data\\SENEMO\\eORCA025_b
 ystart = 2019
 ystop = 2019
 nLME = LME_Data["DOMNAM"].shape[0]
-for iLME in range(32,67): # needs to work for cluster 17
+for iLME in range(67,nLME): # needs to work for cluster 17
     LME_Name=LME_Data["DOMNAM"][iLME]
 
     nemo = coast.Gridded(fn_data=fn_domain, config='example_nemo_grid_t.json')
