@@ -35,7 +35,9 @@ out_path = '/projectsa/NEMO/jholt/SE-NEMO/ASSESSMENT/EN4.2.1/'
 ystart = 1978
 ystop = 2019
 nLME = LME_Data["DOMNAM"].shape[0]
+
 for iLME in range(66):
+
     LME_Name=LME_Data["DOMNAM"][iLME]
 
     nemo = coast.Gridded(fn_data=fn_domain, config='example_nemo_grid_t.json')
