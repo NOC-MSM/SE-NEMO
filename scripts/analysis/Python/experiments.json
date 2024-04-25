@@ -1,6 +1,6 @@
 {
 		"exp_names": [
-                "GS1p2_full",
+                "GS1p2_full_oldtidiss",
                 "GS1p1_tide",
                 "GS1p0_notide",
                 "GS1p3_full_notide",
@@ -8,7 +8,9 @@
 		        "CNRM",
                 "GS1p2_full_notdiss",
                 "GS1p2_newTDISS_simple",
-                "GS1p2_calcTDISS"
+                "GS1p2_calcTDISS",
+                "GS1p5_IWD_JRD",
+                "GS1p2_full"
         ],
 		"dirs":[
                  "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p2_full/output_old/",
@@ -19,7 +21,9 @@
                  "/gws/nopw/j04/class_vol2/annkat/SE_CNRM_OUTPUTS/",
                  "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p2_full_notdiss/output",
                  "/gws/nopw/j04/class_vol2/senemo/jholt/TDISS-Test/EXP_GS1p2_newTDISS_simple/",
-          "/gws/nopw/j04/class_vol2/senemo/jholt/TDISS-Test/EXP_GS1p2_calctdiss_10yr/"
+          "/gws/nopw/j04/class_vol2/senemo/jholt/TDISS-Test/EXP_GS1p2_calctdiss_10yr/",
+          "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p5_full_IWD_JRA/output/",
+          "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/GS1p2_full/output/"
                 ],
         "domains":[    
                   "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p2_full/config/domain_cfg.nc",
@@ -30,7 +34,9 @@
 		          "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p2_full/config/domain_cfg.nc", 
 		              "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p2_full/config/domain_cfg.nc",
 		              "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p2_full/config/domain_cfg.nc",
-                        "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p2_full/config/domain_cfg.nc"
+                        "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p2_full/config/domain_cfg.nc",
+                  "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p2_full/config/domain_cfg.nc",
+                  "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/GS1p2_full/config/domain_cfg.nc"
               ]
 		
 }

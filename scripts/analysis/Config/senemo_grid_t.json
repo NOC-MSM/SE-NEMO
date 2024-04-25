@@ -61,6 +61,8 @@
 			"time_counter": "time0",
 			"glamt": "longitude",
 			"gphit": "latitude",
+			"nav_lon": "longitude",
+			"nav_lat": "latitude",
 			"e1t": "e1",
 			"e2t": "e2",
 			"e3t_0": "e3_0",

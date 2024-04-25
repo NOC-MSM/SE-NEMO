@@ -1,0 +1,27 @@
+{
+		"exp_names": [
+                "ORCA1",
+                "ORCA025",
+                "ORCA0083",
+              "GS1p2_full",
+              "GS1p1_tide",
+              "GS1p0_notide"                
+        		],
+		"dirs":[
+                 "/gws/nopw/j04/nemo_vol4/ORCA1-N006-MEDUSA/means/",
+                 "/gws/nopw/j04/nemo_vol4/ORCA025-N006/means/",
+                 "/gws/nopw/j04/nemo_vol1/ORCA0083-N006/means/",
+                "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/GS1p2_full/output/",
+                "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/GS1p1_tide/output/",
+                "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/GS1p0_notide/output/"
+                ],
+        "domains":[    
+                  "/gws/nopw/j04/nemo_vol4/ORCA1-N006-MEDUSA/domain/mesh_zgr.nc",
+                  "/gws/nopw/j04/nemo_vol4/ORCA025-N006/domain/mesh_zgr.nc",
+                  "/gws/nopw/j04/nemo_vol1/ORCA0083-N006/domain/mesh_zgr.nc",
+                "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/GS1p2_full/config/domain_cfg.nc",
+                "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/GS1p1_tide/config/domain_cfg.nc",
+                "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/GS1p0_notide/config/domain_cfg.nc"
+            ]
+}
+

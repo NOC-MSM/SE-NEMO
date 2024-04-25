@@ -7,7 +7,7 @@ Created on Thu Oct 27 16:33:37 2022
 """
 
 coast_dir='/home/users/jholt/Git/COAsT/'
-coast_dir='/home/n01/n01/jholt/Git/COAsT/'
+#coast_dir='/home/n01/n01/jholt/Git/COAsT/'
 import sys
 sys.path.insert(0,coast_dir)
 import matplotlib.pylab as plt
@@ -28,11 +28,12 @@ ystart=1981
 ystop=1981
 ystart=1991
 ystop=2000
-names,dpaths,DOMS,_  = coast.experiments(experiments='experiments_arch.json')
+ystop=1991
+names,dpaths,DOMS,_  = coast.experiments(experiments='experiments.json')
 nemo_U={}
 
 #iexp=1
-for iexp in [3]:#,1]:#[1,2,3,4,5,0]:
+for iexp in [0,10]:#,1]:#[1,2,3,4,5,0]:
 #%%    
     print(names[iexp])
     #nemo_dir='/gws/nopw/j04/class_vol1/CLASS-MEDUSA/OUT_eORCA12/C001/monthly/'
@@ -55,7 +56,8 @@ for iexp in [3]:#,1]:#[1,2,3,4,5,0]:
     x_min=-79;x_max=12;y_min=26;y_max=69
 #Atlantic
     x_min=-98;x_max=26.5;y_min=-56;y_max=69
-    
+#NWS
+    x_min = -19;x_max = 13;y_min = 40;y_max = 65
     j,i,_=nemo_t.find_j_i_list(lon=[x_min,x_max,x_max,x_min],lat=[y_min,y_min,y_max,y_max])
     imin=min(i)
     imax=max(i)
@@ -74,8 +76,8 @@ for iexp in [3]:#,1]:#[1,2,3,4,5,0]:
                                            Np=6
                                            ,headwidth=5,scale=80,minshaft=2      
                                            )
-    plt.savefig('../Figures/Circulation/Surface_Currents_Atlantic_' + Name.replace(' ','_')+'.png',dpi=300)
-    #fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_NEA_{0}.nc".format(Name)).replace(' ','_')
+    plt.savefig('../Figures/Circulation/Surface_Currents_NWS_' + Name.replace(' ','_')+'.png',dpi=300)
+    fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_NWS_{0}.nc".format(Name)).replace(' ','_')
     #nemo_t_out=coast.Gridded(nemo_t,config=fn_config_t_grid)
     #surf.save_currents(SP,US,VS,fn_out,nemo_t_out)
     nemo_U[iexp]=nemo_u
