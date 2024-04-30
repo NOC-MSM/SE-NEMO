@@ -110,7 +110,7 @@ def nearest_time_index(items, pivot):
 # read in specified iLME
 args = sys.argv
 try:
-    iLME = args[1]
+    iLME = int(args[1])
 except:
     iLME = 34  # Gulf of Thailand
     print('No input LME specified. Use Gulf of Thailand')
@@ -251,7 +251,7 @@ pa_datasets = xr.concat(datasets, dim="id_dim")
 
 # Save to file
 fn_out = '{0}/{1}_{2}_{3}_NEMO_PEA_SST_SSS_binned.nc'.format(out_path, LME_Name, ystart, ystop)
-print("Saving combined model and obs data into a single file: {fn_out}")
+print(f"Saving combined model and obs data into a single file: {fn_out}")
 pa_datasets.to_netcdf(fn_out)
 
 stop_time = time.perf_counter()
