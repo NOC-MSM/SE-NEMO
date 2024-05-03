@@ -34,10 +34,10 @@ x_max = 13
 y_min = 40
 y_max = 65
 
-x_min=90
-x_max=132
-y_min=-12.8
-y_max=24.7
+#x_min=90
+#x_max=132
+#y_min=-12.8
+#y_max=24.7
 
 
 
@@ -107,7 +107,7 @@ with open(outname,'wb' ) as f:
 #   A['slmean']=slmean
    pickle.dump(A,f)
 #%%
-outname='/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/SL_std_SENEMO_ORCA_SEASIA1.p'
+outname='/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/SL_std_SENEMO_ORCA_NWS1.p'
 with open(outname,'rb' ) as f:
 
 #   A['slmean']=slmean
@@ -138,7 +138,7 @@ for iexp in [1,0,2,5,4,3]:
     elif iexp in [4,3]:
         VAR=ssh_std[iexp]-ssh_std[5]
         vmin=-0.05
-        vmax=0.05  
+        vmax=0.05
 
     else:
         X0=x[1].ravel()
@@ -147,19 +147,19 @@ for iexp in [1,0,2,5,4,3]:
         X0=X0[~ssh_std0.mask]
         Y0=Y0[~ssh_std0.mask]
         ssh_std0=ssh_std0[~ssh_std0.mask]
-        
+
 #        interp = scipy.interpolate.NearestNDInterpolator(list(zip(Y0,X0)), ssh_std0)
         interp = scipy.interpolate.LinearNDInterpolator(list(zip(Y0,X0)), ssh_std0)
 
         ssh_std0_in=interp(y[iexp],x[iexp])
         VAR=ssh_std[iexp]-ssh_std0_in
         vmin=-0.05
-        vmax=0.05   
+        vmax=0.05
     xylims=[x_min,x_max,y_min,y_max]
-    
+
     im=axs[ir,ic].pcolormesh(X,Y, VAR,transform=ccrs.PlateCarree(),vmin=vmin,vmax=vmax,cmap=cmap1)
     axs[ir,ic].set_extent(xylims,crs=ccrs.PlateCarree())
-    
+
     #plt.colorbar(im,orientation='horizontal')
 #    axs[iexp].set_title(names[iexp])
 #    if iexp ==2 :
@@ -167,7 +167,7 @@ for iexp in [1,0,2,5,4,3]:
         delta=''
     else:
         delta="$\Delta$"
-    axs[ir,ic].set_title(f"{delta}STD SL {names[iexp]}")
+    axs[ir,ic].set_title(f"{delta}$\sigma$ {names[iexp]}",fontsize=12)
 #    else:
 #        axs[iexp].set_title(f"STD SL {names[iexp]} - {names[2]}")
     if iexp == 1:
@@ -179,8 +179,9 @@ for iexp in [1,0,2,5,4,3]:
 #       cbar=fig.colorbar(im, cax=cbar_ax,orientation='vertical')
 plt.subplots_adjust(hspace=-0.3,wspace=0.2)#left=0.05,right=0.83,bottom=0.025, top=0.95)
 cbar_ax = fig.add_axes([0.03, 0.375, 0.03, 0.2285])
-cbar=fig.colorbar(im1, cax=cbar_ax,orientation='vertical')  
-
-cbar_ax = fig.add_axes([0.91, 0.375, 0.03, 0.2285])
-cbar=fig.colorbar(im2, cax=cbar_ax,orientation='vertical')  
-plt.savefig('../Figures/SSH_std_SENEMO_ORCA-triad-1990-2009_SEASIA2.png',dpi=300)
+cbar=fig.colorbar(im1, cax=cbar_ax,orientation='vertical')
+cbar_ax.set_title(f"$\sigma$ (m)")
+cbar_ax = fig.add_axes([0.92, 0.375, 0.03, 0.2285])
+cbar_ax.set_title(f"$\Delta\sigma$ (m)")
+cbar=fig.colorbar(im2, cax=cbar_ax,orientation='vertical')
+plt.savefig('../Figures/SSH_std_SENEMO_ORCA-triad-1990-2009_NWS4.png',dpi=300)
