@@ -115,6 +115,21 @@ except:
     iLME = 34  # Gulf of Thailand
     print('No input LME specified. Use Gulf of Thailand')
 
+try:
+    config = str(args[2])
+except:
+    config = "GS1p0_notide"
+
+if config == "GS1p0_notide":
+    print(config)
+elif config == "GS1p1_tide":
+    print(config)
+elif config == "GS1p2_full":
+    print(config)
+else:
+   print("Do not recognise that configuration. Expected: [GS1p0_notide / GS1p1_tide / GS1p2_full]")
+
+
 sys.path.insert(0,'/home/users/jelt/GitHub/COAsT/')
 
 import coast
@@ -127,7 +142,7 @@ ystop = 2019
 # Load the rebinned EN4 data by LME. These are averaged onto the NEMO space-time grid
 LME_en4_in_dir = "/gws/nopw/j04/class_vol2/senemo/jelt/PROCESSED/EN4.2.1/1978-2019/"
 in_path = LME_en4_in_dir
-out_path = LME_en4_in_dir
+out_path = LME_en4_in_dir + config + "/"
 
 #%% load processed EN4 data
 # load LME data for names
@@ -141,8 +156,13 @@ print(f'{LME_Name}: {iLME} of {nLME}')
 start_time = time.perf_counter()
 first_time = True
 
-fn_in = '{0}/{1}_{2}_{3}_EN4_PEA_SST_SSS_binned.nc'.format(in_path, LME_Name, ystart, ystop)
+fn_in  = '{0}/{1}_{2}_{3}_EN4_PEA_SST_SSS_binned.nc'.format(in_path, LME_Name, ystart, ystop)
+fn_out = '{0}/{1}_{2}_{3}_NEMO_PEA_SST_SSS_binned.nc'.format(out_path, LME_Name, ystart, ystop)
 fn_profile_config='/home/users/jelt/GitHub/COAsT/config/example_en4_profiles.json'
+
+if os.path.isfile(fn_out):
+    print(f"{fn_out} already exists. Exit.")
+    sys.exit()
 
 profile = coast.Profile(config=fn_profile_config)
 profile.dataset = xr.open_dataset(fn_in, chunks={'id_dim': 10000})
@@ -154,7 +174,8 @@ profile.dataset = xr.open_dataset(fn_in, chunks={'id_dim': 10000})
 
 # Set up stationary NEMO paths
 #fn_nemo_data = "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p0_notide/output/SENEMO_1m*grid_T*.nc"
-fn_nemo_grid = "/gws/nopw/j04/class_vol2/senemo/jdha/FINAL_TESTING/EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2/config/domain_cfg.nc"
+#fn_nemo_grid = "/gws/nopw/j04/class_vol2/senemo/jdha/FINAL_TESTING/EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2/config/domain_cfg.nc"
+fn_nemo_grid = "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/" + config + "/config/domain_cfg.nc"
 fn_nemo_config_t = "/gws/nopw/j04/class_vol2/senemo/jelt/PROCESSED/tmp_nemo_grid_t.json"
 
 ## Loop over year and load NEMO data if there are profiles to extract
@@ -164,7 +185,8 @@ for year in range(ystart, ystop+1):
         yr_mon_str = str(year) + '-' + str(month).zfill(2)
         #if (year in profile.dataset.time.dt.year) and (month in profile.dataset.time.dt.month):
         if np.datetime64(yr_mon_str) in profile.dataset.time.astype('datetime64[M]'):
-            fn_nemo_data = "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p0_notide/output/SENEMO_1m_*grid_T*"+str(year)+str(month).zfill(2)+".nc"
+            #fn_nemo_data = "/gws/nopw/j04/class_vol2/senemo/FINAL_PHYSICS_RUNS/GS1p0_notide/output/SENEMO_1m_*grid_T*"+str(year)+str(month).zfill(2)+".nc"
+            fn_nemo_data = "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/" + config + "/output/SENEMO_1m_*grid_T*"+str(year)+str(month).zfill(2)+".nc"
 
             print(f'load NEMO month-year: {yr_mon_str}')
             print(f"event matches: {(np.datetime64(yr_mon_str) == profile.dataset.time.astype('datetime64[M]').values).sum()}")
@@ -250,7 +272,7 @@ for year in range(ystart, ystop+1):
 pa_datasets = xr.concat(datasets, dim="id_dim")
 
 # Save to file
-fn_out = '{0}/{1}_{2}_{3}_NEMO_PEA_SST_SSS_binned.nc'.format(out_path, LME_Name, ystart, ystop)
+
 print(f"Saving combined model and obs data into a single file: {fn_out}")
 pa_datasets.to_netcdf(fn_out)
 
