@@ -22,7 +22,7 @@ nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.false.'
 ln_rstdate='.true.' ; ln_shlat2d='.false.'   ; nn_diaharm=1981
 rn_Cd0=1.0e-3       ; ln_loglayer='.false.' ; ln_tide='.false.'
 ln_boost='.true.'   ; ln_gls='.false.'       ; ln_int_wave_drag='.false.'
-ln_hpg_djc='.false.' ;
+ln_hpg_djc='.false.';                         ln_calc_tdiss='.false.'
 ########################################################################
 ```
 
@@ -37,7 +37,7 @@ nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.false.'
 ln_rstdate='.true.' ; ln_shlat2d='.false.'   ; nn_diaharm=1981
 rn_Cd0=2.5e-3       ; ln_loglayer='.false.' ; ln_tide='.true.'
 ln_boost='.true.'   ; ln_gls='.true.'       ; ln_int_wave_drag='.true.'
-ln_hpg_djc='.false.' ;
+ln_hpg_djc='.false.';                         ln_calc_tdiss='.false.'
 ########################################################################
 ```
 N.B. GS1p1_tide uses the namelist_ref wave drag file, defined as:
@@ -60,7 +60,7 @@ nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.true.'
 ln_rstdate='.true.' ; ln_shlat2d='.true.'   ; nn_diaharm=1981
 rn_Cd0=2.5e-3       ; ln_loglayer='.true.'  ; ln_tide='.true.'
 ln_boost='.false.'   ; ln_gls='.true.'      ; ln_int_wave_drag='.true.'
-ln_hpg_djc='.true.' ;
+ln_hpg_djc='.true.';                         ln_calc_tdiss='.true.'
 ########################################################################
 ```
 N.B. In namelist_cfg_template, the wave drag file is defined for GS1p2_full as:

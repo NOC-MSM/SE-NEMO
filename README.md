@@ -10,9 +10,9 @@ Base Configuration: GO8p6 at NEMO 4.0.4 or NEMO 4.2.1
 On ARCHER2
 ```
 git clone git@github.com:NOC-MSM/SE-NEMO.git
-./SE-NEMO/scripts/setup/se-eORCA025_setup -p $PWD/test  -r $PWD/cfgs/SE-NEMO -n 4.0.4 -x 2.5 -m archer2 -a mpich -c gnu
+./SE-NEMO/scripts/setup/se-eORCA025_setup -p $PWD/test  -r $PWD/SE-NEMO -n 4.0.4 -x 2.5 -m archer2 -a mpich -c gnu
 # or for 4.2.1
-#./SE-NEMO/scripts/setup/se-eORCA025_setup -p $PWD/test  -r $PWD/cfgs/SE-NEMO -n 4.2.1 -x 2 -m archer2 -a mpich -c gnu
+#./SE-NEMO/scripts/setup/se-eORCA025_setup -p $PWD/test  -r $PWD/SE-NEMO -n 4.2.1 -x 2 -m archer2 -a mpich -c gnu
 cd test/nemo/cfgs/se-eORCA025/
 cp -rP EXPREF EXP_MYRUN
 cd EXP_MYRUN
