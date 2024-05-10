@@ -28,7 +28,7 @@ nn_wxios=0,
 /
 &namcfg
 cn_domcfg='domain_cfg',
-ln_closea=.true.,
+ln_closea=.false.,
 ln_read_cfg=.true.,
 ln_use_jattr=.false.,
 ln_write_cfg=.false.,
@@ -168,7 +168,8 @@ rn_si0=0.35,
 sn_chl='chlorophyll',-1,'CHLA',.true.,.true.,'yearly','','','',
 /
 &namsbc_rnf
-cn_dir='./INPUTS/',
+!cn_dir='./INPUTS/',
+cn_dir='./',
 ln_rnf_depth=.false.,
 ln_rnf_depth_ini=.false.,
 ln_rnf_icb=.false.,
@@ -178,7 +179,8 @@ ln_rnf_tem=.false.,
 rn_avt_rnf=2.0e-3,
 rn_hrnf=10.0,
 rn_rfact=1.0,
-sn_cnf='runoff_1m_nomask.nc',0,'socoefr',.false.,.true.,'yearly',
+!sn_cnf='runoff_1m_nomask.nc',0,'socoefr',.false.,.true.,'yearly',
+sn_cnf='JRA_RIVERS/JRA55_coef.nc',0,'socoefr',.false.,.true.,'yearly',
 '','','',
 sn_rnf=XXX_RNF_XXX,
 '','','',
@@ -254,7 +256,9 @@ rdttideramp   =    28.,
 ln_calc_tdiss = XXX_CTD_XXX ,   ! calculate tdiss rather than reading in
 cn_h_rough = 'INPUTS/h_RMS_topog_anom.nc', ! roughness file
 rn_kappa_tdiss = 0.00075398 ! x12 value  0.00006283,  ! wave number Jayne and Laurence 2004 value !282.74333! increasedwith x1500^2 x2
-tdiss_mindepth = 200.0 ! minimum depth to apply tdiss parameterisation 
+tdiss_mindepth = 500.0, ! minimum depth to apply tdiss parameterisation 
+rn_SO_enhance  = 0.0024 !  0.0016
+rn_lat_SO_enhance = -60.0,
 !
 clname(1) = 'SA',
 clname(2) = 'SSA',

@@ -1712,6 +1712,11 @@ CONTAINS
                   ENDDO
                  ENDDO
                  ENDIF
+!                Southern oceanenhancement
+                WHERE (gphit(:,:) <= rn_lat_SO_enhance)
+                    tdiss(:,:) = tdiss(:,:) + rn_SO_enhance *tmask(:,:, 1)
+                END WHERE
+
 !!!!!!!!!!!!!!!!!!!!
                  !jidbg= 477
                  !jjdbg= 170
