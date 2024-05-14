@@ -143,6 +143,7 @@ ystop = 2019
 LME_en4_in_dir = "/gws/nopw/j04/class_vol2/senemo/jelt/PROCESSED/EN4.2.1/1978-2019/"
 in_path = LME_en4_in_dir
 out_path = LME_en4_in_dir + config + "/"
+#out_path = LME_en4_in_dir + "/tmp" + "/"
 
 #%% load processed EN4 data
 # load LME data for names
