@@ -37,7 +37,7 @@ def cluster_plot(x,y,var,vmin,vmax,Title,Figname,iexp=None):
     A=np.load('Position.npz')
     Position=A['arr_0']
         
-    for icluster in range(clusters.values.shape[0]):  
+    for icluster in range(23):#(clusters.values.shape[0]):
         xylims=clusters.values[icluster,6:10]
         X=np.copy(x[icluster])
         Y=np.copy(y[icluster])        
@@ -94,9 +94,9 @@ if __name__ == '__main__':
     PEA_max={}
     PEA_ann={}
     SAL_mean={}
-    names,dpaths,DOMS,_  = coast.experiments(experiments='../Python/experiments.json')
-    for iexp in [0,1,2]:
-        for icluster in range(clusters.values.shape[0]):
+    names,dpaths,DOMS,_  = coast.experiments(experiments='../Python/experiments_paper.json')
+    for iexp in [0,2]:
+        for icluster in range(23):#clusters.values.shape[0]):
             print(iexp,icluster)
         #%%
             lims=clusters.values[icluster,2:6]
@@ -133,10 +133,10 @@ if __name__ == '__main__':
             nemo_clim_cluster=coast.Gridded(fn_data=fn_data,fn_domain=fn_domain,config=config,lims=lims)
         
             PEA=np.ma.masked_where(np.repeat(nemo_clim_cluster.dataset.bottom_level.values[np.newaxis,:,:]==0,12,axis=0),
-                                   nemo_clim_cluster.dataset.PEA_monthy_clim.values)
+                                   nemo_clim_cluster.dataset.pea_monthy_clim.values)
             
             SAL=np.ma.masked_where(np.repeat(nemo_clim_cluster.dataset.bottom_level.values[np.newaxis,:,:]==0,12,axis=0),
-                                   nemo_clim_cluster.dataset.SSS_monthy_clim.values)
+                                   nemo_clim_cluster.dataset.sss_monthy_clim.values)
             
                 
         
@@ -150,42 +150,47 @@ if __name__ == '__main__':
 #%%  
     vmin=0
     vmax=800                  
-    iexp=0        
-    Title='PEA annual max (Jm$^{-3}$)'
-    Figname='../Figures/'+names[iexp]+'_PEA_max.png'    
-    
-    
-    cluster_plot(x,y,PEA_max,vmin,vmax,Title,Figname,iexp=iexp)
-    Title='PEA annual cycle (Jm$^{-3}$)'
-    Figname='../Figures/'+names[iexp]+'_PEA_ann.png'
-    cluster_plot(x,y,PEA_ann,vmin,vmax/2,Title,Figname,iexp=iexp)
+
+
+    for iexp in [0,2]:
+        Title = f'PEA annual max (Jm$^{-3}$) {names[iexp]}'
+        Figname='../Figures/'+names[iexp]+'_PEA_max_2.png'
+
+        cluster_plot(x,y,PEA_max,vmin,vmax,Title,Figname,iexp=iexp)
+        Title='PEA annual cycle (Jm$^{-3}$)'
+        Figname='../Figures/'+names[iexp]+'_PEA_ann_2.png'
+        cluster_plot(x,y,PEA_ann,vmin,vmax/2,Title,Figname,iexp=iexp)
+
+
+
+    Title=f'SAL annual mean names[iexp]'
+    vmin=30
+    vmax=36
+    Figname='../Figures/'+names[iexp]+'_SAL_mean.png'
+    cluster_plot(x,y,SAL_mean,vmin,vmax,Title,Figname,iexp=iexp)
 #%%
     DPEA_max={}
     DPEA_ann={}
     DSAL_mean={}
 
-    for icluster in range(clusters.values.shape[0]):
-        DPEA_max[icluster]=PEA_max[icluster,0]-PEA_max[icluster,2]
-        DPEA_ann[icluster]=PEA_ann[icluster,0]-PEA_ann[icluster,2]
-        DSAL_mean[icluster]=SAL_mean[icluster,0]-SAL_mean[icluster,2]
+    for icluster in range(23):#clusters.values.shape[0]):
+        DPEA_max[icluster]=PEA_max[icluster,2]-PEA_max[icluster,0]
+        DPEA_ann[icluster]=PEA_ann[icluster,2]-PEA_ann[icluster,0]
+        DSAL_mean[icluster]=SAL_mean[icluster,2]-SAL_mean[icluster,0]
         
 #%%
-    Title='DPEA annual max (Jm$^{-3}$)'
+    Title=f'DPEA annual max (Jm$^{-3}$) {names[2]} - {names[0]}'
     vmin=-100
     vmax=100
-    Figname='../Figures/'+names[0]+'_'+names[2]+'_DPEA_max.png'
+    Figname='../Figures/'+names[2]+'_'+names[0]+'_DPEA_max.png'
     cluster_plot(x,y,DPEA_max,vmin,vmax,Title,Figname)
 #%%
-    Title='SAL annual mean'
-    vmin=30
-    vmax=36
-    Figname='../Figures/'+names[0]+'_'+names[2]+'_SAL_mean.png'
-    cluster_plot(x,y,SAL_mean,vmin,vmax,Title,Figname,iexp=0)
+
 
 #%%
-    Title='DSAL annual mean'
+    Title=f'DSAL annual mean {names[2]} - {names[0]}'
     vmin=-1
     vmax=1
-    Figname='../Figures/'+names[0]+'_'+names[2]+'_DSAL_mean.png'
+    Figname='../Figures/'+names[2]+'_'+names[0]+'_DSAL_mean.png'
     cluster_plot(x,y,DSAL_mean,vmin,vmax,Title,Figname)
         

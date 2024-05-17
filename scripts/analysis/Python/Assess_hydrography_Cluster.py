@@ -62,7 +62,8 @@ RUNNAMS=[
 'ORCA025-SE-NEMO_1990_2019_ZPS_NOTIDE'  
     ]
 RUNNAMS=['ORCA025-SE-NEMO_1990_2016_EXP_G1sp5_full_IWD_JRA']
-
+RUNNAMS=['ORCA025-SE-NEMO_1990_2019_GS1p2_full',
+         'ORCA025-SE-NEMO_1990_2019_GS1p0_notide'         ]
 SS={}
 SN={}
 LME_Clusters='../Data/LME_Clusters_eORCA025.csv'
@@ -86,6 +87,7 @@ for iR,RUNNAM in enumerate(RUNNAMS):
     vnames=['pea_monthy_clim', 'sst_monthy_clim','sss_monthy_clim']
    
     iwant_clusters=np.concatenate((np.arange(1,17),np.arange(18,23)))
+    #iwant_clusters=np.arange(1,23)
     for icluster in iwant_clusters:
 #%%
       #try:  
@@ -266,7 +268,7 @@ for iR,RUNNAM in enumerate(RUNNAMS):
     DD['LME']=np.append(DD['LME'],'N Weighted Mean')                                     
     df=pd.DataFrame(DD)
     df=df.set_index('LME')
-    df.to_csv(Outdir +'Errorstats_clusters_'+ RUNNAM +'_'+str(int(Depth_lim))+'m_'+mons+'_V2.csv')
+    df.to_csv(Outdir +'Errorstats_clusters_'+ RUNNAM +'_'+str(int(Depth_lim))+'m_'+mons+'_V3.csv')
     #writer = pd.ExcelWriter(Outdir +'Errorstats_'+ RUNNAM +'_V1.xlsx', engine='xlsxwriter')
     #df.to_excel(writer, sheet_name='Sheet1')
     #workbook  = writer.book
@@ -275,10 +277,10 @@ for iR,RUNNAM in enumerate(RUNNAMS):
 #%%
 plt.close('all')
 runs=['GS1p2_full','GS1p1_tide','GS1p0']
-runs=['GS1p2_full','GS1p0']
+runs=['GS1p2_full','GS1p0_notide']
 from matplotlib import cm    
 cmap0=cm.get_cmap('BrBG_r',lut=16)
-iwant_clusters=[4,5,10,11,14,15,16,20,22]
+#iwant_clusters=[4,5,10,11,14,15,16,20,22]
 nclusters_iw=len(iwant_clusters)
 #vmin=0
 #vmax=1.5
@@ -292,8 +294,15 @@ vmax=[-1.5,1.5,1.0,-1.5,1.5,1.0, 80,1.5,1.0]
 vmin=[ -80,0  ]
 vmax=[  80,1.5]
 
+vmin=[ -10,0  ]
+vmax=[  10,1.5]
+
+
+vmin=[ 1.5,0  , 1.5,0  ,-80,0  ]
+vmax=[-1.5,1.5,-1.5,1.5, 80,1.5]
+
 isp=0
-for Var in [vars[2]]:    
+for Var in vars:
     for Metric in Metrics[:2]:
         plt.figure()
         plt.pcolormesh(metrics[Metric,Var][iwant_clusters,:],cmap=cmap0,vmin=vmin[isp],vmax=vmax[isp])
@@ -307,7 +316,7 @@ for Var in [vars[2]]:
         cbax.set_position([0.87, 0.11, 0.04, 0.8])
         plt.colorbar(cax=cbax,orientation='vertical')
         isp=isp+1
-        fname='../Figures/{0}_{1}_Clim_v2.png'.format(Var,Metric)
+        fname='../Figures/{0}_{1}_Clim_v3.png'.format(Var,Metric)
         plt.savefig(fname)
 #%%                    
     #Table for each LME  
