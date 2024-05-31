@@ -11,7 +11,7 @@
 
 
 <!-- Files definition -->
-    <file_definition src="./file_def_nemo-oce.xml"/>     <!--  NEMO ocean dynamics                     -->
+    <file_definition src="./file_def_nemo-oce-with_harmonic.xml"/>     <!--  NEMO ocean dynamics                     -->
     <file_definition src="./file_def_nemo-ice.xml"/>     <!--  NEMO ocean sea ice                      -->
     <!-- 
 ============================================================================================================
