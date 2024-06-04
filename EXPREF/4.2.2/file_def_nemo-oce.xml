@@ -196,6 +196,8 @@
       <file_group id="2y"  output_freq="2y" output_level="10" enabled=".FALSE."/> <!-- real 2y files -->
       <file_group id="5y"  output_freq="5y" output_level="10" enabled=".FALSE."/> <!-- real 5y files -->
       <file_group id="10y" output_freq="10y" output_level="10" enabled=".FALSE."/> <!-- real 10y files -->
+<!-- Activation of intermediate output for multiple-linear-regression analysis (diamlr) -->
+      <file_group id="diamlr_files" output_freq="1d"  output_level="10" enabled=".TRUE."/>
 
    </file_definition>
     
