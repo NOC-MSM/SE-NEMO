@@ -58,10 +58,10 @@ that are available in the tidal-forcing implementation (see
     <field id="diamlr_r028"  field_ref="diamlr_time" expr="cos( __TDE_Mtm_omega__  * diamlr_time )" enabled=".TRUE."  comment="harmonic:cos:Mtm"  />
     <field id="diamlr_r029"  field_ref="diamlr_time" expr="sin( __TDE_S1_omega__   * diamlr_time )" enabled=".TRUE."  comment="harmonic:sin:S1"   />
     <field id="diamlr_r030"  field_ref="diamlr_time" expr="cos( __TDE_S1_omega__   * diamlr_time )" enabled=".TRUE."  comment="harmonic:cos:S1"   />
-    <field id="diamlr_r031"  field_ref="diamlr_time" expr="sin( __TDE_MU2_omega__  * diamlr_time )" enabled=".TRUE."  comment="harmonic:sin:MU2"  />
-    <field id="diamlr_r032"  field_ref="diamlr_time" expr="cos( __TDE_MU2_omega__  * diamlr_time )" enabled=".TRUE."  comment="harmonic:cos:MU2"  />
-    <field id="diamlr_r033"  field_ref="diamlr_time" expr="sin( __TDE_NU2_omega__  * diamlr_time )" enabled=".TRUE."  comment="harmonic:sin:NU2"  />
-    <field id="diamlr_r034"  field_ref="diamlr_time" expr="cos( __TDE_NU2_omega__  * diamlr_time )" enabled=".TRUE."  comment="harmonic:cos:NU2"  />
+    <field id="diamlr_r031"  field_ref="diamlr_time" expr="sin( __TDE_mu2_omega__  * diamlr_time )" enabled=".TRUE."  comment="harmonic:sin:MU2"  />
+    <field id="diamlr_r032"  field_ref="diamlr_time" expr="cos( __TDE_mu2_omega__  * diamlr_time )" enabled=".TRUE."  comment="harmonic:cos:MU2"  />
+    <field id="diamlr_r033"  field_ref="diamlr_time" expr="sin( __TDE_nu2_omega__  * diamlr_time )" enabled=".TRUE."  comment="harmonic:sin:NU2"  />
+    <field id="diamlr_r034"  field_ref="diamlr_time" expr="cos( __TDE_nu2_omega__  * diamlr_time )" enabled=".TRUE."  comment="harmonic:cos:NU2"  />
     <field id="diamlr_r035"  field_ref="diamlr_time" expr="sin( __TDE_L2_omega__   * diamlr_time )" enabled=".TRUE."  comment="harmonic:sin:L2"   />
     <field id="diamlr_r036"  field_ref="diamlr_time" expr="cos( __TDE_L2_omega__   * diamlr_time )" enabled=".TRUE."  comment="harmonic:cos:L2"   />
     <field id="diamlr_r037"  field_ref="diamlr_time" expr="sin( __TDE_T2_omega__   * diamlr_time )" enabled=".TRUE."  comment="harmonic:sin:T2"   />
@@ -1422,5 +1422,51 @@ that are available in the tidal-forcing implementation (see
     <field field_ref="temptot"             name="sctemtot"     />
   </field_group>
 
+      <field_group id="diamlr_fields">
+        <!-- Time -->
+        <field id="diamlr_time" grid_ref="diamlr_grid_T_2D" prec="8" />
+        <!-- Regressors for tidal harmonic analysis -->
+        <field id="diamlr_r001" field_ref="diamlr_time" expr="sin( __TDE_M2_omega__ * diamlr_time )" enabled=".TRUE."  comment="harmonic:sin:M2" />
+        <field id="diamlr_r002" field_ref="diamlr_time" expr="cos( __TDE_M2_omega__ * diamlr_time )" enabled=".TRUE."  comment="harmonic:cos:M2" />
+        <field id="diamlr_r003" field_ref="diamlr_time" expr="sin( __TDE_K1_omega__ * diamlr_time )" enabled=".TRUE."  comment="harmonic:sin:K1" />
+        <field id="diamlr_r004" field_ref="diamlr_time" expr="cos( __TDE_K1_omega__ * diamlr_time )" enabled=".TRUE."  comment="harmonic:cos:K1" />
+        <field id="diamlr_r005" enabled=".FALSE." />
+        <field id="diamlr_r006" enabled=".FALSE." />
+        <field id="diamlr_r007" enabled=".FALSE." />
+        <field id="diamlr_r008" enabled=".FALSE." />
+        <field id="diamlr_r009" enabled=".FALSE." />
+        <field id="diamlr_r010" enabled=".FALSE." />
+        <field id="diamlr_r011" enabled=".FALSE." />
+        <field id="diamlr_r012" enabled=".FALSE." />
+        <field id="diamlr_r013" enabled=".FALSE." />
+        <field id="diamlr_r014" enabled=".FALSE." />
+        <field id="diamlr_r015" enabled=".FALSE." />
+        <field id="diamlr_r016" enabled=".FALSE." />
+        <field id="diamlr_r017" enabled=".FALSE." />
+        <field id="diamlr_r018" enabled=".FALSE." />
+        <field id="diamlr_r019" enabled=".FALSE." />
+        <field id="diamlr_r020" enabled=".FALSE." />
+        <field id="diamlr_r021" enabled=".FALSE." />
+        <field id="diamlr_r022" enabled=".FALSE." />
+        <field id="diamlr_r023" enabled=".FALSE." />
+        <field id="diamlr_r024" enabled=".FALSE." />
+        <field id="diamlr_r025" enabled=".FALSE." />
+        <field id="diamlr_r026" enabled=".FALSE." />
+        <field id="diamlr_r027" enabled=".FALSE." />
+        <field id="diamlr_r028" enabled=".FALSE." />
+        <field id="diamlr_r029" enabled=".FALSE." />
+        <field id="diamlr_r030" enabled=".FALSE." />
+        <field id="diamlr_r031" enabled=".FALSE." />
+        <field id="diamlr_r032" enabled=".FALSE." />
+        <field id="diamlr_r033" enabled=".FALSE." />
+        <field id="diamlr_r034" enabled=".FALSE." />
+        <field id="diamlr_r035" enabled=".FALSE." />
+        <field id="diamlr_r036" enabled=".FALSE." />
+        <field id="diamlr_r037" enabled=".FALSE." />
+        <field id="diamlr_r038" enabled=".FALSE." />
+        <field id="diamlr_r101" field_ref="diamlr_time" expr="diamlr_time^0.0"                       enabled=".TRUE."  comment="mean"            />
+        <!-- Fields selected for regression analysis -->
+        <field id="diamlr_f001" field_ref="ssh"  enabled=".TRUE." />
+      </field_group>
   
 </field_definition>
