@@ -1,6 +1,6 @@
 #!/bin/bash
 # Lightweight script to set up SE-eORCA025 on ARCHER2 or Anemone (NOC and UoS cluster)
-set -e
+#set -e
 
 display_usage() {
    echo
@@ -72,7 +72,7 @@ fi
 cd $WORK_DIR
 
 echo "Making sure that the correct modules are loaded"
-
+echo ${HPC_TARG}
 case "${HPC_TARG}"
   in
   archer2) ENV_FILE=$REPO_DIR/scripts/env/archer2/${COMPILER}-${MPI_TARG}-ucx
@@ -87,7 +87,11 @@ case "${HPC_TARG}"
            ;;
   anemone) ENV_FILE=$REPO_DIR/scripts/env/anemone/${COMPILER}-${MPI_TARG}
 	  if [ -f "$ENV_FILE" ]; then
-	    . $REPO_DIR/scripts/env/anemone/${COMPILER}-${MPI_TARG}
+           echo $REPO_DIR/scripts/env/anemone/${COMPILER}-${MPI_TARG}
+	   # .   $REPO_DIR/scripts/env/anemone/${COMPILER}-${MPI_TARG}
+           module restore
+           module load NEMO/prg-env
+
 	  else
              echo "ENV file not recognised"
              echo "For anemone: ifort && impi are available"
@@ -98,7 +102,7 @@ case "${HPC_TARG}"
            echo "Machines available: archer2, anemone"
            exit 1
 esac
-
+echo ${NEMO_VER}
 case "${NEMO_VER}"
   in
   4.0.4|4.2.1|4.2.2)
