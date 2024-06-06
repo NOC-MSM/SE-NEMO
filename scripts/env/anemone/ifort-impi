@@ -1,2 +1,2 @@
-module restore
+module purge
 module load NEMO/prg-env
