@@ -19,7 +19,7 @@ nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.true.'
 ln_rstdate='.true.' ; ln_shlat2d='.true.'   ; nn_diaharm=1981
 rn_Cd0=2.5e-3       ; ln_loglayer='.true.'  ; ln_tide='.true.'
 ln_boost='.false.'  ; ln_gls='.true.'       ; ln_int_wave_drag='.true.'
-ln_hpg_djc='.true.' ;                         ln_calc_tdiss='.false.'
+ln_hpg_djc='.true.' ;                         ln_calc_tdiss='.true.'
 ########################################################################
 
 
@@ -126,14 +126,14 @@ fi
 
 if [ "$ln_rnf_new" = ".true." ]
 then
-	sn_rnf="'.\/JRA_RIVERS\/ORCA025_rivers_Antar_Green',24,'rorunoff',.false.,.false.,'yearly'"
+	sn_rnf="'.\/JRA_RIVERS\/ORCA025_rivers',24,'rorunoff',.false.,.false.,'yearly'"
 else
 	sn_rnf="'runoff_1m_nomask.nc',-1,'sornficb',.true.,.true.,'yearly'"
 fi
 
 echo $SLURM_NNODES
 
-. XXX_ENV_XXX
+. . XXX_ENV_XXX
 export LD_LIBRARY_PATH=${CRAY_LD_LIBRARY_PATH}:${LD_LIBRARY_PATH}
 export OMP_NUM_THREADS=1
 

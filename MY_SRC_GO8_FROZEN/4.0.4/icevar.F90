@@ -225,7 +225,8 @@ CONTAINS
       h_i(:,:,:) = v_i (:,:,:) * z1_a_i(:,:,:)
 
       zhmax    =          hi_max(jpl)
-      z1_zhmax =  1._wp / hi_max(jpl)               
+      z1_zhmax =  1._wp / hi_max(jpl)
+
       WHERE( h_i(:,:,jpl) > zhmax )   ! bound h_i by hi_max (i.e. 99 m) with associated update of ice area
          h_i  (:,:,jpl) = zhmax
          a_i   (:,:,jpl) = v_i(:,:,jpl) * z1_zhmax 
@@ -247,7 +248,7 @@ CONTAINS
       END WHERE
       !
       CALL ice_var_snwfra( h_s, za_s_fra )           ! calculate ice fraction covered by snow
-      a_ip_eff = MIN( a_ip_eff, 1._wp - za_s_fra )   ! make sure (a_ip_eff + a_s_fra) <= 1
+      a_ip_eff(:,:,:) = MIN( a_ip_eff(:,:,:), 1._wp - za_s_fra(:,:,:) )   ! make sure (a_ip_eff + a_s_fra) <= 1
       !
       !                                           !---  salinity (with a minimum value imposed everywhere)     
       IF( nn_icesal == 2 ) THEN

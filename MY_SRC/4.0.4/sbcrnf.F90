@@ -25,6 +25,7 @@ MODULE sbcrnf
    USE fldread        ! read input field at current time step
    USE iom            ! I/O module
    USE lib_mpp        ! MPP library
+   !
 
    IMPLICIT NONE
    PRIVATE
@@ -141,7 +142,10 @@ CONTAINS
             END WHERE
          ELSE                                                        ! use SST as runoffs temperature
             !CEOD River is fresh water so must at least be 0 unless we consider ice
-            rnf_tsc(:,:,jp_tem) = MAX( sst_m(:,:), 0.0_wp ) * rnf(:,:) * r1_rau0
+            !rnf_tsc(:,:,jp_tem) = MAX( sst_m(:,:), 0.0_wp ) * rnf(:,:) * r1_rau0
+            ! SLWA sst_m is potential temperature - use conservative temperature instead
+            rnf_tsc(:,:,jp_tem) = MAX( sst_m_con(:,:), 0.0_wp ) * rnf(:,:) * r1_rau0 ! SLWA
+
          ENDIF
          !                                                           ! use runoffs salinity data
          IF( ln_rnf_sal )   rnf_tsc(:,:,jp_sal) = ( sf_s_rnf(1)%fnow(:,:,1) ) * rnf(:,:) * r1_rau0

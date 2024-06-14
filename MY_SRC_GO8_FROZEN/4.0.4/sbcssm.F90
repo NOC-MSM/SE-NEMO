@@ -83,6 +83,7 @@ CONTAINS
          IF( l_useCT )  THEN    ;   sst_m(:,:) = eos_pt_from_ct( zts(:,:,jp_tem), zts(:,:,jp_sal) )
          ELSE                    ;   sst_m(:,:) = zts(:,:,jp_tem)
          ENDIF
+         sst_m_con(:,:) = zts(:,:,jp_tem)  ! SLWA conservative sst for rivers
          sss_m(:,:) = zts(:,:,jp_sal)
          !                          ! removed inverse barometer ssh when Patm forcing is used (for sea-ice dynamics)
          IF( ln_apr_dyn ) THEN   ;   ssh_m(:,:) = sshn(:,:) - 0.5 * ( ssh_ib(:,:) + ssh_ibb(:,:) )
@@ -106,6 +107,7 @@ CONTAINS
             IF( l_useCT )  THEN    ;   sst_m(:,:) = zcoef * eos_pt_from_ct( zts(:,:,jp_tem), zts(:,:,jp_sal) )
             ELSE                    ;   sst_m(:,:) = zcoef * zts(:,:,jp_tem)
             ENDIF
+            sst_m_con(:,:) = zcoef * zts(:,:,jp_tem)  ! SLWA conservative sst for rivers
             sss_m(:,:) = zcoef * zts(:,:,jp_sal)
             !                          ! removed inverse barometer ssh when Patm forcing is used (for sea-ice dynamics)
             IF( ln_apr_dyn ) THEN   ;   ssh_m(:,:) = zcoef * ( sshn(:,:) - 0.5 * ( ssh_ib(:,:) + ssh_ibb(:,:) ) )
@@ -121,6 +123,7 @@ CONTAINS
             ssu_m(:,:) = 0._wp     ! reset to zero ocean mean sbc fields
             ssv_m(:,:) = 0._wp
             sst_m(:,:) = 0._wp
+            sst_m_con(:,:) = 0._wp  ! SLWA conservative sst for rivers
             sss_m(:,:) = 0._wp
             ssh_m(:,:) = 0._wp
             e3t_m(:,:) = 0._wp
@@ -134,6 +137,7 @@ CONTAINS
          IF( l_useCT )  THEN     ;   sst_m(:,:) = sst_m(:,:) + eos_pt_from_ct( zts(:,:,jp_tem), zts(:,:,jp_sal) )
          ELSE                    ;   sst_m(:,:) = sst_m(:,:) + zts(:,:,jp_tem)
          ENDIF
+         sst_m_con(:,:) =  sst_m_con(:,:) + zts(:,:,jp_tem)  ! SLWA conservative sst for rivers
          sss_m(:,:) = sss_m(:,:) + zts(:,:,jp_sal)
          !                          ! removed inverse barometer ssh when Patm forcing is used (for sea-ice dynamics)
          IF( ln_apr_dyn ) THEN   ;   ssh_m(:,:) = ssh_m(:,:) + sshn(:,:) - 0.5 * ( ssh_ib(:,:) + ssh_ibb(:,:) )
@@ -149,6 +153,7 @@ CONTAINS
             !                                             ! ---------------------------------------- !
             zcoef = 1. / REAL( nn_fsbc, wp )
             sst_m(:,:) = sst_m(:,:) * zcoef     ! mean SST             [Celsius]
+            sst_m_con(:,:) = sst_m_con(:,:) * zcoef     ! mean SST             [Celsius]
             sss_m(:,:) = sss_m(:,:) * zcoef     ! mean SSS             [psu]
             ssu_m(:,:) = ssu_m(:,:) * zcoef     ! mean suface current  [m/s]
             ssv_m(:,:) = ssv_m(:,:) * zcoef     !
@@ -170,6 +175,7 @@ CONTAINS
             CALL iom_rstput( kt, nitrst, numrow, 'ssu_m'  , ssu_m, ldxios = lwxios  )    ! sea surface mean fields
             CALL iom_rstput( kt, nitrst, numrow, 'ssv_m'  , ssv_m, ldxios = lwxios  )
             CALL iom_rstput( kt, nitrst, numrow, 'sst_m'  , sst_m, ldxios = lwxios  )
+            CALL iom_rstput( kt, nitrst, numrow, 'sst_m_con'  , sst_m_con, ldxios = lwxios  )   ! SLWA conservative sst for rivers
             CALL iom_rstput( kt, nitrst, numrow, 'sss_m'  , sss_m, ldxios = lwxios  )
             CALL iom_rstput( kt, nitrst, numrow, 'ssh_m'  , ssh_m, ldxios = lwxios  )
             CALL iom_rstput( kt, nitrst, numrow, 'e3t_m'  , e3t_m, ldxios = lwxios  )
@@ -184,6 +190,7 @@ CONTAINS
          CALL iom_put( 'ssu_m', ssu_m )
          CALL iom_put( 'ssv_m', ssv_m )
          CALL iom_put( 'sst_m_pot', sst_m )
+         CALL iom_put( 'sst_m', sst_m_con )  ! SLWA conservative sst for rivers
          CALL iom_put( 'sss_m_'//stype, sss_m )
          CALL iom_put( 'ssh_m', ssh_m )
          CALL iom_put( 'e3t_m', e3t_m )
@@ -222,6 +229,7 @@ CONTAINS
             CALL iom_get( numror, jpdom_autoglo, 'ssu_m'  , ssu_m, ldxios = lrxios  )    ! sea surface mean velocity    (U-point)
             CALL iom_get( numror, jpdom_autoglo, 'ssv_m'  , ssv_m, ldxios = lrxios  )    !   "         "    velocity    (V-point)
             CALL iom_get( numror, jpdom_autoglo, 'sst_m'  , sst_m, ldxios = lrxios  )    !   "         "    temperature (T-point)
+            CALL iom_get( numror, jpdom_autoglo, 'sst_m_con', sst_m_con, ldxios = lrxios  )    !   "         "    temperature (T-point)  ! SLWA conservative sst for rivers
             CALL iom_get( numror, jpdom_autoglo, 'sss_m'  , sss_m, ldxios = lrxios  )    !   "         "    salinity    (T-point)
             CALL iom_get( numror, jpdom_autoglo, 'ssh_m'  , ssh_m, ldxios = lrxios  )    !   "         "    height      (T-point)
             CALL iom_get( numror, jpdom_autoglo, 'e3t_m'  , e3t_m, ldxios = lrxios  )    ! 1st level thickness          (T-point)
@@ -238,6 +246,7 @@ CONTAINS
                ssu_m(:,:) = zcoef * ssu_m(:,:) 
                ssv_m(:,:) = zcoef * ssv_m(:,:)
                sst_m(:,:) = zcoef * sst_m(:,:)
+               sst_m_con(:,:) = zcoef * sst_m_con(:,:) ! SLWA conservative sst for rivers
                sss_m(:,:) = zcoef * sss_m(:,:)
                ssh_m(:,:) = zcoef * ssh_m(:,:)
                e3t_m(:,:) = zcoef * e3t_m(:,:)
@@ -256,6 +265,7 @@ CONTAINS
          IF( l_useCT )  THEN    ;   sst_m(:,:) = eos_pt_from_ct( tsn(:,:,1,jp_tem), tsn(:,:,1,jp_sal) )
          ELSE                   ;   sst_m(:,:) = tsn(:,:,1,jp_tem)
          ENDIF
+         sst_m_con(:,:) = tsn(:,:,1,jp_tem)   ! SLWA conservative sst for rivers
          sss_m(:,:) = tsn  (:,:,1,jp_sal)
          ssh_m(:,:) = sshn (:,:)
          e3t_m(:,:) = e3t_n(:,:,1)
@@ -270,6 +280,7 @@ CONTAINS
          CALL iom_set_rstw_var_active('ssu_m')
          CALL iom_set_rstw_var_active('ssv_m')
          CALL iom_set_rstw_var_active('sst_m')
+         CALL iom_set_rstw_var_active('sst_m_con')
          CALL iom_set_rstw_var_active('sss_m')
          CALL iom_set_rstw_var_active('ssh_m')
          CALL iom_set_rstw_var_active('e3t_m')

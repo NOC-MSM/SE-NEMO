@@ -251,7 +251,11 @@ CONTAINS
       ! end file definition
       dtime%second = rdt
       CALL xios_set_timestep( dtime )
+              IF(lwp) WRITE(numout,*) 'Before Hang Occurs'
+              CALL FLUSH(numout )
       CALL xios_close_context_definition()
+              IF(lwp) WRITE(numout,*) 'After Hang Occurs'
+              CALL FLUSH(numout )
       CALL xios_update_calendar( 0 )
       !
       DEALLOCATE( zt_bnds, zw_bnds )

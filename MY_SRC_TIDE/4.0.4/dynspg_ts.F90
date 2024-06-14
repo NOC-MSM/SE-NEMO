@@ -648,6 +648,15 @@ CONTAINS
                END DO
             END DO
         ENDIF
+!Enhanced SO tidal bottom friction
+          WHERE (gphit(:,:) <= rn_lat_SO_enhance)
+                   zu_trd(:,:) = zu_trd(:,:) + rn_SO_enhance * zCdU_u(:,:) * ( un_e(:,:) - un_detide(:,:) ) * hur_e(:,:) *umask(:,:, 1)
+                   zv_trd(:,:) = zv_trd(:,:) + rn_SO_enhance * zCdU_v(:,:) * ( vn_e(:,:) - vn_detide(:,:) ) * hvr_e(:,:) *vmask(:,:, 1)
+          END WHERE
+
+
+
+
 !!	
 
 
@@ -1712,6 +1721,11 @@ CONTAINS
                   ENDDO
                  ENDDO
                  ENDIF
+!                Southern oceanenhancement
+!jth                WHERE (gphit(:,:) <= rn_lat_SO_enhance)
+!                    tdiss(:,:) = tdiss(:,:) + rn_SO_enhance *tmask(:,:, 1)
+!                END WHERE
+
 !!!!!!!!!!!!!!!!!!!!
                  !jidbg= 477
                  !jjdbg= 170
