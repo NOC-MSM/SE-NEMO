@@ -124,6 +124,15 @@ else
    ln_zdfevd='.true.'
 fi
 
+
+if [ "$ln_rnf_new" = ".true." ]
+then
+        cn_rnf=".\/JRA_RIVERS\/JRA55_coef.nc',0,'socoefr',.false.,.true.,'yearly'"
+else
+        cn_rnf="'runoff_1m_nomask.nc',0,'socoefr',.false.,.true.,'yearly'"
+fi
+
+
 if [ "$ln_rnf_new" = ".true." ]
 then
 	sn_rnf="'.\/JRA_RIVERS\/ORCA025_rivers',24,'rorunoff',.false.,.false.,'yearly'"
@@ -224,6 +233,7 @@ do
       sed -i "s/XXX_RMP_XXX/$ln_tide_ramp/g" namelist_cfg
       sed -i "s/XXX_BTA_XXX/$ln_bt_auto/g" namelist_cfg
       sed -i "s/XXX_BTC_XXX/$rn_bt_cmax/g" namelist_cfg
+      sed -i "s/XXX_RNM_XXX/$cn_rnf/g" namelist_cfg      
       sed -i "s/XXX_RNF_XXX/$sn_rnf/g" namelist_cfg
       sed -i "s/XXX_TID_XXX/$ln_tide/g" namelist_cfg
       sed -i "s/XXX_ITF_XXX/$ln_tmx_itf/g" namelist_cfg
