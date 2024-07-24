@@ -267,7 +267,7 @@
    !           !  file name              ! frequency (hours) ! variable  ! time interp.!  clim  ! 'yearly'/ ! weights filename ! rotation ! land/sea mask !
    !           !                         !  (if <0  months)  !   name    !   (logical) !  (T/F) ! 'monthly' !                  ! pairing  !    filename   !
    sn_rnf      = XXX_RNF_XXX                                                                               , ''               , ''       , ''
-   sn_cnf      = 'runoff_1m_nomask.nc'   ,       -12.        , 'socoefr',   .false.   , .true. , 'yearly'  , ''               , ''       , ''
+   sn_cnf      = XXX_RNM_XXX                                                                               , ''               , ''       , ''
    sn_s_rnf    = 'runoffs'               ,        24.        , 'rosaline',   .true.    , .true. , 'yearly'  , ''               , ''       , ''
    sn_t_rnf    = 'runoffs'               ,        24.        , 'rotemper',   .true.    , .true. , 'yearly'  , ''               , ''       , ''
    sn_i_rnf    = 'NOT USED'              ,        24.        , 'xxxxxxxx',   .true.    , .true. , 'yearly'  , ''               , ''       , ''
