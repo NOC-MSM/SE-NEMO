@@ -11,7 +11,7 @@ import scipy.io
 LME_Data=np.load('../Data/LME_gridinfo_V4.npz')
 a=scipy.io.loadmat('../Data/ORCA025_ROAM_GLB_LMEmaskV4.mat')
 LME_mask=a['LME_mask'][:,:].T
-LME_Clusters='../Data/LME_Clusters.csv'
+LME_Clusters='../Data/LME_Clusters-v2.csv'
 LME_Clusters_out='../Data/LME_Clusters_eORCA025.csv'
 
 clusters = pd.read_csv(LME_Clusters)
@@ -51,6 +51,7 @@ for iname,name in enumerate(cluster_names):
 
 
     lims=np.array([np.min(X),np.max(X),np.min(Y),np.max(Y)]).astype(int)
+
     if name == 'S Asia':
         lims[0]=1280
         lims[1]=122
@@ -61,7 +62,8 @@ for iname,name in enumerate(cluster_names):
     if name == 'W Canadian Arctic':
         lims[1]=700
     if name == 'Eurasian Arctic':
-        lims[1]=341
+        lims[0]=1124
+        lims[1]=404
     if name == 'Nordic Seas':
         lims[0] = 981        
     Clusters[name]['limits']=lims+[0,0,J_offset,J_offset]

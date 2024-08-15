@@ -62,6 +62,9 @@ Z1=nemo_t1.dataset.coords['depth_0'].values[:,j,i]
 
 plt.subplot(1,2,1)
 plt.plot(T1,-Z,T2,-Z,'--')
+
+
+
 plt.legend(['No Tide tmp','Tide tmp'])
 plt.title('Profiles at j,i={0},{1}'.format(j,i))
 plt.subplot(1,2,2)
