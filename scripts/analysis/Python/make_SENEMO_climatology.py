@@ -28,8 +28,9 @@ ystop=2019
 #EXPNAMS=['EXP_MES',  'EXP_MES_WAV',  'EXP_MES_WAV_NTM'] 
 #EXPNAMS=[ 'EXP_MES_WAV_NTM_RIV']
 names,dpaths,DOMS,_  = coast.experiments(experiments='experiments_paper.json')
-for i,EXPNAM in enumerate(names):
-    
+for i in [3]:
+    EXPNAM = names[i]
+
     print(EXPNAM)
     print(names[i])
 #    domain_datapath='/gws/nopw/j04/class_vol2/senemo/jdha/SHORT_TESTS/' + EXPNAM +'/'

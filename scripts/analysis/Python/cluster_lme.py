@@ -11,8 +11,8 @@ import scipy.io
 LME_Data=np.load('../Data/LME_gridinfo_V4.npz')
 a=scipy.io.loadmat('../Data/ORCA025_ROAM_GLB_LMEmaskV4.mat')
 LME_mask=a['LME_mask'][:,:].T
-LME_Clusters='../Data/LME_Clusters-v2.csv'
-LME_Clusters_out='../Data/LME_Clusters_eORCA025.csv'
+LME_Clusters='../Data/LME_Clusters-v3.csv'
+LME_Clusters_out='../Data/LME_Clusters_eORCA025_2.csv'
 
 clusters = pd.read_csv(LME_Clusters)
 clusters = clusters.to_numpy()
@@ -78,7 +78,7 @@ for iname,name in enumerate(cluster_names):
     xylims=np.array([np.min(x_masked),np.max(x_masked),np.min(y_masked),np.max(y_masked)])
     Clusters[name]['xylimits']=xylims  
 nname=iname+1
-  
+#%%
 plt.pcolormesh(D[J_offset:,:])
 plt.ylabel('j-189')
 Lims=np.zeros((nname,4))

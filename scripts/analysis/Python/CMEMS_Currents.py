@@ -20,14 +20,19 @@ from getpass import getpass
 import surfacefields
 import scipy.io
 import matplotlib.pylab as plt
+try:
+    plt.figure()
+except:
+    print('error in matplotlib')
 USERNAME='jholt'
-PASSWORD=getpass( 'Password: ' )
+PASSWORD="Mycmemspassword9" #getpass( 'Password: ' )
 
 database = coast.Copernicus(USERNAME, PASSWORD, "my")
 #Select global model 1/12
-#globcurrent=database.get_product("cmems_mod_glo_phy_my_0.083_P1M-m")
+globcurrent=database.get_product("cmems_mod_glo_phy_my_0.083deg_P1M-m")
+
 #Select Altimeter observations
-globcurrent=database.get_product("dataset-uv-rep-monthly")
+#globcurrent=database.get_product("dataset-uv-rep-monthly")
 
 
 #%%
@@ -35,7 +40,7 @@ nemo_t = coast.Gridded(fn_data=globcurrent,
                        config="example_cmems_grid_uv.json",
                        Make_LonLat_2D=True)
 nt=nemo_t.dataset.t_dim.size
-#nt=12
+nt=1
 T=np.array([])
 
 #select months
@@ -44,8 +49,7 @@ T=np.array([])
 T=np.sort(T).astype(int)
 #set time period
 T=np.arange(nt)
-T=np.arange(120)
-#T=np.arange(12)
+
 A=np.load('../Data/LME_gridinfo_equ025.npz')
 a=scipy.io.loadmat('../Data/equalgrid_025_LMEmask.mat')
 nlme=66
@@ -80,9 +84,9 @@ imax=max(i)
 jmin=min(j)
 jmax=max(j)
 
-LMENAM='NWS'
-name="CMEMS Glob Current"
-#name="CMEMS ORCA12 Current"
+LMENAM='NNA'
+#name="CMEMS Glob Current"
+name="CMEMS ORCA12 Current"
 
 SEASON=''
 YEARS="1993-2002"
@@ -95,11 +99,11 @@ Name=name+' '+SEASON+' '+YEARS+' '+REGION
 #%%
 SP,US,VS=surfacefields.mean_surface_circulation(nemo_t1,nemo_t1,nemo_t1,mask,co_located=True)         
 surfacefields.plot_surface_circulation(SP, US, VS,nemo_t1, mask,Name,
-                                       Vmax=.3,Np=8 
+                                       Vmax=.16,Np=8
                                       ,headwidth=5,scale=80,minshaft=2 
                                        )
 
-#plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png',dpi=300)
+plt.savefig('../Figures/Circulation/Surface_Currents_' + Name.replace(' ','_')+'.png',dpi=300)
 
 #fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_{0}.nc".format(Name)).replace(' ','_')
 #nemo_t_out=nemo_t1.copy()

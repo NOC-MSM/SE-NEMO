@@ -11,6 +11,10 @@ coast_dir='/home/users/jholt/Git/COAsT/'
 import sys
 sys.path.insert(0,coast_dir)
 import matplotlib.pylab as plt
+try:
+    plt.figure()
+except:
+    print('error in matplotlib')
 import coast
 import numpy as np
 import xarray as xr
@@ -28,13 +32,13 @@ ystart=1981
 ystop=1981
 ystart=1991
 ystop=2000
-ystop=1991
-names,dpaths,DOMS,_  = coast.experiments(experiments='experiments.json')
+#ystop=1991
+names,dpaths,DOMS,_  = coast.experiments(experiments='experiments_paper.json')
 nemo_U={}
-
+#%%
 #iexp=1
-for iexp in [0,10]:#,1]:#[1,2,3,4,5,0]:
-#%%    
+for iexp in [0,4]:
+
     print(names[iexp])
     #nemo_dir='/gws/nopw/j04/class_vol1/CLASS-MEDUSA/OUT_eORCA12/C001/monthly/'
     fn_nemo_dat_u= coast.nemo_filename_maker(dpaths[iexp],ystart,ystop,grid='U') 
@@ -53,11 +57,11 @@ for iexp in [0,10]:#,1]:#[1,2,3,4,5,0]:
 
     nemo_t.currents_on_t(nemo_u,nemo_v)
     #NNA
-    x_min=-79;x_max=12;y_min=26;y_max=69
+#    x_min=-79;x_max=12;y_min=26;y_max=69
 #Atlantic
     x_min=-98;x_max=26.5;y_min=-56;y_max=69
 #NWS
-    x_min = -19;x_max = 13;y_min = 40;y_max = 65
+#    x_min = -19;x_max = 13;y_min = 40;y_max = 65
     j,i,_=nemo_t.find_j_i_list(lon=[x_min,x_max,x_max,x_min],lat=[y_min,y_min,y_max,y_max])
     imin=min(i)
     imax=max(i)
@@ -66,7 +70,7 @@ for iexp in [0,10]:#,1]:#[1,2,3,4,5,0]:
     nemo_t.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
     nemo_u.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
     nemo_v.subset(y_dim=range(jmin,jmax),x_dim=range(imin,imax))
-    #%%
+
     mask=(nemo_t.dataset.bottom_level>0).squeeze()
     Name='{2}-{0}-{1}'.format(ystart,ystop,names[iexp])
     
@@ -76,7 +80,7 @@ for iexp in [0,10]:#,1]:#[1,2,3,4,5,0]:
                                            Np=6
                                            ,headwidth=5,scale=80,minshaft=2      
                                            )
-    plt.savefig('../Figures/Circulation/Surface_Currents_NWS_' + Name.replace(' ','_')+'.png',dpi=300)
+    plt.savefig('../Figures/Circulation/Surface_Currents_Atlantic_' + Name.replace(' ','_')+'.png',dpi=300)
     fn_out=("/home/users/jholt/work/SENEMO/ASSESSMENT/ORCA025-SE-NEMO/Circulation/Surface_Currents_NWS_{0}.nc".format(Name)).replace(' ','_')
     #nemo_t_out=coast.Gridded(nemo_t,config=fn_config_t_grid)
     #surf.save_currents(SP,US,VS,fn_out,nemo_t_out)
