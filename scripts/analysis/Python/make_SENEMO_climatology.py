@@ -20,7 +20,7 @@ import coast
 
 
 #Specify years to average
-ystart=1990
+ystart=1991 #1990
 ystop=2019
 
 #ystop=2016
@@ -28,7 +28,7 @@ ystop=2019
 #EXPNAMS=['EXP_MES',  'EXP_MES_WAV',  'EXP_MES_WAV_NTM'] 
 #EXPNAMS=[ 'EXP_MES_WAV_NTM_RIV']
 names,dpaths,DOMS,_  = coast.experiments(experiments='experiments_paper.json')
-for i in [3]:
+for i in [2,3,4]:
     EXPNAM = names[i]
 
     print(EXPNAM)

@@ -24,7 +24,8 @@ sys.path.insert(0,'/home/users/jholt/Git/COAsT/')
 import coast
 import surfacefields as sf
 
-LME_Clusters='../Data/LME_Clusters_eORCA025.csv'
+LME_Clusters='../Data/LME_Clusters_eORCA025_2.csv'
+nclusters=24
 clusters = pd.read_csv(LME_Clusters)
 
 def cluster_plot(x,y,var,vmin,vmax,Title,Figname,iexp=None):
@@ -34,10 +35,10 @@ def cluster_plot(x,y,var,vmin,vmax,Title,Figname,iexp=None):
     
     plt.figure(figsize=[11.69,8.27])
     
-    A=np.load('Position.npz')
+    A=np.load('Position_2.npz')
     Position=A['arr_0']
         
-    for icluster in range(23):#(clusters.values.shape[0]):
+    for icluster in range(nclusters):#(clusters.values.shape[0]):
         xylims=clusters.values[icluster,6:10]
         X=np.copy(x[icluster])
         Y=np.copy(y[icluster])        
@@ -96,7 +97,7 @@ if __name__ == '__main__':
     SAL_mean={}
     names,dpaths,DOMS,_  = coast.experiments(experiments='../Python/experiments_paper.json')
     for iexp in [0,2]:
-        for icluster in range(23):#clusters.values.shape[0]):
+        for icluster in range(nclusters):#clusters.values.shape[0]):
             print(iexp,icluster)
         #%%
             lims=clusters.values[icluster,2:6]
@@ -154,11 +155,11 @@ if __name__ == '__main__':
 
     for iexp in [0,2]:
         Title = f'PEA annual max (Jm$^{-3}$) {names[iexp]}'
-        Figname='../Figures/'+names[iexp]+'_PEA_max_2.png'
+        Figname='../Figures/'+names[iexp]+'_PEA_max_3.png'
 
         cluster_plot(x,y,PEA_max,vmin,vmax,Title,Figname,iexp=iexp)
         Title='PEA annual cycle (Jm$^{-3}$)'
-        Figname='../Figures/'+names[iexp]+'_PEA_ann_2.png'
+        Figname='../Figures/'+names[iexp]+'_PEA_ann_3.png'
         cluster_plot(x,y,PEA_ann,vmin,vmax/2,Title,Figname,iexp=iexp)
 
 
@@ -166,14 +167,15 @@ if __name__ == '__main__':
     Title=f'SAL annual mean names[iexp]'
     vmin=30
     vmax=36
-    Figname='../Figures/'+names[iexp]+'_SAL_mean.png'
+    Figname='../Figures/'+names[iexp]+'_SAL_mean_3.png'
     cluster_plot(x,y,SAL_mean,vmin,vmax,Title,Figname,iexp=iexp)
 #%%
+if False:
     DPEA_max={}
     DPEA_ann={}
     DSAL_mean={}
 
-    for icluster in range(23):#clusters.values.shape[0]):
+    for icluster in range(nclusters):#clusters.values.shape[0]):
         DPEA_max[icluster]=PEA_max[icluster,2]-PEA_max[icluster,0]
         DPEA_ann[icluster]=PEA_ann[icluster,2]-PEA_ann[icluster,0]
         DSAL_mean[icluster]=SAL_mean[icluster,2]-SAL_mean[icluster,0]
@@ -182,7 +184,7 @@ if __name__ == '__main__':
     Title=f'DPEA annual max (Jm$^{-3}$) {names[2]} - {names[0]}'
     vmin=-100
     vmax=100
-    Figname='../Figures/'+names[2]+'_'+names[0]+'_DPEA_max.png'
+    Figname='../Figures/'+names[2]+'_'+names[0]+'_DPEA_max_3.png'
     cluster_plot(x,y,DPEA_max,vmin,vmax,Title,Figname)
 #%%
 
@@ -191,6 +193,6 @@ if __name__ == '__main__':
     Title=f'DSAL annual mean {names[2]} - {names[0]}'
     vmin=-1
     vmax=1
-    Figname='../Figures/'+names[2]+'_'+names[0]+'_DSAL_mean.png'
+    Figname='../Figures/'+names[2]+'_'+names[0]+'_DSAL_mean_3.png'
     cluster_plot(x,y,DSAL_mean,vmin,vmax,Title,Figname)
         

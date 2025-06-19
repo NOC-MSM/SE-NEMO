@@ -15,7 +15,7 @@ import cartopy.crs as ccrs  # mapping plots
 
 config='example_nemo_grid_t.json'
 fn_domain='/gws/nopw/j04/class_vol2/senemo/jdha/FINAL_TESTING/EXP_MESv2_NOTAPER_WAV_DJC_NTM_TDISSx2/config/domain_cfg.nc'
-LME_Clusters='../Data/LME_Clusters_eORCA025.csv'
+LME_Clusters='../Data/LME_Clusters_eORCA025_2.csv'
 clusters = pd.read_csv(LME_Clusters)
 nclusters=clusters.values.shape[0]
 
@@ -84,9 +84,9 @@ Row[5]=np.array([13,20,19,9,10]).astype(int)-1
 Row={}
 Row[1]=np.array([1,2,3]).astype(int)-1
 Row[2]=np.array([4,5,6,7]).astype(int)-1
-Row[3]=np.array([8,9,10,11,12,13]).astype(int)-1
-Row[4]=np.array([14,15,16,17,18]).astype(int)-1
-Row[5]=np.array([19,20,21,22,23]).astype(int)-1
+Row[3]=np.array([8,9,10,11,12,13,14]).astype(int)-1
+Row[4]=np.array([15,16,17,18]).astype(int)-1
+Row[5]=np.array([19,20,21,22,23,24]).astype(int)-1
 
 nrow=5
 
@@ -95,7 +95,8 @@ plt.figure(figsize=[11.69,8.27])
 
 gapx=0.025
 gapy=gapx*11.69/8.27*2
-Position=np.zeros((23,4))
+#%%
+Position=np.zeros((max(Row[nrow])+1,4))
 
 
 Dlatr = bounds[:,3]/Dlat   
@@ -156,4 +157,4 @@ Ymax=1-y0
 
         
     
-np.savez('Position.npz',Position)
+np.savez('Position_2.npz',Position)
