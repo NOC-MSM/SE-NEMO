@@ -168,7 +168,8 @@ rn_si0=0.35,
 sn_chl='chlorophyll',-1,'CHLA',.true.,.true.,'yearly','','','',
 /
 &namsbc_rnf
-cn_dir='./INPUTS/',
+!cn_dir='./INPUTS/',
+cn_dir='./',
 ln_rnf_depth=.false.,
 ln_rnf_depth_ini=.false.,
 ln_rnf_icb=.false.,
@@ -178,7 +179,8 @@ ln_rnf_tem=.false.,
 rn_avt_rnf=2.0e-3,
 rn_hrnf=10.0,
 rn_rfact=1.0,
-sn_cnf='runoff_1m_nomask.nc',0,'socoefr',.false.,.true.,'yearly',
+!sn_cnf='runoff_1m_nomask.nc',0,'socoefr',.false.,.true.,'yearly',
+sn_cnf='JRA_RIVERS/JRA55_coef.nc',0,'socoefr',.false.,.true.,'yearly',
 '','','',
 sn_rnf=XXX_RNF_XXX,
 '','','',
@@ -202,8 +204,11 @@ ln_sssr_bnd=.true.,
 nn_sssr=2,
 nn_sstr=0,
 rn_deds=-33.3333333,
+nn_sssr_ice =   5,
 rn_sssr_bnd=4.0,
 sn_sss='sss_1m_teos10.nc',-1,'salinity',.true.,.true.,'yearly','','','',
+rn_lat_SO_limit=-34.,
+ln_sssr_ice_so_limit=.true.,
 /
 &namsbc_wave
 /
@@ -253,8 +258,10 @@ ln_tide_ramp  = XXX_RMP_XXX,
 rdttideramp   =    28.,
 ln_calc_tdiss = XXX_CTD_XXX ,   ! calculate tdiss rather than reading in
 cn_h_rough = 'INPUTS/h_RMS_topog_anom.nc', ! roughness file
-rn_kappa_tdiss = 0.00075398 ! x12 value  0.00006283,  ! wave number Jayne and Laurence 2004 value !282.74333! increasedwith x1500^2 x2
-tdiss_mindepth = 200.0 ! minimum depth to apply tdiss parameterisation 
+rn_kappa_tdiss =   0.00075398 !  x12 value  0.00006283,  ! wave number Jayne and Laurence 2004 value !282.74333! increasedwith x1500^2 x2
+tdiss_mindepth = 500.0, ! minimum depth to apply tdiss parameterisation 
+rn_SO_enhance  = 250.0  ! quatratic !0.024 !  0.0016
+rn_lat_SO_enhance = -69.7,
 !
 clname(1) = 'SA',
 clname(2) = 'SSA',
@@ -361,13 +368,16 @@ ln_mle=.false.,
 /
 &namtra_ldf
 ln_traldf_blp=.false.,
-ln_traldf_hor=XXX_HOR_XXX,
-ln_traldf_iso=XXX_ISO_XXX,
+ln_traldf_hor=.false.,
+ln_traldf_iso=.false.,
 ln_traldf_lap=.true.,
 ln_traldf_lev=.false.,
 ln_traldf_msc=.false.,
 ln_traldf_off=.false.,
-ln_traldf_triad=.false.,
+ln_traldf_triad=.true.,
+rn_sw_triad     = 0,
+ln_botmix_triad = .true.,
+ln_triad_iso    = .true.,
 nn_aht_ijk_t=20,
 rn_slpmax=0.01,
 rn_ud=0.011,
@@ -484,6 +494,7 @@ rn_mxlice=10.0,
 rn_hsri=0.02,
 nn_z0_ice=XXX_Z0I_XXX,
 nn_mxlice=XXX_IMX_XXX,
+rn_emin=1.0e-7, !1.0e-8
 /
 &namzdf_mldzint
 nn_mld_diag=2,

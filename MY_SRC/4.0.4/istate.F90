@@ -94,6 +94,15 @@ CONTAINS
             CALL dta_tsd( nit000, tsb )          ! read 3D T and S data from the specified initial fields.
             tsn  (:,:,:,:) = tsb (:,:,:,:)       ! set now values from to before ones for T & S.
          ENDIF
+         IF( ln_reset_dyn ) THEN
+         ! Modifications to set u/v/ssh to zero.overwrite the T &S from the restart files with the initial conditions.
+         sshb(:,:)   = 0._wp               ! set the ocean at rest
+         ub  (:,:,:) = 0._wp
+         vb  (:,:,:) = 0._wp  
+         sshn (:,:)     = sshb(:,:)   
+         un   (:,:,:)   = ub  (:,:,:)
+         vn   (:,:,:)   = vb  (:,:,:)
+         ENDIF
       ELSE                                    ! Start from rest
          !                                    ! ---------------
          numror = 0                           ! define numror = 0 -> no restart file to read
