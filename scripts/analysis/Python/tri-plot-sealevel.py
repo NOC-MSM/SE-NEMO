@@ -157,7 +157,7 @@ for iexp in [1,0,2,5,4,3]:
         vmax=0.05
     xylims=[x_min,x_max,y_min,y_max]
 
-    im=axs[ir,ic].pcolormesh(X,Y, VAR,transform=ccrs.PlateCarree(),vmin=vmin,vmax=vmax,cmap=cmap1)
+    im=axs[ir,ic].pcolormesh(X,Y, VAR,transfwith open(outname,'rb' ) as f:orm=ccrs.PlateCarree(),vmin=vmin,vmax=vmax,cmap=cmap1)
     axs[ir,ic].set_extent(xylims,crs=ccrs.PlateCarree())
 
     #plt.colorbar(im,orientation='horizontal')

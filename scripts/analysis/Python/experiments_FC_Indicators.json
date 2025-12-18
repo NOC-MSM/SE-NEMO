@@ -6,8 +6,8 @@
           "CNRM_ssp370_bgc"
         ],
 		"dirs":[
-          "/gws/nopw/j04/class_vol2/annkat/SE_CNRM_GS1p0_Yuri/",
-          "/gws/nopw/j04/class_vol2/annkat/SE_CNRM_GS1p0_Yuri_ssp370/",
+          "/gws/nopw/j04/class_vol2/annkat/SE_CNRM_OUTPUTS_LANDMASK",
+          "/gws/nopw/j04/class_vol2/annkat/SE_CNRM_OUTPUTS_LANDMASK",
           "/gws/nopw/j04/class_vol2/annkat/SE_CNRM_OUTPUTS_LANDMASK",
           "/gws/nopw/j04/class_vol2/annkat/SE_CNRM_OUTPUTS_LANDMASK"
         ],
@@ -17,7 +17,6 @@
           "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/GS1p0_notide/config/domain_cfg.nc",
           "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/GS1p0_notide/config/domain_cfg.nc"
               ],
-		 "year_start":[1991,2061,1991,2061],
-  		 "year_stop":[2000,2070,2000,2070]
+		 "year_start":[1980,2015,1980,2015],
+  		 "year_stop":[2014,2070,2014,2070]
 }
-

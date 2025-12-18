@@ -19,6 +19,8 @@ sys.path.insert(0,'/home/n01/n01/jholt/Git/COAsT/')
 import coast
 
 
+
+
 #Specify years to average
 ystart=1991 #1990
 ystop=2019
@@ -53,7 +55,7 @@ for i in [2,3,4]:
     #Place to output data
     domain_outpath='/home/users/jholt/work/SENEMO/ASSESSMENT/'
     #domain_outpath='/work/n01/n01/jholt/SENEMO/ASSESSMENT/'
-    #nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid) #nemo_out = nemo_out. subset_as_copy(y_dim=range(86,1000),x_dim=range(1080,1180))  
+    #nemo_out=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid) ;#nemo_out = nemo_out. subset_as_copy(y_dim=range(86,1000),x_dim=range(1080,1180))
     DOMNAM='ORCA025-SE-NEMO'
     z_max=200
     fn_out='{0}/{1}/{1}_{2}_{3}_{4}_SST_SSS_PEA_MonClimate.nc'.format(domain_outpath,DOMNAM,ystart,ystop,EXPNAM)
