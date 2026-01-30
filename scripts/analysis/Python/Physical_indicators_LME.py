@@ -13,8 +13,8 @@ if len(sys.argv) >= 2:
 else:
     iwant_lme = 0
 print ('LME_list',iwant_lme)
-
-
+#iwant_lme = 0
+#%%
 sys.path.insert(0,'/home/users/jholt/Git/COAsT/')
 #needs branch     feature/535_stratification_diag
 import coast
@@ -53,15 +53,16 @@ names,dpaths,DOMS,_,year_start,year_stop  = coast.experiments(experiments='exper
 
 grid = 'T'
 #%%
-vars = ['sst','sss','ssso','pea']
-varname =['temperature','salinity','salinity','pea']
+vars = ['sst','nbt','sss','ssso','pea','Qu','Qv','mld','mldo','ice']
+varname =['temperature','NBT','salinity','salinity'
+    ,'pea','u_velocity','v_velocity','mldr10_1','mldr10_1','soicecov']
 
-vars_bgc = ['nitrate','nitrate_o',O2_bot']
-varname_bgc =['N3_n','N3_n','O2_bot']
+vars_bgc = ['nitrate','nitrate_o','O2_bot','netpp','runoff']
+varname_bgc =['N3_n','N3_n','O2_bot','Ptot_NPP_result','rorunoff']
 
 #%%
 ystart0 = 1980
-ilme=21
+
 nlme=66
 ntmax=(max(year_stop)-min(year_start)+1)*12
 
@@ -70,8 +71,9 @@ lme_list = {}
 for i in range (10):
    lme_list[i] = np.arange(6) + i*6
 
-lme_list[11] = np.arange(61,65)
-lme_list[0]=np.array([22,33,34,35,36,38,39,40,41,42,59,60,65,66])-1
+lme_list[10] = np.arange(61,65)
+#lme_list[0]=np.array([22,33,34,35,36,38,39,40,41,42,59,60,65,66])-1
+#lme_list[0]=[21]
 #%%
 #iwant_lme = 11
 for ilme in lme_list[iwant_lme]: #range(11,61):#,23]:
@@ -93,32 +95,51 @@ for ilme in lme_list[iwant_lme]: #range(11,61):#,23]:
     jmax0 = LME_gridinfo['j_max'][ilme]+1
     #%%
     nemos={}
-    for i in [0,1,2,3]:#, 1, 2, 3]:
-        EXPNAM = names[i]
-        ystart = year_start[i]
-        ystop = year_stop[i]
+    for iexp in [0, 1, 2, 3]:
+        EXPNAM = names[iexp]
+        ystart = year_start[iexp]
+        ystop = year_stop[iexp]
+        domain_datapath = dpaths[iexp]
         for year in range(ystart,ystop+1):
             print(year,'opening',EXPNAM)
             t0 = time.time()
-            domain_datapath = dpaths[i]
+
             # make list of filenames
-            fn_nemo_dat = coast.nemo_filename_maker(domain_datapath, ystart, ystop)
+            #fn_nemo_dat = coast.nemo_filename_maker(domain_datapath, ystart, ystop)
             fn_nemo_dat = []
+            fn_nemo_dat_u = []
+            fn_nemo_dat_v = []
+            fn_nemo_dat_npp = []
+            fn_nemo_dat_riv = []
             if 'CNRM' in EXPNAM:
                 ESM = 'CNRM'
             else:
                 ESM = 'GFDL'
             if 'hist' in EXPNAM:
                 SSP = 'hist'
+                SSPuc='hist'
             else:
                 SSP = 'ssp370'
+                SSPuc='SSP370'
 
             if 'bgc' in EXPNAM:
                 new_name = f"{domain_datapath}/SE_{ESM}_subBGC_{SSP}_{year}.nc"
                 fn_nemo_dat.append(new_name)
+                new_name = f"{domain_datapath}/SE_{ESM}_NPP_{SSP}_{year}.nc"
+                fn_nemo_dat_npp.append(new_name)
+                #hardwired river data
+                new_name_rivers=f'/gws/nopw/j04/class_vol2/annkat/RIVERS_NUTRIENTS/se-ORCA025_{ESM}_{SSPuc}/{ESM}_{SSP}_river_BGC_y{year}.nc'
+                fn_nemo_dat_riv.append(new_name_rivers)
             else:
-                new_name = f"{domain_datapath}/SE_{ESM}_forTransp_T_{SSP}_{year}.nc"
+                new_name = f"{domain_datapath}/SE_{ESM}_yearly_T_{SSP}_{year}.nc"
                 fn_nemo_dat.append(new_name)
+                new_name = f"{domain_datapath}/SE_{ESM}_yearly_U_{SSP}_{year}.nc"
+                fn_nemo_dat_u.append(new_name)
+                new_name = f"{domain_datapath}/SE_{ESM}_yearly_V_{SSP}_{year}.nc"
+                fn_nemo_dat_v.append(new_name)
+
+
+
 
                 if False:
                     days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
@@ -130,15 +151,34 @@ for ilme in lme_list[iwant_lme]: #range(11,61):#,23]:
                         fn_nemo_dat.append(new_name)
 
             # Provide a domain.cfg file
-            fn_nemo_dom = DOMS[i]
-
+            fn_nemo_dom = DOMS[iexp]
+#%%
             # Provide a config file
             fn_config_t_grid = '../Config/senemo_grid_t.json'
+            fn_config_u_grid = '../Config/example_nemo_grid_u.json'
+            fn_config_v_grid = '../Config/example_nemo_grid_v.json'
 
             # input datasets
             lims=[imin,imax+1,jmin,jmax+1]
             nemo = coast.Gridded(fn_data=fn_nemo_dat, fn_domain=fn_nemo_dom, config=fn_config_t_grid,
                                  multiple=True,no_depths=True,lims=lims)
+#%%
+            if not 'bgc' in EXPNAM:
+                nemo_u = coast.Gridded(fn_data=fn_nemo_dat_u, fn_domain=fn_nemo_dom,
+                                       config=fn_config_u_grid,
+                                     multiple=True,no_depths=False,lims=lims)
+                nemo_v = coast.Gridded(fn_data=fn_nemo_dat_v, fn_domain=fn_nemo_dom,
+                                       config=fn_config_v_grid,
+                                     multiple=True,no_depths=False,lims=lims)
+            else:
+                nemo_npp = coast.Gridded(fn_data=fn_nemo_dat_npp, fn_domain=fn_nemo_dom, config=fn_config_t_grid,
+                                     multiple=True, no_depths=True, lims=lims)
+                #nemo_riv = coast.Gridded(fn_data=fn_nemo_dat_riv, fn_domain=fn_nemo_dom,
+                #                       config=fn_config_t_grid,
+                #                     multiple=True,no_depths=True,lims=lims)
+                riv = xr.open_dataset(fn_nemo_dat_riv[0],drop_variables='time')
+                riv = riv.isel(y=range(lims[2], lims[3]), x=range(lims[0], lims[1]))
+#%%
             t1 = time.time()
             print(t1-t0)
 
@@ -150,10 +190,18 @@ for ilme in lme_list[iwant_lme]: #range(11,61):#,23]:
             mask = nemo.dataset.variables['bottom_level'].values != 0
             if len(mask.shape) == 2:
                 mask = np.repeat(mask[np.newaxis, :, :], ntimes, axis=0)
-            lme_mask = mask * LME_mask[jmin0:jmax0 + 1, imin:imax + 1] == ilme + 1
+            if imax>imin:
+                lme_mask = mask * LME_mask[jmin0:jmax0 + 1, imin:imax + 1] == ilme + 1
+            else:
+                nx=LME_mask.shape[1]
+                lme_mask1 = LME_mask[jmin0:jmax0 + 1, imin:nx + 1]
+                lme_mask2 = LME_mask[jmin0:jmax0 + 1, 0:imax + 1]
+                lme_mask=np.concatenate((lme_mask1 ,lme_mask2),axis=1)
+                lme_mask = mask *lme_mask ==ilme +1
+#%%
             #lme_mask = np.repeat(lme_mask[np.newaxis, :, :], ntimes, axis=0)
 
-            Depth_lim = 500
+            Depth_lim = 200
             Depth=nemo.dataset['bathymetry'].values
             Dmask = Depth <= Depth_lim
             Dmasko = Depth > Depth_lim
@@ -186,10 +234,35 @@ for ilme in lme_list[iwant_lme]: #range(11,61):#,23]:
             olme_mask[olme_mask>1] = 1
             olme_mask=olme_mask*mask
             areao = np.sum(np.sum(olme_mask*DX*DY,axis=2),axis=1)
+#Construct list of boundary U and V section
+#%%
+            ny = clme_mask.shape[1]-1
+            nx = clme_mask.shape[2]-1
+            ub_list =np.array([])
+            ub_sign =np.array([])
+            vb_list =np.array([])
+            vb_sign =np.array([])
+            for j in range(1,ny):
+                for i in range(1, nx):
+                    if  clme_mask[0,j,i] and olme_mask[0,j,i+1]:
+                        ub_list = np.append(ub_list,[j,i])
+                        ub_sign = np.append(ub_sign,-1)
+                    if  clme_mask[0,j,i] and olme_mask[0,j,i-1]:
+                        ub_list = np.append(ub_list,[j,i-1])
+                        ub_sign = np.append(ub_sign, 1)
+                    if  clme_mask[0,j,i] and olme_mask[0,j+1,i]:
+                        vb_list = np.append(vb_list,[j,i])
+                        vb_sign = np.append(vb_sign,-1)
+                    if  clme_mask[0,j,i] and olme_mask[0,j-1,i]:
+                        vb_list = np.append(vb_list,[j-1,i])
+                        vb_sign = np.append(vb_sign, 1)
 
-
-
-
+            ub_list = np.reshape(ub_list, (int(len(ub_list) / 2), 2)).astype(int)
+            vb_list = np.reshape(vb_list, (int(len(vb_list) / 2), 2)).astype(int)
+            iu = xr.DataArray(ub_list[:,1], dims = 'points')
+            ju = xr.DataArray(ub_list[:, 0], dims='points')
+            iv = xr.DataArray(vb_list[:,1], dims = 'points')
+            jv = xr.DataArray(vb_list[:, 0], dims='points')
 
             #%%
             if not  'bgc' in EXPNAM:
@@ -205,12 +278,11 @@ for ilme in lme_list[iwant_lme]: #range(11,61):#,23]:
                 print(t1 - t0)
             if 'bgc' in EXPNAM:
                 bottom = nemo.dataset.variables['bottom_level'] -1
-                #bottom[np.where(bottom<0.)] =0.
-                #for j in range(ny):
-                #    for i in range(xy):
-                #        O2[:,j,i]=nemo.dataset['O2_o'][:,bottom[j,i],j,i]
                 O2_bot = nemo.dataset['O2_o'].isel(z_dim = bottom)
                 nemo.dataset['O2_bot'] = O2_bot
+            else:
+                bottom = nemo.dataset.variables['bottom_level'] -1
+                nemo.dataset['NBT'] = nemo.dataset['temperature'].isel(z_dim = bottom)
             #%%
             print('Processing indicators')
             if 'bgc' in EXPNAM:
@@ -225,35 +297,71 @@ for ilme in lme_list[iwant_lme]: #range(11,61):#,23]:
 
                 mask=clme_mask
                 Area=area
-                if 'o' in var:
-                    mask=olme_mask
-                    Area = areao
-                print(varname2[ivar],vars2[ivar])
+                if not 'Q' in var and not 'netpp' in var and not 'runoff' in var:
+                    if 'o' in var:
+                        mask=olme_mask
+                        Area = areao
 
-                if len(nemo.dataset[varname2[ivar]].sizes) == 4:
-                    #data = nemo.dataset[varname2[ivar]].values[:,0,:,:]
-                     data = mask*DX*DY*nemo.dataset[varname2[ivar]].isel(z_dim=0)
-                else:
-                     data = mask*DX*DY*nemo.dataset[varname2[ivar]]
-                Var = (data.sum(dim='x_dim').sum(dim='y_dim') / Area)
 
+                    if len(nemo.dataset[varname2[ivar]].sizes) == 4:
+                        #data = nemo.dataset[varname2[ivar]].values[:,0,:,:]
+                         data = mask*DX*DY*nemo.dataset[varname2[ivar]].isel(z_dim=0)
+                    else:
+                         data = mask*DX*DY*nemo.dataset[varname2[ivar]]
+                    Var = (data.sum(dim='x_dim').sum(dim='y_dim') / Area)
+                elif 'Qu' in var :
+#%%
+                    ds = nemo_u.dataset.isel(x_dim=iu,y_dim=ju)
+
+                    DYU = np.repeat(
+                          np.repeat(ds['e2'].values[np.newaxis,:],ds.sizes['z_dim'],axis=0)
+                          [np.newaxis,:,:],ntimes,axis=0)
+
+                    Sign = np.repeat(np.repeat(ub_sign[np.newaxis, :], ds.sizes['z_dim'], axis=0)
+                          [np.newaxis, :, :], ntimes, axis=0)
+                    #data = ds['u_velocity']*DYU* ds['thkcello'] * Sign
+                    data = ds['u_velocity']*DYU * Sign
+                    data = np.maximum(data,0)
+                    Var = (data.sum(dim='z_dim')).sum(dim='points')
+
+                elif 'Qv' in var:
+                # %%
+                    ds = nemo_v.dataset.isel(x_dim=iv, y_dim=jv)
+
+                    DXV = np.repeat(
+                        np.repeat(ds['e1'].values[np.newaxis, :], ds.sizes['z_dim'], axis=0)
+                        [np.newaxis, :, :], ntimes, axis=0)
+
+                    Sign = np.repeat(np.repeat(vb_sign[np.newaxis, :], ds.sizes['z_dim'], axis=0)
+                                     [np.newaxis, :, :], ntimes, axis=0)
+                    #data = ds['v_velocity'] * DXV * ds['thkcello'] * Sign
+                    data = ds['v_velocity'] * DXV  * Sign
+                    data = np.maximum(data, 0)
+                    Var = (data.sum(dim='z_dim')).sum(dim='points')
+                elif 'netpp' in var:
+#%%
+                    data = mask * DX * DY * (nemo_npp.dataset[varname2[ivar]]*
+                                             nemo.dataset['e3_0'] ).sum(dim='z_dim')
+                    Var = (data.sum(dim='x_dim').sum(dim='y_dim') / Area)
+                elif 'runoff' in var:
+                    data = mask[0,:,:] * DX[0,:,:] * DY[0,:,:] * (riv[varname2[ivar]]).mean(dim='time')
+                    Var = (data.sum(dim='x').sum(dim='y') )
                 it=np.arange((year-ystart0)*12,(year-ystart0)*12+12)
-                indicators[var][it] = Var.values
-
+                if not 'runoff' in var:
+                    indicators[var][it] = Var.values
+                else:
+                    indicators[var][it[0]] = Var.values
                 print('data loaded')
 
                 t1=time.time()
                 print(t1-t0)
 
+
     #%%
     domain_outpath='/home/users/jholt/work/SENEMO/SENEMO_FC/'
-    outname = f"{domain_outpath}physical_indicators_bgc_{LME_name}.p"
+    outname = f"{domain_outpath}physical_indicators_{ESM}_{SSP}_{LME_name}_{int(Depth_lim)}m.p"
     with open(outname,'wb' ) as f:
         pickle.dump(indicators, f)
         f.flush()
 #%%
-#inname=f"{domain_outpath}physical_indicators.p"
-#with open(inname,'rb' ) as f:
 
-#   A['slmean']=slmean
-#   A=pickle.load(f)

@@ -1,5 +1,5 @@
 import os
-for run_number in range(12):
+for run_number in range(11):
     runstring=f"""#!/bin/bash
 #SBATCH --partition=standard
 #SBATCH -o %j.out

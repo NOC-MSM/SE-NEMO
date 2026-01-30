@@ -43,7 +43,7 @@ def is_leap(year):
 names,dpaths,DOMS,_,year_start,year_stop  = coast.experiments(experiments='experiments_FC.json')
 
 grid='T'
-for i in [0,1,2,3]:#,1]:
+for i in [3]:#[0,1,2,3]:#,1]:
     EXPNAM = names[i]
     ystart=year_start[i]
     ystop=year_stop[i]
@@ -54,6 +54,8 @@ for i in [0,1,2,3]:#,1]:
     #make list of filenames
     fn_nemo_dat= coast.nemo_filename_maker(domain_datapath,ystart,ystop)            
     fn_nemo_dat=[]
+    fn_nemo_dat_npp=[]
+
     if 'CNRM' in EXPNAM:
         ESM='CNRM'
     else:
@@ -63,13 +65,17 @@ for i in [0,1,2,3]:#,1]:
     else:
         SSP='ssp370'
     if 'bgc' in EXPNAM:
-        variables = ['N3_n','P1_c','P2_c','P3_c','P4_c']
+        #variables = ['N3_n','P1_c','P2_c','P3_c','P4_c','Ptot_NPP_result']
+        variables = ['N3_n', 'Ptot_NPP_result']
     else:
         variables = ['temperature', 'salinity']
 
     for year in range(ystart, ystop + 1):
         if 'bgc' in EXPNAM:
                 new_name=f"{domain_datapath}/SE_{ESM}_subBGC_{SSP}_{year}.nc"
+                fn_nemo_dat.append(new_name)
+                new_name = f"{domain_datapath}/SE_{ESM}_NPP_{SSP}_{year}.nc"
+                fn_nemo_dat_npp.append(new_name)
         else:
             days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
             if is_leap(year):
@@ -86,10 +92,14 @@ for i in [0,1,2,3]:#,1]:
     fn_config_t_grid='../Config/senemo_grid_t.json'    
                         
     #input datasets
-    nemo = coast.Gridded(fn_data= fn_nemo_dat, fn_domain = fn_nemo_dom, config=fn_config_t_grid,multiple=True);#nemo = nemo.subset_as_copy(y_dim=range(860,1000),x_dim=range(1080,1180))
+    nemo = coast.Gridded(fn_data= fn_nemo_dat, fn_domain = fn_nemo_dom, config=fn_config_t_grid,multiple=True)#;nemo = nemo.subset_as_copy(y_dim=range(860,1000),x_dim=range(1080,1180))
     #fix for nasty bug 
-    nemo_dom=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid);#nemo_dom = nemo_dom.subset_as_copy(y_dim=range(860,1000),x_dim=range(1080,1180))
+    nemo_dom=coast.Gridded(fn_domain = fn_nemo_dom, config=fn_config_t_grid)#;nemo_dom = nemo_dom.subset_as_copy(y_dim=range(860,1000),x_dim=range(1080,1180))
     nemo.dataset['e3_0']=nemo_dom.dataset['e3_0']
+
+    nemo_npp= coast.Gridded(fn_data= fn_nemo_dat_npp, fn_domain = fn_nemo_dom, config=fn_config_t_grid,multiple=True)#;nemo_npp = nemo_npp.subset_as_copy(y_dim=range(860,1000),x_dim=range(1080,1180))
+    nemo.dataset['Ptot_NPP_result'] = nemo_npp.dataset['Ptot_NPP_result']
+
     #Place to output data
     domain_outpath='/home/users/jholt/work/SENEMO/'
 

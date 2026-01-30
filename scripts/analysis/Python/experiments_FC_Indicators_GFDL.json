@@ -1,0 +1,22 @@
+{
+		"exp_names": [
+          "GFDL_hist",
+          "GFDL_ssp370",
+          "GFDL_hist_bgc",
+          "GFDL_ssp370_bgc"
+        ],
+		"dirs":[
+          "/gws/nopw/j04/class_vol2/annkat/SE_GFDL_OUTPUTS_LANDMASK",
+          "/gws/nopw/j04/class_vol2/annkat/SE_GFDL_OUTPUTS_LANDMASK",
+          "/gws/nopw/j04/class_vol2/annkat/SE_GFDL_OUTPUTS_LANDMASK",
+          "/gws/nopw/j04/class_vol2/annkat/SE_GFDL_OUTPUTS_LANDMASK"
+        ],
+        "domains":[
+          "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/GS1p0_notide/config/domain_cfg.nc",
+          "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/GS1p0_notide/config/domain_cfg.nc",
+          "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/GS1p0_notide/config/domain_cfg.nc",
+          "/gws/nopw/j04/class_vol2/senemo/RUNS2024r01/GS1p0_notide/config/domain_cfg.nc"
+              ],
+		 "year_start":[1980,2015,1980,2015],
+  		 "year_stop":[2014,2070,2014,2070]
+}
