@@ -102,8 +102,8 @@ echo $SLURM_NNODES
 export OMP_NUM_THREADS=1
 
 
-jpni=-1
-jpnj=-1
+nn_jpni=-1
+nn_jpnj=-1
 
 nn_date0=$year_st\0101
 while [ $year -le $year_en ]
